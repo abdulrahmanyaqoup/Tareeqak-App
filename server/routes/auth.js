@@ -112,7 +112,6 @@ authRouter.post("/tokenIsValid", auth, async (req, res) => {
 authRouter.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
-    res.set("Content-Type", "image/jpeg");
     res.json({ ...user._doc, token: req.token });
   } catch (error) {
     res.status(500).json({ error: error.message });
