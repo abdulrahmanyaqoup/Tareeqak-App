@@ -24,24 +24,26 @@ authRouter.post("/api/signup", upload.single("image"), async (req, res) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 8);
+    if (req.file) {
+      const mimeType = req.file.mimetype;
 
-    const image = req.file.buffer;
-    const mimeType = req.file.mimetype;
-
-    if (
-      !["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(mimeType)
-    ) {
-      return res.status(422).json({
-        error:
-          "Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.",
-      });
+      if (
+        !["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
+          mimeType
+        )
+      ) {
+        return res.status(422).json({
+          error:
+            "Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.",
+        });
+      }
     }
 
     const userProps = new UserProps({
       university: req.body.userProps?.university,
       major: req.body.userProps?.major,
       contact: req.body.userProps?.contact,
-      image: image ? image : "",
+      image: req.file?.buffer ? req.file.buffer : null,
     });
 
     let user = new User({
