@@ -126,7 +126,7 @@ authRouter.get("/api/users", async (req, res) => {
 });
 
 // Update user
-authRouter.patch("/api/user/:id", auth, async (req, res) => {
+authRouter.patch("/api/user/:id", upload.single("image") ,auth, async (req, res) => {
   try {
     if (req.user._id !== req.params.id) {
       return res.status(401).json({ error: "Unauthorized" });
