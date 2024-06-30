@@ -16,10 +16,6 @@ authRouter.post("/api/signup", upload.single("image"), async (req, res) => {
       return res.status(422).json({ error: "Please fill all fields" });
     }
 
-    if (!req.file) {
-      return res.status(400).json({ error: "No file uploaded" });
-    }
-
     const userExist = await User.findOne({ email });
     if (userExist) {
       return res
@@ -91,7 +87,7 @@ authRouter.post("/api/signin", async (req, res) => {
 });
 
 // token verification
-authRouter.post("/tokenIsValid", auth, async (req, res) => {
+authRouter.post("/api/user/tokenIsValid", auth, async (req, res) => {
   try {
     const token = req.header("x-auth-token");
     if (!token) return res.json(false);
@@ -109,10 +105,37 @@ authRouter.post("/tokenIsValid", auth, async (req, res) => {
 });
 
 // get user data
-authRouter.get("/", auth, async (req, res) => {
+authRouter.get("/api/user", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     res.json({ ...user._doc, token: req.token });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Get all users
+authRouter.get("/api/allusers", async (req, res) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete user
+authRouter.delete("/api/user/:id", auth, async (req, res) => {
+  try {
+    if (req.user._id !== req.params.id) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+
+    const deletedUser = await User.findByIdAndDelete(req.params.id);
+    if (!deletedUser) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    res.json({ message: "User deleted successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
