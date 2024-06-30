@@ -115,9 +115,9 @@ authRouter.get("/api/user", auth, async (req, res) => {
 });
 
 // Get all users
-authRouter.get("/api/allusers", async (req, res) => {
+authRouter.get("/api/users", async (req, res) => {
   try {
-    const users = await User.find({});
+    const users = await User.find({}, "name userProps");
     res.json(users);
   } catch (error) {
     res.status(500).json({ error: error.message });
