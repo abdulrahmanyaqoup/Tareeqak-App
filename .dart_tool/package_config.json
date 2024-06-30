@@ -63,13 +63,13 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
+      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/leak_tracker-10.0.4",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
+      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.3",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -93,13 +93,13 @@
     },
     {
       "name": "material_color_utilities",
-      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/material_color_utilities-0.11.1",
+      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/material_color_utilities-0.8.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "meta",
-      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/meta-1.15.0",
+      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/meta-1.12.0",
       "packageUri": "lib/",
       "languageVersion": "2.12"
     },
@@ -147,9 +147,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/test_api-0.7.2",
+      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/test_api-0.7.0",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.0"
     },
     {
       "name": "vector_math",
@@ -159,7 +159,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/vm_service-14.2.4",
+      "rootUri": "file:///Users/ibramaswadeh/.pub-cache/hosted/pub.dev/vm_service-14.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -167,13 +167,13 @@
       "name": "finalproject",
       "rootUri": "../",
       "packageUri": "lib/",
-      "languageVersion": "3.5"
+      "languageVersion": "3.4"
     }
   ],
-  "generated": "2024-06-30T08:26:29.381489Z",
+  "generated": "2024-06-30T19:22:43.914824Z",
   "generator": "pub",
-  "generatorVersion": "3.5.0-315.0.dev",
+  "generatorVersion": "3.4.3",
   "flutterRoot": "file:///Users/ibramaswadeh/tools/flutter",
-  "flutterVersion": "3.23.0-14.0.pre.75",
+  "flutterVersion": "3.22.2",
   "pubCache": "file:///Users/ibramaswadeh/.pub-cache"
 }
