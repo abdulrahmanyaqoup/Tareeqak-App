@@ -43,7 +43,7 @@ authRouter.post("/api/signup", upload.single("image"), async (req, res) => {
       university: req.body.userProps?.university,
       major: req.body.userProps?.major,
       contact: req.body.userProps?.contact,
-      image: req.file?.buffer ? req.file.buffer : null,
+      image: req.file?.buffer,
     });
 
     let user = new User({
