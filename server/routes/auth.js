@@ -1,17 +1,23 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const upload = require("../middleware/upload");
+const User = require("../models/User/User");
+const UserProps = require("../models/User/UserProps");
 const auth = require("../middleware/auth");
 const authRouter = express.Router();
 
 // Sign Up
-authRouter.post("/api/signup", async (req, res) => {
+authRouter.post("/api/signup", upload.single("image"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
 
     if (!name || !email || !password) {
       return res.status(422).json({ error: "Please fill all fields" });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "No file uploaded" });
     }
 
     const userExist = await User.findOne({ email });
@@ -23,10 +29,31 @@ authRouter.post("/api/signup", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 8);
 
+    const image = req.file.buffer;
+    const mimeType = req.file.mimetype; // Accessing the MIME type of the uploaded file
+
+    // Check if the MIME type is not one of the allowed types
+    if (
+      !["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(mimeType)
+    ) {
+      return res.status(422).json({
+        error:
+          "Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.",
+      });
+    }
+
+    const userProps = new UserProps({
+      university: req.body.userProps?.university,
+      major: req.body.userProps?.major,
+      contact: req.body.userProps?.contact,
+      image: image,
+    });
+
     let user = new User({
       name,
       email,
       password: hashedPassword,
+      userProps: userProps,
     });
     user = await user.save();
     res.json(user);
@@ -85,6 +112,7 @@ authRouter.post("/tokenIsValid", auth, async (req, res) => {
 authRouter.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
+    res.set("Content-Type", "image/jpeg");
     res.json({ ...user._doc, token: req.token });
   } catch (error) {
     res.status(500).json({ error: error.message });

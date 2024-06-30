@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const userProps = require("./UserProps");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -19,6 +20,10 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: true,
+  },
+  userProps: {
+    type: userProps.schema,
     required: true,
   },
 });
