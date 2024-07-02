@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'university.dart';
 
 class Tabs extends StatefulWidget {
   const Tabs({super.key});
