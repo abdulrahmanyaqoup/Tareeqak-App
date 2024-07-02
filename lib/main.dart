@@ -13,35 +13,35 @@ void main() {
   runApp(const ProviderScope( child: Tareeqak()));
 }
 
-final seedColor = Color(0xFF4A4B7B);
+const seedColor = Color(0xFF4A4B7B);
 
 final theme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
     brightness: Brightness.light,
     seedColor: seedColor,
-    primary: Color(0xFF4A4B7B), 
-    secondary: Color(0xFF3C3846), 
-    tertiary: Color(0xFFFDE9CC), 
+    primary: const Color(0xFF4A4B7B), 
+    secondary: const Color(0xFF3C3846), 
+    tertiary: const Color(0xFFFDE9CC), 
   ),
   textTheme: GoogleFonts.latoTextTheme(
     ThemeData(brightness: Brightness.light).textTheme,
   ),
-  appBarTheme: AppBarTheme(
+  appBarTheme: const AppBarTheme(
     backgroundColor: Color(0xFF4A4B7B), 
     iconTheme: IconThemeData(color: Colors.white), 
   ),
-  floatingActionButtonTheme: FloatingActionButtonThemeData(
+  floatingActionButtonTheme: const FloatingActionButtonThemeData(
     backgroundColor: Color(0xFF4A4B7B), 
     foregroundColor: Colors.white, 
   ),
-  buttonTheme: ButtonThemeData(
+  buttonTheme: const ButtonThemeData(
     buttonColor: Color(0xFF4A4B7B), 
   ),
-  iconTheme: IconThemeData(
+  iconTheme: const IconThemeData(
     color: Color(0xFF4A4B7B), 
   ),
-  primaryIconTheme: IconThemeData(
+  primaryIconTheme: const IconThemeData(
     color: Colors.white, 
   ),
 );
@@ -56,7 +56,7 @@ class Tareeqak extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Maseer',
       theme: theme,
-      home: Tabs(),
+      home: const Tabs(),
     );
   }
 }

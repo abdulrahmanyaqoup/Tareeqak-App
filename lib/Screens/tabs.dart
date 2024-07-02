@@ -25,12 +25,12 @@ class _TabsState extends State<Tabs> {
       activePageTitle = 'Profile';
       activeScreen = const Center(
         child: Text('Profile Screen'),
-      ); 
+      );
     } else if (pageIndex == 1) {
       activePageTitle = 'Volnteers';
       activeScreen = const Center(
         child: Text('Volunteers Screen'),
-      );  
+      );
     } else if (pageIndex == 2) {
       activePageTitle = 'ChatBot';
       activeScreen = const Center(
@@ -54,8 +54,12 @@ class _TabsState extends State<Tabs> {
       bottomNavigationBar: BottomNavigationBar(
         onTap: selectPage,
         currentIndex: pageIndex,
-        selectedIconTheme: Theme.of(context).iconTheme.copyWith(color: Theme.of(context).colorScheme.primary),
-        unselectedIconTheme: Theme.of(context).iconTheme.copyWith(color: Theme.of(context).colorScheme.secondary),
+        selectedIconTheme: Theme.of(context)
+            .iconTheme
+            .copyWith(color: Theme.of(context).colorScheme.primary),
+        unselectedIconTheme: Theme.of(context)
+            .iconTheme
+            .copyWith(color: Theme.of(context).colorScheme.secondary),
         showSelectedLabels: false,
         showUnselectedLabels: false,
         items: const [
