@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Screens/user/profile.dart';
+import 'package:finalproject/Screens/user/signup.dart';
+import 'package:finalproject/Services/auth_service.dart';
+import 'package:finalproject/Models/user.dart';
 
-class Tabs extends StatefulWidget {
+class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
 
   @override
-  State<Tabs> createState() => _TabsState();
+  _TabsState createState() => _TabsState();
 }
 
-class _TabsState extends State<Tabs> {
+class _TabsState extends ConsumerState<Tabs> {
+  final AuthService authService = AuthService();
   int pageIndex = 0;
+
   void selectPage(int index) {
     setState(() {
       pageIndex = index;
@@ -16,41 +24,31 @@ class _TabsState extends State<Tabs> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      authService.getUserData(context: context, ref: ref);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    String activePageTitle = 'University';
-    Widget activeScreen = const Center(
-      child: Text('University Screen'),
-    );
-    if (pageIndex == 0) {
-      activePageTitle = 'Profile';
-      activeScreen = const Center(
-        child: Text('Profile Screen'),
-      );
-    } else if (pageIndex == 1) {
-      activePageTitle = 'Volnteers';
-      activeScreen = const Center(
-        child: Text('Volunteers Screen'),
-      );
-    } else if (pageIndex == 2) {
-      activePageTitle = 'ChatBot';
-      activeScreen = const Center(
-        child: Text('ChatBot Screen'),
-      );
-    } else if (pageIndex == 3) {
-      activePageTitle = 'University';
-      activeScreen = const Center(
-        child: Text('University Screen'),
-      );
-    }
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            activePageTitle,
-          ),
-        ),
+      appBar: pageIndex != 0
+          ? AppBar(
+              title: Center(
+                child: Text(
+                  _getPageTitle(pageIndex),
+                ),
+              ),
+            )
+          : null,
+      body: Consumer(
+        builder: (context, ref, child) {
+          final user = ref.watch(userProvider).user;
+          return _getActiveScreen(pageIndex, user);
+        },
       ),
-      body: activeScreen,
       bottomNavigationBar: BottomNavigationBar(
         onTap: selectPage,
         currentIndex: pageIndex,
@@ -82,5 +80,43 @@ class _TabsState extends State<Tabs> {
         ],
       ),
     );
+  }
+
+  String _getPageTitle(int index) {
+    switch (index) {
+      case 0:
+        return 'Profile';
+      case 1:
+        return 'Volunteers';
+      case 2:
+        return 'ChatBot';
+      case 3:
+        return 'University';
+      default:
+        return 'University';
+    }
+  }
+
+  Widget _getActiveScreen(int index, User user) {
+    switch (index) {
+      case 0:
+        return user.token.isEmpty ? const SignupScreen() : const HomeScreen();
+      case 1:
+        return const Center(
+          child: Text('Volunteers Screen'),
+        );
+      case 2:
+        return const Center(
+          child: Text('ChatBot Screen'),
+        );
+      case 3:
+        return const Center(
+          child: Text('University Screen'),
+        );
+      default:
+        return const Center(
+          child: Text('University Screen'),
+        );
+    }
   }
 }
