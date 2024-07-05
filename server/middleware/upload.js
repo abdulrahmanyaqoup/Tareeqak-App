@@ -11,6 +11,11 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 1024 * 1024 * 5, // 5MB (Adjust as needed)
+  },
+});
 
 module.exports = upload.single("image"); // Export the middleware for a single image
