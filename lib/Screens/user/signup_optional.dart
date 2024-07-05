@@ -4,6 +4,7 @@ import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:finalproject/Widgets/dropdown.dart';
 
 class SignupOptionalScreen extends ConsumerStatefulWidget {
   final String email;
@@ -76,38 +77,50 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 150),
+            const SizedBox(height: 40),
+            Align(
+              alignment: Alignment.topLeft,
+              child: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ),
+            const SizedBox(height: 60),
             const Text(
-              "Signup - Optional Fields",
+              "Signup",
               style: TextStyle(fontSize: 30),
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.08),
+            GestureDetector(
+              onTap: _pickImage,
+              child: CircleAvatar(
+                radius: 50,
+                backgroundColor: Colors.grey[200],
+                backgroundImage: _image != null ? FileImage(_image!) : null,
+                child: _image == null
+                    ? const Icon(
+                        Icons.camera_alt,
+                        size: 50,
+                        color: Colors.grey,
+                      )
+                    : null,
+              ),
+            ),
+            const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  hint: const Text('Select your university'),
-                  value: _selectedUniversity,
-                  isExpanded: true,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedUniversity = newValue;
-                    });
-                  },
-                  items: _universities.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
+              child: CustomDropdown(
+                value: _selectedUniversity,
+                hintText: 'Select your university',
+                items: _universities,
+                onChanged: (String? value) {
+                  setState(() {
+                    _selectedUniversity = value;
+                  });
+                },
               ),
             ),
             const SizedBox(height: 20),
@@ -127,11 +140,6 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                 hintText: 'Enter your contact',
                 obscureText: false,
               ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: const Text('Select Profile Image'),
             ),
             const SizedBox(height: 40),
             ElevatedButton(

@@ -63,7 +63,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: nameController,
-                hintText: 'Enter your name',
+                hintText: 'Enter your name*',
                 obscureText: false,
               ),
             ),
@@ -72,7 +72,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: emailController,
-                hintText: 'Enter your email',
+                hintText: 'Enter your email*',
                 obscureText: false,
               ),
             ),
@@ -81,7 +81,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: passwordController,
-                hintText: 'Enter your password',
+                hintText: 'Enter your password*',
                 obscureText: true,
               ),
             ),
