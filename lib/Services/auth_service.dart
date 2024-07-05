@@ -51,8 +51,7 @@ class AuthService {
       request.fields['university'] = user.userProps.university!;
       request.fields['major'] = user.userProps.major!;
       request.fields['contact'] = user.userProps.contact!;
-
-      http.Response response = (await request.send()) as http.Response;
+      final response = await http.Response.fromStream(await request.send());
 
       httpErrorHandle(
         response: response,
