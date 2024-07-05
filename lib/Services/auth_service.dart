@@ -42,16 +42,20 @@ class AuthService {
       );
       final uri = Uri.parse('${dotenv.env['uri']}/api/signup');
 
-      http.Response res = await http.post(
-        uri,
-        body: jsonEncode(user),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
+      var request = http.MultipartRequest('POST', uri);
+      request.files
+          .add(await http.MultipartFile.fromPath('image', image!.path));
+      request.fields['name'] = user.name;
+      request.fields['email'] = user.email;
+      request.fields['password'] = user.password;
+      request.fields['university'] = user.userProps.university!;
+      request.fields['major'] = user.userProps.major!;
+      request.fields['contact'] = user.userProps.contact!;
+
+      http.Response response = (await request.send()) as http.Response;
 
       httpErrorHandle(
-        response: res,
+        response: response,
         context: context,
         onSuccess: () {
           showSnackBar(
