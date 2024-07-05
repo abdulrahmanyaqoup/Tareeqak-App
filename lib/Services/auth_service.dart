@@ -29,7 +29,7 @@ class AuthService {
         university: university,
         major: major,
         contact: contact,
-        image: image != null ? base64Encode(await image.readAsBytes()) : '',
+        image: '',
       );
 
       User user = User(
