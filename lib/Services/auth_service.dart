@@ -5,7 +5,6 @@ import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/user/profile.dart';
 import 'package:finalproject/Screens/user/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
-import 'package:finalproject/Utils/constants.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
@@ -20,20 +19,29 @@ class AuthService {
     required String email,
     required String password,
     required String name,
+    String? university,
+    String? major,
+    String? contact,
     File? imageFile,
   }) async {
     try {
-      UserProps userProps = UserProps(
-        university: '',
-        major: '',
-        contact: '',
-        image: '',
-      );
-      User user = User(
-          name: name, password: password, email: email, userProps: userProps);
+      Map<String, dynamic> userProps = {
+        'university': university,
+        'major': major,
+        'contact': contact,
+      };
 
+      User user = User(
+        id: '',
+        name: name,
+        email: email,
+        password: password,
+        token: '',
+        userProps: UserProps.fromMap(userProps),
+      );
+      final uri = dotenv.env['uri'];
       http.Response res = await http.post(
-        Uri.parse('${dotenv.env['uri']}/api/signup'),
+        Uri.parse('$uri/api/signup'),
         body: user.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',

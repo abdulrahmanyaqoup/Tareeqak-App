@@ -1,10 +1,8 @@
-import 'package:finalproject/Screens/user/signin.dart';
-import 'package:finalproject/Services/auth_service.dart';
-import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:finalproject/Screens/user/signin.dart';
+import 'package:finalproject/Screens/user/signup_optional.dart';
+import 'package:finalproject/Widgets/textfield.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -17,43 +15,27 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
-  final TextEditingController majorController = TextEditingController();
-  final TextEditingController contactController = TextEditingController();
-  final AuthService authService = AuthService();
-  File? _image;
-  String? _selectedUniversity;
 
-  final List<String> _universities = [
-    'Harvard University',
-    'Stanford University',
-    'MIT',
-    'University of California, Berkeley',
-    'University of Oxford',
-    // Add more universities as needed
-  ];
-
-  void signupUser() {
-    authService.signUpUser(
-      context: context,
-      ref: ref,
-      email: emailController.text,
-      password: passwordController.text,
-      name: nameController.text,
-      imageFile: _image,
-    );
-  }
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
+  void goToOptionalSignup() {
+    if (emailController.text.isNotEmpty &&
+        passwordController.text.isNotEmpty &&
+        nameController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SignupOptionalScreen(
+            email: emailController.text,
+            password: passwordController.text,
+            name: nameController.text,
+          ),
+        ),
+      );
+    } else {
+      // Show an error message if fields are empty
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please fill all the fields')),
+      );
+    }
   }
 
   @override
@@ -61,8 +43,6 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     emailController.dispose();
     passwordController.dispose();
     nameController.dispose();
-    majorController.dispose();
-    contactController.dispose();
     super.dispose();
   }
 
@@ -105,59 +85,9 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 obscureText: true,
               ),
             ),
-            const SizedBox(height: 20),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.grey),
-              ),
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton<String>(
-                  hint: Text('Select your university'),
-                  value: _selectedUniversity,
-                  isExpanded: true,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      _selectedUniversity = newValue;
-                    });
-                  },
-                  items: _universities.map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomTextField(
-                controller: majorController,
-                hintText: 'Enter your major',
-                obscureText: false,
-              ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20),
-              child: CustomTextField(
-                controller: contactController,
-                hintText: 'Enter your contact',
-                obscureText: false,
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _pickImage,
-              child: const Text('Select Profile Image'),
-            ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: signupUser,
+              onPressed: goToOptionalSignup,
               style: ButtonStyle(
                 backgroundColor: MaterialStateProperty.all(
                   Theme.of(context).primaryColor,
@@ -170,7 +100,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 ),
               ),
               child: const Text(
-                "Sign up",
+                "Next",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
             ),
