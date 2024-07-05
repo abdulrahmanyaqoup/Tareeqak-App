@@ -66,7 +66,7 @@ class AuthService {
       final userNotifier = ref.read(userProvider.notifier);
 
       http.Response res = await http.post(
-        Uri.parse('${Constants.uri}/api/signin'),
+        Uri.parse('${dotenv.env['uri']}/api/signin'),
         body: jsonEncode({
           'email': email,
           'password': password,
@@ -110,7 +110,7 @@ class AuthService {
       }
 
       var tokenRes = await http.post(
-        Uri.parse('${Constants.uri}/api/user/tokenIsValid'),
+        Uri.parse('${dotenv.env['uri']}/api/user/tokenIsValid'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token!,
@@ -121,7 +121,7 @@ class AuthService {
 
       if (response == true) {
         http.Response userRes = await http.get(
-          Uri.parse('${Constants.uri}/api/user'),
+          Uri.parse('${dotenv.env['uri']}/api/user'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'x-auth-token': token,
@@ -140,7 +140,7 @@ class AuthService {
   }) async {
     try {
       http.Response res = await http.get(
-        Uri.parse('${Constants.uri}/api/users'),
+        Uri.parse('${dotenv.env['uri']}/api/users'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -184,7 +184,7 @@ class AuthService {
       }
 
       http.Response res = await http.patch(
-        Uri.parse('${Constants.uri}/api/user/$userId'),
+        Uri.parse('${dotenv.env['uri']}/api/user/$userId'),
         body: jsonEncode(updates),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -211,7 +211,7 @@ class AuthService {
   }) async {
     try {
       http.Response res = await http.delete(
-        Uri.parse('${Constants.uri}/api/user/$userId'),
+        Uri.parse('${dotenv.env['uri']}/api/user/$userId'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,
