@@ -19,17 +19,17 @@ class AuthService {
     required String email,
     required String password,
     required String name,
-    String? university,
-    String? major,
-    String? contact,
-    File? imageFile,
+    String university = '',
+    String major = '',
+    String contact = '',
+    File? image,
   }) async {
     try {
-      Map<String, dynamic> userProps = {
-        'university': university,
-        'major': major,
-        'contact': contact,
-      };
+      UserProps userProps = UserProps(
+        university: university,
+        major: major,
+        contact: contact,
+      );
 
       User user = User(
         id: '',
@@ -37,19 +37,21 @@ class AuthService {
         email: email,
         password: password,
         token: '',
-        userProps: UserProps.fromMap(userProps),
+        userProps: userProps,
       );
-      final uri = dotenv.env['uri'];
-      http.Response res = await http.post(
-        Uri.parse('$uri/api/signup'),
-        body: user.toJson(),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
+      final uri = Uri.parse('${dotenv.env['uri']}/api/signup');
+
+      var request = http.MultipartRequest('POST', uri)
+        ..fields['user'] = user.toJson()
+        ..headers['Content-Type'] = 'application/json; charset=UTF-8';
+      request.files
+          .add(await http.MultipartFile.fromPath('ImagePaths', image!.path));
+
+      var streamedResponse = await request.send();
+      http.Response response = await http.Response.fromStream(streamedResponse);
 
       httpErrorHandle(
-        response: res,
+        response: response,
         context: context,
         onSuccess: () {
           showSnackBar(

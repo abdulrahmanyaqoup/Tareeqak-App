@@ -7,10 +7,20 @@ const UserProps = require("../models/User/UserProps");
 const auth = require("../middleware/auth");
 const authRouter = express.Router();
 
+// Create uploads folder if not exists
+const uploadsDir = path.join(__dirname, "/uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
+app.use("/uploads", express.static("uploads"));
+
 // Sign Up
-authRouter.post("/api/signup", upload.single("image"), async (req, res) => {
+authRouter.post("/api/signup", upload.single("avatar"), async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    const { university, major, contact } = req.body.userProps;
+    const image = req.file.image;
 
     if (!name || !email || !password) {
       res.status(400);
@@ -41,10 +51,10 @@ authRouter.post("/api/signup", upload.single("image"), async (req, res) => {
     }
 
     const userProps = new UserProps({
-      university: req.body.userProps?.university,
-      major: req.body.userProps?.major,
-      contact: req.body.userProps?.contact,
-      image: req.file?.buffer,
+      university,
+      major,
+      contact,
+      image: req.file.path,
     });
 
     let user = new User({
