@@ -10,7 +10,7 @@ const authRouter = express.Router();
 // Sign Up
 authRouter.post("/api/signup", upload, async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, university, major, contact } = req.body;
 
     if (!name || !email || !password) {
       res.status(400);
@@ -28,9 +28,9 @@ authRouter.post("/api/signup", upload, async (req, res) => {
     const imagePath = req.file ? req.file.path : undefined;
 
     const userProps = new UserProps({
-      university: req.body.userProps?.university,
-      major: req.body.userProps?.major,
-      contact: req.body.userProps?.contact,
+      university,
+      major,
+      contact,
       image: imagePath,
     });
 
