@@ -7,12 +7,6 @@ const UserProps = require("../models/User/UserProps");
 const auth = require("../middleware/auth");
 const authRouter = express.Router();
 
-// Create uploads folder if not exists
-const uploadsDir = path.join(__dirname, "/uploads");
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir);
-}
-
 app.use("/uploads", express.static("uploads"));
 
 // Sign Up
