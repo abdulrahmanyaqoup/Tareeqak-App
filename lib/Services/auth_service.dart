@@ -151,7 +151,6 @@ class AuthService {
 
       if (res.statusCode == 200) {
         List<dynamic> users = jsonDecode(res.body);
-        // Process the list of users as needed
       } else {
         showSnackBar(context, 'Failed to fetch users');
       }
