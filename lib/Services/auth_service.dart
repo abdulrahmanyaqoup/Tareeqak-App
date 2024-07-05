@@ -29,6 +29,7 @@ class AuthService {
         university: university,
         major: major,
         contact: contact,
+        image: image != null ? base64Encode(await image.readAsBytes()) : '',
       );
 
       User user = User(
@@ -41,17 +42,16 @@ class AuthService {
       );
       final uri = Uri.parse('${dotenv.env['uri']}/api/signup');
 
-      var request = http.MultipartRequest('POST', uri)
-        ..fields['user'] = user.toJson()
-        ..headers['Content-Type'] = 'application/json; charset=UTF-8';
-      request.files
-          .add(await http.MultipartFile.fromPath('ImagePaths', image!.path));
-
-      var streamedResponse = await request.send();
-      http.Response response = await http.Response.fromStream(streamedResponse);
+      http.Response res = await http.post(
+        uri,
+        body: jsonEncode(user),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
       httpErrorHandle(
-        response: response,
+        response: res,
         context: context,
         onSuccess: () {
           showSnackBar(
