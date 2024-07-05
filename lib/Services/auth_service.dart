@@ -7,6 +7,7 @@ import 'package:finalproject/Screens/user/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/Utils/constants.dart';
 import 'package:finalproject/Provider/user_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -29,14 +30,10 @@ class AuthService {
         image: '',
       );
       User user = User(
-        name: name,
-        password: password,
-        email: email,
-        userProps: userProps
-      );
+          name: name, password: password, email: email, userProps: userProps);
 
       http.Response res = await http.post(
-        Uri.parse('${Constants.uri}/api/signup'),
+        Uri.parse('${dotenv.env['uri']}/api/signup'),
         body: user.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -175,12 +172,15 @@ class AuthService {
 
       if (imageFile != null) {
         final mimeType = lookupMimeType(imageFile.path);
-        if (!['image/jpeg', 'image/jpg', 'image/png', 'image/webp'].contains(mimeType)) {
-          showSnackBar(context, 'Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.');
+        if (!['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
+            .contains(mimeType)) {
+          showSnackBar(context,
+              'Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.');
           return;
         }
 
-        updates['userProps']['image'] = base64Encode(await imageFile.readAsBytes());
+        updates['userProps']['image'] =
+            base64Encode(await imageFile.readAsBytes());
       }
 
       http.Response res = await http.patch(

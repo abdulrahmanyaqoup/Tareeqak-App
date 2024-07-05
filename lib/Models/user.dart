@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 class User {
   final String id;
   final String name;
@@ -9,10 +11,10 @@ class User {
   final UserProps userProps;
 
   User({
-    this.id= '',
+    this.id = '',
     required this.name,
     required this.email,
-    this.token= '',
+    this.token = '',
     required this.password,
     required this.userProps,
   });
@@ -77,5 +79,6 @@ class UserProps {
 
   String toJson() => json.encode(toMap());
 
-  factory UserProps.fromJson(String source) => UserProps.fromMap(json.decode(source));
+  factory UserProps.fromJson(String source) =>
+      UserProps.fromMap(json.decode(source));
 }
