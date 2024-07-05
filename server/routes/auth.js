@@ -27,9 +27,9 @@ authRouter.post("/api/signup", upload, async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 8);
 
     const userProps = new UserProps({
-      university: req.body?.university,
-      major: req.body?.major,
-      contact: req.body?.contact,
+      university: req.body.userProps?.university,
+      major: req.body.userProps?.major,
+      contact: req.body.userProps?.contact,
       image: req.file?.path,
     });
 
