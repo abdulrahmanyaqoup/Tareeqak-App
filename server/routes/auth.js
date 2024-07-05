@@ -7,8 +7,6 @@ const UserProps = require("../models/User/UserProps");
 const auth = require("../middleware/auth");
 const authRouter = express.Router();
 
-app.use("/uploads", express.static("uploads"));
-
 // Sign Up
 authRouter.post("/api/signup", upload.single("avatar"), async (req, res) => {
   try {
