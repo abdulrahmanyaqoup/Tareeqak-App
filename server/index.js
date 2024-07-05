@@ -1,4 +1,3 @@
-const e = require("express");
 const express = require("express");
 const mongose = require("mongoose");
 const cors = require("cors");
@@ -7,9 +6,9 @@ const authRouter = require("./routes/auth");
 const PORT = process.env.PORT || 3000;
 const app = express();
 
-app.use("/uploads", express.static("uploads"));
 app.use(cors());
 app.use(express.json());
+app.use("/uploads", express.static("uploads"));
 app.use(authRouter);
 
 const DB =

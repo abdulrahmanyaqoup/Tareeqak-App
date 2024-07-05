@@ -1,15 +1,16 @@
+// uploadMiddleware.js
 const multer = require("multer");
 const path = require("path");
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Directory where images will be stored
+    cb(null, "uploads/");
   },
   filename: (req, file, cb) => {
-    cb(null, Date.now() + "-" + file.originalname); // Unique filename
+    cb(null, Date.now() + "-" + file.originalname);
   },
 });
 
 const upload = multer({ storage: storage });
 
-module.exports = upload;
+module.exports = upload.single("image"); // Export the middleware for a single image
