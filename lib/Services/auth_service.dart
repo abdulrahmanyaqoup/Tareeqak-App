@@ -147,9 +147,9 @@ class AuthService {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String token = prefs.getString('x-auth-token') ?? '';
 
-      if (token == null || token.isEmpty) {
+      if (token.isEmpty) {
         prefs.setString('x-auth-token', '');
         return;
       }
