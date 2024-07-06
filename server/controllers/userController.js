@@ -17,7 +17,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const userExist = await User.findOne({ email });
     if (userExist) {
-      res.status(401);
+      res.status(400);
       throw new Error("User with the same email already exists!");
     }
 
@@ -50,19 +50,20 @@ const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(422).json({ error: "Please fill out all fields" });
+      res.status(400);
+      throw new Error("All fields are mandatory!");
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      return res
-        .status(422)
-        .json({ error: "User with this email does not exist!" });
+      res.status(404);
+      throw new Error("User not found!");
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(400).json({ error: "password is not correct!" });
+      res.status(400);
+      throw new Error("Password is incorrect!");
     }
 
     const token = jwt.sign({ _id: user._id }, "passwordKey");
@@ -128,27 +129,6 @@ const updateUser = asyncHandler(async (req, res) => {
     const updates = { ...req.body };
     if (updates.userProps && Object.keys(updates.userProps).length === 0) {
       delete updates.userProps;
-    }
-
-    const userExist = await User.findOne({ email: updates.email });
-    if (userExist) {
-      return res
-        .status(400)
-        .json({ error: "User with the same email already exists!" });
-    }
-
-    if (updates.name) {
-      if (updates.name.length === 0) {
-        return res.status(401).json({ error: "name can't be empty" });
-      }
-    }
-
-    if (updates.password) {
-      if (updates.password.length > 0) {
-        updates.password = await bcrypt.hash(updates.password, 8);
-      } else {
-        return res.status(401).json({ error: "password can't be empty" });
-      }
     }
 
     if (req.file) {
