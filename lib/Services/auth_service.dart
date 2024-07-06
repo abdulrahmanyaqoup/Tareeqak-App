@@ -47,19 +47,19 @@ class AuthService {
 
       var request = http.MultipartRequest('POST', uri);
 
-      // if (image != null) {
-      //   final mimeType = lookupMimeType(image.path);
-      //   final fileType = mimeType?.split('/');
-      //   if (fileType != null && fileType.length == 2) {
-      //     request.files.add(
-      //       await http.MultipartFile.fromPath(
-      //         'image',
-      //         image.path,
-      //         contentType: MediaType(fileType[0], fileType[1]),
-      //       ),
-      //     );
-      //   }
-      // }
+      if (image != null) {
+        final mimeType = lookupMimeType(image.path);
+        final fileType = mimeType?.split('/');
+        if (fileType != null && fileType.length == 2) {
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              'image',
+              image.path,
+              contentType: MediaType(fileType[0], fileType[1]),
+            ),
+          );
+        }
+      }
 
       request.fields.addAll({
         'name': user.name,
