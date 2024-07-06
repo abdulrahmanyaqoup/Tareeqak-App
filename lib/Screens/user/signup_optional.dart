@@ -23,10 +23,10 @@ class SignupOptionalScreen extends ConsumerStatefulWidget {
 }
 
 class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
-  final TextEditingController majorController = TextEditingController();
-  final TextEditingController contactController = TextEditingController();
+  TextEditingController majorController = TextEditingController();
+  TextEditingController contactController = TextEditingController();
   final AuthService authService = AuthService();
-  File _image = File('assets/images/user.png');
+  File? _image;
   String? _selectedUniversity;
 
   final List<String> _universities = [
@@ -41,7 +41,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
   void signupUser() {
     authService.signUpUser(
       context: context,
-      ref: ref,
+      ref: ref, // Ensure ref is properly initialized and not null
       email: widget.email,
       password: widget.password,
       name: widget.name,
@@ -99,7 +99,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: FileImage(_image),
+                backgroundImage: _image != null ? FileImage(_image!) : null,
               ),
             ),
             const SizedBox(height: 20),
@@ -111,7 +111,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                 items: _universities,
                 onChanged: (String? value) {
                   setState(() {
-                    _selectedUniversity = value ?? '';
+                    _selectedUniversity = value;
                   });
                 },
               ),
@@ -138,13 +138,13 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
             ElevatedButton(
               onPressed: signupUser,
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(
                   Theme.of(context).primaryColor,
                 ),
-                textStyle: WidgetStateProperty.all(
+                textStyle: MaterialStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: WidgetStateProperty.all(
+                minimumSize: MaterialStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),

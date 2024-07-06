@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/user/profile.dart';
@@ -43,8 +44,13 @@ class AuthService {
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/register');
 
       var request = http.MultipartRequest('POST', uri);
-      request.files
-          .add(await http.MultipartFile.fromPath('image', image!.path));
+
+      if (image != null) {
+        request.files.add(await http.MultipartFile.fromPath(
+          'image',
+          image.path,
+        ));
+      }
       request.fields.addAll({
         'name': user.name,
         'email': user.email,

@@ -50,10 +50,12 @@ class _TabsState extends ConsumerState<Tabs> {
           WidgetBuilder builder;
           switch (settings.name) {
             case '/':
-              builder = (BuildContext _) => _getActiveScreen(pageIndex, ref.read(userProvider).user);
+              builder = (BuildContext _) =>
+                  _getActiveScreen(pageIndex, ref.read(userProvider).user);
               break;
             case '/signin':
-              builder = (BuildContext _) => const Signin(); // Signin screen route
+              builder =
+                  (BuildContext _) => const Signin(); // Signin screen route
               break;
             default:
               throw Exception('Invalid route: ${settings.name}');
@@ -109,10 +111,12 @@ class _TabsState extends ConsumerState<Tabs> {
     }
   }
 
-  Widget _getActiveScreen(int index,User user) {
+  Widget _getActiveScreen(int index, User user) {
     switch (index) {
       case 0:
-        return user.token.isEmpty ? const SignupScreen() : const HomeScreen();
+        return ref.read(userProvider.notifier).user.token.isEmpty
+            ? const SignupScreen()
+            : const HomeScreen();
       case 1:
         return const Center(
           child: Text('Volunteers Screen'),
