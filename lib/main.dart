@@ -56,7 +56,7 @@ class Tareeqak extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Maseer',
+      title: 'Tareeqak',
       theme: theme,
       home: const Tabs(),
     );

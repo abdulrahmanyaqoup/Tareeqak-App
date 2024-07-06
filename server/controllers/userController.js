@@ -26,18 +26,16 @@ const registerUser = asyncHandler(async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 8);
     const imagePath = req.file ? req.file.path : undefined;
 
-    const userProps = UserProps({
-      university,
-      major,
-      contact,
-      image: imagePath,
-    });
-
     let user = new User({
       name,
       email,
       password: hashedPassword,
-      userProps: userProps,
+      userProps: UserProps({
+        university,
+        major,
+        contact,
+        image: imagePath,
+      }),
     });
     user = await user.save();
     res.json(user);
