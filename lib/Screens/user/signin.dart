@@ -5,7 +5,7 @@ import 'package:finalproject/Widgets/textfield.dart';
 import 'package:finalproject/Screens/user/signup.dart';
 
 class Signin extends ConsumerStatefulWidget {
-  const Signin({Key? key}) : super(key: key);
+  const Signin({super.key});
 
   @override
   _SigninState createState() => _SigninState();

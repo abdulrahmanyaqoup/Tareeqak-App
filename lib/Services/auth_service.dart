@@ -124,7 +124,7 @@ class AuthService {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String token = prefs.getString('x-auth-token') as String;
 
-      if (token == '') {
+      if (token.isEmpty) {
         prefs.setString('x-auth-token', '');
       }
 

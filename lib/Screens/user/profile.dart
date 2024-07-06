@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   void signOutUser(BuildContext context) {
     AuthService().signOut(context);
@@ -24,11 +24,11 @@ class HomeScreen extends ConsumerWidget {
           ElevatedButton(
             onPressed: () => signOutUser(context),
             style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(Colors.blue),
-              textStyle: MaterialStateProperty.all(
+              backgroundColor: WidgetStateProperty.all(Colors.blue),
+              textStyle: WidgetStateProperty.all(
                 const TextStyle(color: Colors.white),
               ),
-              minimumSize: MaterialStateProperty.all(
+              minimumSize: WidgetStateProperty.all(
                 Size(MediaQuery.of(context).size.width / 2.5, 50),
               ),
             ),
