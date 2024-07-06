@@ -64,7 +64,7 @@ class AuthService {
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university ,
+        'university': user.userProps.university,
         'major': user.userProps.major,
         'contact': user.userProps.contact,
       });
@@ -75,7 +75,7 @@ class AuthService {
       if (response.statusCode != 200) {
         final responseBody = jsonDecode(response.body);
         final errorMessage = responseBody['error'] ?? 'Sign up failed';
-        throw Exception(errorMessage);
+        throw ErrorDescription(errorMessage);
       }
 
       httpErrorHandle(
