@@ -27,7 +27,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
   final TextEditingController contactController = TextEditingController();
   final AuthService authService = AuthService();
   File _image = File('assets/images/user.png');
-  String _selectedUniversity = '';
+  String? _selectedUniversity;
 
   final List<String> _universities = [
     'Harvard University',
@@ -45,7 +45,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
       email: widget.email,
       password: widget.password,
       name: widget.name,
-      university: _selectedUniversity,
+      university: _selectedUniversity ?? '',
       major: majorController.text,
       contact: contactController.text,
       image: _image,
