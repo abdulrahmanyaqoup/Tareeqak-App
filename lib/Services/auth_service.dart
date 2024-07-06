@@ -27,9 +27,9 @@ class AuthService {
   }) async {
     try {
       UserProps userProps = UserProps(
-        university: university ,
-        major: major ,
-        contact: contact ,
+        university: university,
+        major: major,
+        contact: contact,
         image: '',
       );
 
@@ -64,9 +64,10 @@ class AuthService {
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university,
-        'major': user.userProps.major,
-        'contact': user.userProps.contact,
+        'university': userProps.university,
+        'major': userProps.major,
+        'contact': userProps.contact,
+
       });
 
       final streamedResponse = await request.send();
@@ -107,12 +108,6 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-
-      if (res.statusCode != 200) {
-        final responseBody = jsonDecode(res.body);
-        final errorMessage = responseBody['error'] ?? 'Sign in failed';
-        throw Exception(errorMessage);
-      }
 
       httpErrorHandle(
         response: res,

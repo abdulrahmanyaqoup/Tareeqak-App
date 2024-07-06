@@ -9,6 +9,7 @@ const app = express();
 app.use(express.json());
 app.use("/uploads/images", express.static("uploads"));
 app.use("/api/users", userRoutes);
+app.use(errorHandler);
 
 const DB =
   "mongodb+srv://tareeqak:9ueSyaL1enUQ3jB5@tareeqak.rrfoolw.mongodb.net/tareeqak?retryWrites=true&w=majority&appName=Tareeqak&ssl=true";
