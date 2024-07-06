@@ -40,7 +40,7 @@ class AuthService {
         token: '',
         userProps: userProps,
       );
-      final uri = Uri.parse('${dotenv.env['uri']}/api/signup');
+      final uri = Uri.parse('${dotenv.env['uri']}/api/users/register');
 
       var request = http.MultipartRequest('POST', uri);
       request.files
@@ -54,7 +54,6 @@ class AuthService {
         'contact': user.userProps.contact,
       });
       final response = await http.Response.fromStream(await request.send());
-
       httpErrorHandle(
         response: response,
         context: context,
@@ -81,7 +80,7 @@ class AuthService {
       final userNotifier = ref.read(userProvider.notifier);
 
       http.Response res = await http.post(
-        Uri.parse('${dotenv.env['uri']}/api/signin'),
+        Uri.parse('${dotenv.env['uri']}/api/users/login'),
         body: jsonEncode({
           'email': email,
           'password': password,
@@ -125,7 +124,7 @@ class AuthService {
       }
 
       var tokenRes = await http.post(
-        Uri.parse('${dotenv.env['uri']}/api/user/tokenIsValid'),
+        Uri.parse('${dotenv.env['uri']}/api/users/token'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token!,
@@ -136,7 +135,7 @@ class AuthService {
 
       if (response == true) {
         http.Response userRes = await http.get(
-          Uri.parse('${dotenv.env['uri']}/api/user'),
+          Uri.parse('${dotenv.env['uri']}/api/users/current'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             'x-auth-token': token,
@@ -199,7 +198,7 @@ class AuthService {
       }
 
       http.Response res = await http.patch(
-        Uri.parse('${dotenv.env['uri']}/api/user/$userId'),
+        Uri.parse('${dotenv.env['uri']}/api/users/$userId'),
         body: jsonEncode(updates),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
@@ -226,7 +225,7 @@ class AuthService {
   }) async {
     try {
       http.Response res = await http.delete(
-        Uri.parse('${dotenv.env['uri']}/api/user/$userId'),
+        Uri.parse('${dotenv.env['uri']}/api/users/$userId'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,

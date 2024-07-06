@@ -1,14 +1,13 @@
-const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const upload = require("../middleware/imageUploadHandler");
 const User = require("../models/User/User");
 const UserProps = require("../models/User/UserProps");
-const auth = require("../middleware/validateTokenHandler");
-const authRouter = express.Router();
+const asyncHandler = require("express-async-handler");
 
-// Sign Up
-authRouter.post("/api/signup", upload, async (req, res) => {
+//@desc Register a user
+//@route POST /api/users/register
+//@access public
+const registerUser = asyncHandler(async (req, res) => {
   try {
     const { name, email, password, university, major, contact } = req.body;
 
@@ -27,7 +26,7 @@ authRouter.post("/api/signup", upload, async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 8);
     const imagePath = req.file ? req.file.path : undefined;
 
-    const userProps = new UserProps({
+    const userProps = UserProps({
       university,
       major,
       contact,
@@ -47,8 +46,10 @@ authRouter.post("/api/signup", upload, async (req, res) => {
   }
 });
 
-// sign in
-authRouter.post("/api/signin", async (req, res) => {
+//@desc Login user
+//@route POST /api/users/login
+//@access public
+const loginUser = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -75,8 +76,10 @@ authRouter.post("/api/signin", async (req, res) => {
   }
 });
 
-// token verification
-authRouter.post("/api/user/tokenIsValid", auth, async (req, res) => {
+//@desc token verification
+//@route POST /api/users/token
+//@access private
+const tokenVerficiation = asyncHandler(async (req, res) => {
   try {
     const token = req.header("x-auth-token");
     if (!token) return res.json(false);
@@ -93,8 +96,10 @@ authRouter.post("/api/user/tokenIsValid", auth, async (req, res) => {
   }
 });
 
-// get user data
-authRouter.get("/api/user", auth, async (req, res) => {
+//@desc Curret user
+//@route POST /api/users/current
+//@access private
+const currentUser = asyncHandler(async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     res.json({ ...user._doc, token: req.token });
@@ -103,8 +108,10 @@ authRouter.get("/api/user", auth, async (req, res) => {
   }
 });
 
-// Get all users
-authRouter.get("/api/users", async (req, res) => {
+//@desc Get users
+//@route GET /api/users
+//@access public
+const getUsers = asyncHandler(async (req, res) => {
   try {
     const users = await User.find({}, "name userProps");
     res.json(users);
@@ -113,8 +120,10 @@ authRouter.get("/api/users", async (req, res) => {
   }
 });
 
-// Update user
-authRouter.patch("/api/user/:id", upload, auth, async (req, res) => {
+//@desc Update user
+//@route PATCH /api/users
+//@access private
+const updateUser = asyncHandler(async (req, res) => {
   try {
     if (req.user._id !== req.params.id) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -179,8 +188,10 @@ authRouter.patch("/api/user/:id", upload, auth, async (req, res) => {
   }
 });
 
-// Delete user
-authRouter.delete("/api/user/:id", auth, async (req, res) => {
+//@desc Delete users
+//@route DELETE /api/users
+//@access private
+const deleteUser = asyncHandler(async (req, res) => {
   try {
     if (req.user._id !== req.params.id) {
       return res.status(401).json({ error: "Unauthorized" });
@@ -196,4 +207,12 @@ authRouter.delete("/api/user/:id", auth, async (req, res) => {
   }
 });
 
-module.exports = authRouter;
+module.exports = {
+  registerUser,
+  loginUser,
+  tokenVerficiation,
+  currentUser,
+  getUsers,
+  updateUser,
+  deleteUser,
+};
