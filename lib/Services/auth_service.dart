@@ -49,9 +49,9 @@ class AuthService {
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university ?? '',
-        'major': user.userProps.major ?? '',
-        'contact': user.userProps.contact ?? '',
+        'university': user.userProps.university,
+        'major': user.userProps.major,
+        'contact': user.userProps.contact,
       });
       final response = await http.Response.fromStream(await request.send());
 
