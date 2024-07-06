@@ -4,7 +4,6 @@ import 'package:finalproject/Screens/user/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/user/profile.dart';
-import 'package:finalproject/Screens/user/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -21,16 +20,16 @@ class AuthService {
     required String email,
     required String password,
     required String name,
-    String? university,
-    String? major,
-    String? contact,
+    String university = '',
+    String major = '',
+    String contact = '',
     File? image,
   }) async {
     try {
       UserProps userProps = UserProps(
-        university: university ?? '',
-        major: major ?? '',
-        contact: contact ?? '',
+        university: university ,
+        major: major ,
+        contact: contact ,
         image: '',
       );
 
@@ -65,19 +64,13 @@ class AuthService {
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university ,
+        'university': user.userProps.university,
         'major': user.userProps.major,
         'contact': user.userProps.contact,
       });
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode != 200) {
-        final responseBody = jsonDecode(response.body);
-        final errorMessage = responseBody['error'] ?? 'Sign up failed';
-        throw ErrorDescription(errorMessage.toString());
-      }
 
       httpErrorHandle(
         response: response,
@@ -276,7 +269,7 @@ class AuthService {
     }
   }
 
-   void signOut(BuildContext context, WidgetRef ref) async {
+  void signOut(BuildContext context, WidgetRef ref) async {
     final navigator = Navigator.of(context);
     final userNotifier = ref.read(userProvider.notifier);
     SharedPreferences prefs = await SharedPreferences.getInstance();

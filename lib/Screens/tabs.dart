@@ -6,7 +6,6 @@ import 'package:finalproject/Screens/user/signup.dart';
 import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Models/user.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});

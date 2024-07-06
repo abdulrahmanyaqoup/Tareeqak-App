@@ -17,9 +17,26 @@ class User {
     required this.userProps,
   });
 
+  User copyWith({
+    String? id,
+    String? name,
+    String? email,
+    String? token,
+    String? password,
+    UserProps? userProps,
+  }) {
+    return User(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      token: token ?? this.token,
+      password: password ?? this.password,
+      userProps: userProps ?? this.userProps,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'name': name,
       'email': email,
       'token': token,
@@ -30,12 +47,12 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['_id'] ?? '',
+      id: map['id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       token: map['token'] ?? '',
       password: map['password'] ?? '',
-      userProps: UserProps.fromMap(map['userProps'] ?? {}),
+      userProps: UserProps.fromMap(map['userProps']),
     );
   }
 
@@ -51,11 +68,25 @@ class UserProps {
   final String image;
 
   UserProps({
-    this.university = '',
-    this.major = '',
-    this.contact = '',
-    this.image = '',
+    required this.university,
+    required this.major,
+    required this.contact,
+    required this.image,
   });
+
+  UserProps copyWith({
+    String? university,
+    String? major,
+    String? contact,
+    String? image,
+  }) {
+    return UserProps(
+      university: university ?? this.university,
+      major: major ?? this.major,
+      contact: contact ?? this.contact,
+      image: image ?? this.image,
+    );
+  }
 
   Map<String, dynamic> toMap() {
     return {
