@@ -111,26 +111,22 @@ class _TabsState extends ConsumerState<Tabs> {
     }
   }
 
-  Widget _getActiveScreen(int index, User user) {
+  Widget _getActiveScreen(int index, User? user) {
+  if (user == null || user.token.isEmpty) {
+    return const SignupScreen();
+  } else {
     switch (index) {
       case 0:
-        return user.token.isEmpty ? const SignupScreen() : const HomeScreen();
+        return const HomeScreen();
       case 1:
-        return const Center(
-          child: Text('Volunteers Screen'),
-        );
+        return const Center(child: Text('Volunteers Screen'));
       case 2:
-        return const Center(
-          child: Text('ChatBot Screen'),
-        );
+        return const Center(child: Text('ChatBot Screen'));
       case 3:
-        return const Center(
-          child: Text('University Screen'),
-        );
+        return const Center(child: Text('University Screen'));
       default:
-        return const Center(
-          child: Text('University Screen'),
-        );
+        return const Center(child: Text('University Screen'));
     }
   }
+}
 }
