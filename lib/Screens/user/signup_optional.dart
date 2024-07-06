@@ -99,18 +99,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey[200],
-<<<<<<< HEAD
-                backgroundImage: _image != null ? FileImage(_image!) : null,
-                child: _image == null
-                    ? const Icon(
-                        Icons.add_a_photo,
-                        size: 50,
-                        color: Colors.grey,
-                      )
-                    : null,
-=======
                 backgroundImage: FileImage(_image),
->>>>>>> 79e736b654a362e1f4a47a1ad476718dcb88f503
               ),
             ),
             const SizedBox(height: 20),
