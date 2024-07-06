@@ -23,25 +23,28 @@ class SignupOptionalScreen extends ConsumerStatefulWidget {
 }
 
 class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
-  TextEditingController majorController = TextEditingController();
-  TextEditingController contactController = TextEditingController();
+  final TextEditingController majorController = TextEditingController();
+  final TextEditingController contactController = TextEditingController();
   final AuthService authService = AuthService();
   File? _image;
   String? _selectedUniversity;
 
   final List<String> _universities = [
-    'Harvard University',
-    'Stanford University',
-    'MIT',
-    'University of California, Berkeley',
-    'University of Oxford',
-    // Add more universities as needed
+    'University of Jordan',
+    'Yarmouk University',
+    'Jordan University of Science and Technology',
+    'Hashemite University',
+    'German Jordanian University',
+    'Tafileh Technical University',
+    'Al-Balqa Applied University',
+    'Al-Hussein Bin Talal University',
+    'Al-Hussein Technical University',
   ];
 
   void signupUser() {
     authService.signUpUser(
       context: context,
-      ref: ref, // Initialize ref if null
+      ref: ref,
       email: widget.email,
       password: widget.password,
       name: widget.name,
@@ -100,6 +103,13 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                 radius: 50,
                 backgroundColor: Colors.grey[200],
                 backgroundImage: _image != null ? FileImage(_image!) : null,
+                child: _image == null
+                    ? const Icon(
+                        Icons.add_a_photo,
+                        size: 40,
+                        color: Colors.grey,
+                      )
+                    : null,
               ),
             ),
             const SizedBox(height: 20),
@@ -111,7 +121,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                 items: _universities,
                 onChanged: (String? value) {
                   setState(() {
-                    _selectedUniversity = value;
+                    _selectedUniversity = value ?? '';
                   });
                 },
               ),

@@ -6,8 +6,8 @@ import 'package:finalproject/Provider/user_provider.dart';
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
-  void signOutUser(BuildContext context) {
-    AuthService().signOut(context);
+  void signOutUser(BuildContext context, WidgetRef ref) {
+    AuthService().signOut(context, ref);
   }
 
   @override
@@ -22,13 +22,13 @@ class HomeScreen extends ConsumerWidget {
           Text(user.email),
           Text(user.name),
           ElevatedButton(
-            onPressed: () => signOutUser(context),
+            onPressed: () => signOutUser(context, ref),
             style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.blue),
-              textStyle: WidgetStateProperty.all(
+              backgroundColor: MaterialStateProperty.all(Colors.blue),
+              textStyle: MaterialStateProperty.all(
                 const TextStyle(color: Colors.white),
               ),
-              minimumSize: WidgetStateProperty.all(
+              minimumSize: MaterialStateProperty.all(
                 Size(MediaQuery.of(context).size.width / 2.5, 50),
               ),
             ),

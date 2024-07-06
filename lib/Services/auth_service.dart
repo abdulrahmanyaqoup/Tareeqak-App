@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:finalproject/Screens/user/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/user/profile.dart';
@@ -64,7 +65,7 @@ class AuthService {
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university,
+        'university': user.userProps.university ,
         'major': user.userProps.major,
         'contact': user.userProps.contact,
       });
@@ -75,7 +76,7 @@ class AuthService {
       if (response.statusCode != 200) {
         final responseBody = jsonDecode(response.body);
         final errorMessage = responseBody['error'] ?? 'Sign up failed';
-        throw ErrorDescription(errorMessage);
+        throw ErrorDescription(errorMessage.toString());
       }
 
       httpErrorHandle(
@@ -147,9 +148,9 @@ class AuthService {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString('x-auth-token') ?? '';
+      String? token = prefs.getString('x-auth-token');
 
-      if (token.isEmpty) {
+      if (token == null || token.isEmpty) {
         prefs.setString('x-auth-token', '');
         return;
       }
@@ -275,13 +276,27 @@ class AuthService {
     }
   }
 
-  void signOut(BuildContext context) async {
+   void signOut(BuildContext context, WidgetRef ref) async {
     final navigator = Navigator.of(context);
+    final userNotifier = ref.read(userProvider.notifier);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('x-auth-token', '');
+    await prefs.remove('x-auth-token');
+    userNotifier.setUserFromModel(User(
+      id: '',
+      name: '',
+      email: '',
+      password: '',
+      token: '',
+      userProps: UserProps(
+        university: '',
+        major: '',
+        contact: '',
+        image: '',
+      ),
+    ));
     navigator.pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (context) => const SignupScreen(),
+        builder: (context) => const Signin(),
       ),
       (route) => false,
     );

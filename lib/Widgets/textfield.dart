@@ -7,7 +7,8 @@ class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
     required this.controller,
-    required this.hintText, required bool obscureText,
+    required this.hintText,
+    required bool obscureText,
   });
 
   @override
@@ -23,7 +24,8 @@ class CustomTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(8),
           borderSide: const BorderSide(color: Colors.transparent, width: 0),
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         filled: true,
         fillColor: const Color(0xffF5F6FA),
         hintText: hintText,

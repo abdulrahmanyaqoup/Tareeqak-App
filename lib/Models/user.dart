@@ -31,10 +31,10 @@ class User {
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
       id: map['_id'] ?? '',
-      name: map['name'],
-      email: map['email'],
+      name: map['name'] ?? '',
+      email: map['email'] ?? '',
       token: map['token'] ?? '',
-      password: map['password'],
+      password: map['password'] ?? '',
       userProps: UserProps.fromMap(map['userProps'] ?? {}),
     );
   }
@@ -68,10 +68,10 @@ class UserProps {
 
   factory UserProps.fromMap(Map<String, dynamic> map) {
     return UserProps(
-      university: map['university'],
-      major: map['major'],
-      contact: map['contact'],
-      image: map['image'],
+      university: map['university'] ?? '',
+      major: map['major'] ?? '',
+      contact: map['contact'] ?? '',
+      image: map['image'] ?? '',
     );
   }
 

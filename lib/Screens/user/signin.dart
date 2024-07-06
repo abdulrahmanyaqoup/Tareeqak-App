@@ -49,7 +49,7 @@ class _SigninState extends ConsumerState<Signin> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: emailController,
-                hintText: 'Enter your email',
+                hintText: 'Enter your email*',
                 obscureText: false,
               ),
             ),
@@ -58,7 +58,7 @@ class _SigninState extends ConsumerState<Signin> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: passwordController,
-                hintText: 'Enter your password',
+                hintText: 'Enter your password*',
                 obscureText: true,
               ),
             ),
@@ -66,11 +66,13 @@ class _SigninState extends ConsumerState<Signin> {
             ElevatedButton(
               onPressed: loginUser,
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(Colors.blue),
-                textStyle: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(
+                  Theme.of(context).primaryColor,
+                ),
+                textStyle: MaterialStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: WidgetStateProperty.all(
+                minimumSize: MaterialStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),

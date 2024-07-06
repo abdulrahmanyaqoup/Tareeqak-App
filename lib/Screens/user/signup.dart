@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Screens/user/signup_optional.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
-  const SignupScreen({super.key});
+  const SignupScreen({Key? key}) : super(key: key);
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -29,16 +30,32 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ),
         ),
       );
-    } else {
-      // Show an error message if fields are empty
+    } else if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please fill all the fields')),
+        const SnackBar(
+          content: Text('Please enter your email'),
+        ),
       );
+    } else if (passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your password'),
+        ),
+      );
+    } else if (nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your name'),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all the fields'),
+        ),
+      );
+      
     }
-  }
-
-  void goToSignin() {
-    Navigator.of(context).pushNamed('/signin'); // Use the route name
   }
 
   @override
@@ -66,7 +83,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: nameController,
-                hintText: 'Enter your name',
+                hintText: 'Enter your name*',
                 obscureText: false,
               ),
             ),
@@ -75,7 +92,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: emailController,
-                hintText: 'Enter your email',
+                hintText: 'Enter your email*',
                 obscureText: false,
               ),
             ),
@@ -84,7 +101,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: passwordController,
-                hintText: 'Enter your password',
+                hintText: 'Enter your password*',
                 obscureText: true,
               ),
             ),
@@ -92,13 +109,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ElevatedButton(
               onPressed: goToOptionalSignup,
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(
                   Theme.of(context).primaryColor,
                 ),
-                textStyle: WidgetStateProperty.all(
+                textStyle: MaterialStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: WidgetStateProperty.all(
+                minimumSize: MaterialStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),
@@ -109,7 +126,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             TextButton(
-              onPressed: goToSignin,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const Signin(),
+                  ),
+                );
+              },
               child: const Text('Login User?'),
             ),
           ],

@@ -6,6 +6,7 @@ import 'package:finalproject/Screens/user/signup.dart';
 import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
@@ -55,7 +56,7 @@ class _TabsState extends ConsumerState<Tabs> {
               break;
             case '/signin':
               builder =
-                  (BuildContext _) => const Signin(); // Signin screen route
+                  (BuildContext _) => const Signin(); 
               break;
             default:
               throw Exception('Invalid route: ${settings.name}');
@@ -112,21 +113,17 @@ class _TabsState extends ConsumerState<Tabs> {
   }
 
   Widget _getActiveScreen(int index, User? user) {
-    if (user == null || user.token.isEmpty) {
-      return const SignupScreen();
-    } else {
-      switch (index) {
-        case 0:
-          return const HomeScreen();
-        case 1:
-          return const Center(child: Text('Volunteers Screen'));
-        case 2:
-          return const Center(child: Text('ChatBot Screen'));
-        case 3:
-          return const Center(child: Text('University Screen'));
-        default:
-          return const Center(child: Text('University Screen'));
-      }
+    switch (index) {
+      case 0:
+       return user!.token.isNotEmpty ? const HomeScreen() : const SignupScreen();
+      case 1:
+        return const Center(child: Text('Volunteers Screen'));
+      case 2:
+        return const Center(child: Text('ChatBot Screen'));
+      case 3:
+        return const Center(child: Text('University Screen'));
+      default:
+        return const Center(child: Text('University Screen'));
     }
   }
 }
