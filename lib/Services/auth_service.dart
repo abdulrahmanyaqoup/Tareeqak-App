@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class AuthService {
   void signUpUser({
@@ -40,25 +41,43 @@ class AuthService {
         token: '',
         userProps: userProps,
       );
+
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/register');
 
       var request = http.MultipartRequest('POST', uri);
 
       if (image != null) {
-        request.files.add(await http.MultipartFile.fromPath(
-          'image',
-          image.path,
-        ));
+        final mimeType = lookupMimeType(image.path);
+        final fileType = mimeType?.split('/');
+        if (fileType != null && fileType.length == 2) {
+          request.files.add(
+            await http.MultipartFile.fromPath(
+              'image',
+              image.path,
+              contentType: MediaType(fileType[0], fileType[1]),
+            ),
+          );
+        }
       }
+
       request.fields.addAll({
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university,
+        'university': user.userProps.university ,
         'major': user.userProps.major,
         'contact': user.userProps.contact,
       });
-      final response = await http.Response.fromStream(await request.send());
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      if (response.statusCode != 200) {
+        final responseBody = jsonDecode(response.body);
+        final errorMessage = responseBody['error'] ?? 'Sign up failed';
+        throw Exception(errorMessage);
+      }
+
       httpErrorHandle(
         response: response,
         context: context,
@@ -95,6 +114,12 @@ class AuthService {
         },
       );
 
+      if (res.statusCode != 200) {
+        final responseBody = jsonDecode(res.body);
+        final errorMessage = responseBody['error'] ?? 'Sign in failed';
+        throw Exception(errorMessage);
+      }
+
       httpErrorHandle(
         response: res,
         context: context,
@@ -122,10 +147,11 @@ class AuthService {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String token = prefs.getString('x-auth-token') as String;
+      String? token = prefs.getString('x-auth-token');
 
-      if (token.isEmpty) {
+      if (token == null || token.isEmpty) {
         prefs.setString('x-auth-token', '');
+        return;
       }
 
       var tokenRes = await http.post(
