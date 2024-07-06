@@ -122,7 +122,7 @@ class AuthService {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
+      String token = prefs.getString('x-auth-token') as String;
 
       if (token == '') {
         prefs.setString('x-auth-token', '');
@@ -132,7 +132,7 @@ class AuthService {
         Uri.parse('${dotenv.env['uri']}/api/users/token'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token!,
+          'x-auth-token': token,
         },
       );
 
