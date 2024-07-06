@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Screens/user/signup_optional.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
-  const SignupScreen({Key? key}) : super(key: key);
+  const SignupScreen({super.key});
 
   @override
   _SignupScreenState createState() => _SignupScreenState();

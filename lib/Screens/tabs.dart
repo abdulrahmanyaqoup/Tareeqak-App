@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Screens/user/profile.dart';
 import 'package:finalproject/Screens/user/signup.dart';
-import 'package:finalproject/Screens/user/signin.dart'; // Import the signin screen
+import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Models/user.dart';
 
@@ -114,9 +114,7 @@ class _TabsState extends ConsumerState<Tabs> {
   Widget _getActiveScreen(int index, User user) {
     switch (index) {
       case 0:
-        return ref.read(userProvider.notifier).user.token.isEmpty
-            ? const SignupScreen()
-            : const HomeScreen();
+        return user.token.isEmpty ? const SignupScreen() : const HomeScreen();
       case 1:
         return const Center(
           child: Text('Volunteers Screen'),

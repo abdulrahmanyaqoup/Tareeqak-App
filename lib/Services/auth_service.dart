@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/user/profile.dart';
@@ -125,7 +124,7 @@ class AuthService {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('x-auth-token');
 
-      if (token == null) {
+      if (token == '') {
         prefs.setString('x-auth-token', '');
       }
 
