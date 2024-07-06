@@ -1,7 +1,6 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User/User");
-const UserProps = require("../models/User/UserProps");
 const asyncHandler = require("express-async-handler");
 
 //@desc Register a user
@@ -30,12 +29,12 @@ const registerUser = asyncHandler(async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      userProps: UserProps({
+      userProps: {
         university,
         major,
         contact,
         image: imagePath,
-      }),
+      },
     });
     user = await user.save();
     res.json(user);
