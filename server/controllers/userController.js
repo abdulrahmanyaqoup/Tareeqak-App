@@ -17,9 +17,8 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const userExist = await User.findOne({ email });
     if (userExist) {
-      return res
-        .status(400)
-        .json({ error: "User with the same email already exists!" });
+      res.status(401);
+      throw new Error("User with the same email already exists!");
     }
 
     const hashedPassword = await bcrypt.hash(password, 8);

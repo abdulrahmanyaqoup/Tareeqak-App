@@ -21,16 +21,16 @@ class AuthService {
     required String email,
     required String password,
     required String name,
-    String? university,
-    String? major,
-    String? contact,
+    String university = '',
+    String major = '',
+    String contact = '',
     File? image,
   }) async {
     try {
       UserProps userProps = UserProps(
-        university: university ?? '',
-        major: major ?? '',
-        contact: contact ?? '',
+        university: university,
+        major: major,
+        contact: contact,
         image: '',
       );
 
@@ -47,37 +47,31 @@ class AuthService {
 
       var request = http.MultipartRequest('POST', uri);
 
-      if (image != null) {
-        final mimeType = lookupMimeType(image.path);
-        final fileType = mimeType?.split('/');
-        if (fileType != null && fileType.length == 2) {
-          request.files.add(
-            await http.MultipartFile.fromPath(
-              'image',
-              image.path,
-              contentType: MediaType(fileType[0], fileType[1]),
-            ),
-          );
-        }
-      }
+      // if (image != null) {
+      //   final mimeType = lookupMimeType(image.path);
+      //   final fileType = mimeType?.split('/');
+      //   if (fileType != null && fileType.length == 2) {
+      //     request.files.add(
+      //       await http.MultipartFile.fromPath(
+      //         'image',
+      //         image.path,
+      //         contentType: MediaType(fileType[0], fileType[1]),
+      //       ),
+      //     );
+      //   }
+      // }
 
       request.fields.addAll({
         'name': user.name,
         'email': user.email,
         'password': user.password,
-        'university': user.userProps.university ,
-        'major': user.userProps.major,
-        'contact': user.userProps.contact,
+        'university': userProps.university,
+        'major': userProps.major,
+        'contact': userProps.contact,
       });
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode != 200) {
-        final responseBody = jsonDecode(response.body);
-        final errorMessage = responseBody['error'] ?? 'Sign up failed';
-        throw ErrorDescription(errorMessage.toString());
-      }
 
       httpErrorHandle(
         response: response,
@@ -114,12 +108,6 @@ class AuthService {
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-
-      if (res.statusCode != 200) {
-        final responseBody = jsonDecode(res.body);
-        final errorMessage = responseBody['error'] ?? 'Sign in failed';
-        throw Exception(errorMessage);
-      }
 
       httpErrorHandle(
         response: res,
@@ -276,7 +264,7 @@ class AuthService {
     }
   }
 
-   void signOut(BuildContext context, WidgetRef ref) async {
+  void signOut(BuildContext context, WidgetRef ref) async {
     final navigator = Navigator.of(context);
     final userNotifier = ref.read(userProvider.notifier);
     SharedPreferences prefs = await SharedPreferences.getInstance();
