@@ -45,12 +45,14 @@ class AuthService {
       var request = http.MultipartRequest('POST', uri);
       request.files
           .add(await http.MultipartFile.fromPath('image', image!.path));
-      request.fields['name'] = user.name;
-      request.fields['email'] = user.email;
-      request.fields['password'] = user.password;
-      request.fields['university'] = user.userProps.university!;
-      request.fields['major'] = user.userProps.major!;
-      request.fields['contact'] = user.userProps.contact!;
+      request.fields.addAll({
+        'name': user.name,
+        'email': user.email,
+        'password': user.password,
+        'university': user.userProps.university ?? '',
+        'major': user.userProps.major ?? '',
+        'contact': user.userProps.contact ?? '',
+      });
       final response = await http.Response.fromStream(await request.send());
 
       httpErrorHandle(
