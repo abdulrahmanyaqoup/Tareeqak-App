@@ -2,6 +2,7 @@ const express = require("express");
 const mongose = require("mongoose");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
+const errorHandler = require("./middleware/errorHandler");
 
 const PORT = process.env.PORT || 3000;
 const app = express();
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use(authRouter);
+app.use(errorHandler);
 
 const DB =
   "mongodb+srv://tareeqak:9ueSyaL1enUQ3jB5@tareeqak.rrfoolw.mongodb.net/tareeqak?retryWrites=true&w=majority&appName=Tareeqak&ssl=true";
