@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Screens/user/profile.dart';
 import 'package:finalproject/Screens/user/signup.dart';
+import 'package:finalproject/Screens/user/signin.dart'; // Import the signin screen
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Models/user.dart';
 
@@ -43,10 +44,21 @@ class _TabsState extends ConsumerState<Tabs> {
               ),
             )
           : null,
-      body: Consumer(
-        builder: (context, ref, child) {
-          final user = ref.watch(userProvider).user;
-          return _getActiveScreen(pageIndex, user);
+      body: Navigator(
+        key: GlobalKey<NavigatorState>(),
+        onGenerateRoute: (RouteSettings settings) {
+          WidgetBuilder builder;
+          switch (settings.name) {
+            case '/':
+              builder = (BuildContext _) => _getActiveScreen(pageIndex, ref.read(userProvider).user);
+              break;
+            case '/signin':
+              builder = (BuildContext _) => const Signin(); // Signin screen route
+              break;
+            default:
+              throw Exception('Invalid route: ${settings.name}');
+          }
+          return MaterialPageRoute(builder: builder, settings: settings);
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -97,7 +109,7 @@ class _TabsState extends ConsumerState<Tabs> {
     }
   }
 
-  Widget _getActiveScreen(int index, User user) {
+  Widget _getActiveScreen(int index,User user) {
     switch (index) {
       case 0:
         return user.token.isEmpty ? const SignupScreen() : const HomeScreen();

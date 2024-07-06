@@ -102,7 +102,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                 backgroundImage: _image != null ? FileImage(_image!) : null,
                 child: _image == null
                     ? const Icon(
-                        Icons.camera_alt,
+                        Icons.add_a_photo,
                         size: 50,
                         color: Colors.grey,
                       )

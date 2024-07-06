@@ -38,6 +38,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     }
   }
 
+  void goToSignin() {
+    Navigator.of(context).pushNamed('/signin'); // Use the route name
+  }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -63,7 +67,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: nameController,
-                hintText: 'Enter your name*',
+                hintText: 'Enter your name',
                 obscureText: false,
               ),
             ),
@@ -72,7 +76,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: emailController,
-                hintText: 'Enter your email*',
+                hintText: 'Enter your email',
                 obscureText: false,
               ),
             ),
@@ -81,7 +85,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
                 controller: passwordController,
-                hintText: 'Enter your password*',
+                hintText: 'Enter your password',
                 obscureText: true,
               ),
             ),
@@ -89,13 +93,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ElevatedButton(
               onPressed: goToOptionalSignup,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                   Theme.of(context).primaryColor,
                 ),
-                textStyle: MaterialStateProperty.all(
+                textStyle: WidgetStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: MaterialStateProperty.all(
+                minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),
@@ -106,14 +110,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Signin(),
-                  ),
-                );
-              },
+              onPressed: goToSignin,
               child: const Text('Login User?'),
             ),
           ],
