@@ -41,7 +41,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
   void signupUser() {
     authService.signUpUser(
       context: context,
-      ref: ref, // Ensure ref is properly initialized and not null
+      ref: ref, // Initialize ref if null
       email: widget.email,
       password: widget.password,
       name: widget.name,
@@ -138,13 +138,13 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
             ElevatedButton(
               onPressed: signupUser,
               style: ButtonStyle(
-                backgroundColor: WidgetStateProperty.all(
+                backgroundColor: MaterialStateProperty.all(
                   Theme.of(context).primaryColor,
                 ),
-                textStyle: WidgetStateProperty.all(
+                textStyle: MaterialStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: WidgetStateProperty.all(
+                minimumSize: MaterialStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),

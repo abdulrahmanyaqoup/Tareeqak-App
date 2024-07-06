@@ -19,16 +19,16 @@ class AuthService {
     required String email,
     required String password,
     required String name,
-    String university = '',
-    String major = '',
-    String contact = '',
+    String? university,
+    String? major,
+    String? contact,
     File? image,
   }) async {
     try {
       UserProps userProps = UserProps(
-        university: university,
-        major: major,
-        contact: contact,
+        university: university ?? '',
+        major: major ?? '',
+        contact: contact ?? '',
         image: '',
       );
 
