@@ -108,12 +108,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: _image != null
-                    ? FileImage(_image!)
+                backgroundImage: user.userProps.image.isEmpty
+                    ? null
                     : NetworkImage(
                             "${dotenv.env['uri']}/${user.userProps.image}")
                         as ImageProvider,
-                child: _image == null
+                child: user.userProps.image.isEmpty
                     ? const Icon(Icons.camera_alt, size: 50)
                     : null,
               ),
