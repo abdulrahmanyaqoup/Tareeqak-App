@@ -6,6 +6,7 @@ import 'package:finalproject/Screens/user/signup.dart';
 import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Models/user.dart';
+import 'package:finalproject/Screens/volunteers.dart';
 
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
@@ -116,7 +117,7 @@ class _TabsState extends ConsumerState<Tabs> {
       case 0:
        return user!.token.isNotEmpty ? const HomeScreen() : const SignupScreen();
       case 1:
-        return const Center(child: Text('Volunteers Screen'));
+        return Volunteers() ;
       case 2:
         return const Center(child: Text('ChatBot Screen'));
       case 3:

@@ -163,26 +163,30 @@ class AuthService {
     }
   }
 
-  void getAllUsers({
-    required BuildContext context,
-  }) async {
-    try {
-      http.Response res = await http.get(
-        Uri.parse('${dotenv.env['uri']}/api/users'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-      );
+ void getAllUsers({
+  required BuildContext context,
+  required WidgetRef ref,
+}) async {
+  try {
+    http.Response res = await http.get(
+      Uri.parse('${dotenv.env['uri']}/api/users'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
 
-      if (res.statusCode == 200) {
-        List<dynamic> users = jsonDecode(res.body);
-      } else {
-        showSnackBar(context, 'Failed to fetch users');
-      }
-    } catch (e) {
-      showSnackBar(context, e.toString());
+    if (res.statusCode == 200) {
+      List<dynamic> usersJson = jsonDecode(res.body);
+      List<User> users = usersJson.map((userJson) => User.fromMap(userJson)).toList();
+      ref.read(userProvider.notifier).setUserList(users);
+    } else {
+      showSnackBar(context, 'Failed to fetch users');
     }
+  } catch (e) {
+    showSnackBar(context, e.toString());
   }
+}
+
 
   void updateUser({
     required BuildContext context,
@@ -227,7 +231,7 @@ class AuthService {
         response: response,
         context: context,
         onSuccess: () {
-          showSnackBar(context, 'User updated successfully');
+          showSnackBar(context, response.body);
         },
       );
     } catch (e) {

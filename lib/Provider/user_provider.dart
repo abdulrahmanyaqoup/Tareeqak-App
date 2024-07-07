@@ -16,9 +16,9 @@ class UserProvider extends ChangeNotifier {
       image: '',
     ),
   );
-
+  List<User> _userList = [];
   User get user => _user;
-
+  List<User> get userList => _userList; 
   void setUser(String user) {
     _user = User.fromJson(user);
     notifyListeners();
@@ -26,6 +26,11 @@ class UserProvider extends ChangeNotifier {
 
   void setUserFromModel(User user) {
     _user = user;
+    notifyListeners();
+  }
+
+  void setUserList(List<User> users) {
+    _userList = users;
     notifyListeners();
   }
 
