@@ -9,10 +9,10 @@ class User {
   final UserProps userProps;
 
   User({
-    this.id = '',
+    required this.id,
     required this.name,
     required this.email,
-    this.token = '',
+    required this.token,
     required this.password,
     required this.userProps,
   });
@@ -47,7 +47,7 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> map) {
     return User(
-      id: map['id'] ?? '',
+      id: map['_id'] ?? '',
       name: map['name'] ?? '',
       email: map['email'] ?? '',
       token: map['token'] ?? '',

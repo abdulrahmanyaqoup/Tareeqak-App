@@ -188,16 +188,18 @@ class AuthService {
     required BuildContext context,
     required WidgetRef ref,
     required String userId,
+    required String userToken,
     required Map<String, dynamic> updates,
     required String token,
     File? image,
   }) async {
     try {
-      print(userId);
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
-
       var request = http.MultipartRequest('PATCH', uri);
-
+      request.headers.addAll({
+        'Content-Type': 'application/json; charset=UTF-8',
+        'x-auth-token': userToken,
+      });
       if (image != null) {
         request.files.add(
           await http.MultipartFile.fromPath(
@@ -209,15 +211,11 @@ class AuthService {
           }),
         );
       }
-
       request.fields
           .addAll(updates.map((key, value) => MapEntry(key, value.toString())));
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
-      print(response.statusCode);
-      print(response.reasonPhrase);
 
       httpErrorHandle(
         response: response,

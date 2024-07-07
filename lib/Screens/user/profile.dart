@@ -74,6 +74,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       context: context,
       ref: ref,
       userId: user.id,
+      userToken: user.token,
       updates: updatedUser.toMap(),
       token: user.token,
       image: _image,

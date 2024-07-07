@@ -31,8 +31,10 @@ class UserProvider extends ChangeNotifier {
 
   void updateUserProps(UserProps userProps) {
     _user = User(
+      id: _user.id,
       name: _user.name,
       email: _user.email,
+      token: _user.token,
       password: _user.password,
       userProps: userProps,
     );
