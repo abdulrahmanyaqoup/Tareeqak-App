@@ -10,15 +10,9 @@ const registerUser = asyncHandler(async (req, res) => {
   try {
     const { name, email, password, university, major, contact } = req.body;
 
-    if (!name || !email || !password) {
-      res.status(400);
-      throw new Error("All fields are mandatory!");
-    }
-
     const userExist = await User.findOne({ email });
     if (userExist) {
-      res.status(400);
-      throw new Error("User with the same email already exists!");
+      res.status(400).json({ msg: "User with the same email already exists!" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 8);
@@ -49,21 +43,22 @@ const loginUser = asyncHandler(async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
-      res.status(400);
-      throw new Error("All fields are mandatory!");
+    if (!email) {
+      res.status(400).json({ msg: "Please enter your email!" });
+    }
+
+    if (!password) {
+      res.status(400).json({ msg: "Please enter your password!" });
     }
 
     const user = await User.findOne({ email });
     if (!user) {
-      res.status(404);
-      throw new Error("User not found!");
+      res.status(404).json({ msg: "User not found!" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(400);
-      throw new Error("Password is incorrect!");
+      res.status(403).json({ msg: "Password is incorrect!" });
     }
 
     const token = jwt.sign({ _id: user._id }, "passwordKey");
@@ -122,40 +117,30 @@ const getUsers = asyncHandler(async (req, res) => {
 //@access private
 const updateUser = asyncHandler(async (req, res) => {
   try {
-    if (req.user._id !== req.params.id) {
-      return res.status(401).json({ error: "Unauthorized" });
+    const { name, email, password, university, major, contact } = req.body;
+
+    let hashedPassword;
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 8);
     }
+    const imagePath = req.file ? req.file.path : undefined;
 
-    const updates = { ...req.body };
-    if (updates.userProps && Object.keys(updates.userProps).length === 0) {
-      delete updates.userProps;
-    }
+    const updates = {
+      name,
+      email,
+      password: hashedPassword,
+      userProps: {
+        university,
+        major,
+        contact,
+        image: imagePath,
+      },
+    };
 
-    if (req.file) {
-      const mimeType = req.file.mimetype;
-      if (
-        !["image/jpeg", "image/jpg", "image/png", "image/webp"].includes(
-          mimeType
-        )
-      ) {
-        return res.status(422).json({
-          error:
-            "Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.",
-        });
-      }
-
-      updates.userProps.image = req.file.buffer;
-    }
-
-    const user = await User.findByIdAndUpdate(
-      req.params.id,
-      updates,
-      { $set: updates },
-      { new: true }
-    );
+    const user = await User.findByIdAndUpdate(req.params.id, { $set: updates });
 
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
     }
 
     res.json(user);
@@ -170,12 +155,12 @@ const updateUser = asyncHandler(async (req, res) => {
 const deleteUser = asyncHandler(async (req, res) => {
   try {
     if (req.user._id !== req.params.id) {
-      return res.status(401).json({ error: "Unauthorized" });
+      res.status(401).json({ error: "Unauthorized" });
     }
 
     const deletedUser = await User.findByIdAndDelete(req.params.id);
     if (!deletedUser) {
-      return res.status(404).json({ error: "User not found" });
+      res.status(404).json({ error: "User not found" });
     }
     res.json({ message: "User deleted successfully" });
   } catch (error) {

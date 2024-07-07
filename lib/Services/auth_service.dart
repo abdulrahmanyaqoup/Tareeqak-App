@@ -47,17 +47,13 @@ class AuthService {
       var request = http.MultipartRequest('POST', uri);
 
       if (image != null) {
-        final mimeType = lookupMimeType(image.path);
-        final fileType = mimeType?.split('/');
-        if (fileType != null && fileType.length == 2) {
-          request.files.add(
-            await http.MultipartFile.fromPath(
-              'image',
-              image.path,
-              contentType: MediaType(fileType[0], fileType[1]),
-            ),
-          );
-        }
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            image.path,
+            contentType: MediaType('image', 'jpeg/jpg/png/webp'),
+          ),
+        );
       }
 
       request.fields.addAll({
@@ -67,7 +63,6 @@ class AuthService {
         'university': userProps.university,
         'major': userProps.major,
         'contact': userProps.contact,
-
       });
 
       final streamedResponse = await request.send();
@@ -196,38 +191,37 @@ class AuthService {
     required String userId,
     required Map<String, dynamic> updates,
     required String token,
-    File? imageFile,
+    File? image,
   }) async {
     try {
-      if (updates.isEmpty && imageFile == null) {
-        showSnackBar(context, 'No updates provided');
-        return;
+      print(userId);
+      final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
+
+      var request = http.MultipartRequest('PATCH', uri);
+
+      if (image != null) {
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            'image',
+            image.path,
+            contentType: MediaType('image', 'jpeg/jpg/png/webp'),
+          ).catchError((e) {
+            return e;
+          }),
+        );
       }
 
-      if (imageFile != null) {
-        final mimeType = lookupMimeType(imageFile.path);
-        if (!['image/jpeg', 'image/jpg', 'image/png', 'image/webp']
-            .contains(mimeType)) {
-          showSnackBar(context,
-              'Unsupported image format. Allowed formats are: jpg, jpeg, png, webp.');
-          return;
-        }
+      request.fields
+          .addAll(updates.map((key, value) => MapEntry(key, value.toString())));
 
-        updates['userProps']['image'] =
-            base64Encode(await imageFile.readAsBytes());
-      }
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
 
-      http.Response res = await http.patch(
-        Uri.parse('${dotenv.env['uri']}/api/users/$userId'),
-        body: jsonEncode(updates),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token,
-        },
-      );
+      print(response.statusCode);
+      print(response.reasonPhrase);
 
       httpErrorHandle(
-        response: res,
+        response: response,
         context: context,
         onSuccess: () {
           showSnackBar(context, 'User updated successfully');
@@ -245,7 +239,7 @@ class AuthService {
   }) async {
     try {
       http.Response res = await http.delete(
-        Uri.parse('${dotenv.env['uri']}/api/users/$userId'),
+        Uri.parse('${dotenv.env['uri']}/api/users/delete/$userId'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,

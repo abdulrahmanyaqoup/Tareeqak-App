@@ -10,6 +10,7 @@ const {
 } = require("../controllers/userController");
 const validateToken = require("../middleware/validateTokenHandler");
 const imageUpload = require("../middleware/imageUploadHandler");
+const errorHandler = require("../middleware/errorHandler");
 
 const router = express.Router();
 
@@ -18,7 +19,7 @@ router.post("/login", loginUser);
 router.post("/token", validateToken, tokenVerficiation);
 router.get("/current", validateToken, currentUser);
 router.get("/", getUsers);
-router.patch("/:id", validateToken, updateUser);
-router.delete("/:id", validateToken, deleteUser);
+router.patch("/update/:id", imageUpload, updateUser);
+router.delete("/delete/:id", deleteUser);
 
 module.exports = router;
