@@ -211,8 +211,14 @@ class AuthService {
           }),
         );
       }
-      request.fields
-          .addAll(updates.map((key, value) => MapEntry(key, value.toString())));
+      request.fields.addAll({
+        'name': updates['name'],
+        'email': updates['email'],
+        'password': updates['password'],
+        'university': updates['userProps']['university'],
+        'major': updates['userProps']['major'],
+        'contact': updates['userProps']['contact'],
+      });
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
