@@ -27,7 +27,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final user = ref.read(userProvider).user;
     nameController = TextEditingController(text: user.name);
     emailController = TextEditingController(text: user.email);
-    universityController = TextEditingController(text: user.userProps.university);
+    universityController =
+        TextEditingController(text: user.userProps.university);
     majorController = TextEditingController(text: user.userProps.major);
     contactController = TextEditingController(text: user.userProps.contact);
   }
@@ -74,7 +75,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       userId: user.id,
       updates: updatedUser.toMap(),
       token: user.token,
-      imageFile: _image,
+      image: _image,
     );
   }
 
@@ -106,8 +107,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: _image != null ? FileImage(_image!) : NetworkImage(user.userProps.image) as ImageProvider,
-                child: _image == null ? const Icon(Icons.camera_alt, size: 50) : null,
+                backgroundImage: _image != null
+                    ? FileImage(_image!)
+                    : NetworkImage(user.userProps.image) as ImageProvider,
+                child: _image == null
+                    ? const Icon(Icons.camera_alt, size: 50)
+                    : null,
               ),
             ),
             const SizedBox(height: 20),
