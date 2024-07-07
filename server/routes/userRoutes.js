@@ -2,7 +2,6 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
-  tokenVerficiation,
   currentUser,
   getUsers,
   updateUser,
@@ -16,10 +15,9 @@ const router = express.Router();
 
 router.post("/register", imageUpload, registerUser);
 router.post("/login", loginUser);
-router.post("/token", validateToken, tokenVerficiation);
 router.get("/current", validateToken, currentUser);
 router.get("/", getUsers);
-router.patch("/update/:id", imageUpload, updateUser);
-router.delete("/delete/:id", deleteUser);
+router.patch("/update/:id", validateToken, imageUpload, updateUser);
+router.delete("/delete/:id", validateToken, deleteUser);
 
 module.exports = router;

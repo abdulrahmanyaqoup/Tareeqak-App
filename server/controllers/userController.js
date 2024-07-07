@@ -61,28 +61,8 @@ const loginUser = asyncHandler(async (req, res) => {
       res.status(403).json({ msg: "Password is incorrect!" });
     }
 
-    const token = jwt.sign({ _id: user._id }, "passwordKey");
+    const token = jwt.sign({ _id: user._id }, process.env.SECRET);
     res.json({ token, ...user._doc });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-//@desc token verification
-//@route POST /api/users/token
-//@access private
-const tokenVerficiation = asyncHandler(async (req, res) => {
-  try {
-    const token = req.header("x-auth-token");
-    if (!token) return res.json(false);
-
-    const verified = jwt.verify(token, "passwordKey");
-    if (!verified) return res.json(false);
-
-    const user = await User.findById(verified._id);
-    if (!user) return res.json(false);
-
-    res.json(true);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -121,7 +101,7 @@ const updateUser = asyncHandler(async (req, res) => {
 
     let hashedPassword;
     if (password) {
-      hashedPassword = await bcrypt.hash(password, 8);
+      hashedPassword = await bcrypt.hash(password, 12);
     }
     const imagePath = req.file ? req.file.path : undefined;
 
@@ -171,7 +151,6 @@ const deleteUser = asyncHandler(async (req, res) => {
 module.exports = {
   registerUser,
   loginUser,
-  tokenVerficiation,
   currentUser,
   getUsers,
   updateUser,

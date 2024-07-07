@@ -3,7 +3,7 @@ const mongose = require("mongoose");
 const userRoutes = require("./routes/userRoutes");
 const errorHandler = require("./middleware/errorHandler");
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 const app = express();
 
 app.use(express.json());
@@ -11,8 +11,7 @@ app.use("/uploads/images", express.static("uploads"));
 app.use("/api/users", userRoutes);
 app.use(errorHandler);
 
-const DB =
-  "mongodb+srv://tareeqak:9ueSyaL1enUQ3jB5@tareeqak.rrfoolw.mongodb.net/tareeqak?retryWrites=true&w=majority&appName=Tareeqak&ssl=true";
+const DB = process.env.DB;
 
 mongose
   .connect(DB)
