@@ -111,7 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 backgroundImage: _image != null
                     ? FileImage(_image!)
                     : NetworkImage(
-                            "${dotenv.env['uri']}${user.userProps.image}")
+                            "${dotenv.env['uri']}/${user.userProps.image}")
                         as ImageProvider,
                 child: _image == null
                     ? const Icon(Icons.camera_alt, size: 50)
