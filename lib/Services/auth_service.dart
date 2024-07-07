@@ -163,30 +163,30 @@ class AuthService {
     }
   }
 
- void getAllUsers({
-  required BuildContext context,
-  required WidgetRef ref,
-}) async {
-  try {
-    http.Response res = await http.get(
-      Uri.parse('${dotenv.env['uri']}/api/users'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    );
+  void getAllUsers({
+    required BuildContext context,
+    required WidgetRef ref,
+  }) async {
+    try {
+      http.Response res = await http.get(
+        Uri.parse('${dotenv.env['uri']}/api/users'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
 
-    if (res.statusCode == 200) {
-      List<dynamic> usersJson = jsonDecode(res.body);
-      List<User> users = usersJson.map((userJson) => User.fromMap(userJson)).toList();
-      ref.read(userProvider.notifier).setUserList(users);
-    } else {
-      showSnackBar(context, 'Failed to fetch users');
+      if (res.statusCode == 200) {
+        List<dynamic> usersJson = jsonDecode(res.body);
+        List<User> users =
+            usersJson.map((userJson) => User.fromMap(userJson)).toList();
+        ref.read(userProvider.notifier).setUserList(users);
+      } else {
+        showSnackBar(context, 'Failed to fetch users');
+      }
+    } catch (e) {
+      showSnackBar(context, e.toString());
     }
-  } catch (e) {
-    showSnackBar(context, e.toString());
   }
-}
-
 
   void updateUser({
     required BuildContext context,
@@ -218,7 +218,7 @@ class AuthService {
       request.fields.addAll({
         'name': updates['name'],
         'email': updates['email'],
-        'password': updates['password'],
+        'password': '',
         'university': updates['userProps']['university'],
         'major': updates['userProps']['major'],
         'contact': updates['userProps']['contact'],
