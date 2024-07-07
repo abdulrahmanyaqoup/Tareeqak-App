@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finalproject/Services/auth_service.dart';
@@ -109,7 +110,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 backgroundColor: Colors.grey[200],
                 backgroundImage: _image != null
                     ? FileImage(_image!)
-                    : NetworkImage(user.userProps.image) as ImageProvider,
+                    : NetworkImage(
+                            "${dotenv.env['uri']}${user.userProps.image}")
+                        as ImageProvider,
                 child: _image == null
                     ? const Icon(Icons.camera_alt, size: 50)
                     : null,
