@@ -92,15 +92,17 @@ class AuthService {
       final navigator = Navigator.of(context);
       final userNotifier = ref.read(userProvider.notifier);
 
+      Map<String, String> headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+      };
+
       http.Response res = await http.post(
         Uri.parse('${dotenv.env['uri']}/api/users/login'),
         body: jsonEncode({
           'email': email,
           'password': password,
         }),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: headers,
       );
 
       httpErrorHandle(
@@ -137,23 +139,22 @@ class AuthService {
         return;
       }
 
+      Map<String, String> headers = {
+        'Content-Type': 'application/json;charset=UTF-8',
+        'x-auth-token': token,
+      };
+
       var tokenRes = await http.post(
         Uri.parse('${dotenv.env['uri']}/api/users/token'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token,
-        },
+        headers: headers,
       );
 
-      var response = jsonDecode(tokenRes.body);
+      var response = tokenRes.body;
 
       if (response == true) {
         http.Response userRes = await http.get(
           Uri.parse('${dotenv.env['uri']}/api/users/current'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            'x-auth-token': token,
-          },
+          headers: headers,
         );
 
         userNotifier.setUser(userRes.body);
