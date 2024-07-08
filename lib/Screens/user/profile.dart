@@ -32,6 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         TextEditingController(text: user.userProps.university);
     majorController = TextEditingController(text: user.userProps.major);
     contactController = TextEditingController(text: user.userProps.contact);
+    _image = File(user.userProps.image);
   }
 
   @override
@@ -61,6 +62,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
+      image: _image!.path
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
