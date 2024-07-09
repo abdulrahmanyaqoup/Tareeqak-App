@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:finalproject/Models/user.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -22,7 +23,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   late TextEditingController universityController;
   late TextEditingController majorController;
   late TextEditingController contactController;
-  File? _image;
+  FileImage? _image;
   bool circular = false;
 
   @override
@@ -53,7 +54,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
+        _image = FileImage(File(pickedFile.path));
       }
     });
   }
@@ -70,7 +71,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
-      image: _image?.path,
+      image: _image?.file.path,
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
@@ -87,7 +88,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       userToken: user.token,
       updates: updatedUser.toMap(),
       token: user.token,
-      image: _image,
     );
 
     setState(() {
@@ -216,10 +216,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         children: [
           CircleAvatar(
             radius: 80.0,
-            backgroundImage: _image == null
-                ? CachedNetworkImageProvider(
-                    "${dotenv.env['uri']}/${user.userProps.image}")
-                : FileImage(_image!),
+            backgroundImage: _image ??
+                CachedNetworkImageProvider(
+                    "${dotenv.env['uri']}/${user.userProps.image}"),
           ),
           Positioned(
             bottom: 0,

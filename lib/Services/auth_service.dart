@@ -197,9 +197,9 @@ class AuthService {
     required String userToken,
     required Map<String, dynamic> updates,
     required String token,
-    File? image,
   }) async {
     try {
+      final userNotifier = ref.read(userProvider.notifier);
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/update');
       var request = http.MultipartRequest('PATCH', uri);
 
@@ -208,7 +208,7 @@ class AuthService {
         'x-auth-token': userToken,
       });
 
-      if (image != null) {
+      if (updates['userProps']['image'] != null) {
         request.files.add(
           await http.MultipartFile.fromPath(
             'image',
@@ -231,6 +231,9 @@ class AuthService {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
+      final userProps = jsonDecode(response.body)['userProps'];
+      userNotifier.updateUserProps(UserProps.fromMap(userProps));
+
       httpErrorHandle(
         response: response,
         context: context,

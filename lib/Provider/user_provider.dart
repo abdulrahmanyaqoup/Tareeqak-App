@@ -18,7 +18,7 @@ class UserProvider extends ChangeNotifier {
   );
   List<User> _userList = [];
   User get user => _user;
-  List<User> get userList => _userList; 
+  List<User> get userList => _userList;
   void setUser(String user) {
     _user = User.fromJson(user);
     notifyListeners();
