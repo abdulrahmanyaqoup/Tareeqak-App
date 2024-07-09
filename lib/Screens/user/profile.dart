@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -45,7 +45,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage() async {  
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -62,7 +62,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
-      image: _image!.path
+      image: _image?.path == user.userProps.image
+          ? user.userProps.image
+          : _image?.path,
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
@@ -111,11 +113,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               child: CircleAvatar(
                 radius: 50,
                 backgroundColor: Colors.grey[200],
-                backgroundImage: _image != null
+                backgroundImage: _image != null 
                     ? FileImage(_image!)
-                    : NetworkImage(
-                            "${dotenv.env['uri']}/${user.userProps.image}")
-                        as ImageProvider,
+                    : CachedNetworkImageProvider(
+                        "${dotenv.env['uri']}/${user.userProps.image}"),
                 child: user.userProps.image.isEmpty && _image == null
                     ? const Icon(Icons.camera_alt, size: 50)
                     : null,

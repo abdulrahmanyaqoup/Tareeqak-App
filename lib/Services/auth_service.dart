@@ -96,7 +96,7 @@ class AuthService {
         'Content-Type': 'application/json;charset=UTF-8',
       };
 
-      http.Response res = await http.post(
+      http.Response response = await http.post(
         Uri.parse('${dotenv.env['uri']}/api/users/login'),
         body: jsonEncode({
           'email': email,
@@ -106,12 +106,12 @@ class AuthService {
       );
 
       httpErrorHandle(
-        response: res,
+        response: response,
         context: context,
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
-          userNotifier.setUser(res.body);
-          await prefs.setString('x-auth-token', jsonDecode(res.body)['token']);
+          userNotifier.setUser(response.body);
+          await prefs.setString('x-auth-token', jsonDecode(response.body)['token']);
           navigator.pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const HomeScreen(),
