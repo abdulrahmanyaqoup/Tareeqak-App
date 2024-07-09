@@ -30,6 +30,21 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           ),
         ),
       );
+    } else if (emailController.text.isEmpty &&
+        passwordController.text.isEmpty &&
+        nameController.text.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please fill all the fields'),
+        ),
+      );
+      
+    } else if (nameController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter your name'),
+        ),
+      );
     } else if (emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -42,20 +57,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
           content: Text('Please enter your password'),
         ),
       );
-    } else if (nameController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter your name'),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please fill all the fields'),
-        ),
-      );
-      
-    }
+    } 
+       
   }
 
   @override
@@ -84,6 +87,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
               child: CustomTextField(
                 controller: nameController,
                 hintText: 'Enter your name*',
+                
                 obscureText: false,
               ),
             ),
@@ -109,13 +113,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
             ElevatedButton(
               onPressed: goToOptionalSignup,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                   Theme.of(context).primaryColor,
                 ),
-                textStyle: MaterialStateProperty.all(
+                textStyle: WidgetStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: MaterialStateProperty.all(
+                minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),

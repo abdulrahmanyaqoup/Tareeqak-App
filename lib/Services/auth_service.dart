@@ -189,7 +189,7 @@ class AuthService {
     }
   }
 
-  void updateUser({
+  Future<void> updateUser({
     required BuildContext context,
     required WidgetRef ref,
     required String userId,
@@ -201,21 +201,24 @@ class AuthService {
     try {
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
       var request = http.MultipartRequest('PATCH', uri);
+
       request.headers.addAll({
         'Content-Type': 'application/json; charset=UTF-8',
         'x-auth-token': userToken,
       });
+
       if (image != null) {
         request.files.add(
           await http.MultipartFile.fromPath(
             'image',
-            image.path,
-            contentType: MediaType('image', 'jpeg/jpg/png/webp'),
+            updates['userProps']['image'],
+            contentType: MediaType('image', 'jpeg'),
           ).catchError((e) {
-            return e;
+            return http.MultipartFile.fromBytes('image', []);
           }),
         );
       }
+
       request.fields.addAll({
         'name': updates['name'],
         'email': updates['email'],

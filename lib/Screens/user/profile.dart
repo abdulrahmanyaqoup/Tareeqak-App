@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:finalproject/Models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,20 +8,23 @@ import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
-
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController emailController;
   late TextEditingController universityController;
   late TextEditingController majorController;
   late TextEditingController contactController;
   File? _image;
+  bool circular = false;
+
 
   @override
   void initState() {
@@ -32,7 +36,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         TextEditingController(text: user.userProps.university);
     majorController = TextEditingController(text: user.userProps.major);
     contactController = TextEditingController(text: user.userProps.contact);
-    _image = File(user.userProps.image);
+    _image = null;
   }
 
   @override
@@ -45,9 +49,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {  
+  Future<void> _pickImage(ImageSource source) async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: source, maxWidth: 600);
 
     setState(() {
       if (pickedFile != null) {
@@ -57,14 +61,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   void updateUser(BuildContext context, WidgetRef ref) {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() {
+      circular = true;
+    });
+
     final user = ref.read(userProvider).user;
     final updatedUserProps = user.userProps.copyWith(
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
-      image: _image?.path == user.userProps.image
-          ? user.userProps.image
-          : _image?.path,
+      image: _image != null ? _image!.path : user.userProps.image,
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
@@ -83,6 +91,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       token: user.token,
       image: _image,
     );
+
+    setState(() {
+      circular = false;
+    });
   }
 
   void signOutUser(BuildContext context, WidgetRef ref) {
@@ -103,25 +115,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundColor: Colors.grey[200],
-                backgroundImage: _image != null 
-                    ? FileImage(_image!)
-                    : CachedNetworkImageProvider(
-                        "${dotenv.env['uri']}/${user.userProps.image}"),
-                child: user.userProps.image.isEmpty && _image == null
-                    ? const Icon(Icons.camera_alt, size: 50)
-                    : null,
-              ),
-            ),
+            imageProfile(user),
             const SizedBox(height: 20),
             CustomTextField(
               controller: nameController,
@@ -156,47 +155,124 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                ElevatedButton(
-                  onPressed: () => updateUser(context, ref),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                  Theme.of(context).primaryColor,
-                ),
-                    textStyle: MaterialStateProperty.all(
-                      const TextStyle(color: Colors.white),
+                InkWell(
+                  onTap: () => updateUser(context, ref),
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: circular
+                            ? const CircularProgressIndicator()
+                            : const Text(
+                                "Update",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                      ),
                     ),
-                    minimumSize: MaterialStateProperty.all(
-                      Size(MediaQuery.of(context).size.width / 2.5, 50),
-                    ),
-                  ),
-                  child: const Text(
-                    "Update",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
                 const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () => signOutUser(context, ref),
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.all(
-                  Theme.of(context).primaryColor,
-                ),
-                    textStyle: MaterialStateProperty.all(
-                      const TextStyle(color: Colors.white),
+                InkWell(
+                  onTap: () => signOutUser(context, ref),
+                  child: Center(
+                    child: Container(
+                      width: 100,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          "Sign Out",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
-                    minimumSize: MaterialStateProperty.all(
-                      Size(MediaQuery.of(context).size.width / 2.5, 50),
-                    ),
-                  ),
-                  child: const Text(
-                    "Sign Out",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ],
             ),
           ],
         ),
+      ),
+    );
+  }
+  
+  Widget imageProfile(User user) {
+    return Center(
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 80.0,
+            backgroundImage: _image != null
+                ? FileImage(_image!)
+                : CachedNetworkImageProvider(
+                    "${dotenv.env['uri']}/${user.userProps.image}"),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: InkWell(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (builder) => bottomSheet(),
+                  );
+                },
+                child: Icon(
+                  Icons.camera_alt,
+                  color: Theme.of(context).primaryColor,
+                  size: 28.0,
+                )),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget bottomSheet() {
+    return Container(
+      height: 100.0,
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        children: [
+          const Text(
+            "Choose Profile photo",
+            style: TextStyle(
+              fontSize: 20.0,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            IconButton(
+              icon: const Icon(Icons.camera),
+              onPressed: () {
+                _pickImage(ImageSource.camera);
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.image),
+              onPressed: () {
+                _pickImage(ImageSource.gallery);
+              },
+            ),
+          ])
+        ],
       ),
     );
   }
