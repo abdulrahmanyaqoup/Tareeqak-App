@@ -148,13 +148,13 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
             ElevatedButton(
               onPressed: signupUser,
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
                   Theme.of(context).primaryColor,
                 ),
-                textStyle: MaterialStateProperty.all(
+                textStyle: WidgetStateProperty.all(
                   const TextStyle(color: Colors.white),
                 ),
-                minimumSize: MaterialStateProperty.all(
+                minimumSize: WidgetStateProperty.all(
                   Size(MediaQuery.of(context).size.width / 2.5, 50),
                 ),
               ),

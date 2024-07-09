@@ -78,9 +78,7 @@ class VolunteerCard extends StatelessWidget {
       child: ListTile(
         leading: CircleAvatar(
           radius: 25,
-          backgroundImage: NetworkImage(user.userProps.image.isNotEmpty
-              ? '${dotenv.env['uri']}/${user.userProps.image}'
-              : 'https://via.placeholder.com/150'),
+          backgroundImage: NetworkImage('${dotenv.env['uri']}/${user.userProps.image}'),
         ),
         title: Text(user.name),
         subtitle: Column(

@@ -153,38 +153,47 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               obscureText: false,
             ),
             const SizedBox(height: 40),
-            ElevatedButton(
-              onPressed: () => updateUser(context, ref),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.blue),
-                textStyle: MaterialStateProperty.all(
-                  const TextStyle(color: Colors.white),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ElevatedButton(
+                  onPressed: () => updateUser(context, ref),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                  Theme.of(context).primaryColor,
                 ),
-                minimumSize: MaterialStateProperty.all(
-                  Size(MediaQuery.of(context).size.width / 2.5, 50),
+                    textStyle: MaterialStateProperty.all(
+                      const TextStyle(color: Colors.white),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                      Size(MediaQuery.of(context).size.width / 2.5, 50),
+                    ),
+                  ),
+                  child: const Text(
+                    "Update",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-              ),
-              child: const Text(
-                "Update",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => signOutUser(context, ref),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.red),
-                textStyle: MaterialStateProperty.all(
-                  const TextStyle(color: Colors.white),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () => signOutUser(context, ref),
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.all(
+                  Theme.of(context).primaryColor,
                 ),
-                minimumSize: MaterialStateProperty.all(
-                  Size(MediaQuery.of(context).size.width / 2.5, 50),
+                    textStyle: MaterialStateProperty.all(
+                      const TextStyle(color: Colors.white),
+                    ),
+                    minimumSize: MaterialStateProperty.all(
+                      Size(MediaQuery.of(context).size.width / 2.5, 50),
+                    ),
+                  ),
+                  child: const Text(
+                    "Sign Out",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
+                  ),
                 ),
-              ),
-              child: const Text(
-                "Sign Out",
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              ],
             ),
           ],
         ),
