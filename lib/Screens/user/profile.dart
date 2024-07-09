@@ -25,7 +25,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   File? _image;
   bool circular = false;
 
-
   @override
   void initState() {
     super.initState();
@@ -36,9 +35,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         TextEditingController(text: user.userProps.university);
     majorController = TextEditingController(text: user.userProps.major);
     contactController = TextEditingController(text: user.userProps.contact);
-    if (user.userProps.image.isNotEmpty) {
-      _image = File(user.userProps.image);
-    }
   }
 
   @override
@@ -74,7 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
-      image: _image!.path ,
+      image: _image?.path,
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
@@ -213,17 +209,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       ),
     );
   }
-  
+
   Widget imageProfile(User user) {
     return Center(
       child: Stack(
         children: [
           CircleAvatar(
             radius: 80.0,
-            backgroundImage: _image != null
-                ? FileImage(_image!)
-                : CachedNetworkImageProvider(
-                    "${dotenv.env['uri']}/${user.userProps.image}"),
+            backgroundImage: _image == null
+                ? CachedNetworkImageProvider(
+                    "${dotenv.env['uri']}/${user.userProps.image}")
+                : FileImage(_image!),
           ),
           Positioned(
             bottom: 0,

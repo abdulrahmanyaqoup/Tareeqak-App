@@ -111,7 +111,8 @@ class AuthService {
         onSuccess: () async {
           SharedPreferences prefs = await SharedPreferences.getInstance();
           userNotifier.setUser(response.body);
-          await prefs.setString('x-auth-token', jsonDecode(response.body)['token']);
+          await prefs.setString(
+              'x-auth-token', jsonDecode(response.body)['token']);
           navigator.pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const HomeScreen(),
@@ -199,7 +200,7 @@ class AuthService {
     File? image,
   }) async {
     try {
-      final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
+      final uri = Uri.parse('${dotenv.env['uri']}/api/users/update');
       var request = http.MultipartRequest('PATCH', uri);
 
       request.headers.addAll({
@@ -230,12 +231,11 @@ class AuthService {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
       httpErrorHandle(
         response: response,
         context: context,
         onSuccess: () {
-          showSnackBar(context, response.body);
+          showSnackBar(context, 'user has been updated');
         },
       );
     } catch (e) {
@@ -250,7 +250,7 @@ class AuthService {
   }) async {
     try {
       http.Response res = await http.delete(
-        Uri.parse('${dotenv.env['uri']}/api/users/delete/$userId'),
+        Uri.parse('${dotenv.env['uri']}/api/users/delete'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,
