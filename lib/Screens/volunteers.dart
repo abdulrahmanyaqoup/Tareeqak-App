@@ -31,48 +31,49 @@ class _VolunteersState extends ConsumerState<Volunteers> {
     return Scaffold(
       body: Column(
         children: [
-          Container(
-            margin: const EdgeInsets.all(15),
-            width: MediaQuery.of(context).size.width,
-            height: 150,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              gradient: const LinearGradient(
-                colors: [
-                  Color.fromARGB(255, 158, 83, 232),
-                  Color.fromARGB(255, 94, 21, 190)
-                ],
-              ),
-            ),
-            child: Stack(
-              children: [
-                Opacity(
-                  opacity: .6,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.network(
-                      "https://images.pexels.com/photos/267885/pexels-photo-267885.jpeg",
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
-                  ),
+          Center(
+            child: Container(
+              margin: const EdgeInsets.all(15),
+              width: MediaQuery.of(context).size.width,
+              height: 150,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).appBarTheme.backgroundColor!,
+                    Theme.of(context).appBarTheme.backgroundColor!,
+                  ],
                 ),
-                const Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: EdgeInsets.all(20.0),
-                    child: Text(
-                      'Join ambassadors !\n be a model for other students by helping them in their academic year',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+              ),
+              child: Stack(
+                children: [
+                  Opacity(
+                    opacity: .6,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: CustomPaint(
+                        painter: CustomIconsPainter(),
+                        size: Size(double.infinity, 150),
                       ),
                     ),
                   ),
-                ),
-              ],
+                  const Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: EdgeInsets.all(20.0),
+                      child: Text(
+                        'Join ambassadors !\n be a model for other students by helping them in their academic year',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -92,6 +93,45 @@ class _VolunteersState extends ConsumerState<Volunteers> {
         ],
       ),
     );
+  }
+}
+class CustomIconsPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color.fromARGB(255, 128, 127, 182)
+      ..style = PaintingStyle.fill
+      ..strokeWidth = 2;
+      PaintingStyle.fill;
+      double x = (size.width / 30) + (size.width / 1000);
+      double y = (size.height / 2) + (70);
+      canvas.drawCircle(Offset(x, y), 70, paint);
+
+      x = (size.width / 2) + (size.width / 1000);
+      y = (size.height / 2) + (70);
+      canvas.drawCircle(Offset(10, 10), 30, paint);
+
+      x = (size.width / 1.2) + (size.width / 1000);
+      y = (size.height / 2) + (70);
+      canvas.drawCircle(Offset(100, 30), 30, paint);
+
+      x = (size.width / 1.5) + (size.width / 1000);
+      y = (size.height / 2) + (70);
+      canvas.drawCircle(Offset(x, y), 30, paint);
+      
+      x = (size.width / 1.5) + (size.width / 1000);
+      y = (size.height / 2) + (70);
+      canvas.drawCircle(Offset(x, y), 70, paint);
+
+      x = (size.width / 1.5) + (size.width / 1000);
+      y = (size.height / 2) + (70);
+      canvas.drawCircle(Offset(350,0), 50, paint);
+    
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
 
@@ -114,15 +154,18 @@ class ProfileCard extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(7),
                 width: double.infinity,
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15),
                   ),
                   gradient: LinearGradient(
                     colors: [
-                      Color.fromARGB(255, 158, 83, 232),
-                      Color.fromARGB(255, 94, 21, 190)
+                      Theme.of(context).appBarTheme.backgroundColor!,
+                      Theme.of(context)
+                          .appBarTheme
+                          .backgroundColor!
+                          .withOpacity(.7),
                     ],
                   ),
                 ),
@@ -166,10 +209,10 @@ class ProfileCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       user.userProps.university,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 81, 3, 119),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
@@ -184,10 +227,10 @@ class ProfileCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Text(
                       user.userProps.major,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 81, 3, 119),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
@@ -200,12 +243,12 @@ class ProfileCard extends StatelessWidget {
                       color: Colors.black,
                     ),
                     const SizedBox(width: 3),
-                    const Text(
+                    Text(
                       'abd0203489@ju.edu.jo',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 81, 3, 119),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     const SizedBox(width: 30),
@@ -216,10 +259,10 @@ class ProfileCard extends StatelessWidget {
                     const SizedBox(width: 3),
                     Text(
                       user.userProps.contact,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Color.fromARGB(255, 81, 3, 119),
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                   ],
