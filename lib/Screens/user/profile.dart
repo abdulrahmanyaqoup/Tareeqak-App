@@ -78,8 +78,7 @@ class _ProfileState extends ConsumerState<Profile> {
       email: emailController.text,
       userProps: updatedUserProps,
     );
-
-    ref.read(userProvider.notifier).setUserFromModel(updatedUser);
+    ref.read(userProvider).setUserFromModel(updatedUser);
 
     AuthService().updateUser(
       context: context,
@@ -89,7 +88,6 @@ class _ProfileState extends ConsumerState<Profile> {
       updates: updatedUser.toMap(),
       token: user.token,
     );
-
     setState(() {
       circular = false;
     });
@@ -214,27 +212,45 @@ class _ProfileState extends ConsumerState<Profile> {
     return Center(
       child: Stack(
         children: [
-          CircleAvatar(
-            radius: 80.0,
-            backgroundImage: _image ??
-                CachedNetworkImageProvider(
-                    "${dotenv.env['uri']}/${user.userProps.image}"),
+          ClipOval(
+            child: _image == null ? CachedNetworkImage(
+              imageUrl: "${dotenv.env['uri'].toString()}/${user.userProps.image}",
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) => Icon(Icons.error),
+              fit: BoxFit.cover,
+              width: 160.0, 
+              height: 160.0,
+            ) :  Image(
+                    image: _image!,
+                    width: 160.0,
+                    height: 160.0,
+                    fit: BoxFit.cover,
+                  )
           ),
           Positioned(
-            bottom: 0,
-            right: 0,
-            child: InkWell(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (builder) => bottomSheet(),
-                  );
-                },
-                child: Icon(
-                  Icons.camera_alt,
-                  color: Theme.of(context).primaryColor,
-                  size: 28.0,
-                )),
+            bottom: 10,
+            right: 5,
+            child: Container(
+              height: 35,
+              width: 35,
+              decoration: BoxDecoration(
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(60),
+
+              ), 
+              child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (builder) => bottomSheet(),
+                    );
+                  },
+                  child: Icon(
+                    Icons.photo_camera,
+                    color: Theme.of(context).primaryColor, 
+                    size: 28.0,
+                  )),
+            ),
           ),
         ],
       ),
