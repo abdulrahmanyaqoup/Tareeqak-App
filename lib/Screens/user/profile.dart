@@ -10,13 +10,13 @@ import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class HomeScreen extends ConsumerStatefulWidget {
-  const HomeScreen({super.key});
+class Profile extends ConsumerStatefulWidget {
+  const Profile({super.key});
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
+class _ProfileState extends ConsumerState<Profile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController emailController;

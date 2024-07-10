@@ -115,7 +115,7 @@ class AuthService {
               'x-auth-token', jsonDecode(response.body)['token']);
           navigator.pushAndRemoveUntil(
             MaterialPageRoute(
-              builder: (context) => const HomeScreen(),
+              builder: (context) => const Profile(),
             ),
             (route) => false,
           );

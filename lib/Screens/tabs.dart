@@ -115,7 +115,7 @@ class _TabsState extends ConsumerState<Tabs> {
   Widget _getActiveScreen(int index, User? user) {
     switch (index) {
       case 0:
-       return user!.token.isNotEmpty ? const HomeScreen() : const SignupScreen();
+       return user!.token.isNotEmpty ? const Profile() : const SignupScreen();
       case 1:
         return Volunteers() ;
       case 2:
