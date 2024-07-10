@@ -36,7 +36,7 @@ class _TabsState extends ConsumerState<Tabs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: pageIndex != 0
+      appBar: pageIndex != 0 && pageIndex != 1
           ? AppBar(
               title: Center(
                 child: Text(
@@ -55,8 +55,7 @@ class _TabsState extends ConsumerState<Tabs> {
                   _getActiveScreen(pageIndex, ref.read(userProvider).user);
               break;
             case '/signin':
-              builder =
-                  (BuildContext _) => const Signin(); 
+              builder = (BuildContext _) => const Signin();
               break;
             default:
               throw Exception('Invalid route: ${settings.name}');
@@ -101,8 +100,6 @@ class _TabsState extends ConsumerState<Tabs> {
     switch (index) {
       case 0:
         return 'Profile';
-      case 1:
-        return 'Volunteers';
       case 2:
         return 'ChatBot';
       case 3:
@@ -115,9 +112,9 @@ class _TabsState extends ConsumerState<Tabs> {
   Widget _getActiveScreen(int index, User? user) {
     switch (index) {
       case 0:
-       return user!.token.isNotEmpty ? const Profile() : const SignupScreen();
+        return user!.token.isNotEmpty ? const Profile() : const SignupScreen();
       case 1:
-        return Volunteers() ;
+        return const Volunteers();
       case 2:
         return const Center(child: Text('ChatBot Screen'));
       case 3:
