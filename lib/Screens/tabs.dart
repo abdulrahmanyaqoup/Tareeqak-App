@@ -3,9 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Screens/user/profile.dart';
 import 'package:finalproject/Screens/user/signup.dart';
-import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Services/auth_service.dart';
-import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/volunteers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,14 +11,13 @@ class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
 
   @override
-  _TabsState createState() => _TabsState();
+  TabsState createState() => TabsState();
 }
 
-class _TabsState extends ConsumerState<Tabs> {
+class TabsState extends ConsumerState<Tabs> {
   final AuthService authService = AuthService();
-  int pageIndex = 1;
+  int pageIndex = 0;
   bool isLoading = true;
-  bool isLoggedIn = false;
   String token = '';
 
   void selectPage(int index) {
@@ -33,22 +30,23 @@ class _TabsState extends ConsumerState<Tabs> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final prefs = await SharedPreferences.getInstance();
-      token = prefs.getString('x-auth-token') ?? '';
-      if (token.isNotEmpty) {
-        authService.getUserData(context: context, ref: ref);
+      authService.getUserData(context: context, ref: ref);
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
       }
-      setState(() async {
-        isLoading = false;
-      });
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+    String token = '';
+    SharedPreferences.getInstance()
+        .then((value) => {token = value.getString('x-auth-token') ?? ''});
+
     if (isLoading) {
-      return Scaffold(
+      return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }

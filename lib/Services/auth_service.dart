@@ -112,8 +112,6 @@ class AuthService {
           userNotifier.setUser(response.body);
           await prefs.setString(
               'x-auth-token', jsonDecode(response.body)['token']);
-          print('respnse body    :' + response.body);
-          prefs.setBool("isLoggedIn", true);
           navigator.pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const Profile(),
@@ -134,37 +132,22 @@ class AuthService {
     try {
       final userNotifier = ref.read(userProvider.notifier);
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('x-auth-token');
-
-      if (token == null || token.isEmpty) {
-        prefs.setString('x-auth-token', '');
-      }
 
       Map<String, String> headers = {
         'Content-Type': 'application/json;charset=UTF-8',
-        'x-auth-token': token!,
+        'x-auth-token': prefs.getString('x-auth-token') ?? '',
       };
 
-      var tokenRes = await http.post(
-        Uri.parse('${dotenv.env['uri']}/api/users/token'),
-        headers: headers,
+      http.Response userRes = await http.get(
+          Uri.parse('${dotenv.env['uri']}/api/users/current'),
+          headers: headers);
+      httpErrorHandle(
+        response: userRes,
+        context: context,
+        onSuccess: () {
+          userNotifier.setUser(userRes.body);
+        },
       );
-
-      var response = jsonDecode(tokenRes.body);
-
-      if (response == true) {
-        http.Response userRes = await http.get(
-            Uri.parse('${dotenv.env['uri']}/api/users/current'),
-            headers: headers);
-        httpErrorHandle(
-          response: userRes,
-          context: context,
-          onSuccess: () {
-            userNotifier.setUser(userRes.body);
-            print('userRes.body: ' + userRes.body); 
-          },
-        );
-      }
     } catch (e) {
       showSnackBar(context, e.toString());
     }
@@ -187,8 +170,6 @@ class AuthService {
         List<User> users =
             usersJson.map((userJson) => User.fromMap(userJson)).toList();
         ref.read(userProvider.notifier).setUserList(users);
-      } else {
-        showSnackBar(context, 'Failed to fetch users');
       }
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -199,18 +180,17 @@ class AuthService {
     required BuildContext context,
     required WidgetRef ref,
     required String userId,
-    required String userToken,
     required Map<String, dynamic> updates,
-    required String token,
   }) async {
     try {
       final userNotifier = ref.read(userProvider.notifier);
+      final prefs = await SharedPreferences.getInstance();
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
       var request = http.MultipartRequest('PATCH', uri);
 
       request.headers.addAll({
         'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': userToken,
+        'x-auth-token': prefs.getString('x-auth-token') ?? '',
       });
 
       if (updates['userProps']['image'] != null) {
@@ -255,17 +235,14 @@ class AuthService {
     required BuildContext context,
     required WidgetRef ref,
     required String id,
-
   }) async {
     try {
-      final userNotidier = ref.read(userProvider.notifier);
       final prefs = await SharedPreferences.getInstance();
       http.Response response = await http.delete(
-        Uri.parse(
-            '${dotenv.env['uri']}/api/users/delete/$id'),
+        Uri.parse('${dotenv.env['uri']}/api/users/delete/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': userNotidier.user.token,
+          'x-auth-token': prefs.getString('x-auth-token') ?? '',
         },
       );
 
@@ -273,7 +250,7 @@ class AuthService {
         response: response,
         context: context,
         onSuccess: () {
-          prefs.remove('x-auth-token');
+          prefs.setString('x-auth-token', '');
           Navigator.of(context).pushReplacementNamed('/signin');
         },
       );
@@ -284,22 +261,8 @@ class AuthService {
 
   Future<void> signOut(BuildContext context, WidgetRef ref) async {
     final navigator = Navigator.of(context);
-    final userNotifier = ref.read(userProvider.notifier);
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('x-auth-token', '');
-    userNotifier.setUserFromModel(User(
-      id: '',
-      name: '',
-      email: '',
-      password: '',
-      token: '',
-      userProps: UserProps(
-        university: '',
-        major: '',
-        contact: '',
-        image: '',
-      ),
-    ));
     navigator.pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const Signin(),
