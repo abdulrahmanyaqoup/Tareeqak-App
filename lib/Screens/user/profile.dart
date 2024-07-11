@@ -9,6 +9,7 @@ import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -93,6 +94,19 @@ class _ProfileState extends ConsumerState<Profile> {
     });
   }
 
+  void deleteUser(BuildContext context, WidgetRef ref)   {
+    final user = ref.read(userProvider).user;
+     AuthService().deleteUser(
+      context: context,
+      ref: ref,
+      id : user.id,
+      token: user.token,
+    );
+
+    ref.read(userProvider).setUser('');
+    
+  }
+
   void signOutUser(BuildContext context, WidgetRef ref) {
     AuthService().signOut(context, ref);
   }
@@ -155,7 +169,7 @@ class _ProfileState extends ConsumerState<Profile> {
                   onTap: () => updateUser(context, ref),
                   child: Center(
                     child: Container(
-                      width: 100,
+                      width: 140,
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
@@ -178,10 +192,10 @@ class _ProfileState extends ConsumerState<Profile> {
                 ),
                 const SizedBox(height: 20),
                 InkWell(
-                  onTap: () => signOutUser(context, ref),
+                  onTap: () => deleteUser(context, ref),
                   child: Center(
                     child: Container(
-                      width: 100,
+                      width: 140,
                       height: 50,
                       decoration: BoxDecoration(
                         color: Theme.of(context).primaryColor,
@@ -189,7 +203,7 @@ class _ProfileState extends ConsumerState<Profile> {
                       ),
                       child: const Center(
                         child: Text(
-                          "Sign Out",
+                          "Delete Account",
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 16,
@@ -213,20 +227,23 @@ class _ProfileState extends ConsumerState<Profile> {
       child: Stack(
         children: [
           ClipOval(
-            child: _image == null ? CachedNetworkImage(
-              imageUrl: "${dotenv.env['uri'].toString()}/${user.userProps.image}",
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => Icon(Icons.error),
-              fit: BoxFit.cover,
-              width: 160.0, 
-              height: 160.0,
-            ) :  Image(
-                    image: _image!,
-                    width: 160.0,
-                    height: 160.0,
-                    fit: BoxFit.cover,
-                  )
-          ),
+              child: _image == null
+                  ? CachedNetworkImage(
+                      imageUrl:
+                          "${dotenv.env['uri'].toString()}/${user.userProps.image}",
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover,
+                      width: 160.0,
+                      height: 160.0,
+                    )
+                  : Image(
+                      image: _image!,
+                      width: 160.0,
+                      height: 160.0,
+                      fit: BoxFit.cover,
+                    )),
           Positioned(
             bottom: 10,
             right: 5,
@@ -236,8 +253,7 @@ class _ProfileState extends ConsumerState<Profile> {
               decoration: BoxDecoration(
                 color: Color.fromARGB(255, 255, 255, 255),
                 borderRadius: BorderRadius.circular(60),
-
-              ), 
+              ),
               child: InkWell(
                   onTap: () {
                     showModalBottomSheet(
@@ -247,7 +263,7 @@ class _ProfileState extends ConsumerState<Profile> {
                   },
                   child: Icon(
                     Icons.photo_camera,
-                    color: Theme.of(context).primaryColor, 
+                    color: Theme.of(context).primaryColor,
                     size: 28.0,
                   )),
             ),

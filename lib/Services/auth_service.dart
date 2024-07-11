@@ -66,7 +66,6 @@ class AuthService {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
       httpErrorHandle(
         response: response,
         context: context,
@@ -113,6 +112,8 @@ class AuthService {
           userNotifier.setUser(response.body);
           await prefs.setString(
               'x-auth-token', jsonDecode(response.body)['token']);
+          print('respnse body    :' + response.body);
+          prefs.setBool("isLoggedIn", true);
           navigator.pushAndRemoveUntil(
             MaterialPageRoute(
               builder: (context) => const Profile(),
@@ -126,7 +127,7 @@ class AuthService {
     }
   }
 
-  void getUserData({
+  Future<void> getUserData({
     required BuildContext context,
     required WidgetRef ref,
   }) async {
@@ -150,15 +151,19 @@ class AuthService {
         headers: headers,
       );
 
-      var response = tokenRes.body;
+      var response = jsonDecode(tokenRes.body);
 
       if (response == true) {
         http.Response userRes = await http.get(
-          Uri.parse('${dotenv.env['uri']}/api/users/current'),
-          headers: headers,
+            Uri.parse('${dotenv.env['uri']}/api/users/current'),
+            headers: headers);
+        httpErrorHandle(
+          response: userRes,
+          context: context,
+          onSuccess: () {
+            userNotifier.setUser(userRes.body);
+          },
         );
-
-        userNotifier.setUser(userRes.body);
       }
     } catch (e) {
       showSnackBar(context, e.toString());
@@ -200,7 +205,7 @@ class AuthService {
   }) async {
     try {
       final userNotifier = ref.read(userProvider.notifier);
-      final uri = Uri.parse('${dotenv.env['uri']}/api/users/update');
+      final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
       var request = http.MultipartRequest('PATCH', uri);
 
       request.headers.addAll({
@@ -231,13 +236,13 @@ class AuthService {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-      final userProps = jsonDecode(response.body)['userProps'];
-      userNotifier.updateUserProps(UserProps.fromMap(userProps));
 
       httpErrorHandle(
         response: response,
         context: context,
         onSuccess: () {
+          final userProps = jsonDecode(response.body)['userProps'];
+          userNotifier.updateUserProps(UserProps.fromMap(userProps));
           showSnackBar(context, 'user has been updated');
         },
       );
@@ -246,14 +251,19 @@ class AuthService {
     }
   }
 
-  void deleteUser({
+  Future<void> deleteUser({
     required BuildContext context,
-    required String userId,
+    required WidgetRef ref,
+    required String id,
     required String token,
   }) async {
     try {
-      http.Response res = await http.delete(
-        Uri.parse('${dotenv.env['uri']}/api/users/delete'),
+      final userNotidier = ref.read(userProvider.notifier);
+      print('userID' + id);
+      print('user credentials ' + userNotidier.user.id + "\n" + token);
+      http.Response response = await http.delete(
+        Uri.parse(
+            '${dotenv.env['uri']}/api/users/delete/${userNotidier.user.id}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': token,
@@ -261,10 +271,11 @@ class AuthService {
       );
 
       httpErrorHandle(
-        response: res,
+        response: response,
         context: context,
         onSuccess: () {
-          showSnackBar(context, 'User deleted successfully');
+          showSnackBar(context, response.body);
+          Navigator.of(context).pushReplacementNamed('/signin');
         },
       );
     } catch (e) {

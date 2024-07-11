@@ -7,6 +7,7 @@ import 'package:finalproject/Screens/user/signin.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/volunteers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
@@ -17,7 +18,9 @@ class Tabs extends ConsumerStatefulWidget {
 
 class _TabsState extends ConsumerState<Tabs> {
   final AuthService authService = AuthService();
-  int pageIndex = 0;
+  int pageIndex = 1;
+  bool isLoading = true;
+  bool isLoggedIn = false;
 
   void selectPage(int index) {
     setState(() {
@@ -28,13 +31,25 @@ class _TabsState extends ConsumerState<Tabs> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      authService.getUserData(context: context, ref: ref);
+    authService.getUserData(context: context, ref: ref);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getBool('isLoggedIn') ?? false;
+      setState(() {
+        isLoggedIn = token;
+        isLoading = false;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: pageIndex != 0 && pageIndex != 1
           ? AppBar(
@@ -52,7 +67,7 @@ class _TabsState extends ConsumerState<Tabs> {
           switch (settings.name) {
             case '/':
               builder = (BuildContext _) =>
-                  _getActiveScreen(pageIndex, ref.read(userProvider).user);
+                  _getActiveScreen(pageIndex, isLoggedIn);
               break;
             case '/signin':
               builder = (BuildContext _) => const Signin();
@@ -109,10 +124,10 @@ class _TabsState extends ConsumerState<Tabs> {
     }
   }
 
-  Widget _getActiveScreen(int index, User? user) {
+  Widget _getActiveScreen(int index, bool isLoggedIn) {
     switch (index) {
       case 0:
-        return user!.token.isNotEmpty ? const Profile() : const SignupScreen();
+        return isLoggedIn ? const Profile() : const SignupScreen();
       case 1:
         return const Volunteers();
       case 2:
