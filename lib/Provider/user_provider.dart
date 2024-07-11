@@ -33,7 +33,7 @@ class UserProvider extends ChangeNotifier {
     _userList = users;
     notifyListeners();
   }
-
+  
   void updateUserProps(UserProps userProps) {
     _user = User(
       id: _user.id,

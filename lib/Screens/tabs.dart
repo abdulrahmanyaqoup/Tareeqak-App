@@ -21,6 +21,7 @@ class _TabsState extends ConsumerState<Tabs> {
   int pageIndex = 1;
   bool isLoading = true;
   bool isLoggedIn = false;
+  String token = '';
 
   void selectPage(int index) {
     setState(() {
@@ -31,16 +32,18 @@ class _TabsState extends ConsumerState<Tabs> {
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context: context, ref: ref);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final prefs = await SharedPreferences.getInstance();
-      final token = prefs.getBool('isLoggedIn') ?? false;
-      setState(() {
-        isLoggedIn = token;
+      token = prefs.getString('x-auth-token') ?? '';
+      if (token.isNotEmpty) {
+        authService.getUserData(context: context, ref: ref);
+      }
+      setState(() async {
         isLoading = false;
       });
     });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +69,10 @@ class _TabsState extends ConsumerState<Tabs> {
           WidgetBuilder builder;
           switch (settings.name) {
             case '/':
-              builder = (BuildContext _) =>
-                  _getActiveScreen(pageIndex, isLoggedIn);
+              builder = (BuildContext _) => _getActiveScreen(pageIndex, token);
               break;
             case '/signin':
-              builder = (BuildContext _) => const Signin();
+              builder = (BuildContext _) => _getActiveScreen(pageIndex, token);
               break;
             default:
               throw Exception('Invalid route: ${settings.name}');
@@ -124,10 +126,10 @@ class _TabsState extends ConsumerState<Tabs> {
     }
   }
 
-  Widget _getActiveScreen(int index, bool isLoggedIn) {
+  Widget _getActiveScreen(int index, String token) {
     switch (index) {
       case 0:
-        return isLoggedIn ? const Profile() : const SignupScreen();
+        return token.isNotEmpty ? const Profile() : const SignupScreen();
       case 1:
         return const Volunteers();
       case 2:

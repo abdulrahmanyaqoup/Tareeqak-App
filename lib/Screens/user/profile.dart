@@ -10,9 +10,12 @@ import 'package:finalproject/Provider/user_provider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:finalproject/Screens/tabs.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
+
+  
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -100,15 +103,12 @@ class _ProfileState extends ConsumerState<Profile> {
       context: context,
       ref: ref,
       id : user.id,
-      token: user.token,
     );
-
-    ref.read(userProvider).setUser('');
     
   }
 
-  void signOutUser(BuildContext context, WidgetRef ref) {
-    AuthService().signOut(context, ref);
+  Future<void> signOutUser(BuildContext context, WidgetRef ref) async {
+    await AuthService().signOut(context, ref);
   }
 
   @override

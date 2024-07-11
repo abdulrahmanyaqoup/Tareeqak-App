@@ -138,12 +138,11 @@ class AuthService {
 
       if (token == null || token.isEmpty) {
         prefs.setString('x-auth-token', '');
-        return;
       }
 
       Map<String, String> headers = {
         'Content-Type': 'application/json;charset=UTF-8',
-        'x-auth-token': token,
+        'x-auth-token': token!,
       };
 
       var tokenRes = await http.post(
@@ -162,6 +161,7 @@ class AuthService {
           context: context,
           onSuccess: () {
             userNotifier.setUser(userRes.body);
+            print('userRes.body: ' + userRes.body); 
           },
         );
       }
@@ -255,18 +255,17 @@ class AuthService {
     required BuildContext context,
     required WidgetRef ref,
     required String id,
-    required String token,
+
   }) async {
     try {
       final userNotidier = ref.read(userProvider.notifier);
-      print('userID' + id);
-      print('user credentials ' + userNotidier.user.id + "\n" + token);
+      final prefs = await SharedPreferences.getInstance();
       http.Response response = await http.delete(
         Uri.parse(
-            '${dotenv.env['uri']}/api/users/delete/${userNotidier.user.id}'),
+            '${dotenv.env['uri']}/api/users/delete/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': token,
+          'x-auth-token': userNotidier.user.token,
         },
       );
 
@@ -274,7 +273,7 @@ class AuthService {
         response: response,
         context: context,
         onSuccess: () {
-          showSnackBar(context, response.body);
+          prefs.remove('x-auth-token');
           Navigator.of(context).pushReplacementNamed('/signin');
         },
       );
@@ -283,11 +282,11 @@ class AuthService {
     }
   }
 
-  void signOut(BuildContext context, WidgetRef ref) async {
+  Future<void> signOut(BuildContext context, WidgetRef ref) async {
     final navigator = Navigator.of(context);
     final userNotifier = ref.read(userProvider.notifier);
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove('x-auth-token');
+    await prefs.setString('x-auth-token', '');
     userNotifier.setUserFromModel(User(
       id: '',
       name: '',
