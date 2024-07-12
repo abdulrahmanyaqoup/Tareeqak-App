@@ -75,8 +75,6 @@ class ProfileState extends ConsumerState<Profile> {
     );
 
     AuthService().updateUser(
-      context: context,
-      ref: ref,
       userId: user.id,
       updates: updatedUser.toMap(),
     );

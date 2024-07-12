@@ -140,9 +140,7 @@ class AuthService {
     }
   }
 
-  Future<void> updateUser({
-    required BuildContext context,
-    required WidgetRef ref,
+  Future<User> updateUser({
     required String userId,
     required Map<String, dynamic> updates,
   }) async {
@@ -179,16 +177,9 @@ class AuthService {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
-      httpErrorHandle(
-        response: response,
-        context: context,
-        onSuccess: () {
-          showSnackBar(context, 'user has been updated');
-        },
-      );
+      return jsonDecode(response.body);
     } catch (e) {
-      showSnackBar(context, e.toString());
+      rethrow;
     }
   }
 
