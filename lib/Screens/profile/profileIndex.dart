@@ -18,7 +18,7 @@ class _Index extends ConsumerState<Index> {
   @override
   void initState() {
     super.initState();
-    ref.read(authProvider.notifier);
+    ref.read(authProvider);
   }
 
   Future<void> signIn(String email, String password) async {
@@ -28,7 +28,7 @@ class _Index extends ConsumerState<Index> {
         content: Text(errorMessage),
       ));
     });
-    if (ref.read(authProvider)) {
+    if (ref.read(authProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
           builder: (_) => Profile(
@@ -41,25 +41,21 @@ class _Index extends ConsumerState<Index> {
 
   Future<void> signOut() async {
     await ref.read(authProvider.notifier).signOut();
-    if (!ref.read(authProvider)) {
-      _navigatorKey.currentState?.pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => Signin(
-            onSignUpPressed: () {
-              _navigatorKey.currentState?.pushReplacementNamed('/signup');
-            },
-            onSignIn: signIn,
-          ),
+    _navigatorKey.currentState?.pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => Signin(
+          onSignUpPressed: () {
+            _navigatorKey.currentState?.pushReplacementNamed('/signup');
+          },
+          onSignIn: signIn,
         ),
-      );
-    }
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn = ref.watch(authProvider.select((value) => value));
-    print(isLoggedIn);
-
+    final isLoggedIn = ref.watch(authProvider).isLoggedIn;
     return Navigator(
       key: _navigatorKey,
       onGenerateRoute: (settings) => _generateRoute(settings, isLoggedIn),

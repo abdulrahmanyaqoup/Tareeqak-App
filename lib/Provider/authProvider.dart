@@ -5,26 +5,27 @@ import 'package:finalproject/Services/authService.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final authProvider = StateNotifierProvider<AuthController, bool>((ref) {
-  return AuthController(ref);
-});
+class AuthState {
+  final bool isLoggedIn;
+  AuthState({this.isLoggedIn = false});
+}
 
-class AuthController extends StateNotifier<bool> {
+class AuthNotifier extends StateNotifier<AuthState> {
   final Ref ref;
-  AuthController(this.ref) : super(true) {
-    _checkLoginStatus();
+  AuthNotifier(this.ref) : super(AuthState(isLoggedIn: false)) {
+    checkLoginStatus();
   }
 
-  Future<void> _checkLoginStatus() async {
+  Future<void> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('x-auth-token');
     if (token != null && token.isNotEmpty) {
       String response = await AuthService().getUserData();
       final userNotifier = ref.read(userProvider.notifier);
       userNotifier.setUser(response);
-      state = true;
+      state = AuthState(isLoggedIn: true);
     } else {
-      state = false;
+      state = AuthState(isLoggedIn: false);
     }
   }
 
@@ -39,16 +40,19 @@ class AuthController extends StateNotifier<bool> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', token);
       ref.read(userProvider.notifier).setUser(userData);
-      state = true;
+      state = AuthState(isLoggedIn: true);
     } catch (e) {
       onError(e.toString());
-      state = false;
+      state = AuthState(isLoggedIn: false);
     }
   }
 
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('x-auth-token');
-    state = false;
+    state = AuthState(isLoggedIn: false);
   }
 }
+
+final authProvider =
+    StateNotifierProvider<AuthNotifier, AuthState>((ref) => AuthNotifier(ref));
