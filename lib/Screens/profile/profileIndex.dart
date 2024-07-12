@@ -32,7 +32,7 @@ class _Index extends ConsumerState<Index> {
     if (ref.read(authProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
-          builder: (_) => Profile(
+          builder: (_) => CompleteProfilePage(
             onSignOut: signOut,
           ),
         ),
