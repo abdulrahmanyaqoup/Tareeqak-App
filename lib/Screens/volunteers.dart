@@ -75,7 +75,7 @@ class _VolunteersState extends ConsumerState<Volunteers> {
             ),
           ),
           Expanded(
-            child: userState.isLoading
+            child: userState.userList.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
