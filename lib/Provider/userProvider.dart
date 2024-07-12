@@ -62,8 +62,10 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
-  void updateUser(String name, String email) {
-    User updatedUser = state.user.copyWith(name: name, email: email);
+  void updateUser(
+      String name, String email, String password, UserProps userProps) async {
+    User updatedUser = state.user.copyWith(
+        name: name, email: email, password: password, userProps: userProps);
     state = state.copyWith(user: updatedUser);
   }
 }
