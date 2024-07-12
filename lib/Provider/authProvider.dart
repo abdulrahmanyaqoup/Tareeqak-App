@@ -43,7 +43,7 @@ class AuthController extends StateNotifier<bool> {
 
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('x-auth-token', '');
+    prefs.remove('x-auth-token');
     state = false;
   }
 }
