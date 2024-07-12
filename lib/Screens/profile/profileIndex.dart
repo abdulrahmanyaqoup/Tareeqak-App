@@ -18,7 +18,7 @@ class _Index extends ConsumerState<Index> {
   @override
   void initState() {
     super.initState();
-    ref.watch(authProvider);
+    ref.read(authProvider.notifier);
   }
 
   Future<void> signIn(String email, String password) async {
@@ -57,7 +57,8 @@ class _Index extends ConsumerState<Index> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoggedIn = ref.read(authProvider);
+    final isLoggedIn = ref.watch(authProvider.select((value) => value));
+    print(isLoggedIn);
 
     return Navigator(
       key: _navigatorKey,

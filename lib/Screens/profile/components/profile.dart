@@ -31,7 +31,6 @@ class ProfileState extends ConsumerState<Profile> {
   @override
   void initState() {
     super.initState();
-    authService.getUserData(context: context, ref: ref);
   }
 
   @override

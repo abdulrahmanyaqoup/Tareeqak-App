@@ -19,7 +19,12 @@ class AuthController extends StateNotifier<bool> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('x-auth-token');
     if (token != null && token.isNotEmpty) {
+      String response = await AuthService().getUserData();
+      final userNotifier = ref.read(userProvider.notifier);
+      userNotifier.setUser(response);
       state = true;
+    } else {
+      state = false;
     }
   }
 

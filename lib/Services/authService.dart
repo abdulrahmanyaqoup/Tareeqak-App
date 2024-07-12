@@ -105,12 +105,8 @@ class AuthService {
     }
   }
 
-  Future<void> getUserData({
-    required BuildContext context,
-    required WidgetRef ref,
-  }) async {
+  Future<String> getUserData() async {
     try {
-      final userNotifier = ref.read(userProvider.notifier);
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
       Map<String, String> headers = {
@@ -121,15 +117,10 @@ class AuthService {
       http.Response userRes = await http.get(
           Uri.parse('${dotenv.env['uri']}/api/users/current'),
           headers: headers);
-      httpErrorHandle(
-        response: userRes,
-        context: context,
-        onSuccess: () {
-          userNotifier.setUser(userRes.body);
-        },
-      );
+
+      return userRes.body;
     } catch (e) {
-      showSnackBar(context, e.toString());
+      return '';
     }
   }
 
