@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Utils/utils.dart';
-import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';

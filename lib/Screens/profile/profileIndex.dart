@@ -1,4 +1,4 @@
-import 'package:finalproject/Provider/auth_state.dart';
+import 'package:finalproject/Provider/authProvider.dart';
 import 'package:finalproject/Screens/profile/components/profile.dart';
 import 'package:finalproject/Screens/profile/components/signin.dart';
 import 'package:finalproject/Screens/profile/components/signup.dart';

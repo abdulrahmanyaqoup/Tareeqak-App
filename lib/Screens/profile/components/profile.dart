@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:finalproject/Services/auth_service.dart';
-import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Services/authService.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 

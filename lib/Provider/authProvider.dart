@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:finalproject/Provider/user_provider.dart';
-import 'package:finalproject/Services/auth_service.dart';
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Services/authService.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
