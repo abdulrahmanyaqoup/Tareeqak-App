@@ -10,7 +10,8 @@ import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Profile extends ConsumerStatefulWidget {
-  const Profile({super.key});
+  final VoidCallback onSignOut;
+  const Profile({super.key, required this.onSignOut});
 
   @override
   ProfileState createState() => ProfileState();
@@ -100,21 +101,16 @@ class ProfileState extends ConsumerState<Profile> {
     );
   }
 
-  Future<void> signOutUser(BuildContext context, WidgetRef ref) async {
-    await AuthService().signOut(context, ref);
-  }
-
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider).user;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => signOutUser(context, ref),
+            onPressed: () => widget.onSignOut(),
           ),
         ],
       ),

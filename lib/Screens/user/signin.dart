@@ -2,43 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Widgets/textfield.dart';
-import 'package:finalproject/Screens/user/signup.dart';
 
 class Signin extends ConsumerStatefulWidget {
-  const Signin({super.key});
+  final VoidCallback onSignUpPressed;
+  final Function(String, String) onSignIn;
+
+  const Signin(
+      {super.key, required this.onSignUpPressed, required this.onSignIn});
 
   @override
   _SigninState createState() => _SigninState();
 }
 
 class _SigninState extends ConsumerState<Signin> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final AuthService authService = AuthService();
-
-  void loginUser() {
-    authService.signInUser(
-      context: context,
-      ref: ref,
-      email: emailController.text,
-      password: passwordController.text,
-    );
-  }
-
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
+      body: Form(
+        key: _formKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             const SizedBox(height: 150),
             const Text(
               "Login",
@@ -48,7 +37,7 @@ class _SigninState extends ConsumerState<Signin> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
-                controller: emailController,
+                controller: _emailController,
                 hintText: 'Enter your email*',
                 obscureText: false,
               ),
@@ -57,14 +46,19 @@ class _SigninState extends ConsumerState<Signin> {
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
               child: CustomTextField(
-                controller: passwordController,
+                controller: _passwordController,
                 hintText: 'Enter your password*',
                 obscureText: true,
               ),
             ),
             const SizedBox(height: 40),
             ElevatedButton(
-              onPressed: loginUser,
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  widget.onSignIn(
+                      _emailController.text, _passwordController.text);
+                }
+              },
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(
                   Theme.of(context).primaryColor,
@@ -83,19 +77,19 @@ class _SigninState extends ConsumerState<Signin> {
             ),
             SizedBox(height: MediaQuery.of(context).size.height * 0.1),
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SignupScreen(),
-                  ),
-                );
-              },
+              onPressed: () => widget.onSignUpPressed(),
               child: const Text('Don\'t have an account? Sign up'),
             ),
           ],
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

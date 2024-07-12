@@ -1,11 +1,7 @@
+import 'package:finalproject/Screens/user/auth_tab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Provider/user_provider.dart';
-import 'package:finalproject/Screens/user/profile.dart';
-import 'package:finalproject/Screens/user/signup.dart';
-import 'package:finalproject/Services/auth_service.dart';
 import 'package:finalproject/Screens/volunteers.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class Tabs extends ConsumerStatefulWidget {
   const Tabs({super.key});
@@ -15,72 +11,57 @@ class Tabs extends ConsumerStatefulWidget {
 }
 
 class TabsState extends ConsumerState<Tabs> {
-  final AuthService authService = AuthService();
-  int pageIndex = 0;
-  bool isLoading = true;
-  String token = '';
+  int _pageIndex = 0;
+  bool _isLoading = true;
+  bool token = false;
 
-  void selectPage(int index) {
-    setState(() {
-      pageIndex = index;
-    });
-  }
+  static final List<Widget> _widgetOptions = <Widget>[
+    const AuthTab(),
+    const Volunteers(),
+    const Center(
+      child: Text("chatbot"),
+    ),
+    const Center(
+      child: Text("university"),
+    ),
+  ];
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      authService.getUserData(context: context, ref: ref);
-      if (mounted) {
-        setState(() {
-          isLoading = false;
-        });
-      }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void selectPage(int index) {
+    setState(() {
+      _pageIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    String token = '';
-    SharedPreferences.getInstance()
-        .then((value) => {token = value.getString('x-auth-token') ?? ''});
-
-    if (isLoading) {
+    if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
     return Scaffold(
-      appBar: pageIndex != 0 && pageIndex != 1
+      appBar: _pageIndex != 0 && _pageIndex != 1
           ? AppBar(
               title: Center(
                 child: Text(
-                  _getPageTitle(pageIndex),
+                  _getPageTitle(_pageIndex),
                 ),
               ),
             )
           : null,
-      body: Navigator(
-        key: GlobalKey<NavigatorState>(),
-        onGenerateRoute: (RouteSettings settings) {
-          WidgetBuilder builder;
-          switch (settings.name) {
-            case '/':
-              builder = (BuildContext _) => _getActiveScreen(pageIndex, token);
-              break;
-            case '/signin':
-              builder = (BuildContext _) => _getActiveScreen(pageIndex, token);
-              break;
-            default:
-              throw Exception('Invalid route: ${settings.name}');
-          }
-          return MaterialPageRoute(builder: builder, settings: settings);
-        },
-      ),
+      body: Center(child: _widgetOptions.elementAt(_pageIndex)),
       bottomNavigationBar: BottomNavigationBar(
         onTap: selectPage,
-        currentIndex: pageIndex,
+        currentIndex: _pageIndex,
         selectedIconTheme: Theme.of(context)
             .iconTheme
             .copyWith(color: Theme.of(context).colorScheme.primary),
@@ -115,27 +96,14 @@ class TabsState extends ConsumerState<Tabs> {
     switch (index) {
       case 0:
         return 'Profile';
-      case 2:
-        return 'ChatBot';
-      case 3:
-        return 'University';
-      default:
-        return 'University';
-    }
-  }
-
-  Widget _getActiveScreen(int index, String token) {
-    switch (index) {
-      case 0:
-        return token.isNotEmpty ? const Profile() : const SignupScreen();
       case 1:
-        return const Volunteers();
+        return 'University';
       case 2:
-        return const Center(child: Text('ChatBot Screen'));
+        return 'Volunteers';
       case 3:
-        return const Center(child: Text('University Screen'));
+        return 'ChatBot';
       default:
-        return const Center(child: Text('University Screen'));
+        return 'University';
     }
   }
 }
