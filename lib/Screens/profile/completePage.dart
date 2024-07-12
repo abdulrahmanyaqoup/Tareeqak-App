@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:finalproject/Services/authService.dart';
+import 'package:finalproject/backend/authentication.dart';
 import 'package:finalproject/Provider/authProvider.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
@@ -111,7 +111,8 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage: userState.user.userProps.image.isNotEmpty
+                          backgroundImage: userState
+                                  .user.userProps.image.isNotEmpty
                               ? CachedNetworkImageProvider(
                                   '${dotenv.env['uri']}/${userState.user.userProps.image}')
                               : null,
@@ -121,7 +122,9 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          userState.user.name.isNotEmpty ? userState.user.name : '-',
+                          userState.user.name.isNotEmpty
+                              ? userState.user.name
+                              : '-',
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
