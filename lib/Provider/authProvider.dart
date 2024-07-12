@@ -21,11 +21,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     if (token != null && token.isNotEmpty) {
       String response = await AuthService().getUser();
       final userNotifier = ref.read(userProvider.notifier);
-<<<<<<< HEAD
-      userNotifier.setUser(response);
-=======
       userNotifier.getUser(response);
->>>>>>> 034a8f016876e8906d8ab0f6a8ca0c0ccb8e7ec7
       state = AuthState(isLoggedIn: true, isLoading: false);
     } else {
       state = AuthState(isLoggedIn: false, isLoading: false);
@@ -42,11 +38,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', token);
-<<<<<<< HEAD
-      ref.read(userProvider.notifier).setUser(userData);
-=======
       ref.read(userProvider.notifier).getUser(userData);
->>>>>>> 034a8f016876e8906d8ab0f6a8ca0c0ccb8e7ec7
       state = AuthState(isLoggedIn: true, isLoading: false);
     } catch (e) {
       onError(e.toString());
