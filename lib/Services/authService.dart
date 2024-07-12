@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:finalproject/Screens/user/signin.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
-import 'package:finalproject/Screens/user/profile.dart';
 import 'package:finalproject/Utils/utils.dart';
-import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -81,16 +79,9 @@ class AuthService {
     }
   }
 
-  void signInUser({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String email,
-    required String password,
-  }) async {
+  Future<String> signInUser(
+      {required String email, required String password}) async {
     try {
-      final navigator = Navigator.of(context);
-      final userNotifier = ref.read(userProvider.notifier);
-
       Map<String, String> headers = {
         'Content-Type': 'application/json;charset=UTF-8',
       };
@@ -104,24 +95,13 @@ class AuthService {
         headers: headers,
       );
 
-      httpErrorHandle(
-        response: response,
-        context: context,
-        onSuccess: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          userNotifier.setUser(response.body);
-          await prefs.setString(
-              'x-auth-token', jsonDecode(response.body)['token']);
-          navigator.pushAndRemoveUntil(
-            MaterialPageRoute(
-              builder: (context) => const Profile(),
-            ),
-            (route) => false,
-          );
-        },
-      );
+      if (response.statusCode == 200) {
+        return response.body;
+      } else {
+        throw Exception(jsonDecode(response.body)['error']);
+      }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      rethrow;
     }
   }
 
@@ -257,17 +237,5 @@ class AuthService {
     } catch (e) {
       showSnackBar(context, e.toString());
     }
-  }
-
-  Future<void> signOut(BuildContext context, WidgetRef ref) async {
-    final navigator = Navigator.of(context);
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('x-auth-token', '');
-    navigator.pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => const Signin(),
-      ),
-      (route) => false,
-    );
   }
 }

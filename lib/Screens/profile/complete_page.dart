@@ -2,7 +2,7 @@ import 'package:finalproject/Services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -39,7 +39,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).user;
+    final user = ref.watch(userProvider);
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
@@ -138,6 +138,8 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                           child: Icon(Icons.school,
                               color: Theme.of(context).colorScheme.secondary),
                         ),
+                        Icon(Icons.school,
+                            color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,6 +176,8 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                           child: Icon(Icons.edit,
                               color: Theme.of(context).colorScheme.secondary),
                         ),
+                        Icon(Icons.edit,
+                            color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Services/auth_service.dart';
-import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Services/authService.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Models/user.dart';
 
 class Volunteers extends ConsumerStatefulWidget {
@@ -26,7 +25,7 @@ class _VolunteersState extends ConsumerState<Volunteers> {
 
   @override
   Widget build(BuildContext context) {
-    final userList = ref.watch(userProvider).userList;
+    final userList = ref.watch(userProvider.notifier).userList;
 
     return Scaffold(
       body: Column(
@@ -95,6 +94,7 @@ class _VolunteersState extends ConsumerState<Volunteers> {
     );
   }
 }
+
 class CustomIconsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -102,31 +102,30 @@ class CustomIconsPainter extends CustomPainter {
       ..color = Color.fromARGB(255, 128, 127, 182)
       ..style = PaintingStyle.fill
       ..strokeWidth = 2;
-      PaintingStyle.fill;
-      double x = (size.width / 30) + (size.width / 1000);
-      double y = (size.height / 2) + (70);
-      canvas.drawCircle(Offset(x, y), 70, paint);
+    PaintingStyle.fill;
+    double x = (size.width / 30) + (size.width / 1000);
+    double y = (size.height / 2) + (70);
+    canvas.drawCircle(Offset(x, y), 70, paint);
 
-      x = (size.width / 2) + (size.width / 1000);
-      y = (size.height / 2) + (70);
-      canvas.drawCircle(Offset(10, 10), 30, paint);
+    x = (size.width / 2) + (size.width / 1000);
+    y = (size.height / 2) + (70);
+    canvas.drawCircle(Offset(10, 10), 30, paint);
 
-      x = (size.width / 1.2) + (size.width / 1000);
-      y = (size.height / 2) + (70);
-      canvas.drawCircle(Offset(100, 30), 30, paint);
+    x = (size.width / 1.2) + (size.width / 1000);
+    y = (size.height / 2) + (70);
+    canvas.drawCircle(Offset(100, 30), 30, paint);
 
-      x = (size.width / 1.5) + (size.width / 1000);
-      y = (size.height / 2) + (70);
-      canvas.drawCircle(Offset(x, y), 30, paint);
-      
-      x = (size.width / 1.5) + (size.width / 1000);
-      y = (size.height / 2) + (70);
-      canvas.drawCircle(Offset(x, y), 70, paint);
+    x = (size.width / 1.5) + (size.width / 1000);
+    y = (size.height / 2) + (70);
+    canvas.drawCircle(Offset(x, y), 30, paint);
 
-      x = (size.width / 1.5) + (size.width / 1000);
-      y = (size.height / 2) + (70);
-      canvas.drawCircle(Offset(350,0), 50, paint);
-    
+    x = (size.width / 1.5) + (size.width / 1000);
+    y = (size.height / 2) + (70);
+    canvas.drawCircle(Offset(x, y), 70, paint);
+
+    x = (size.width / 1.5) + (size.width / 1000);
+    y = (size.height / 2) + (70);
+    canvas.drawCircle(Offset(350, 0), 50, paint);
   }
 
   @override

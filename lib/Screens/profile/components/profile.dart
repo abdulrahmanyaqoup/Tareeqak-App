@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:finalproject/Services/auth_service.dart';
-import 'package:finalproject/Provider/user_provider.dart';
+import 'package:finalproject/Services/authService.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class Profile extends ConsumerStatefulWidget {
-  const Profile({super.key});
+  final VoidCallback onSignOut;
+  const Profile({super.key, required this.onSignOut});
 
   @override
   ProfileState createState() => ProfileState();
@@ -25,17 +26,12 @@ class ProfileState extends ConsumerState<Profile> {
   late TextEditingController contactController;
   FileImage? _image;
   bool circular = false;
+  final AuthService authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    final user = ref.read(userProvider).user;
-    nameController = TextEditingController(text: user.name);
-    emailController = TextEditingController(text: user.email);
-    universityController =
-        TextEditingController(text: user.userProps.university);
-    majorController = TextEditingController(text: user.userProps.major);
-    contactController = TextEditingController(text: user.userProps.contact);
+    authService.getUserData(context: context, ref: ref);
   }
 
   @override
@@ -66,7 +62,7 @@ class ProfileState extends ConsumerState<Profile> {
       circular = true;
     });
 
-    final user = ref.read(userProvider).user;
+    final user = ref.read(userProvider);
     final updatedUserProps = user.userProps.copyWith(
       university: universityController.text,
       major: majorController.text,
@@ -78,7 +74,7 @@ class ProfileState extends ConsumerState<Profile> {
       email: emailController.text,
       userProps: updatedUserProps,
     );
-    ref.read(userProvider).setUserFromModel(updatedUser);
+    ref.read(userProvider.notifier).setUserFromModel(updatedUser);
 
     AuthService().updateUser(
       context: context,
@@ -92,7 +88,7 @@ class ProfileState extends ConsumerState<Profile> {
   }
 
   void deleteUser(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userProvider).user;
+    final user = ref.read(userProvider);
     AuthService().deleteUser(
       context: context,
       ref: ref,
@@ -100,21 +96,22 @@ class ProfileState extends ConsumerState<Profile> {
     );
   }
 
-  Future<void> signOutUser(BuildContext context, WidgetRef ref) async {
-    await AuthService().signOut(context, ref);
-  }
-
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).user;
-
+    final user = ref.watch(userProvider);
+    nameController = TextEditingController(text: user.name);
+    emailController = TextEditingController(text: user.email);
+    universityController =
+        TextEditingController(text: user.userProps.university);
+    majorController = TextEditingController(text: user.userProps.major);
+    contactController = TextEditingController(text: user.userProps.contact);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
-            onPressed: () => signOutUser(context, ref),
+            onPressed: () => widget.onSignOut(),
           ),
         ],
       ),
