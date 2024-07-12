@@ -1,4 +1,4 @@
-import 'package:finalproject/Screens/user/auth_tab.dart';
+import 'package:finalproject/Screens/user/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Screens/volunteers.dart';
@@ -16,7 +16,7 @@ class TabsState extends ConsumerState<Tabs> {
   bool token = false;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const AuthTab(),
+    const index(),
     const Volunteers(),
     const Center(
       child: Text("chatbot"),

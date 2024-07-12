@@ -1,19 +1,19 @@
 import 'package:finalproject/Provider/auth_state.dart';
-import 'package:finalproject/Screens/user/profile.dart';
-import 'package:finalproject/Screens/user/signin.dart';
-import 'package:finalproject/Screens/user/signup.dart';
+import 'package:finalproject/Screens/user/components/profile.dart';
+import 'package:finalproject/Screens/user/components/signin.dart';
+import 'package:finalproject/Screens/user/components/signup.dart';
 import 'package:finalproject/Services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AuthTab extends ConsumerStatefulWidget {
-  const AuthTab({super.key});
+class index extends ConsumerStatefulWidget {
+  const index({super.key});
 
   @override
-  _AuthTabState createState() => _AuthTabState();
+  _index createState() => _index();
 }
 
-class _AuthTabState extends ConsumerState<AuthTab> {
+class _index extends ConsumerState<index> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final AuthService authService = AuthService();
 
