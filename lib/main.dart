@@ -47,6 +47,7 @@ final theme = ThemeData(
   primaryIconTheme: const IconThemeData(
     color: Colors.white,
   ),
+  
 );
 
 class Tareeqak extends StatelessWidget {

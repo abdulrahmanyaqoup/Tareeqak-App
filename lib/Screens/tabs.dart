@@ -60,35 +60,45 @@ class TabsState extends ConsumerState<Tabs> {
             )
           : null,
       body: Center(child: _widgetOptions.elementAt(_pageIndex)),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: selectPage,
-        currentIndex: _pageIndex,
-        selectedIconTheme: Theme.of(context)
-            .iconTheme
-            .copyWith(color: Theme.of(context).colorScheme.primary),
-        unselectedIconTheme: Theme.of(context)
-            .iconTheme
-            .copyWith(color: Theme.of(context).colorScheme.secondary),
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.person_2),
-            label: 'Volunteers',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.chat_bubble_text),
-            label: 'ChatBot',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'University',
-          ),
-        ],
+      bottomNavigationBar: Theme(
+        data: Theme.of(context).copyWith(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: BottomNavigationBar(
+          onTap: selectPage,
+          currentIndex: _pageIndex,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          selectedIconTheme: Theme.of(context)
+              .iconTheme
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+          unselectedIconTheme: Theme.of(context)
+              .iconTheme
+              .copyWith(color: Theme.of(context).colorScheme.secondary),
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          
+          iconSize: 30,
+          type: BottomNavigationBarType.fixed,
+          items:  [
+            BottomNavigationBarItem(
+              icon: Icon(_pageIndex == 0 ? CupertinoIcons.person_fill : CupertinoIcons.person),
+              label: 'Profile',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_pageIndex == 1 ? CupertinoIcons.person_2_fill : CupertinoIcons.person_2),
+              label: 'Volunteers',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_pageIndex == 2 ? CupertinoIcons.chat_bubble_text_fill : CupertinoIcons.chat_bubble_text),
+              label: 'ChatBot',
+            ),
+            BottomNavigationBarItem(
+            icon: Icon(_pageIndex == 3 ? CupertinoIcons.compass_fill : CupertinoIcons.compass),
+              label: 'University',
+            ),
+          ],
+        ),
       ),
     );
   }
