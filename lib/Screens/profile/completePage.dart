@@ -1,3 +1,4 @@
+import 'package:finalproject/Screens/profile/components/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -5,22 +6,24 @@ import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:finalproject/Services/authService.dart';
+import 'package:finalproject/Provider/authProvider.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
-  const CompleteProfilePage({super.key});
+  final VoidCallback onSignOut;
+  const CompleteProfilePage({super.key, required this.onSignOut});
 
   @override
   _CompleteProfilePageState createState() => _CompleteProfilePageState();
 }
 
 class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
-  String token = '';
+ 
   AuthService authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    _initializeData();
+    ref.read(authProvider.notifier).checkLoginStatus();
   }
 
   @override
@@ -28,14 +31,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
     super.dispose();
   }
 
-  Future<void> _initializeData() async {
-    await authService.getUserData(context: context, ref: ref);
-    final prefs = await SharedPreferences.getInstance();
-    final storedToken = prefs.getString('x-auth-token') ?? '';
-    setState(() {
-      token = storedToken;
-    });
-  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +66,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                       ),
                   const SizedBox(height: 20),
                   Text(
-                    token.isNotEmpty
+                    user.token.isNotEmpty
                         ? 'Welcome back!'
                         : 'Be a part of our community!',
                     style: const TextStyle(
@@ -81,13 +77,20 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      if (token.isNotEmpty) {
-                        Navigator.of(context).pushNamed('/profile');
+                      if (user.token.isNotEmpty) {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => Profile(
+                              onSignOut: widget.onSignOut,
+                            ),
+                          ),
+                        
+                        );
                       } else {
                         Navigator.of(context).pushNamed('/signup');
                       }
                     },
-                    child: Text(token.isNotEmpty ? 'Go to Profile' : 'Sign Up'),
+                    child: Text(user.token.isNotEmpty ? 'Go to Profile' : 'Sign Up'),
                   ),
                 ],
               ),
@@ -132,12 +135,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: Icon(Icons.school,
-                              color: Theme.of(context).colorScheme.secondary),
-                        ),
+                        
                         Icon(Icons.school,
                             color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 5),
@@ -170,12 +168,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: Icon(Icons.edit,
-                              color: Theme.of(context).colorScheme.secondary),
-                        ),
+                       
                         Icon(Icons.edit,
                             color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 5),

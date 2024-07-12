@@ -1,4 +1,5 @@
 import 'package:finalproject/Screens/profile/profileIndex.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Screens/volunteers.dart';
@@ -72,15 +73,15 @@ class TabsState extends ConsumerState<Tabs> {
         showUnselectedLabels: false,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: Icon(CupertinoIcons.person),
             label: 'Profile',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.volunteer_activism),
+            icon: Icon(CupertinoIcons.person_2),
             label: 'Volunteers',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.chat),
+            icon: Icon(CupertinoIcons.chat_bubble_text),
             label: 'ChatBot',
           ),
           BottomNavigationBarItem(
