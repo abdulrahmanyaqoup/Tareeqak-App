@@ -1,4 +1,5 @@
 import 'package:finalproject/Screens/profile/profileIndex.dart';
+import 'package:finalproject/Screens/university.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,9 +22,7 @@ class TabsState extends ConsumerState<Tabs> {
       child: Text("chatbot"),
     ),
     const Volunteers(),
-    const Center(
-      child: Text("university"),
-    ),
+    UniversityPage(),
     const Index(),
   ];
 

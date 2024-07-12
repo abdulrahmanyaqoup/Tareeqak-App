@@ -1,41 +1,72 @@
+import 'package:finalproject/Services/authService.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Models/user.dart';
 
-class UserProvider extends StateNotifier<User> {
-  UserProvider()
-      : super(User(
-          id: '',
-          name: '',
-          email: '',
-          token: '',
-          password: '',
-          userProps: UserProps(
-            university: '',
-            major: '',
-            contact: '',
-            image: '',
-          ),
-        ));
+import '../Models/user.dart';
 
-  List<User> _userList = [];
-  List<User> get userList => _userList;
+class UserState {
+  final User user;
+  final List<User> userList;
+  final bool isLoading;
+  final String? errorMessage;
 
-  void setUser(String user) {
-    state = User.fromJson(user);
+  UserState({
+    required this.user,
+    this.userList = const [],
+    this.isLoading = false,
+    this.errorMessage,
+  });
+
+  UserState copyWith({
+    User? user,
+    List<User>? userList,
+    bool? isLoading,
+    String? errorMessage,
+  }) {
+    return UserState(
+      user: user ?? this.user,
+      userList: userList ?? this.userList,
+      isLoading: isLoading ?? this.isLoading,
+      errorMessage: errorMessage ?? this.errorMessage,
+    );
+  }
+}
+
+class UserNotifier extends StateNotifier<UserState> {
+  UserNotifier()
+      : super(UserState(
+            user: User(
+                id: '',
+                name: '',
+                email: '',
+                password: '',
+                token: '',
+                userProps: UserProps(
+                    university: '', major: '', contact: '', image: ''))));
+
+  Future<void> getUser(String userId) async {
+    state = state.copyWith(isLoading: true);
+    try {
+      var userData = await AuthService().getUser();
+      state = state.copyWith(user: User.fromJson(userData), isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
+    }
   }
 
-  void setUserFromModel(User user) {
-    state = user;
+  Future<void> getAllUsers() async {
+    try {
+      List<User> users = await AuthService().getAllUsers();
+      state = state.copyWith(userList: users, isLoading: false);
+    } catch (e) {
+      state = state.copyWith(isLoading: false, errorMessage: e.toString());
+    }
   }
 
-  void setUserList(List<User> users) {
-    _userList = users;
-  }
-
-  void updateUserProps(UserProps userProps) {
-    state = state.copyWith(userProps: userProps);
+  void updateUser(String name, String email) {
+    User updatedUser = state.user.copyWith(name: name, email: email);
+    state = state.copyWith(user: updatedUser);
   }
 }
 
 final userProvider =
-    StateNotifierProvider<UserProvider, User>((ref) => UserProvider());
+    StateNotifierProvider<UserNotifier, UserState>((ref) => UserNotifier());
