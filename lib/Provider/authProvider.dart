@@ -7,14 +7,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthState {
   final bool isLoggedIn;
-  AuthState({this.isLoggedIn = false});
+  final bool isLoading;
+  AuthState({this.isLoggedIn = false, this.isLoading = true});
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
   final Ref ref;
-  AuthNotifier(this.ref) : super(AuthState(isLoggedIn: false)) {
-    checkLoginStatus();
-  }
+  AuthNotifier(this.ref) : super(AuthState(isLoggedIn: false));
 
   Future<void> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -23,9 +22,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       String response = await AuthService().getUserData();
       final userNotifier = ref.read(userProvider.notifier);
       userNotifier.setUser(response);
-      state = AuthState(isLoggedIn: true);
+      state = AuthState(isLoggedIn: true, isLoading: false);
     } else {
-      state = AuthState(isLoggedIn: false);
+      state = AuthState(isLoggedIn: false, isLoading: false);
     }
   }
 
@@ -40,17 +39,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', token);
       ref.read(userProvider.notifier).setUser(userData);
-      state = AuthState(isLoggedIn: true);
+      state = AuthState(isLoggedIn: true, isLoading: false);
     } catch (e) {
       onError(e.toString());
-      state = AuthState(isLoggedIn: false);
+      state = AuthState(isLoggedIn: false, isLoading: false);
     }
   }
 
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('x-auth-token');
-    state = AuthState(isLoggedIn: false);
+    prefs.setString('x-auth-token', '');
+    state = AuthState(isLoggedIn: false, isLoading: false);
   }
 }
 
