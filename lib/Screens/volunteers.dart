@@ -13,12 +13,12 @@ class Volunteers extends ConsumerStatefulWidget {
 }
 
 class _VolunteersState extends ConsumerState<Volunteers> {
-  final authServce = AuthService();
+  final authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    authServce.getAllUsers();
+    authService.getAllUsers();
     ref.read(userProvider.notifier).getAllUsers();
   }
 
@@ -27,58 +27,64 @@ class _VolunteersState extends ConsumerState<Volunteers> {
     UserState userState = ref.watch(userProvider);
 
     return Scaffold(
-      body: Column(
-        children: [
-          Center(
-            child: Container(
-              margin: const EdgeInsets.all(15),
-              width: MediaQuery.of(context).size.width,
-              height: 150,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).appBarTheme.backgroundColor!,
-                    Theme.of(context).appBarTheme.backgroundColor!,
-                  ],
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Opacity(
-                    opacity: .6,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15),
-                      child: CustomPaint(
-                        painter: CustomIconsPainter(),
-                        size: Size(double.infinity, 150),
-                      ),
-                    ),
+      appBar: AppBar(
+        title: const Text('Contact With Avisors'),
+        elevation: 2,
+        backgroundColor: Theme.of(context).colorScheme.tertiary.withOpacity(.4),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Center(
+              child: Container(
+                margin: const EdgeInsets.all(15),
+                width: MediaQuery.of(context).size.width,
+                height: 150,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).appBarTheme.backgroundColor!,
+                      Theme.of(context).appBarTheme.backgroundColor!,
+                    ],
                   ),
-                  const Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text(
-                        'Join ambassadors !\n be a model for other students by helping them in their academic year',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                ),
+                child: Stack(
+                  children: [
+                    Opacity(
+                      opacity: .6,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: CustomPaint(
+                          painter: CustomIconsPainter(),
+                          size: const Size(double.infinity, 150),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    const Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: EdgeInsets.all(20.0),
+                        child: Text(
+                          'Join ambassadors !\n be a model for other students by helping them in their academic year',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: userState.userList.isEmpty
+            userState.userList.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
+                    shrinkWrap: true,
                     itemCount: userState.userList.length,
                     itemBuilder: (context, index) {
                       final user = userState.userList[index];
@@ -87,8 +93,8 @@ class _VolunteersState extends ConsumerState<Volunteers> {
                       );
                     },
                   ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -98,7 +104,7 @@ class CustomIconsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Color.fromARGB(255, 128, 127, 182)
+      ..color = const Color(0xFFFDE9CC)
       ..style = PaintingStyle.fill
       ..strokeWidth = 2;
     PaintingStyle.fill;
@@ -108,11 +114,11 @@ class CustomIconsPainter extends CustomPainter {
 
     x = (size.width / 2) + (size.width / 1000);
     y = (size.height / 2) + (70);
-    canvas.drawCircle(Offset(10, 10), 30, paint);
+    canvas.drawCircle(const Offset(10, 10), 30, paint);
 
     x = (size.width / 1.2) + (size.width / 1000);
     y = (size.height / 2) + (70);
-    canvas.drawCircle(Offset(100, 30), 30, paint);
+    canvas.drawCircle(const Offset(100, 30), 30, paint);
 
     x = (size.width / 1.5) + (size.width / 1000);
     y = (size.height / 2) + (70);
@@ -124,7 +130,7 @@ class CustomIconsPainter extends CustomPainter {
 
     x = (size.width / 1.5) + (size.width / 1000);
     y = (size.height / 2) + (70);
-    canvas.drawCircle(Offset(350, 0), 50, paint);
+    canvas.drawCircle(const Offset(350, 0), 50, paint);
   }
 
   @override
@@ -139,54 +145,69 @@ class ProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      elevation: 4,
       margin: const EdgeInsets.all(15),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(20), // Adjusted border radius
       ),
-      elevation: 3,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Stack(
             children: [
               Container(
-                padding: const EdgeInsets.all(7),
+                padding: const EdgeInsets.all(16), // Adjusted padding
                 width: double.infinity,
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(15),
-                    topRight: Radius.circular(15),
+                    topLeft: Radius.circular(20), // Adjusted border radius
+                    topRight: Radius.circular(20),
                   ),
                   gradient: LinearGradient(
                     colors: [
-                      Theme.of(context).appBarTheme.backgroundColor!,
                       Theme.of(context)
-                          .appBarTheme
-                          .backgroundColor!
+                          .colorScheme
+                          .primary, // Adjusted color scheme
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
                           .withOpacity(.7),
                     ],
                   ),
                 ),
                 child: Row(
                   children: [
-                    CircleAvatar(
-                      radius: 40,
-                      backgroundImage: NetworkImage(
-                          '${dotenv.env['uri']}/${user.userProps.image}'),
-                    ),
-                    const SizedBox(width: 16),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user.name,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
+                    Container(
+                      width: 80, 
+                      height: 80, 
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color:Theme.of(context)
+                              .colorScheme
+                              .tertiary.withOpacity(.7), 
+                          width: 1.0, 
                         ),
-                      ],
+                      ),
+                      child: CircleAvatar(
+                        radius: 40,
+                        backgroundImage: NetworkImage(
+                            '${dotenv.env['uri']}/${user.userProps.image}'),
+                        child: user.userProps.image.isEmpty
+                            ? const Icon(Icons.person,
+                                size: 30) 
+                            : null,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      user.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ],
                 ),
@@ -194,65 +215,80 @@ class ProfileCard extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            padding:
+                const EdgeInsets.all(16), // Adjusted padding for uniformity
             child: Column(
               children: [
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.school,
-                      color: Colors.black,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary, // Adjusted icon color
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 5),
                     Text(
                       user.userProps.university,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface, // Adjusted text color
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.code,
-                      color: Colors.black,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary, // Adjusted icon color
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 5),
                     Text(
                       user.userProps.major,
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface, // Adjusted text color
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.email,
-                      color: Colors.black,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary, // Adjusted icon color
                     ),
                     const SizedBox(width: 3),
                     Text(
-                      'abd0203489@ju.edu.jo',
+                      user.email,
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface, // Adjusted text color
                       ),
                     ),
                     const SizedBox(width: 30),
-                    const Icon(
+                    Icon(
                       Icons.phone,
-                      color: Colors.black,
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary, // Adjusted icon color
                     ),
                     const SizedBox(width: 3),
                     Text(
@@ -260,7 +296,9 @@ class ProfileCard extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
+                        color: Theme.of(context)
+                            .colorScheme
+                            .onSurface, // Adjusted text color
                       ),
                     ),
                   ],
