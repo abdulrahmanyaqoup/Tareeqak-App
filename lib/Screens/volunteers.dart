@@ -25,7 +25,7 @@ class _VolunteersState extends ConsumerState<Volunteers> {
 
   @override
   Widget build(BuildContext context) {
-    final userList = ref.watch(userProvider).userList;
+    final userList = ref.watch(userProvider.notifier).userList;
 
     return Scaffold(
       body: Column(

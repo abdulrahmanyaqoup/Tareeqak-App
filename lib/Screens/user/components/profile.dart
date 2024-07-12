@@ -32,13 +32,6 @@ class ProfileState extends ConsumerState<Profile> {
   void initState() {
     super.initState();
     authService.getUserData(context: context, ref: ref);
-    final user = ref.read(userProvider).user;
-    nameController = TextEditingController(text: user.name);
-    emailController = TextEditingController(text: user.email);
-    universityController =
-        TextEditingController(text: user.userProps.university);
-    majorController = TextEditingController(text: user.userProps.major);
-    contactController = TextEditingController(text: user.userProps.contact);
   }
 
   @override
@@ -69,7 +62,7 @@ class ProfileState extends ConsumerState<Profile> {
       circular = true;
     });
 
-    final user = ref.read(userProvider).user;
+    final user = ref.read(userProvider);
     final updatedUserProps = user.userProps.copyWith(
       university: universityController.text,
       major: majorController.text,
@@ -81,7 +74,7 @@ class ProfileState extends ConsumerState<Profile> {
       email: emailController.text,
       userProps: updatedUserProps,
     );
-    ref.read(userProvider).setUserFromModel(updatedUser);
+    ref.read(userProvider.notifier).setUserFromModel(updatedUser);
 
     AuthService().updateUser(
       context: context,
@@ -95,7 +88,7 @@ class ProfileState extends ConsumerState<Profile> {
   }
 
   void deleteUser(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userProvider).user;
+    final user = ref.read(userProvider);
     AuthService().deleteUser(
       context: context,
       ref: ref,
@@ -105,7 +98,13 @@ class ProfileState extends ConsumerState<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).user;
+    final user = ref.watch(userProvider);
+    nameController = TextEditingController(text: user.name);
+    emailController = TextEditingController(text: user.email);
+    universityController =
+        TextEditingController(text: user.userProps.university);
+    majorController = TextEditingController(text: user.userProps.major);
+    contactController = TextEditingController(text: user.userProps.contact);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
