@@ -12,19 +12,19 @@ class Tabs extends ConsumerStatefulWidget {
 }
 
 class TabsState extends ConsumerState<Tabs> {
-  int _pageIndex = 0;
+  int _pageIndex = 3;
   bool _isLoading = true;
   bool token = false;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const Index(),
-    const Volunteers(),
     const Center(
       child: Text("chatbot"),
     ),
+    const Volunteers(),
     const Center(
       child: Text("university"),
     ),
+    const Index(),
   ];
 
   @override
@@ -50,7 +50,7 @@ class TabsState extends ConsumerState<Tabs> {
     }
 
     return Scaffold(
-      appBar: _pageIndex != 0 && _pageIndex != 1
+      appBar: _pageIndex != 1 && _pageIndex != 3
           ? AppBar(
               title: Center(
                 child: Text(
@@ -77,25 +77,32 @@ class TabsState extends ConsumerState<Tabs> {
               .copyWith(color: Theme.of(context).colorScheme.secondary),
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          
           iconSize: 30,
           type: BottomNavigationBarType.fixed,
-          items:  [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 0 ? CupertinoIcons.person_fill : CupertinoIcons.person),
-              label: 'Profile',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 1 ? CupertinoIcons.person_2_fill : CupertinoIcons.person_2),
-              label: 'Volunteers',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 2 ? CupertinoIcons.chat_bubble_text_fill : CupertinoIcons.chat_bubble_text),
+              icon: Icon(_pageIndex == 0
+                  ? CupertinoIcons.chat_bubble_text_fill
+                  : CupertinoIcons.chat_bubble_text),
               label: 'ChatBot',
             ),
             BottomNavigationBarItem(
-            icon: Icon(_pageIndex == 3 ? CupertinoIcons.compass_fill : CupertinoIcons.compass),
+              icon: Icon(_pageIndex == 1
+                  ? CupertinoIcons.person_2_fill
+                  : CupertinoIcons.person_2),
+              label: 'Volunteers',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_pageIndex == 2
+                  ? CupertinoIcons.compass_fill
+                  : CupertinoIcons.compass),
               label: 'University',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(_pageIndex == 3
+                  ? CupertinoIcons.person_fill
+                  : CupertinoIcons.person),
+              label: 'Profile',
             ),
           ],
         ),
@@ -106,13 +113,13 @@ class TabsState extends ConsumerState<Tabs> {
   String _getPageTitle(int index) {
     switch (index) {
       case 0:
-        return 'Profile';
-      case 1:
-        return 'University';
-      case 2:
-        return 'Volunteers';
-      case 3:
         return 'ChatBot';
+      case 1:
+        return 'Volunteers';
+      case 2:
+        return 'University';
+      case 3:
+        return 'Profile';
       default:
         return 'University';
     }
