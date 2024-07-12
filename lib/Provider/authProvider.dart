@@ -57,6 +57,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('x-auth-token', '');
+    print("hello");
     state = AuthState(isLoggedIn: false, isLoading: false);
   }
 }
