@@ -16,7 +16,7 @@ class TabsState extends ConsumerState<Tabs> {
   bool token = false;
 
   static final List<Widget> _widgetOptions = <Widget>[
-    const index(),
+    const Index(),
     const Volunteers(),
     const Center(
       child: Text("chatbot"),

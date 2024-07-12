@@ -11,17 +11,16 @@ final authProvider = StateNotifierProvider<AuthController, bool>((ref) {
 
 class AuthController extends StateNotifier<bool> {
   final Ref ref;
-  AuthController(this.ref) : super(false) {
-    checkLoginStatus();
+  AuthController(this.ref) : super(true) {
+    _checkLoginStatus();
   }
 
-  Future<bool> checkLoginStatus() async {
+  Future<void> _checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('x-auth-token');
     if (token != null && token.isNotEmpty) {
       state = true;
     }
-    return state;
   }
 
   Future<void> signIn(

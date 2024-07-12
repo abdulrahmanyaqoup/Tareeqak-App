@@ -26,10 +26,12 @@ class ProfileState extends ConsumerState<Profile> {
   late TextEditingController contactController;
   FileImage? _image;
   bool circular = false;
+  final AuthService authService = AuthService();
 
   @override
   void initState() {
     super.initState();
+    authService.getUserData(context: context, ref: ref);
     final user = ref.read(userProvider).user;
     nameController = TextEditingController(text: user.name);
     emailController = TextEditingController(text: user.email);

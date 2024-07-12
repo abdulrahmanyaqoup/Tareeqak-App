@@ -2,25 +2,23 @@ import 'package:finalproject/Provider/auth_state.dart';
 import 'package:finalproject/Screens/user/components/profile.dart';
 import 'package:finalproject/Screens/user/components/signin.dart';
 import 'package:finalproject/Screens/user/components/signup.dart';
-import 'package:finalproject/Services/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class index extends ConsumerStatefulWidget {
-  const index({super.key});
+class Index extends ConsumerStatefulWidget {
+  const Index({super.key});
 
   @override
-  _index createState() => _index();
+  _Index createState() => _Index();
 }
 
-class _index extends ConsumerState<index> {
+class _Index extends ConsumerState<Index> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
-  final AuthService authService = AuthService();
 
   @override
   void initState() {
     super.initState();
-    ref.read(authProvider.notifier).checkLoginStatus();
+    ref.read(authProvider.notifier);
   }
 
   Future<void> signIn(String email, String password) async {
@@ -59,19 +57,12 @@ class _index extends ConsumerState<index> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: ref.read(authProvider.notifier).checkLoginStatus(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          authService.getUserData(context: context, ref: ref);
-          final isLoggedIn = ref.watch(authProvider);
-          return Navigator(
-            onGenerateRoute: (settings) => _generateRoute(settings, isLoggedIn),
-          );
-        } else {
-          return const CircularProgressIndicator(); // Or any other loading indicator
-        }
-      },
+    final isLoggedIn = ref.watch(authProvider);
+    print(isLoggedIn);
+
+    return Navigator(
+      key: _navigatorKey,
+      onGenerateRoute: (settings) => _generateRoute(settings, isLoggedIn),
     );
   }
 
