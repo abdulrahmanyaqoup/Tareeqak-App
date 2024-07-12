@@ -1,4 +1,5 @@
 import 'package:finalproject/Provider/authProvider.dart';
+import 'package:finalproject/Screens/profile/completePage.dart';
 import 'package:finalproject/Screens/profile/components/profile.dart';
 import 'package:finalproject/Screens/profile/components/signin.dart';
 import 'package:finalproject/Screens/profile/components/signup.dart';
@@ -58,7 +59,7 @@ class _Index extends ConsumerState<Index> {
     final authState = ref.watch(authProvider);
     if (authState.isLoading) {
       return Scaffold(
-        body: Profile(onSignOut: () {}),
+        body: CompleteProfilePage(onSignOut: signOut),
       );
     }
     return Navigator(
@@ -71,7 +72,7 @@ class _Index extends ConsumerState<Index> {
   Route<dynamic> _generateRoute(RouteSettings settings, bool isLoggedIn) {
     if (isLoggedIn) {
       return MaterialPageRoute(
-        builder: (_) => Profile(
+        builder: (_) => CompleteProfilePage(
           onSignOut: signOut,
         ),
       );
