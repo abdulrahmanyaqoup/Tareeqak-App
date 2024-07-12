@@ -9,7 +9,7 @@ class CompleteProfilePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final user = ref.watch(userProvider).user;
+    final user = ref.watch(userProvider);
     final double height = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -21,7 +21,8 @@ class CompleteProfilePage extends ConsumerWidget {
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.background,
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20)),
             ),
             child: Column(
               children: [
@@ -88,7 +89,8 @@ class CompleteProfilePage extends ConsumerWidget {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        Icon(Icons.school, color: Theme.of(context).colorScheme.secondary),
+                        Icon(Icons.school,
+                            color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -117,7 +119,8 @@ class CompleteProfilePage extends ConsumerWidget {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        Icon(Icons.edit, color: Theme.of(context).colorScheme.secondary),
+                        Icon(Icons.edit,
+                            color: Theme.of(context).colorScheme.secondary),
                         const SizedBox(width: 5),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
