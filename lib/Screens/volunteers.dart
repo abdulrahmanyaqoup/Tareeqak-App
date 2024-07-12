@@ -1,9 +1,11 @@
 import 'package:finalproject/backend/authentication.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Models/user.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Volunteers extends ConsumerStatefulWidget {
   const Volunteers({super.key});
@@ -27,10 +29,11 @@ class _VolunteersState extends ConsumerState<Volunteers> {
     UserState userState = ref.watch(userProvider);
 
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       appBar: AppBar(
-        title: const Text('Contact With Avisors'),
+        title: const Text('Contact With Advisors'),
         elevation: 2,
-        backgroundColor: Theme.of(context).colorScheme.tertiary.withOpacity(.4),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -104,7 +107,7 @@ class CustomIconsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = const Color(0xFFFDE9CC)
+      ..color = Color.fromARGB(255, 56, 53, 63)
       ..style = PaintingStyle.fill
       ..strokeWidth = 2;
     PaintingStyle.fill;
@@ -142,171 +145,194 @@ class CustomIconsPainter extends CustomPainter {
 class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key, required this.user});
   final User user;
+
+  void _launchURL(String url) async {
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 4,
+      elevation: 2,
       margin: const EdgeInsets.all(15),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20), // Adjusted border radius
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16), // Adjusted padding
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(20), // Adjusted border radius
-                    topRight: Radius.circular(20),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: 75,
+                  height: 75,
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.7),
+                      width: 1.0,
+                    ),
                   ),
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context)
-                          .colorScheme
-                          .primary, // Adjusted color scheme
-                      Theme.of(context)
-                          .colorScheme
-                          .primary
-                          .withOpacity(.7),
-                    ],
+                  child: CircleAvatar(
+                    radius: 35,
+                    backgroundImage: NetworkImage(
+                        '${dotenv.env['uri']}/${user.userProps.image}'),
+                    child: user.userProps.image.isEmpty
+                        ? const Icon(Icons.person, size: 30)
+                        : null,
                   ),
                 ),
-                child: Row(
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
-                      width: 80, 
-                      height: 80, 
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color:Theme.of(context)
-                              .colorScheme
-                              .tertiary.withOpacity(.7), 
-                          width: 1.0, 
-                        ),
-                      ),
-                      child: CircleAvatar(
-                        radius: 40,
-                        backgroundImage: NetworkImage(
-                            '${dotenv.env['uri']}/${user.userProps.image}'),
-                        child: user.userProps.image.isEmpty
-                            ? const Icon(Icons.person,
-                                size: 30) 
-                            : null,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
                     Text(
                       user.name,
                       style: const TextStyle(
-                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                         fontSize: 16,
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-              ),
-            ],
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.all(16), // Adjusted padding for uniformity
-            child: Column(
-              children: [
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.school,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary, // Adjusted icon color
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      user.userProps.university,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface, // Adjusted text color
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.code,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary, // Adjusted icon color
-                    ),
-                    const SizedBox(width: 5),
-                    Text(
-                      user.userProps.major,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface, // Adjusted text color
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.email,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary, // Adjusted icon color
-                    ),
-                    const SizedBox(width: 3),
-                    Text(
-                      user.email,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface, // Adjusted text color
-                      ),
-                    ),
-                    const SizedBox(width: 30),
-                    Icon(
-                      Icons.phone,
-                      color: Theme.of(context)
-                          .colorScheme
-                          .secondary, // Adjusted icon color
-                    ),
-                    const SizedBox(width: 3),
-                    Text(
-                      user.userProps.contact,
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurface, // Adjusted text color
-                      ),
-                    ),
-                  ],
-                )
               ],
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    Icons.school,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'University',
+                      style: TextStyle(
+                        fontSize: 7,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    Text(
+                      user.userProps.university.isEmpty
+                          ? '-'
+                          : user.userProps.university,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    color:
+                        Theme.of(context).colorScheme.primary.withOpacity(.2),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  child: Icon(
+                    CupertinoIcons.pen,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 20,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Major',
+                      style: TextStyle(
+                        fontSize: 7,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                    Text(
+                      user.userProps.major.isEmpty ? '-' : user.userProps.major,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.onSurface,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () => _launchURL('mailto:${user.email}'),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Icon(
+                      Icons.email,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 30),
+                InkWell(
+                  onTap: () =>
+                      _launchURL('https://wa.me/${user.userProps.contact}'),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
+                    decoration: BoxDecoration(
+                      color:
+                          Theme.of(context).colorScheme.primary.withOpacity(.2),
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                    child: Icon(
+                      Icons.phone,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
