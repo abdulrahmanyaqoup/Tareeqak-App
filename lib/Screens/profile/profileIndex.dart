@@ -1,6 +1,5 @@
 import 'package:finalproject/Provider/authProvider.dart';
 import 'package:finalproject/Screens/profile/completePage.dart';
-import 'package:finalproject/Screens/profile/components/profile.dart';
 import 'package:finalproject/Screens/profile/components/signin.dart';
 import 'package:finalproject/Screens/profile/components/signup.dart';
 import 'package:flutter/material.dart';
@@ -42,16 +41,13 @@ class _Index extends ConsumerState<Index> {
 
   Future<void> signOut() async {
     await ref.read(authProvider.notifier).signOut();
-    _navigatorKey.currentState?.pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => Signin(
-          onSignUpPressed: () {
-            _navigatorKey.currentState?.pushReplacementNamed('/signup');
-          },
-          onSignIn: signIn,
+    if (!ref.read(authProvider).isLoggedIn) {
+      _navigatorKey.currentState?.pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => CompleteProfilePage(onSignOut: signOut),
         ),
-      ),
-    );
+      );
+    }
   }
 
   @override
@@ -70,33 +66,31 @@ class _Index extends ConsumerState<Index> {
   }
 
   Route<dynamic> _generateRoute(RouteSettings settings, bool isLoggedIn) {
-    if (isLoggedIn) {
-      return MaterialPageRoute(
-        builder: (_) => CompleteProfilePage(
-          onSignOut: signOut,
-        ),
-      );
-    } else {
-      switch (settings.name) {
-        case '/signup':
-          return MaterialPageRoute(
-            builder: (_) => SignupScreen(
-              onSignInPressed: () {
-                _navigatorKey.currentState?.pushReplacementNamed('/signin');
-              },
-            ),
-          );
-        case '/signin':
-        default:
-          return MaterialPageRoute(
-            builder: (_) => Signin(
-              onSignUpPressed: () {
-                _navigatorKey.currentState?.pushReplacementNamed('/signup');
-              },
-              onSignIn: signIn,
-            ),
-          );
-      }
+    switch (settings.name) {
+      case '/signin':
+        return MaterialPageRoute(
+          builder: (_) => Signin(
+            onSignIn: signIn,
+            onSignUpPressed: () {
+              _navigatorKey.currentState?.pushNamed('/signup');
+            },
+          ),
+        );
+      case '/signup':
+        return MaterialPageRoute(
+          builder: (_) => SignupScreen(
+            onSignInPressed: () {
+              _navigatorKey.currentState?.pushNamed('/signin');
+            },
+          ),
+        );
+      case '/Profile':
+      default:
+        return MaterialPageRoute(
+          builder: (_) => CompleteProfilePage(
+            onSignOut: signOut,
+          ),
+        );
     }
   }
 }

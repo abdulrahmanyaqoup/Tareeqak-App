@@ -18,12 +18,12 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('x-auth-token');
+    final userNotifier = ref.read(userProvider.notifier);
     if (token != null && token.isNotEmpty) {
-      String response = await AuthService().getUser();
-      final userNotifier = ref.read(userProvider.notifier);
-      userNotifier.getUser(response);
+      await userNotifier.getUser(token);
       state = AuthState(isLoggedIn: true, isLoading: false);
     } else {
+      await userNotifier.clearUser();
       state = AuthState(isLoggedIn: false, isLoading: false);
     }
   }

@@ -33,8 +33,6 @@ class AuthService {
         id: '',
         name: name,
         email: email,
-        password: password,
-        token: '',
         userProps: userProps,
       );
 
@@ -55,7 +53,6 @@ class AuthService {
       request.fields.addAll({
         'name': user.name,
         'email': user.email,
-        'password': user.password,
         'university': userProps.university,
         'major': userProps.major,
         'contact': userProps.contact,
@@ -104,13 +101,11 @@ class AuthService {
     }
   }
 
-  Future<String> getUser() async {
+  Future<String> getUser(String token) async {
     try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-
       Map<String, String> headers = {
         'Content-Type': 'application/json;charset=UTF-8',
-        'x-auth-token': prefs.getString('x-auth-token') ?? '',
+        'x-auth-token': token,
       };
 
       http.Response userRes = await http.get(

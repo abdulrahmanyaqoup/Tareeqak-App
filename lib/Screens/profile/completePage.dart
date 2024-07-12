@@ -4,8 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:finalproject/backend/authentication.dart';
 import 'package:finalproject/Provider/authProvider.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
@@ -17,17 +15,10 @@ class CompleteProfilePage extends ConsumerStatefulWidget {
 }
 
 class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
-  AuthService authService = AuthService();
-
   @override
   void initState() {
     super.initState();
     ref.read(authProvider.notifier).checkLoginStatus();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override

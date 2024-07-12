@@ -32,21 +32,16 @@ class UserState {
 }
 
 class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier()
-      : super(UserState(
-            user: User(
-                id: '',
-                name: '',
-                email: '',
-                password: '',
-                token: '',
-                userProps: UserProps(
-                    university: '', major: '', contact: '', image: ''))));
+  UserNotifier() : super(UserState(user: User.initial()));
 
-  Future<void> getUser(String userId) async {
+  Future<void> clearUser() async {
+    state = UserState(user: User.initial());
+  }
+
+  Future<void> getUser(String token) async {
     state = state.copyWith(isLoading: true);
     try {
-      var userData = await AuthService().getUser();
+      var userData = await AuthService().getUser(token);
       state = state.copyWith(user: User.fromJson(userData), isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
@@ -64,8 +59,8 @@ class UserNotifier extends StateNotifier<UserState> {
 
   void updateUser(
       String name, String email, String password, UserProps userProps) async {
-    User updatedUser = state.user.copyWith(
-        name: name, email: email, password: password, userProps: userProps);
+    User updatedUser =
+        state.user.copyWith(name: name, email: email, userProps: userProps);
     state = state.copyWith(user: updatedUser);
   }
 }
