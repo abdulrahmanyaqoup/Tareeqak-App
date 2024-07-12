@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Screens/user/components/signup_optional.dart';
+import 'package:finalproject/Screens/profile/components/signupExtended.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {

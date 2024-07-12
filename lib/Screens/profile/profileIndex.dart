@@ -1,7 +1,7 @@
 import 'package:finalproject/Provider/auth_state.dart';
-import 'package:finalproject/Screens/user/components/profile.dart';
-import 'package:finalproject/Screens/user/components/signin.dart';
-import 'package:finalproject/Screens/user/components/signup.dart';
+import 'package:finalproject/Screens/profile/components/profile.dart';
+import 'package:finalproject/Screens/profile/components/signin.dart';
+import 'package:finalproject/Screens/profile/components/signup.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,4 +1,4 @@
-import 'package:finalproject/Screens/user/index.dart';
+import 'package:finalproject/Screens/profile/profileIndex.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Screens/volunteers.dart';
