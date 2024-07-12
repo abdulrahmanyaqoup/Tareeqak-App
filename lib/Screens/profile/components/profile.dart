@@ -61,7 +61,7 @@ class ProfileState extends ConsumerState<Profile> {
       circular = true;
     });
 
-    final user = ref.read(userProvider);
+    final user = ref.read(userProvider).user;
     final updatedUserProps = user.userProps.copyWith(
       university: universityController.text,
       major: majorController.text,
@@ -73,7 +73,6 @@ class ProfileState extends ConsumerState<Profile> {
       email: emailController.text,
       userProps: updatedUserProps,
     );
-    ref.read(userProvider.notifier).setUserFromModel(updatedUser);
 
     AuthService().updateUser(
       context: context,
@@ -91,19 +90,20 @@ class ProfileState extends ConsumerState<Profile> {
     AuthService().deleteUser(
       context: context,
       ref: ref,
-      id: user.id,
+      id: user.user.id,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(userProvider);
-    nameController = TextEditingController(text: user.name);
-    emailController = TextEditingController(text: user.email);
+    nameController = TextEditingController(text: user.user.name);
+    emailController = TextEditingController(text: user.user.email);
     universityController =
-        TextEditingController(text: user.userProps.university);
-    majorController = TextEditingController(text: user.userProps.major);
-    contactController = TextEditingController(text: user.userProps.contact);
+        TextEditingController(text: user.user.userProps.university);
+    majorController = TextEditingController(text: user.user.userProps.major);
+    contactController =
+        TextEditingController(text: user.user.userProps.contact);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -119,7 +119,7 @@ class ProfileState extends ConsumerState<Profile> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           children: [
-            imageProfile(user),
+            imageProfile(user.user),
             const SizedBox(height: 20),
             CustomTextField(
               controller: nameController,

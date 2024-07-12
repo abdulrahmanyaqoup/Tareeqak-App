@@ -1,7 +1,7 @@
+import 'package:finalproject/Services/authService.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Services/authService.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Models/user.dart';
 
@@ -13,19 +13,18 @@ class Volunteers extends ConsumerStatefulWidget {
 }
 
 class _VolunteersState extends ConsumerState<Volunteers> {
-  final AuthService authService = AuthService();
+  final authServce = AuthService();
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      authService.getAllUsers(context: context, ref: ref);
-    });
+    authServce.getAllUsers();
+    ref.read(userProvider.notifier).getAllUsers();
   }
 
   @override
   Widget build(BuildContext context) {
-    final userList = ref.watch(userProvider.notifier).userList;
+    UserState userState = ref.watch(userProvider);
 
     return Scaffold(
       body: Column(
@@ -76,13 +75,13 @@ class _VolunteersState extends ConsumerState<Volunteers> {
             ),
           ),
           Expanded(
-            child: userList.isEmpty
+            child: userState.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemCount: userList.length,
+                    itemCount: userState.userList.length,
                     itemBuilder: (context, index) {
-                      final user = userList[index];
+                      final user = userState.userList[index];
                       return ProfileCard(
                         user: user,
                       );

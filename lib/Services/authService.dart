@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Utils/utils.dart';
-import 'package:finalproject/Provider/userProvider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -105,7 +104,7 @@ class AuthService {
     }
   }
 
-  Future<String> getUserData() async {
+  Future<String> getUser() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -124,26 +123,20 @@ class AuthService {
     }
   }
 
-  void getAllUsers({
-    required BuildContext context,
-    required WidgetRef ref,
-  }) async {
+  Future<List<User>> getAllUsers() async {
     try {
-      http.Response res = await http.get(
+      http.Response response = await http.get(
         Uri.parse('${dotenv.env['uri']}/api/users'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
       );
-
-      if (res.statusCode == 200) {
-        List<dynamic> usersJson = jsonDecode(res.body);
-        List<User> users =
-            usersJson.map((userJson) => User.fromMap(userJson)).toList();
-        ref.read(userProvider.notifier).setUserList(users);
-      }
+      List<dynamic> userJsonList = jsonDecode(response.body);
+      List<User> users =
+          userJsonList.map((userJson) => User.fromMap(userJson)).toList();
+      return users;
     } catch (e) {
-      showSnackBar(context, e.toString());
+      rethrow;
     }
   }
 
@@ -154,7 +147,6 @@ class AuthService {
     required Map<String, dynamic> updates,
   }) async {
     try {
-      final userNotifier = ref.read(userProvider.notifier);
       final prefs = await SharedPreferences.getInstance();
       final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
       var request = http.MultipartRequest('PATCH', uri);
@@ -192,8 +184,6 @@ class AuthService {
         response: response,
         context: context,
         onSuccess: () {
-          final userProps = jsonDecode(response.body)['userProps'];
-          userNotifier.updateUserProps(UserProps.fromMap(userProps));
           showSnackBar(context, 'user has been updated');
         },
       );
