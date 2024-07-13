@@ -1,5 +1,5 @@
 import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/profile/completePage.dart';
+import 'package:finalproject/Screens/profile/components/profile.dart';
 import 'package:finalproject/Screens/profile/components/signin.dart';
 import 'package:finalproject/Screens/profile/components/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
