@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class Volunteers extends ConsumerStatefulWidget {
   const Volunteers({super.key});
@@ -143,13 +145,38 @@ class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key, required this.user});
   final User user;
 
-  void _launchURL(String url) async {
-    if (await canLaunchUrl(url as Uri)) {
-      await launchUrl(url as Uri);
-    } else {
-      throw 'Could not launch $url';
+  Future<void> whatsapp() async {
+  String contact = '+962${user.userProps.contact.substring(1)}';
+  String androidUrl = "whatsapp://send?phone=$contact&text=hi";
+  String iosUrl = "https://wa.me/$contact";
+  String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
+
+  try {
+    print('Attempting to open URL');
+    if (Platform.isIOS) {
+      print('iOS detected');
+      if (await canLaunchUrl(Uri.parse(iosUrl))) {
+        print('Launching iOS URL: $iosUrl');
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        print('Cannot launch iOS URL: $iosUrl');
+      }
+    } else if (Platform.isAndroid) {
+      print('Android detected');
+      if (await canLaunchUrl(Uri.parse(androidUrl))) {
+        print('Launching Android URL: $androidUrl');
+        await launchUrl(Uri.parse(androidUrl));
+      } else {
+        print('Cannot launch Android URL: $androidUrl');
+      }
     }
+  } catch(e) {
+    print('Error caught: $e');
+    print('Falling back to web URL: $webUrl');
+    await launchUrl(Uri.parse(webUrl), mode: LaunchMode.externalApplication);
   }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -183,14 +210,12 @@ class ProfileCard extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 35,
                     backgroundImage: user.userProps.image.isNotEmpty
-                        ? 
-                    CachedNetworkImageProvider(
-                        '${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}')
+                        ? CachedNetworkImageProvider(
+                            '${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}')
                         : null,
                     child: user.userProps.image.isEmpty
-                        ? const Icon(Icons.person, size: 30) :
-                    null,
-                      
+                        ? const Icon(Icons.person, size: 30)
+                        : null,
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -297,36 +322,37 @@ class ProfileCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  onTap: () => _launchURL('mailto:${user.email}'),
+                  onTap: () => launchUrl('mailto:${user.email}' as Uri),
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
                     decoration: BoxDecoration(
                       color:
-                          Theme.of(context).colorScheme.primary.withOpacity(.2),
+                          Color.fromARGB(255, 13, 31, 47).withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Icon(
-                      Icons.email,
-                      color: Theme.of(context).colorScheme.primary,
+                      FontAwesomeIcons.envelope,
+                      color: Colors.white,
                     ),
                   ),
                 ),
                 const SizedBox(width: 30),
                 InkWell(
                   onTap: () =>
-                      _launchURL('https://wa.me/${user.userProps.contact}'),
+                      whatsapp(),
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
                     decoration: BoxDecoration(
                       color:
-                          Theme.of(context).colorScheme.primary.withOpacity(.2),
+                          Colors.green.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Icon(
-                      Icons.phone,
-                      color: Theme.of(context).colorScheme.primary,
+                      FontAwesomeIcons.whatsapp,
+                      color: Colors.white,
+                      
                     ),
                   ),
                 ),

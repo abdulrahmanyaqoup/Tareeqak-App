@@ -103,10 +103,8 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                         CircleAvatar(
                           radius: 40,
                           backgroundImage: userState
-                                  .user.userProps.image.isNotEmpty
-                              ? CachedNetworkImageProvider(
-                                  '${Env.URI}${userState.user.userProps.image}?apiKey=${Env.API_KEY}')
-                              : null,
+                                  .user.userProps.image.isNotEmpty ? CachedNetworkImageProvider(userState.user.userProps.image) : null,
+                            
                           child: userState.user.userProps.image.isEmpty
                               ? const Icon(Icons.person, size: 30)
                               : null,
