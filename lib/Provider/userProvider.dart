@@ -31,7 +31,7 @@ class UserState {
 class UserNotifier extends StateNotifier<UserState> {
   UserNotifier() : super(UserState(user: User.initial()));
 
-  Future<void> clearUser() async {
+  Future<void> signOut() async {
     state = UserState(user: User.initial());
   }
 
@@ -58,6 +58,14 @@ class UserNotifier extends StateNotifier<UserState> {
     String user =
         await UserApi().updateUser(updates: updatedUser, token: token ?? '');
     state = state.copyWith(user: User.fromJson(user), isLoading: false);
+  }
+
+  Future<void> deleteUser() async {
+    state = state.copyWith(isLoading: true);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('x-auth-token');
+    await UserApi().deleteUser(token: token ?? '');
+    state = state.copyWith(user: User.initial(), isLoading: false);
   }
 }
 

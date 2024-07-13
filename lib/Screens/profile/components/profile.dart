@@ -87,13 +87,14 @@ class ProfileState extends ConsumerState<Profile> {
     });
   }
 
-  void deleteUser() {
-    final user = ref.read(userProvider).user;
-    UserApi().deleteUser(
-      context: context,
-      ref: ref,
-      id: user.id,
-    );
+  Future<void> deleteUser() async {
+    try {
+      await ref.read(userProvider.notifier).deleteUser();
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
   }
 
   @override
