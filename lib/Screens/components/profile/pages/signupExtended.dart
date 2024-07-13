@@ -1,3 +1,5 @@
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Screens/components/profile/pages/profile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -26,7 +28,6 @@ class SignupOptionalScreen extends ConsumerStatefulWidget {
 class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
   final TextEditingController majorController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
-  final UserApi userApi = UserApi();
   File? _image;
   String? _selectedUniversity;
 
@@ -42,20 +43,29 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
     'Al-Hussein Technical University',
   ];
 
-  Future signupUser() async {
+  Future<void> signupUser() async {
     try {
-      String response = await userApi.signUp(
-        email: widget.email,
-        password: widget.password,
-        name: widget.name,
-        university: _selectedUniversity ?? '',
-        major: majorController.text,
-        contact: contactController.text,
-        image: _image,
-      );
-      showSnackBar(context, response);
+      String response = await ref.read(userProvider.notifier).signUp(
+            widget.name,
+            widget.email,
+            widget.password,
+            _selectedUniversity ?? '',
+            majorController.text,
+            contactController.text,
+            _image,
+          );
+      if (response.isNotEmpty && mounted) {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) => Profile(
+            onSignOut: () {},
+          ),
+        ));
+        showSnackBar(context, response);
+      }
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
   }
 

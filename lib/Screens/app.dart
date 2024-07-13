@@ -1,4 +1,3 @@
-import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/components/profile/index.dart';
 import 'package:finalproject/Screens/components/university.dart';
 import 'package:flutter/cupertino.dart';
