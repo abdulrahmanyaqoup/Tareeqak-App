@@ -42,7 +42,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
       ref.read(userProvider.notifier).setUser(User.fromJson(response));
       state = AuthState(isLoggedIn: true, isLoading: false);
     } catch (e) {
-      print(e);
       state = AuthState(isLoggedIn: false, isLoading: false);
     }
   }
