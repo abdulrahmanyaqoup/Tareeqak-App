@@ -57,6 +57,7 @@ class UserNotifier extends StateNotifier<UserState> {
       List<User> users = await UserApi().getAllUsers();
       state = state.copyWith(userList: users, isLoading: false);
     } catch (e) {
+      print(e);
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
     }
   }

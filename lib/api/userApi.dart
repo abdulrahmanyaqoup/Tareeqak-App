@@ -98,15 +98,11 @@ class UserApi {
   Future<List<User>> getAllUsers() async {
     try {
       Response response = await dio.get(
-        '${Env.URI}/api/users?apiKey=${Env.API_KEY}',
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-        ),
+        '/api/users?apiKey=${Env.API_KEY}',
       );
-      List<dynamic> userJsonList = response.data;
-      return userJsonList.map((userJson) => User.fromMap(userJson)).toList();
+
+      List<dynamic> userList = response.data;
+      return userList.map((userJson) => User.fromMap(userJson)).toList();
     } on DioException catch (e) {
       throw Exception(e.response!.data['error']);
     }
