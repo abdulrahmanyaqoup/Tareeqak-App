@@ -147,23 +147,24 @@ class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key, required this.user});
   final User user;
 
-  Future<void> whatsapp() async {
-  String contact = '+962${user.userProps.contact.substring(1)}';
-  String androidUrl = "whatsapp://send?phone=$contact&text=hi";
-  String iosUrl = "https://wa.me/$contact";
-  String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
+ 
+Future<void> whatsapp() async {
+  String contact = '+962${user.userProps.contact.substring(1)}';  
+  Uri androidUri = Uri.parse("whatsapp://send?phone=$contact&text=hi");
+  Uri iosUri = Uri.parse("https://wa.me/$contact");
+  Uri webUri = Uri.parse('https://api.whatsapp.com/send/?phone=$contact&text=hi');
 
   if (Platform.isIOS) {
-    if (await canLaunch(iosUrl)) {
-      await launch(iosUrl, forceSafariVC: false);
+    if (await canLaunchUrl(iosUri)) {
+      await launchUrl(iosUri, mode: LaunchMode.externalNonBrowserApplication);
     } else {
-      await launch(webUrl);
+      await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
     }
   } else {
-    if (await canLaunch(androidUrl)) {
-      await launch(androidUrl);
+    if (await canLaunchUrl(androidUri)) {
+      await launchUrl(androidUri, mode: LaunchMode.externalNonBrowserApplication);
     } else {
-      await launch(webUrl);
+      await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
     }
   }
 }
