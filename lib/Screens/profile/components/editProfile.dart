@@ -5,7 +5,6 @@ import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:finalproject/api/userApi.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
