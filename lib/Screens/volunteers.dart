@@ -147,27 +147,34 @@ class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key, required this.user});
   final User user;
 
- 
-Future<void> whatsapp() async {
-  String contact = '+962${user.userProps.contact.substring(1)}';  
-  Uri androidUri = Uri.parse("whatsapp://send?phone=$contact&text=hi");
-  Uri iosUri = Uri.parse("https://wa.me/$contact");
-  Uri webUri = Uri.parse('https://api.whatsapp.com/send/?phone=$contact&text=hi');
+  Future<void> whatsapp() async {
+    String contact = '+962${user.userProps.contact.substring(1)}';
+    Uri androidUri = Uri.parse("whatsapp://send?phone=$contact&text=hi");
+    Uri iosUri = Uri.parse("https://wa.me/$contact");
+    Uri webUri = Uri.parse(
+        'https://api.whatsapp.com/send/?phone=$contact&text=Hello Advisor ${user.name} \nCan you help me with my academic year ?');
 
-  if (Platform.isIOS) {
-    if (await canLaunchUrl(iosUri)) {
-      await launchUrl(iosUri, mode: LaunchMode.externalNonBrowserApplication);
+    if (Platform.isIOS) {
+      if (await canLaunchUrl(iosUri)) {
+        await launchUrl(iosUri, mode: LaunchMode.externalNonBrowserApplication);
+      } else {
+        await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
+      }
     } else {
-      await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
-    }
-  } else {
-    if (await canLaunchUrl(androidUri)) {
-      await launchUrl(androidUri, mode: LaunchMode.externalNonBrowserApplication);
-    } else {
-      await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
+      if (await canLaunchUrl(androidUri)) {
+        await launchUrl(androidUri,
+            mode: LaunchMode.externalNonBrowserApplication);
+      } else {
+        await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
+      }
     }
   }
-}
+
+  Future<void> _launchUrl(email) async {
+    if (!await launchUrl(email)) {
+      throw Exception('Could not launch $email');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -313,15 +320,23 @@ Future<void> whatsapp() async {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  onTap: () => launchUrl('mailto:${user.email}' as Uri),
+                  onTap: () {
+                    final Uri email = Uri.parse(
+                        'mailto:${user.email}?subject=Advisor&body=Hello Advisor ${user.name}.\n\nHope you are doing well!\n\nCan you help me with my academic year?\n\nThanks.'
+                      );
+                    _launchUrl(
+                      email,
+                    );
+                  },
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
                     decoration: BoxDecoration(
-                      color: Color.fromARGB(255, 13, 31, 47).withOpacity(0.8),
+                      color: const Color.fromARGB(255, 13, 31, 47)
+                          .withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       FontAwesomeIcons.envelope,
                       color: Colors.white,
                     ),
