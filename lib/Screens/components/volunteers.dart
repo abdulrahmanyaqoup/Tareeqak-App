@@ -185,7 +185,7 @@ class ProfileCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(14.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,7 +329,7 @@ class ProfileCard extends StatelessWidget {
                   },
                   child: Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 68, vertical: 5),
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 13, 31, 47)
                           .withOpacity(0.8),
@@ -346,7 +346,7 @@ class ProfileCard extends StatelessWidget {
                   onTap: () => whatsapp(),
                   child: Container(
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
+                        const EdgeInsets.symmetric(horizontal: 68, vertical: 5),
                     decoration: BoxDecoration(
                       color: Colors.green.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
