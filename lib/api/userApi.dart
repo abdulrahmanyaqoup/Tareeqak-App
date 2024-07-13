@@ -49,7 +49,7 @@ class UserApi {
       }
 
       Response response = await dio.post(
-        'api/users/register?apiKey=${Env.API_KEY}',
+        'api/users/register${Env.API_KEY}',
         data: formData,
       );
 
@@ -63,7 +63,7 @@ class UserApi {
       {required String email, required String password}) async {
     try {
       Response response = await dio.post(
-        'api/users/login?apiKey=${Env.API_KEY}',
+        'api/users/login${Env.API_KEY}',
         data: {
           'email': email,
           'password': password,
@@ -81,8 +81,8 @@ class UserApi {
         'x-auth-token': token,
       });
 
-      Response response = await dio
-          .get('api/users/current?apiKey=${Env.API_KEY}', options: options);
+      Response response =
+          await dio.get('api/users/current${Env.API_KEY}', options: options);
       return jsonEncode(response.data);
     } on DioException catch (e) {
       throw Exception(e.response!.data);
@@ -92,7 +92,7 @@ class UserApi {
   Future<List<User>> getAllUsers() async {
     try {
       Response response = await dio.get(
-        'api/users?apiKey=${Env.API_KEY}',
+        'api/users${Env.API_KEY}',
       );
 
       List<dynamic> userList = response.data;
@@ -130,7 +130,7 @@ class UserApi {
       );
 
       Response response = await dio.patch(
-        'api/users/update/?apiKey=${Env.API_KEY}',
+        'api/users/update${Env.API_KEY}',
         data: formData,
         options: options,
       );
@@ -151,7 +151,7 @@ class UserApi {
         },
       );
       Response response = await dio.delete(
-        'api/users/delete/?apiKey=${Env.API_KEY}',
+        'api/users/delete${Env.API_KEY}',
         options: options,
       );
 

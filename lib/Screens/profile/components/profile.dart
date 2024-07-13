@@ -27,7 +27,6 @@ class ProfileState extends ConsumerState<Profile> {
   late TextEditingController contactController;
   FileImage? _image;
   bool circular = false;
-  final UserApi authService = UserApi();
 
   @override
   void initState() {
@@ -221,7 +220,7 @@ class ProfileState extends ConsumerState<Profile> {
               child: _image == null
                   ? CachedNetworkImage(
                       imageUrl:
-                          "${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}",
+                          "${Env.URI}${user.userProps.image}${Env.API_KEY}",
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>
