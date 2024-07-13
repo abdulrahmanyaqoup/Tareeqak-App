@@ -89,7 +89,8 @@ class UserNotifier extends StateNotifier<UserState> {
     String token = prefs.getString('x-auth-token') ?? '';
     await UserApi().deleteUser(token: token);
     prefs.remove('x-auth-token');
-    state = state.copyWith(user: User.initial(), isLoading: false);
+    state = state.copyWith(
+        user: User.initial(), isLoading: false, isLoggedIn: false);
   }
 }
 
