@@ -39,7 +39,7 @@ class UserState {
 }
 
 class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier() : super(UserState(user: User.initial()));
+  UserNotifier() : super(UserState(user: const User()));
 
   Future<void> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -51,7 +51,7 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
-  Future<String> signUp(
+  Future<void> signUp(
     String name,
     String email,
     String password,
@@ -69,7 +69,8 @@ class UserNotifier extends StateNotifier<UserState> {
       contact: contact,
       image: image,
     );
-    return response;
+    User user = User.fromJson(response);
+    state = UserState(userList: [...state.userList, user], isLoading: false);
   }
 
   Future<void> signIn(
@@ -81,20 +82,18 @@ class UserNotifier extends StateNotifier<UserState> {
     String token = jsonDecode(response)['token'];
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('x-auth-token', token);
-    state = state.copyWith(
-        user: User.fromJson(response), isLoggedIn: true, isLoading: false);
+    state = UserState(user: User.fromJson(response), isLoggedIn: true);
   }
 
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('x-auth-token');
-    state = state.copyWith(
-        user: User.initial(), isLoggedIn: false, isLoading: false);
+    state = UserState(user: const User(), isLoggedIn: false, isLoading: false);
   }
 
   Future<void> getAllUsers() async {
     List<User> users = await UserApi().getAllUsers();
-    state = state.copyWith(userList: users, isLoading: false);
+    state = UserState(userList: users, isLoading: false);
   }
 
   Future<void> updateUser(updatedUser) async {
@@ -102,7 +101,7 @@ class UserNotifier extends StateNotifier<UserState> {
     String token = prefs.getString('x-auth-token') ?? '';
     String response =
         await UserApi().updateUser(updates: updatedUser, token: token);
-    state = state.copyWith(
+    state = UserState(
         user: User.fromJson(response), isLoggedIn: true, isLoading: false);
   }
 
@@ -111,8 +110,7 @@ class UserNotifier extends StateNotifier<UserState> {
     String token = prefs.getString('x-auth-token') ?? '';
     await UserApi().deleteUser(token: token);
     prefs.remove('x-auth-token');
-    state = state.copyWith(
-        user: User.initial(), isLoading: false, isLoggedIn: false);
+    state = UserState(user: const User(), isLoggedIn: false, isLoading: false);
   }
 }
 

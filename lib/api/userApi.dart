@@ -53,7 +53,7 @@ class UserApi {
         data: formData,
       );
 
-      return response.data;
+      return jsonEncode(response.data);
     } on DioException catch (e) {
       throw (e.response?.data);
     }
