@@ -30,7 +30,7 @@ class _Index extends ConsumerState<Index> {
     if (ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
-          builder: (_) => CompleteProfilePage(
+          builder: (_) => Profile(
             onSignOut: signOut,
           ),
         ),
@@ -47,7 +47,7 @@ class _Index extends ConsumerState<Index> {
     if (!ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
-          builder: (_) => CompleteProfilePage(onSignOut: signOut),
+          builder: (_) => Profile(onSignOut: signOut),
         ),
       );
     }
@@ -83,7 +83,7 @@ class _Index extends ConsumerState<Index> {
       case '/Profile':
       default:
         return MaterialPageRoute(
-          builder: (_) => CompleteProfilePage(
+          builder: (_) => Profile(
             onSignOut: signOut,
           ),
         );
