@@ -54,7 +54,7 @@ class UserApi {
       }
 
       Response response = await dio.post(
-        '/api/users/register?apiKey=${Env.API_KEY}',
+        'api/users/register?apiKey=${Env.API_KEY}',
         data: formData,
       );
 
@@ -68,7 +68,7 @@ class UserApi {
       {required String email, required String password}) async {
     try {
       Response response = await dio.post(
-        '/api/users/login?apiKey=${Env.API_KEY}',
+        'api/users/login?apiKey=${Env.API_KEY}',
         data: {
           'email': email,
           'password': password,
@@ -86,9 +86,8 @@ class UserApi {
         'x-auth-token': token,
       });
 
-      Response response = await dio.get(
-          '${Env.URI}/api/users/current?apiKey=${Env.API_KEY}',
-          options: options);
+      Response response = await dio
+          .get('api/users/current?apiKey=${Env.API_KEY}', options: options);
       return jsonEncode(response.data);
     } on DioException catch (e) {
       throw Exception(e.response!.data['error']);
@@ -98,57 +97,55 @@ class UserApi {
   Future<List<User>> getAllUsers() async {
     try {
       Response response = await dio.get(
-        '/api/users?apiKey=${Env.API_KEY}',
+        'api/users?apiKey=${Env.API_KEY}',
       );
 
       List<dynamic> userList = response.data;
       return userList.map((userJson) => User.fromMap(userJson)).toList();
     } on DioException catch (e) {
-      throw Exception(e.response!.data['error']);
+      throw Exception(e.response?.data['error']);
     }
   }
 
-  Future<User> updateUser({
+  Future<String> updateUser({
     required String userId,
     required Map<String, dynamic> updates,
+    required String token,
   }) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final uri =
-          Uri.parse('${Env.URI}/api/users/update/$userId??${Env.API_KEY}');
-      var request = http.MultipartRequest('PATCH', uri);
-
-      request.headers.addAll({
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': prefs.getString('x-auth-token') ?? '',
-      });
-
-      if (updates['userProps']['image'] != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'image',
-            updates['userProps']['image'],
-            contentType: MediaType('image', 'jpeg'),
-          ).catchError((e) {
-            return http.MultipartFile.fromBytes('image', []);
-          }),
-        );
-      }
-
-      request.fields.addAll({
+      FormData formData = FormData.fromMap({
         'name': updates['name'],
         'email': updates['email'],
-        'password': '',
+        'password': updates['password'],
         'university': updates['userProps']['university'],
         'major': updates['userProps']['major'],
-        'contact': updates['userProps']['contact'],
+        'contact': updates['userProps']['contact']
       });
+      if (updates['userProps']['image'] != null) {
+        formData.files.add(MapEntry(
+          'image',
+          await MultipartFile.fromFile(
+            updates['userProps']['image'],
+            filename: updates['userProps']['image'],
+            contentType: MediaType('image', 'jpeg/webp/png'),
+          ),
+        ));
+      }
+      Options options = Options(
+        headers: {
+          'x-auth-token': token,
+        },
+      );
 
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-      return jsonDecode(response.body);
-    } catch (e) {
-      rethrow;
+      Response response = await dio.patch(
+        'api/users/update/$userId?apiKey=${Env.API_KEY}',
+        data: formData,
+        options: options,
+      );
+
+      return jsonEncode(response.data);
+    } on DioException catch (e) {
+      throw Exception(e.response?.data['error']);
     }
   }
 
@@ -160,7 +157,7 @@ class UserApi {
     try {
       final prefs = await SharedPreferences.getInstance();
       http.Response response = await http.delete(
-        Uri.parse('${Env.URI}/api/users/delete/$id?${Env.API_KEY}'),
+        Uri.parse('api/users/delete/$id?${Env.API_KEY}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': prefs.getString('x-auth-token') ?? '',
