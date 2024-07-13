@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:finalproject/Models/majors.dart';
-import 'package:finalproject/Models/university,dart';
+import 'package:finalproject/Models/university.dart';
 
 class Schools {
   final String name;
