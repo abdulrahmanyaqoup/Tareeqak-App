@@ -90,6 +90,7 @@ class UserApi {
   }
 
   Future<List<User>> getAllUsers() async {
+    print('api/users?apiKey=${Env.API_KEY}');
     try {
       Response response = await dio.get(
         'api/users?apiKey=${Env.API_KEY}',
