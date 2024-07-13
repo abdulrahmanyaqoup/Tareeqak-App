@@ -148,36 +148,25 @@ class ProfileCard extends StatelessWidget {
   final User user;
 
   Future<void> whatsapp() async {
-    String contact = '+962${user.userProps.contact.substring(1)}';
-    String androidUrl = "whatsapp://send?phone=$contact&text=hi";
-    String iosUrl = "https://wa.me/$contact";
-    String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
+  String contact = '+962${user.userProps.contact.substring(1)}';
+  String androidUrl = "whatsapp://send?phone=$contact&text=hi";
+  String iosUrl = "https://wa.me/$contact";
+  String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
 
-    try {
-      print('Attempting to open URL');
-      if (Platform.isIOS) {
-        print('iOS detected');
-        if (await canLaunchUrl(Uri.parse(iosUrl))) {
-          print('Launching iOS URL: $iosUrl');
-          await launchUrl(Uri.parse(iosUrl));
-        } else {
-          print('Cannot launch iOS URL: $iosUrl');
-        }
-      } else if (Platform.isAndroid) {
-        print('Android detected');
-        if (await canLaunchUrl(Uri.parse(androidUrl))) {
-          print('Launching Android URL: $androidUrl');
-          await launchUrl(Uri.parse(androidUrl));
-        } else {
-          print('Cannot launch Android URL: $androidUrl');
-        }
-      }
-    } catch (e) {
-      print('Error caught: $e');
-      print('Falling back to web URL: $webUrl');
-      await launchUrl(Uri.parse(webUrl), mode: LaunchMode.externalApplication);
+  if (Platform.isIOS) {
+    if (await canLaunch(iosUrl)) {
+      await launch(iosUrl, forceSafariVC: false);
+    } else {
+      await launch(webUrl);
+    }
+  } else {
+    if (await canLaunch(androidUrl)) {
+      await launch(androidUrl);
+    } else {
+      await launch(webUrl);
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
