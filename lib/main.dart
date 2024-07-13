@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:finalproject/Screens/tabs.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() async {
-  await dotenv.load(fileName: ".env");
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -47,7 +45,6 @@ final theme = ThemeData(
   primaryIconTheme: const IconThemeData(
     color: Colors.white,
   ),
-  
 );
 
 class Tareeqak extends StatelessWidget {

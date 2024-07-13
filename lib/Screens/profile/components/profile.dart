@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:finalproject/Models/user.dart';
+import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finalproject/backend/authentication.dart';
@@ -216,8 +216,7 @@ class ProfileState extends ConsumerState<Profile> {
           ClipOval(
               child: _image == null
                   ? CachedNetworkImage(
-                      imageUrl:
-                          "${dotenv.env['uri'].toString()}/${user.userProps.image}",
+                      imageUrl: "${Env.URI}/${user.userProps.image}",
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>

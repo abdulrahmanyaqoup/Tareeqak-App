@@ -1,6 +1,6 @@
 import 'package:finalproject/Screens/profile/components/profile.dart';
+import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -105,7 +105,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                           backgroundImage: userState
                                   .user.userProps.image.isNotEmpty
                               ? CachedNetworkImageProvider(
-                                  '${dotenv.env['uri']}/${userState.user.userProps.image}')
+                                  '${Env.URI}/${userState.user.userProps.image}?apiKey=${Env.API_KEY}')
                               : null,
                           child: userState.user.userProps.image.isEmpty
                               ? const Icon(Icons.person, size: 30)

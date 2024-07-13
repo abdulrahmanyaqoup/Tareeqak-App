@@ -1,7 +1,7 @@
-import 'package:finalproject/backend/authentication.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Models/user.dart';
@@ -15,12 +15,9 @@ class Volunteers extends ConsumerStatefulWidget {
 }
 
 class _VolunteersState extends ConsumerState<Volunteers> {
-  final authService = AuthService();
-
   @override
   void initState() {
     super.initState();
-    authService.getAllUsers();
     ref.read(userProvider.notifier).getAllUsers();
   }
 
@@ -147,8 +144,8 @@ class ProfileCard extends StatelessWidget {
   final User user;
 
   void _launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(url as Uri)) {
+      await launchUrl(url as Uri);
     } else {
       throw 'Could not launch $url';
     }
@@ -185,8 +182,8 @@ class ProfileCard extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     radius: 35,
-                    backgroundImage: NetworkImage(
-                        '${dotenv.env['uri']}/${user.userProps.image}'),
+                    backgroundImage: CachedNetworkImageProvider(
+                        '${Env.URI}/${user.userProps.image}?apiKey=${Env.API_KEY}'),
                     child: user.userProps.image.isEmpty
                         ? const Icon(Icons.person, size: 30)
                         : null,

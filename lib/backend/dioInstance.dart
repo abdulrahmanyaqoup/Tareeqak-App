@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:finalproject/env/env.dart';
 
 Dio createDio() {
   var dio = Dio();
-  dio.options.baseUrl = dotenv.env['uri'] ?? '';
+  dio.options.baseUrl = Env.URI;
   dio.httpClientAdapter = Http2Adapter(
     ConnectionManager(
       idleTimeout: const Duration(milliseconds: 10000),

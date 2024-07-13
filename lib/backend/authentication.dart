@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Utils/utils.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,7 +36,8 @@ class AuthService {
         userProps: userProps,
       );
 
-      final uri = Uri.parse('${dotenv.env['uri']}/api/users/register');
+      final uri =
+          Uri.parse('${Env.URI}/api/users/register?apiKey=${Env.API_KEY}');
 
       var request = http.MultipartRequest('POST', uri);
 
@@ -83,7 +84,7 @@ class AuthService {
       };
 
       http.Response response = await http.post(
-        Uri.parse('${dotenv.env['uri']}/api/users/login'),
+        Uri.parse('${Env.URI}/api/users/login?apiKey=${Env.API_KEY}'),
         body: jsonEncode({
           'email': email,
           'password': password,
@@ -109,7 +110,7 @@ class AuthService {
       };
 
       http.Response userRes = await http.get(
-          Uri.parse('${dotenv.env['uri']}/api/users/current'),
+          Uri.parse('${Env.URI}/api/users/current?apiKey=${Env.API_KEY}'),
           headers: headers);
 
       return userRes.body;
@@ -121,7 +122,7 @@ class AuthService {
   Future<List<User>> getAllUsers() async {
     try {
       http.Response response = await http.get(
-        Uri.parse('${dotenv.env['uri']}/api/users'),
+        Uri.parse('${Env.URI}/api/users?apiKey=${Env.API_KEY}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -141,7 +142,8 @@ class AuthService {
   }) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final uri = Uri.parse('${dotenv.env['uri']}/api/users/update/$userId');
+      final uri =
+          Uri.parse('${Env.URI}/api/users/update/$userId??${Env.API_KEY}');
       var request = http.MultipartRequest('PATCH', uri);
 
       request.headers.addAll({
@@ -186,7 +188,7 @@ class AuthService {
     try {
       final prefs = await SharedPreferences.getInstance();
       http.Response response = await http.delete(
-        Uri.parse('${dotenv.env['uri']}/api/users/delete/$id'),
+        Uri.parse('${Env.URI}/api/users/delete/$id?${Env.API_KEY}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'x-auth-token': prefs.getString('x-auth-token') ?? '',
