@@ -1,7 +1,7 @@
 import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/profile/components/profile.dart';
-import 'package:finalproject/Screens/profile/components/signin.dart';
-import 'package:finalproject/Screens/profile/components/signup.dart';
+import 'package:finalproject/Screens/components/profile/pages/profile.dart';
+import 'package:finalproject/Screens/components/profile/pages/signin.dart';
+import 'package:finalproject/Screens/components/profile/pages/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

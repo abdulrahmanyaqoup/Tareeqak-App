@@ -322,8 +322,7 @@ class ProfileCard extends StatelessWidget {
                 InkWell(
                   onTap: () {
                     final Uri email = Uri.parse(
-                        'mailto:${user.email}?subject=Advisor&body=Hello Advisor ${user.name}.\n\nHope you are doing well!\n\nCan you help me with my academic year?\n\nThanks.'
-                      );
+                        'mailto:${user.email}?subject=Advisor&body=Hello Advisor ${user.name}.\n\nHope you are doing well!\n\nCan you help me with my academic year?\n\nThanks.');
                     _launchUrl(
                       email,
                     );

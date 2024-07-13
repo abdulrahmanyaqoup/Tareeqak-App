@@ -1,24 +1,23 @@
-import 'package:finalproject/Screens/profile/index.dart';
-import 'package:finalproject/Screens/university.dart';
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Screens/components/profile/index.dart';
+import 'package:finalproject/Screens/components/university.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Screens/volunteers.dart';
+import 'package:finalproject/Screens/components/volunteers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Tabs extends ConsumerStatefulWidget {
-  const Tabs({super.key});
+class BottomNavigation extends ConsumerStatefulWidget {
+  const BottomNavigation({super.key});
 
   @override
-  TabsState createState() => TabsState();
+  _BottomNavigationState createState() => _BottomNavigationState();
 }
 
-class TabsState extends ConsumerState<Tabs> {
+class _BottomNavigationState extends ConsumerState<BottomNavigation> {
   int _pageIndex = 3;
-  bool _isLoading = true;
-  bool token = false;
 
-  static final List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _widgetOptions = <Widget>[
     const Center(
       child: Text("chatbot"),
     ),
@@ -26,14 +25,6 @@ class TabsState extends ConsumerState<Tabs> {
     const UniversityPage(),
     const Index(),
   ];
-
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      _isLoading = false;
-    });
-  }
 
   void selectPage(int index) {
     setState(() {
@@ -43,12 +34,6 @@ class TabsState extends ConsumerState<Tabs> {
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Scaffold(
       appBar: _pageIndex != 1 && _pageIndex != 3
           ? AppBar(
@@ -59,7 +44,10 @@ class TabsState extends ConsumerState<Tabs> {
               ),
             )
           : null,
-      body: Center(child: _widgetOptions.elementAt(_pageIndex)),
+      body: IndexedStack(
+        index: _pageIndex,
+        children: _widgetOptions,
+      ),
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           splashColor: Colors.transparent,

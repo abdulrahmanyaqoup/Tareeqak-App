@@ -1,4 +1,4 @@
-import 'package:finalproject/Screens/profile/components/editProfile.dart';
+import 'package:finalproject/Screens/components/profile/pages/editProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
