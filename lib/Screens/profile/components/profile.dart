@@ -84,11 +84,11 @@ class ProfileState extends ConsumerState<Profile> {
   }
 
   void deleteUser(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userProvider);
+    final user = ref.read(userProvider).user;
     UserApi().deleteUser(
       context: context,
       ref: ref,
-      id: user.user.id,
+      id: user.id,
     );
   }
 

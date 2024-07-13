@@ -47,7 +47,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                     height: 200,
                     width: 400,
                     decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.background,
+                      color: Theme.of(context).colorScheme.surface,
                     ),
                     child: Image.network(
                       'https://img.freepik.com/free-vector/remote-meeting-concept-illustration_114360-4704.jpg?t=st=1720743352~exp=1720746952~hmac=ae4560815f69c085e9dbb270b373d92233003f60a0eefb2c2e9a2520eccd3e0e&w=1060',

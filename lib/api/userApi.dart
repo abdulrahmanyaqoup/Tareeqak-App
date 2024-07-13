@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:finalproject/api/dioClient.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
@@ -7,12 +9,11 @@ import 'package:finalproject/Utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
 class UserApi {
-  void signUpUser({
-    required BuildContext context,
-    required WidgetRef ref,
+  Future<String> signUp({
     required String email,
     required String password,
     required String name,
@@ -30,109 +31,84 @@ class UserApi {
       );
 
       User user = User(
-        id: '',
         name: name,
         email: email,
         userProps: userProps,
       );
 
-      final uri =
-          Uri.parse('${Env.URI}/api/users/register?apiKey=${Env.API_KEY}');
-
-      var request = http.MultipartRequest('POST', uri);
-
-      if (image != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'image',
-            image.path,
-            contentType: MediaType('image', 'jpeg/jpg/png/webp'),
-          ),
-        );
-      }
-
-      request.fields.addAll({
+      FormData formData = FormData.fromMap({
         'name': user.name,
         'email': user.email,
+        'password': password,
         'university': userProps.university,
         'major': userProps.major,
         'contact': userProps.contact,
       });
 
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-      httpErrorHandle(
-        response: response,
-        context: context,
-        onSuccess: () {
-          showSnackBar(
-            context,
-            'Account created! Login with the same credentials!',
-          );
-        },
+      if (image != null) {
+        formData.files.add(MapEntry(
+          'image',
+          await MultipartFile.fromFile(image.path,
+              contentType: MediaType('image', 'jpeg/webp/png')),
+        ));
+      }
+
+      Response response = await dio.post(
+        '/api/users/register?apiKey=${Env.API_KEY}',
+        data: formData,
       );
-    } catch (e) {
-      showSnackBar(context, e.toString());
+
+      return response.data['success'];
+    } on DioException catch (e) {
+      throw (e.response?.data['error']);
     }
   }
 
   Future<String> signInUser(
       {required String email, required String password}) async {
     try {
-      Map<String, String> headers = {
-        'Content-Type': 'application/json;charset=UTF-8',
-      };
-
-      http.Response response = await http.post(
-        Uri.parse('${Env.URI}/api/users/login?apiKey=${Env.API_KEY}'),
-        body: jsonEncode({
+      Response response = await dio.post(
+        '/api/users/login?apiKey=${Env.API_KEY}',
+        data: {
           'email': email,
           'password': password,
-        }),
-        headers: headers,
+        },
       );
-
-      if (response.statusCode == 200) {
-        return response.body;
-      } else {
-        throw Exception(jsonDecode(response.body)['error']);
-      }
-    } catch (e) {
-      rethrow;
+      return jsonEncode(response.data);
+    } on DioException catch (e) {
+      throw (e.response!.data['error']);
     }
   }
 
   Future<String> getUser(String token) async {
     try {
-      Map<String, String> headers = {
-        'Content-Type': 'application/json;charset=UTF-8',
+      Options options = Options(headers: {
         'x-auth-token': token,
-      };
+      });
 
-      http.Response userRes = await http.get(
-          Uri.parse('${Env.URI}/api/users/current?apiKey=${Env.API_KEY}'),
-          headers: headers);
-
-      return userRes.body;
-    } catch (e) {
-      return '';
+      Response response = await dio.get(
+          '${Env.URI}/api/users/current?apiKey=${Env.API_KEY}',
+          options: options);
+      return jsonEncode(response.data);
+    } on DioException catch (e) {
+      throw Exception(e.response!.data['error']);
     }
   }
 
   Future<List<User>> getAllUsers() async {
     try {
-      http.Response response = await http.get(
-        Uri.parse('${Env.URI}/api/users?apiKey=${Env.API_KEY}'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+      Response response = await dio.get(
+        '${Env.URI}/api/users?apiKey=${Env.API_KEY}',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+        ),
       );
-      List<dynamic> userJsonList = jsonDecode(response.body);
-      List<User> users =
-          userJsonList.map((userJson) => User.fromMap(userJson)).toList();
-      return users;
-    } catch (e) {
-      rethrow;
+      List<dynamic> userJsonList = response.data;
+      return userJsonList.map((userJson) => User.fromMap(userJson)).toList();
+    } on DioException catch (e) {
+      throw Exception(e.response!.data['error']);
     }
   }
 

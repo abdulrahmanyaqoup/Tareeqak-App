@@ -48,6 +48,10 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
+  void setUser(User user) {
+    state = state.copyWith(user: user);
+  }
+
   Future<void> getAllUsers() async {
     try {
       List<User> users = await UserApi().getAllUsers();

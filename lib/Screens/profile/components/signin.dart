@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/api/userApi.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 
 class Signin extends ConsumerStatefulWidget {
@@ -18,7 +17,6 @@ class _SigninState extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final UserApi authService = UserApi();
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,4 @@
+import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/api/userApi.dart';
@@ -25,7 +26,7 @@ class SignupOptionalScreen extends ConsumerStatefulWidget {
 class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
   final TextEditingController majorController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
-  final UserApi authService = UserApi();
+  final UserApi userApi = UserApi();
   File? _image;
   String? _selectedUniversity;
 
@@ -41,18 +42,21 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
     'Al-Hussein Technical University',
   ];
 
-  void signupUser() {
-    authService.signUpUser(
-      context: context,
-      ref: ref,
-      email: widget.email,
-      password: widget.password,
-      name: widget.name,
-      university: _selectedUniversity ?? '',
-      major: majorController.text,
-      contact: contactController.text,
-      image: _image,
-    );
+  Future signupUser() async {
+    try {
+      String response = await userApi.signUp(
+        email: widget.email,
+        password: widget.password,
+        name: widget.name,
+        university: _selectedUniversity ?? '',
+        major: majorController.text,
+        contact: contactController.text,
+        image: _image,
+      );
+      showSnackBar(context, response);
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   Future<void> _pickImage() async {
@@ -62,8 +66,6 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
       }
     });
   }

@@ -22,12 +22,7 @@ class _Index extends ConsumerState<Index> {
   }
 
   Future<void> signIn(String email, String password) async {
-    await ref.read(authProvider.notifier).signIn(email, password,
-        (errorMessage) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text(errorMessage),
-      ));
-    });
+    await ref.read(authProvider.notifier).signIn(email, password);
     if (ref.read(authProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(

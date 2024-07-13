@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/api/userApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,19 +30,19 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> signIn(
-      String email, String password, Function(String) onError) async {
+    String email,
+    String password,
+  ) async {
     try {
       String response =
           await UserApi().signInUser(email: email, password: password);
-      String userData = response;
       String token = jsonDecode(response)['token'];
-
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', token);
-      ref.read(userProvider.notifier).getUser(userData);
+      ref.read(userProvider.notifier).setUser(User.fromJson(response));
       state = AuthState(isLoggedIn: true, isLoading: false);
     } catch (e) {
-      onError(e.toString());
+      print(e);
       state = AuthState(isLoggedIn: false, isLoading: false);
     }
   }
