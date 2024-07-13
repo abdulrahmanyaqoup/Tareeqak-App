@@ -1,5 +1,4 @@
 import 'package:finalproject/Screens/components/profile/pages/editProfile.dart';
-import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

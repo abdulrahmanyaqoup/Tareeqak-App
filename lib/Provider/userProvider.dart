@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:finalproject/api/userApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -13,10 +14,10 @@ class UserState {
   final bool isLoading;
 
   UserState({
-    required this.user,
+    this.user = const User(),
     this.userList = const [],
     this.isLoggedIn = false,
-    this.isLoading = false,
+    this.isLoading = true,
   });
 
   get userProps => const UserProps();
@@ -48,6 +49,27 @@ class UserNotifier extends StateNotifier<UserState> {
       state = state.copyWith(user: User.fromJson(userData), isLoading: false);
       state = state.copyWith(isLoggedIn: true, isLoading: false);
     }
+  }
+
+  Future<String> signUp(
+    String name,
+    String email,
+    String password,
+    String university,
+    String major,
+    String contact,
+    File? image,
+  ) async {
+    String response = await UserApi().signUp(
+      name: name,
+      email: email,
+      password: password,
+      university: university,
+      major: major,
+      contact: contact,
+      image: image,
+    );
+    return response;
   }
 
   Future<void> signIn(
