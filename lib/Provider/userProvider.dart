@@ -19,6 +19,9 @@ class UserState {
     this.isLoading = false,
   });
 
+  get userProps => const UserProps();
+  get name => user.name;
+
   UserState copyWith({
     User? user,
     List<User>? userList,
@@ -44,8 +47,6 @@ class UserNotifier extends StateNotifier<UserState> {
       var userData = await UserApi().getUser(token);
       state = state.copyWith(user: User.fromJson(userData), isLoading: false);
       state = state.copyWith(isLoggedIn: true, isLoading: false);
-    } else {
-      state = state.copyWith(isLoading: false);
     }
   }
 
@@ -65,12 +66,8 @@ class UserNotifier extends StateNotifier<UserState> {
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('x-auth-token');
-    state = UserState(user: User.initial());
-    state = state.copyWith(isLoggedIn: false, isLoading: false);
-  }
-
-  void setUser(User user) {
-    state = state.copyWith(user: user);
+    state = state.copyWith(
+        user: User.initial(), isLoggedIn: false, isLoading: false);
   }
 
   Future<void> getAllUsers() async {
@@ -80,16 +77,17 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> updateUser(updatedUser) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('x-auth-token');
-    String user =
-        await UserApi().updateUser(updates: updatedUser, token: token ?? '');
-    state = state.copyWith(user: User.fromJson(user), isLoading: false);
+    String token = prefs.getString('x-auth-token') ?? '';
+    String response =
+        await UserApi().updateUser(updates: updatedUser, token: token);
+    state = state.copyWith(
+        user: User.fromJson(response), isLoggedIn: true, isLoading: false);
   }
 
   Future<void> deleteUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('x-auth-token');
-    await UserApi().deleteUser(token: token ?? '');
+    String token = prefs.getString('x-auth-token') ?? '';
+    await UserApi().deleteUser(token: token);
     prefs.remove('x-auth-token');
     state = state.copyWith(user: User.initial(), isLoading: false);
   }

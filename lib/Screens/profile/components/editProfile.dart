@@ -9,15 +9,15 @@ import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class Profile extends ConsumerStatefulWidget {
+class EditProfile extends ConsumerStatefulWidget {
   final VoidCallback onSignOut;
-  const Profile({super.key, required this.onSignOut});
+  const EditProfile({super.key, required this.onSignOut});
 
   @override
-  ProfileState createState() => ProfileState();
+  EditProfileState createState() => EditProfileState();
 }
 
-class ProfileState extends ConsumerState<Profile> {
+class EditProfileState extends ConsumerState<EditProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController emailController;
@@ -56,10 +56,6 @@ class ProfileState extends ConsumerState<Profile> {
   Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      circular = true;
-    });
-
     final user = ref.read(userProvider).user;
     final updatedUserProps = user.userProps.copyWith(
       university: universityController.text,
@@ -74,15 +70,14 @@ class ProfileState extends ConsumerState<Profile> {
     );
     try {
       await ref.read(userProvider.notifier).updateUser(updatedUser);
+      if (mounted) {
+        showSnackBar(context, 'User updated successfully');
+      }
     } catch (e) {
       if (mounted) {
         showSnackBar(context, e.toString());
       }
     }
-
-    setState(() {
-      circular = false;
-    });
   }
 
   Future<void> deleteUser() async {
@@ -164,17 +159,15 @@ class ProfileState extends ConsumerState<Profile> {
                         color: Theme.of(context).primaryColor,
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: Center(
-                        child: circular
-                            ? const CircularProgressIndicator()
-                            : const Text(
-                                "Update",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
+                      child: const Center(
+                        child: Text(
+                          "Update",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                   ),

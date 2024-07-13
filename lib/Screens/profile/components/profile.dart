@@ -1,27 +1,24 @@
 import 'package:finalproject/Screens/profile/components/editProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
+import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
-class CompleteProfilePage extends ConsumerStatefulWidget {
+class Profile extends ConsumerStatefulWidget {
   final VoidCallback onSignOut;
-  const CompleteProfilePage({super.key, required this.onSignOut});
+  const Profile({super.key, required this.onSignOut});
 
   @override
-  _CompleteProfilePageState createState() => _CompleteProfilePageState();
+  _ProfileState createState() => _ProfileState();
 }
 
-class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
+class _ProfileState extends ConsumerState<Profile> {
   @override
   void initState() {
     super.initState();
-    try {
-      ref.read(userProvider.notifier).checkLoginStatus();
-    } catch (e) {
-      showSnackBar(context, e.toString());
-    }
+    ref.read(userProvider.notifier).checkLoginStatus();
   }
 
   @override
@@ -37,7 +34,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
             height: height * 0.75,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.background,
+              color: Theme.of(context).colorScheme.surface,
               borderRadius:
                   const BorderRadius.vertical(top: Radius.circular(20)),
             ),
@@ -71,7 +68,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                       if (userState.isLoggedIn) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => Profile(
+                            builder: (_) => EditProfile(
                               onSignOut: widget.onSignOut,
                             ),
                           ),
@@ -104,11 +101,11 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage:
-                              userState.user.userProps.image.isNotEmpty
-                                  ? CachedNetworkImageProvider(
-                                      userState.user.userProps.image)
-                                  : null,
+                          backgroundImage: userState
+                                  .user.userProps.image.isNotEmpty
+                              ? CachedNetworkImageProvider(
+                                  "${Env.URI}${userState.user.userProps.image}${Env.API_KEY}")
+                              : null,
                           child: userState.user.userProps.image.isEmpty
                               ? const Icon(Icons.person, size: 30)
                               : null,
