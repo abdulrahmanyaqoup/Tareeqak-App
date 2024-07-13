@@ -3,12 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:finalproject/api/dioClient.dart';
 import 'package:finalproject/env/env.dart';
-import 'package:flutter/material.dart';
 import 'package:finalproject/Models/user.dart';
-import 'package:finalproject/Utils/utils.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
@@ -49,18 +44,18 @@ class UserApi {
         formData.files.add(MapEntry(
           'image',
           await MultipartFile.fromFile(image.path,
-              contentType: MediaType('image', 'jpeg/webp/png')),
+              contentType: MediaType('image', 'jpg/jpeg/webp/png')),
         ));
       }
 
       Response response = await dio.post(
-        '/api/users/register?apiKey=${Env.API_KEY}',
+        'api/users/register?apiKey=${Env.API_KEY}',
         data: formData,
       );
 
-      return response.data['success'];
+      return response.data;
     } on DioException catch (e) {
-      throw (e.response?.data['error']);
+      throw (e.response?.data);
     }
   }
 
@@ -68,7 +63,7 @@ class UserApi {
       {required String email, required String password}) async {
     try {
       Response response = await dio.post(
-        '/api/users/login?apiKey=${Env.API_KEY}',
+        'api/users/login?apiKey=${Env.API_KEY}',
         data: {
           'email': email,
           'password': password,
@@ -76,7 +71,7 @@ class UserApi {
       );
       return jsonEncode(response.data);
     } on DioException catch (e) {
-      throw (e.response!.data['error']);
+      throw (e.response!.data);
     }
   }
 
@@ -86,97 +81,84 @@ class UserApi {
         'x-auth-token': token,
       });
 
-      Response response = await dio.get(
-          '${Env.URI}/api/users/current?apiKey=${Env.API_KEY}',
-          options: options);
+      Response response = await dio
+          .get('api/users/current?apiKey=${Env.API_KEY}', options: options);
       return jsonEncode(response.data);
     } on DioException catch (e) {
-      throw Exception(e.response!.data['error']);
+      throw Exception(e.response!.data);
     }
   }
 
   Future<List<User>> getAllUsers() async {
+    print('api/users?apiKey=${Env.API_KEY}');
     try {
       Response response = await dio.get(
-        '/api/users?apiKey=${Env.API_KEY}',
+        'api/users?apiKey=${Env.API_KEY}',
       );
 
       List<dynamic> userList = response.data;
       return userList.map((userJson) => User.fromMap(userJson)).toList();
     } on DioException catch (e) {
-      throw Exception(e.response!.data['error']);
+      throw Exception(e.response?.data);
     }
   }
 
-  Future<User> updateUser({
-    required String userId,
-    required Map<String, dynamic> updates,
+  Future<String> updateUser({
+    required User updates,
+    required String token,
   }) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final uri =
-          Uri.parse('${Env.URI}/api/users/update/$userId??${Env.API_KEY}');
-      var request = http.MultipartRequest('PATCH', uri);
-
-      request.headers.addAll({
-        'Content-Type': 'application/json; charset=UTF-8',
-        'x-auth-token': prefs.getString('x-auth-token') ?? '',
+      FormData formData = FormData.fromMap({
+        'name': updates.name,
+        'email': updates.email,
+        'university': updates.userProps.university,
+        'major': updates.userProps.major,
+        'contact': updates.userProps.contact,
       });
-
-      if (updates['userProps']['image'] != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath(
-            'image',
-            updates['userProps']['image'],
-            contentType: MediaType('image', 'jpeg'),
-          ).catchError((e) {
-            return http.MultipartFile.fromBytes('image', []);
-          }),
-        );
+      if (updates.userProps.image.isNotEmpty) {
+        formData.files.add(MapEntry(
+          'image',
+          await MultipartFile.fromFile(
+            updates.userProps.image,
+            contentType: MediaType('image', 'jpg/jpeg/webp/png'),
+          ),
+        ));
       }
+      Options options = Options(
+        headers: {
+          'x-auth-token': token,
+        },
+      );
 
-      request.fields.addAll({
-        'name': updates['name'],
-        'email': updates['email'],
-        'password': '',
-        'university': updates['userProps']['university'],
-        'major': updates['userProps']['major'],
-        'contact': updates['userProps']['contact'],
-      });
+      Response response = await dio.patch(
+        'api/users/update/?apiKey=${Env.API_KEY}',
+        data: formData,
+        options: options,
+      );
 
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-      return jsonDecode(response.body);
-    } catch (e) {
-      rethrow;
+      return jsonEncode(response.data);
+    } on DioException catch (e) {
+      throw (e.response?.data);
     }
   }
 
-  Future<void> deleteUser({
-    required BuildContext context,
-    required WidgetRef ref,
-    required String id,
+  Future<String> deleteUser({
+    required String token,
   }) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      http.Response response = await http.delete(
-        Uri.parse('${Env.URI}/api/users/delete/$id?${Env.API_KEY}'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'x-auth-token': prefs.getString('x-auth-token') ?? '',
+      Options options = Options(
+        headers: {
+          'x-auth-token': token,
         },
+      );
+      Response response = await dio.delete(
+        'api/users/delete/?apiKey=${Env.API_KEY}',
+        options: options,
       );
 
-      httpErrorHandle(
-        response: response,
-        context: context,
-        onSuccess: () {
-          prefs.setString('x-auth-token', '');
-          Navigator.of(context).pushReplacementNamed('/signin');
-        },
-      );
-    } catch (e) {
-      showSnackBar(context, e.toString());
+      return jsonEncode(response.data);
+    } on DioException catch (e) {
+      throw (e.response?.data);
     }
   }
 }

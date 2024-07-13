@@ -24,7 +24,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await userNotifier.getUser(token);
       state = AuthState(isLoggedIn: true, isLoading: false);
     } else {
-      await userNotifier.clearUser();
+      await userNotifier.signOut();
       state = AuthState(isLoggedIn: false, isLoading: false);
     }
   }
@@ -48,7 +48,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   Future<void> signOut() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('x-auth-token', '');
+    prefs.remove('x-auth-token');
     state = AuthState(isLoggedIn: false, isLoading: false);
   }
 }

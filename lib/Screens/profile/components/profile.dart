@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:finalproject/Models/user.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,7 +55,7 @@ class ProfileState extends ConsumerState<Profile> {
     });
   }
 
-  void updateUser(BuildContext context, WidgetRef ref) {
+  Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() {
@@ -66,42 +67,45 @@ class ProfileState extends ConsumerState<Profile> {
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
-      image: _image?.file.path,
+      image: _image?.file.path ?? '',
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
       email: emailController.text,
       userProps: updatedUserProps,
     );
+    try {
+      await ref.read(userProvider.notifier).updateUser(updatedUser);
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
 
-    UserApi().updateUser(
-      userId: user.id,
-      updates: updatedUser.toMap(),
-    );
     setState(() {
       circular = false;
     });
   }
 
-  void deleteUser(BuildContext context, WidgetRef ref) {
-    final user = ref.read(userProvider).user;
-    UserApi().deleteUser(
-      context: context,
-      ref: ref,
-      id: user.id,
-    );
+  Future<void> deleteUser() async {
+    try {
+      await ref.read(userProvider.notifier).deleteUser();
+    } catch (e) {
+      if (mounted) {
+        showSnackBar(context, e.toString());
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-    nameController = TextEditingController(text: user.user.name);
-    emailController = TextEditingController(text: user.user.email);
+    final user = ref.watch(userProvider).user;
+    nameController = TextEditingController(text: user.name);
+    emailController = TextEditingController(text: user.email);
     universityController =
-        TextEditingController(text: user.user.userProps.university);
-    majorController = TextEditingController(text: user.user.userProps.major);
-    contactController =
-        TextEditingController(text: user.user.userProps.contact);
+        TextEditingController(text: user.userProps.university);
+    majorController = TextEditingController(text: user.userProps.major);
+    contactController = TextEditingController(text: user.userProps.contact);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -117,7 +121,7 @@ class ProfileState extends ConsumerState<Profile> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           children: [
-            imageProfile(user.user),
+            imageProfile(user),
             const SizedBox(height: 20),
             CustomTextField(
               controller: nameController,
@@ -153,7 +157,7 @@ class ProfileState extends ConsumerState<Profile> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  onTap: () => updateUser(context, ref),
+                  onTap: () => updateUser(),
                   child: Center(
                     child: Container(
                       width: 140,
@@ -179,7 +183,7 @@ class ProfileState extends ConsumerState<Profile> {
                 ),
                 const SizedBox(height: 20),
                 InkWell(
-                  onTap: () => deleteUser(context, ref),
+                  onTap: () => deleteUser(),
                   child: Center(
                     child: Container(
                       width: 140,
@@ -216,7 +220,8 @@ class ProfileState extends ConsumerState<Profile> {
           ClipOval(
               child: _image == null
                   ? CachedNetworkImage(
-                      imageUrl: "${Env.URI}/${user.userProps.image}",
+                      imageUrl:
+                          "${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}",
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>
