@@ -182,11 +182,15 @@ class ProfileCard extends StatelessWidget {
                   ),
                   child: CircleAvatar(
                     radius: 35,
-                    backgroundImage: CachedNetworkImageProvider(
-                        '${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}'),
-                    child: user.userProps.image.isEmpty
-                        ? const Icon(Icons.person, size: 30)
+                    backgroundImage: user.userProps.image.isNotEmpty
+                        ? 
+                    CachedNetworkImageProvider(
+                        '${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}')
                         : null,
+                    child: user.userProps.image.isEmpty
+                        ? const Icon(Icons.person, size: 30) :
+                    null,
+                      
                   ),
                 ),
                 const SizedBox(width: 10),
