@@ -55,7 +55,7 @@ class ProfileState extends ConsumerState<Profile> {
     });
   }
 
-  void updateUser(BuildContext context, WidgetRef ref) async {
+  Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() {
@@ -77,7 +77,9 @@ class ProfileState extends ConsumerState<Profile> {
     try {
       await ref.read(userProvider.notifier).updateUser(updatedUser);
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (mounted) {
+        showSnackBar(context, e.toString());
+      }
     }
 
     setState(() {
@@ -85,7 +87,7 @@ class ProfileState extends ConsumerState<Profile> {
     });
   }
 
-  void deleteUser(BuildContext context, WidgetRef ref) {
+  void deleteUser() {
     final user = ref.read(userProvider).user;
     UserApi().deleteUser(
       context: context,
@@ -96,14 +98,13 @@ class ProfileState extends ConsumerState<Profile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider);
-    nameController = TextEditingController(text: user.user.name);
-    emailController = TextEditingController(text: user.user.email);
+    final user = ref.watch(userProvider).user;
+    nameController = TextEditingController(text: user.name);
+    emailController = TextEditingController(text: user.email);
     universityController =
-        TextEditingController(text: user.user.userProps.university);
-    majorController = TextEditingController(text: user.user.userProps.major);
-    contactController =
-        TextEditingController(text: user.user.userProps.contact);
+        TextEditingController(text: user.userProps.university);
+    majorController = TextEditingController(text: user.userProps.major);
+    contactController = TextEditingController(text: user.userProps.contact);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
@@ -119,7 +120,7 @@ class ProfileState extends ConsumerState<Profile> {
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
           children: [
-            imageProfile(user.user),
+            imageProfile(user),
             const SizedBox(height: 20),
             CustomTextField(
               controller: nameController,
@@ -155,7 +156,7 @@ class ProfileState extends ConsumerState<Profile> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 InkWell(
-                  onTap: () => updateUser(context, ref),
+                  onTap: () => updateUser(),
                   child: Center(
                     child: Container(
                       width: 140,
@@ -181,7 +182,7 @@ class ProfileState extends ConsumerState<Profile> {
                 ),
                 const SizedBox(height: 20),
                 InkWell(
-                  onTap: () => deleteUser(context, ref),
+                  onTap: () => deleteUser(),
                   child: Center(
                     child: Container(
                       width: 140,
@@ -218,7 +219,8 @@ class ProfileState extends ConsumerState<Profile> {
           ClipOval(
               child: _image == null
                   ? CachedNetworkImage(
-                      imageUrl: "${Env.URI}/${user.userProps.image}",
+                      imageUrl:
+                          "${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}",
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>

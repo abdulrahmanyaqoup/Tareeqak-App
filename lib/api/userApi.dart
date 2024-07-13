@@ -49,7 +49,7 @@ class UserApi {
         formData.files.add(MapEntry(
           'image',
           await MultipartFile.fromFile(image.path,
-              contentType: MediaType('image', 'jpeg/webp/png')),
+              contentType: MediaType('image', 'jpg/jpeg/webp/png')),
         ));
       }
 
@@ -124,7 +124,7 @@ class UserApi {
           'image',
           await MultipartFile.fromFile(
             updates.userProps.image,
-            contentType: MediaType('image', 'jpeg/webp/png'),
+            contentType: MediaType('image', 'jpg/jpeg/webp/png'),
           ),
         ));
       }
