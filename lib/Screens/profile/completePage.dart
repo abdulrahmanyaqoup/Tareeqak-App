@@ -105,7 +105,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                           backgroundImage: userState
                                   .user.userProps.image.isNotEmpty
                               ? CachedNetworkImageProvider(
-                                  '${Env.URI}/${userState.user.userProps.image}?apiKey=${Env.API_KEY}')
+                                  '${Env.URI}${userState.user.userProps.image}?apiKey=${Env.API_KEY}')
                               : null,
                           child: userState.user.userProps.image.isEmpty
                               ? const Icon(Icons.person, size: 30)
