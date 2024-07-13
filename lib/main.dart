@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:finalproject/Screens/tabs.dart';
+import 'package:finalproject/Screens/bottomNavigation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';

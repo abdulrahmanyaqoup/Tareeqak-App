@@ -18,7 +18,9 @@ class _ProfileState extends ConsumerState<Profile> {
   @override
   void initState() {
     super.initState();
-    ref.read(userProvider.notifier).checkLoginStatus();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userProvider.notifier).checkLoginStatus();
+    });
   }
 
   @override
