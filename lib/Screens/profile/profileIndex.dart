@@ -1,7 +1,8 @@
-import 'package:finalproject/Provider/authProvider.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/profile/completePage.dart';
 import 'package:finalproject/Screens/profile/components/signin.dart';
 import 'package:finalproject/Screens/profile/components/signup.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -18,12 +19,15 @@ class _Index extends ConsumerState<Index> {
   @override
   void initState() {
     super.initState();
-    ref.read(authProvider.notifier).checkLoginStatus();
   }
 
   Future<void> signIn(String email, String password) async {
-    await ref.read(authProvider.notifier).signIn(email, password);
-    if (ref.read(authProvider).isLoggedIn) {
+    try {
+      await ref.read(userProvider.notifier).signIn(email, password);
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    if (ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
           builder: (_) => CompleteProfilePage(
@@ -35,8 +39,12 @@ class _Index extends ConsumerState<Index> {
   }
 
   Future<void> signOut() async {
-    await ref.read(authProvider.notifier).signOut();
-    if (!ref.read(authProvider).isLoggedIn) {
+    try {
+      await ref.read(userProvider.notifier).signOut();
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
+    if (!ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
           builder: (_) => CompleteProfilePage(onSignOut: signOut),
@@ -47,20 +55,13 @@ class _Index extends ConsumerState<Index> {
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
-    if (authState.isLoading) {
-      return Scaffold(
-        body: CompleteProfilePage(onSignOut: signOut),
-      );
-    }
     return Navigator(
       key: _navigatorKey,
-      onGenerateRoute: (settings) =>
-          _generateRoute(settings, authState.isLoggedIn),
+      onGenerateRoute: (settings) => _generateRoute(settings),
     );
   }
 
-  Route<dynamic> _generateRoute(RouteSettings settings, bool isLoggedIn) {
+  Route<dynamic> _generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/signin':
         return MaterialPageRoute(

@@ -1,10 +1,9 @@
 import 'package:finalproject/Screens/profile/components/profile.dart';
-import 'package:finalproject/env/env.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finalproject/Provider/authProvider.dart';
 
 class CompleteProfilePage extends ConsumerStatefulWidget {
   final VoidCallback onSignOut;
@@ -18,12 +17,15 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
   @override
   void initState() {
     super.initState();
-    ref.read(authProvider.notifier).checkLoginStatus();
+    try {
+      ref.read(userProvider.notifier).checkLoginStatus();
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
     final userState = ref.watch(userProvider);
     final double height = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -55,7 +57,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                   ),
                   const SizedBox(height: 20),
                   Text(
-                    authState.isLoggedIn
+                    userState.isLoggedIn
                         ? 'Welcome back!'
                         : 'Be a part of our community!',
                     style: const TextStyle(
@@ -66,7 +68,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                   const SizedBox(height: 10),
                   ElevatedButton(
                     onPressed: () {
-                      if (authState.isLoggedIn) {
+                      if (userState.isLoggedIn) {
                         Navigator.of(context).push(
                           MaterialPageRoute(
                             builder: (_) => Profile(
@@ -79,7 +81,7 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                       }
                     },
                     child: Text(
-                        authState.isLoggedIn ? 'Go to Profile' : 'Sign Up'),
+                        userState.isLoggedIn ? 'Go to Profile' : 'Sign Up'),
                   ),
                 ],
               ),
@@ -102,9 +104,11 @@ class _CompleteProfilePageState extends ConsumerState<CompleteProfilePage> {
                       children: [
                         CircleAvatar(
                           radius: 40,
-                          backgroundImage: userState
-                                  .user.userProps.image.isNotEmpty ? CachedNetworkImageProvider(userState.user.userProps.image) : null,
-                            
+                          backgroundImage:
+                              userState.user.userProps.image.isNotEmpty
+                                  ? CachedNetworkImageProvider(
+                                      userState.user.userProps.image)
+                                  : null,
                           child: userState.user.userProps.image.isEmpty
                               ? const Icon(Icons.person, size: 30)
                               : null,
