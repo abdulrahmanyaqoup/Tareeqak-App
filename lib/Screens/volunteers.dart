@@ -20,12 +20,14 @@ class _VolunteersState extends ConsumerState<Volunteers> {
   @override
   void initState() {
     super.initState();
-    ref.read(userProvider.notifier).getAllUsers();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userProvider.notifier).getAllUsers();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    UserState userState = ref.watch(userProvider);
+    List<User> users = ref.watch(userProvider).userList;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
@@ -82,14 +84,14 @@ class _VolunteersState extends ConsumerState<Volunteers> {
                 ),
               ),
             ),
-            userState.userList.isEmpty
+            users.isEmpty
                 ? const Center(child: CircularProgressIndicator())
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: userState.userList.length,
+                    itemCount: users.length,
                     itemBuilder: (context, index) {
-                      final user = userState.userList[index];
+                      final user = users[index];
                       return ProfileCard(
                         user: user,
                       );
@@ -146,37 +148,36 @@ class ProfileCard extends StatelessWidget {
   final User user;
 
   Future<void> whatsapp() async {
-  String contact = '+962${user.userProps.contact.substring(1)}';
-  String androidUrl = "whatsapp://send?phone=$contact&text=hi";
-  String iosUrl = "https://wa.me/$contact";
-  String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
+    String contact = '+962${user.userProps.contact.substring(1)}';
+    String androidUrl = "whatsapp://send?phone=$contact&text=hi";
+    String iosUrl = "https://wa.me/$contact";
+    String webUrl = 'https://api.whatsapp.com/send/?phone=$contact&text=hi';
 
-  try {
-    print('Attempting to open URL');
-    if (Platform.isIOS) {
-      print('iOS detected');
-      if (await canLaunchUrl(Uri.parse(iosUrl))) {
-        print('Launching iOS URL: $iosUrl');
-        await launchUrl(Uri.parse(iosUrl));
-      } else {
-        print('Cannot launch iOS URL: $iosUrl');
+    try {
+      print('Attempting to open URL');
+      if (Platform.isIOS) {
+        print('iOS detected');
+        if (await canLaunchUrl(Uri.parse(iosUrl))) {
+          print('Launching iOS URL: $iosUrl');
+          await launchUrl(Uri.parse(iosUrl));
+        } else {
+          print('Cannot launch iOS URL: $iosUrl');
+        }
+      } else if (Platform.isAndroid) {
+        print('Android detected');
+        if (await canLaunchUrl(Uri.parse(androidUrl))) {
+          print('Launching Android URL: $androidUrl');
+          await launchUrl(Uri.parse(androidUrl));
+        } else {
+          print('Cannot launch Android URL: $androidUrl');
+        }
       }
-    } else if (Platform.isAndroid) {
-      print('Android detected');
-      if (await canLaunchUrl(Uri.parse(androidUrl))) {
-        print('Launching Android URL: $androidUrl');
-        await launchUrl(Uri.parse(androidUrl));
-      } else {
-        print('Cannot launch Android URL: $androidUrl');
-      }
+    } catch (e) {
+      print('Error caught: $e');
+      print('Falling back to web URL: $webUrl');
+      await launchUrl(Uri.parse(webUrl), mode: LaunchMode.externalApplication);
     }
-  } catch(e) {
-    print('Error caught: $e');
-    print('Falling back to web URL: $webUrl');
-    await launchUrl(Uri.parse(webUrl), mode: LaunchMode.externalApplication);
   }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -327,8 +328,7 @@ class ProfileCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
                     decoration: BoxDecoration(
-                      color:
-                          Color.fromARGB(255, 13, 31, 47).withOpacity(0.8),
+                      color: Color.fromARGB(255, 13, 31, 47).withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Icon(
@@ -339,20 +339,17 @@ class ProfileCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 30),
                 InkWell(
-                  onTap: () =>
-                      whatsapp(),
+                  onTap: () => whatsapp(),
                   child: Container(
                     padding:
                         const EdgeInsets.symmetric(horizontal: 60, vertical: 5),
                     decoration: BoxDecoration(
-                      color:
-                          Colors.green.withOpacity(0.8),
+                      color: Colors.green.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Icon(
                       FontAwesomeIcons.whatsapp,
                       color: Colors.white,
-                      
                     ),
                   ),
                 ),
