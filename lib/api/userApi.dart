@@ -108,25 +108,22 @@ class UserApi {
   }
 
   Future<String> updateUser({
-    required String userId,
-    required Map<String, dynamic> updates,
+    required User updates,
     required String token,
   }) async {
     try {
       FormData formData = FormData.fromMap({
-        'name': updates['name'],
-        'email': updates['email'],
-        'password': updates['password'],
-        'university': updates['userProps']['university'],
-        'major': updates['userProps']['major'],
-        'contact': updates['userProps']['contact']
+        'name': updates.name,
+        'email': updates.email,
+        'university': updates.userProps.university,
+        'major': updates.userProps.major,
+        'contact': updates.userProps.contact,
       });
-      if (updates['userProps']['image'] != null) {
+      if (updates.userProps.image.isNotEmpty) {
         formData.files.add(MapEntry(
           'image',
           await MultipartFile.fromFile(
-            updates['userProps']['image'],
-            filename: updates['userProps']['image'],
+            updates.userProps.image,
             contentType: MediaType('image', 'jpeg/webp/png'),
           ),
         ));
@@ -138,14 +135,14 @@ class UserApi {
       );
 
       Response response = await dio.patch(
-        'api/users/update/$userId?apiKey=${Env.API_KEY}',
+        'api/users/update/?apiKey=${Env.API_KEY}',
         data: formData,
         options: options,
       );
 
       return jsonEncode(response.data);
     } on DioException catch (e) {
-      throw Exception(e.response?.data['error']);
+      throw (e.response?.data['error']);
     }
   }
 

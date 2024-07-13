@@ -36,6 +36,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     try {
       String response =
           await UserApi().signInUser(email: email, password: password);
+      print(response);
       String token = jsonDecode(response)['token'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('x-auth-token', token);

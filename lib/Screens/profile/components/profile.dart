@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:finalproject/Models/user.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,7 +55,7 @@ class ProfileState extends ConsumerState<Profile> {
     });
   }
 
-  void updateUser(BuildContext context, WidgetRef ref) {
+  void updateUser(BuildContext context, WidgetRef ref) async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() {
@@ -66,18 +67,19 @@ class ProfileState extends ConsumerState<Profile> {
       university: universityController.text,
       major: majorController.text,
       contact: contactController.text,
-      image: _image?.file.path,
+      image: _image?.file.path ?? '',
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
       email: emailController.text,
       userProps: updatedUserProps,
     );
+    try {
+      await ref.read(userProvider.notifier).updateUser(updatedUser);
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
 
-    UserApi().updateUser(
-      userId: user.id,
-      updates: updatedUser.toMap(),
-    );
     setState(() {
       circular = false;
     });
