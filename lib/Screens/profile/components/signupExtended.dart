@@ -25,7 +25,7 @@ class SignupOptionalScreen extends ConsumerStatefulWidget {
 class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
   final TextEditingController majorController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
-  final AuthService authService = AuthService();
+  final UserApi authService = UserApi();
   File? _image;
   String? _selectedUniversity;
 

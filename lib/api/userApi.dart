@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http_parser/http_parser.dart';
 
-class AuthService {
+class UserApi {
   void signUpUser({
     required BuildContext context,
     required WidgetRef ref,

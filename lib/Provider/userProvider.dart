@@ -41,7 +41,7 @@ class UserNotifier extends StateNotifier<UserState> {
   Future<void> getUser(String token) async {
     state = state.copyWith(isLoading: true);
     try {
-      var userData = await AuthService().getUser(token);
+      var userData = await UserApi().getUser(token);
       state = state.copyWith(user: User.fromJson(userData), isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());
@@ -50,7 +50,7 @@ class UserNotifier extends StateNotifier<UserState> {
 
   Future<void> getAllUsers() async {
     try {
-      List<User> users = await AuthService().getAllUsers();
+      List<User> users = await UserApi().getAllUsers();
       state = state.copyWith(userList: users, isLoading: false);
     } catch (e) {
       state = state.copyWith(isLoading: false, errorMessage: e.toString());

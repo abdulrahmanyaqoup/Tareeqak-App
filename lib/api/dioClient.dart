@@ -8,8 +8,6 @@ Dio createDio() {
   dio.httpClientAdapter = Http2Adapter(
     ConnectionManager(
       idleTimeout: const Duration(milliseconds: 10000),
-
-      /// Assume your server supports HTTP/2:
       onClientCreate: (_, config) => config.onBadCertificate = (_) => true,
     ),
   );

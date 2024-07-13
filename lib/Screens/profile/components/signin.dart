@@ -18,7 +18,7 @@ class _SigninState extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService authService = AuthService();
+  final UserApi authService = UserApi();
 
   @override
   Widget build(BuildContext context) {

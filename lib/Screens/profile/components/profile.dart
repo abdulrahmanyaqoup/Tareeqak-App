@@ -26,7 +26,7 @@ class ProfileState extends ConsumerState<Profile> {
   late TextEditingController contactController;
   FileImage? _image;
   bool circular = false;
-  final AuthService authService = AuthService();
+  final UserApi authService = UserApi();
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class ProfileState extends ConsumerState<Profile> {
       userProps: updatedUserProps,
     );
 
-    AuthService().updateUser(
+    UserApi().updateUser(
       userId: user.id,
       updates: updatedUser.toMap(),
     );
@@ -85,7 +85,7 @@ class ProfileState extends ConsumerState<Profile> {
 
   void deleteUser(BuildContext context, WidgetRef ref) {
     final user = ref.read(userProvider);
-    AuthService().deleteUser(
+    UserApi().deleteUser(
       context: context,
       ref: ref,
       id: user.user.id,

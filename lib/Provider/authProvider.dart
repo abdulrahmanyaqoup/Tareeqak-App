@@ -32,7 +32,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       String email, String password, Function(String) onError) async {
     try {
       String response =
-          await AuthService().signInUser(email: email, password: password);
+          await UserApi().signInUser(email: email, password: password);
       String userData = response;
       String token = jsonDecode(response)['token'];
 

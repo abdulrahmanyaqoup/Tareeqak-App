@@ -22,7 +22,7 @@ class TabsState extends ConsumerState<Tabs> {
       child: Text("chatbot"),
     ),
     const Volunteers(),
-    UniversityPage(),
+    const UniversityPage(),
     const Index(),
   ];
 
@@ -118,9 +118,8 @@ class TabsState extends ConsumerState<Tabs> {
       case 2:
         return 'University';
       case 3:
-        return 'Profile';
       default:
-        return 'University';
+        return 'Profile';
     }
   }
 }
