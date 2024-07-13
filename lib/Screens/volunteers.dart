@@ -202,7 +202,7 @@ Future<void> whatsapp() async {
                     radius: 35,
                     backgroundImage: user.userProps.image.isNotEmpty
                         ? CachedNetworkImageProvider(
-                            '${Env.URI}${user.userProps.image}?apiKey=${Env.API_KEY}')
+                            '${Env.URI}${user.userProps.image}${Env.API_KEY}')
                         : null,
                     child: user.userProps.image.isEmpty
                         ? const Icon(Icons.person, size: 30)
