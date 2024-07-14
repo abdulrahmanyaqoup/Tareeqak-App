@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Screens/components/volunteers.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 
 class BottomNavigation extends ConsumerStatefulWidget {
@@ -72,7 +71,6 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
       bottomNavigationBar: Theme(
         data: Theme.of(context).copyWith(
           splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
         ),
         child: BottomNavigationBar(
           onTap: selectPage,
@@ -84,17 +82,29 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
           unselectedIconTheme: Theme.of(context)
               .iconTheme
               .copyWith(color: Theme.of(context).colorScheme.secondary),
-          enableFeedback: false,
           showSelectedLabels: false,
           showUnselectedLabels: false,
-          useLegacyColorScheme: true,
           iconSize: 30,
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
               icon: Lottie.asset(
-                'assets/animations/starsBlue.json',
+                'assets/animations/stars.json',
+                height: 40,
                 width: 40,
+                fit: BoxFit.fill,
+                controller: _controller,
+                animate: _pageIndex == 0,
+                onLoaded: (composition) => {
+                  _controller.animateTo(_introAnimationEnd,
+                      duration: const Duration(seconds: 1)),
+                },
+              ),
+              activeIcon: Lottie.asset(
+                'assets/animations/starsFilled.json',
+                height: 40,
+                width: 40,
+                fit: BoxFit.fill,
                 controller: _controller,
                 animate: _pageIndex == 0,
                 onLoaded: (composition) => {
