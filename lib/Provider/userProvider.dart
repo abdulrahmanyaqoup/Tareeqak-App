@@ -46,8 +46,8 @@ class UserNotifier extends StateNotifier<UserState> {
     String? token = prefs.getString('x-auth-token');
     if (token != null && token.isNotEmpty) {
       var userData = await UserApi().getUser(token);
-      state = state.copyWith(user: User.fromJson(userData), isLoading: false);
-      state = state.copyWith(isLoggedIn: true, isLoading: false);
+      state = state.copyWith(
+          user: User.fromJson(userData), isLoggedIn: true, isLoading: false);
     }
   }
 
