@@ -18,8 +18,29 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
   int _pageIndex = 3;
 
   final List<Widget> _widgetOptions = <Widget>[
-    const Center(
-      child: Text("chatbot"),
+     Center(
+      child: Column(
+        children: [
+          const SizedBox(height: 50),
+           const Text(
+            'AstroNet is under prgress waiting Abdulrahman AlDumairi to finish it :()',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xFF4A4B7B), 
+              fontSize: 15,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 50),
+          Lottie.asset(
+            'assets/animations/astronet.json',
+            width: 200,
+            height: 200,
+            repeat: true,
+            animate: true,
+          ),
+        ],
+      ),
     ),
     const Volunteers(),
     const UniversityPage(),
@@ -35,7 +56,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _pageIndex != 1 && _pageIndex != 3
+      appBar: _pageIndex != 1 && _pageIndex != 3 && _pageIndex != 2
           ? AppBar(
               title: Center(
                 child: Text(
@@ -71,7 +92,11 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
             type: BottomNavigationBarType.fixed,
             items: [
               BottomNavigationBarItem(
-                icon: Lottie.asset(_pageIndex != 0 ? 'assets/animations/stars.json' : 'assets/animations/starsBlue.json',width: 80 ,height: 36,repeat: true, animate: true),
+                icon: _pageIndex == 0
+                    ? Lottie.asset('assets/animations/starsBlue.json',
+                        width: 80, height: 36, repeat: true, animate: true)
+                    : Image.asset('assets/animations/images/starsStatic.png',
+                    width: 80, height: 29),
                 label: 'ChatBot',
               ),
               BottomNavigationBarItem(
