@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Screens/components/volunteers.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:lottie/lottie.dart';
 
 class BottomNavigation extends ConsumerStatefulWidget {
   const BottomNavigation({super.key});
@@ -68,9 +69,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 0
-                  ? CupertinoIcons.chat_bubble_text_fill
-                  : CupertinoIcons.chat_bubble_text),
+              icon: Lottie.asset('assets/animations/stars.json',width: 30 ,height: 30,repeat: true, animate: true),
               label: 'ChatBot',
             ),
             BottomNavigationBarItem(
