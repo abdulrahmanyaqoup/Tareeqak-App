@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:lottie/lottie.dart';
 
 class Profile extends ConsumerStatefulWidget {
   final VoidCallback onSignOut;
@@ -49,11 +50,12 @@ class _ProfileState extends ConsumerState<Profile> {
                     decoration: BoxDecoration(
                       color: Theme.of(context).colorScheme.surface,
                     ),
-                    child: Image.network(
-                      'https://img.freepik.com/free-vector/remote-meeting-concept-illustration_114360-4704.jpg?t=st=1720743352~exp=1720746952~hmac=ae4560815f69c085e9dbb270b373d92233003f60a0eefb2c2e9a2520eccd3e0e&w=1060',
+                    child: Lottie.asset(
+                      'assets/animations/logo.json',
+                      fit: BoxFit.contain,
                     ),
                   ),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
                   Text(
                     userState.isLoggedIn
                         ? 'Welcome back!'

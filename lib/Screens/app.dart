@@ -53,44 +53,47 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        child: BottomNavigationBar(
-          onTap: selectPage,
-          currentIndex: _pageIndex,
-          selectedItemColor: Theme.of(context).colorScheme.primary,
-          selectedIconTheme: Theme.of(context)
-              .iconTheme
-              .copyWith(color: Theme.of(context).colorScheme.primary),
-          unselectedIconTheme: Theme.of(context)
-              .iconTheme
-              .copyWith(color: Theme.of(context).colorScheme.secondary),
-          showSelectedLabels: false,
-          showUnselectedLabels: false,
-          iconSize: 30,
-          type: BottomNavigationBarType.fixed,
-          items: [
-            BottomNavigationBarItem(
-              icon: Lottie.asset('assets/animations/stars.json',width: 30 ,height: 30,repeat: true, animate: true),
-              label: 'ChatBot',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 1
-                  ? CupertinoIcons.person_2_fill
-                  : CupertinoIcons.person_2),
-              label: 'Volunteers',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 2
-                  ? CupertinoIcons.compass_fill
-                  : CupertinoIcons.compass),
-              label: 'University',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(_pageIndex == 3
-                  ? CupertinoIcons.person_fill
-                  : CupertinoIcons.person),
-              label: 'Profile',
-            ),
-          ],
+        child: SizedBox(
+          height: 70,
+          child: BottomNavigationBar(
+            onTap: selectPage,
+            currentIndex: _pageIndex,
+            selectedItemColor: Theme.of(context).colorScheme.primary,
+            selectedIconTheme: Theme.of(context)
+                .iconTheme
+                .copyWith(color: Theme.of(context).colorScheme.primary),
+            unselectedIconTheme: Theme.of(context)
+                .iconTheme
+                .copyWith(color: Theme.of(context).colorScheme.secondary),
+            showSelectedLabels: false,
+            showUnselectedLabels: false,
+            iconSize: 30,
+            type: BottomNavigationBarType.fixed,
+            items: [
+              BottomNavigationBarItem(
+                icon: Lottie.asset(_pageIndex != 0 ? 'assets/animations/stars.json' : 'assets/animations/starsBlue.json',width: 80 ,height: 36,repeat: true, animate: true),
+                label: 'ChatBot',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(_pageIndex == 1
+                    ? CupertinoIcons.person_2_fill
+                    : CupertinoIcons.person_2),
+                label: 'Volunteers',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(_pageIndex == 2
+                    ? CupertinoIcons.compass_fill
+                    : CupertinoIcons.compass),
+                label: 'University',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(_pageIndex == 3
+                    ? CupertinoIcons.person_fill
+                    : CupertinoIcons.person),
+                label: 'Profile',
+              ),
+            ],
+          ),
         ),
       ),
     );
