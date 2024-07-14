@@ -125,8 +125,12 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
               label: 'University',
             ),
             const BottomNavigationBarItem(
-              activeIcon: Icon(CupertinoIcons.person_fill),
-              icon: Icon(CupertinoIcons.person),
+              icon: AnimatedCrossFade(
+                firstChild: Icon(CupertinoIcons.person_fill),
+                secondChild: Icon(CupertinoIcons.person),
+                crossFadeState: CrossFadeState.showSecond,
+                duration: Duration(milliseconds: 300),
+              ),
               label: 'Profile',
             ),
           ],
