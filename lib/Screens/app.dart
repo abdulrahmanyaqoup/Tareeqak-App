@@ -94,8 +94,8 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
                 height: 40,
                 width: 40,
                 fit: BoxFit.fill,
+                animate: false,
                 controller: _controller,
-                animate: _pageIndex == 0,
                 onLoaded: (composition) => {
                   _controller.animateTo(_introAnimationEnd,
                       duration: const Duration(seconds: 1)),
@@ -107,7 +107,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
                 width: 40,
                 fit: BoxFit.fill,
                 controller: _controller,
-                animate: _pageIndex == 0,
+                animate: false,
                 onLoaded: (composition) => {
                   _controller.animateTo(_introAnimationEnd,
                       duration: const Duration(seconds: 1)),
