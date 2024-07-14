@@ -1,8 +1,8 @@
 {
   "nm": "Main Scene",
   "ddd": 0,
-  "h": 500,
-  "w": 500,
+  "w": 430,
+  "h": 350,
   "meta": { "g": "@lottiefiles/creator 1.17.0" },
   "layers": [
     {

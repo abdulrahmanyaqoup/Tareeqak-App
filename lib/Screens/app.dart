@@ -14,34 +14,20 @@ class BottomNavigation extends ConsumerStatefulWidget {
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
-class _BottomNavigationState extends ConsumerState<BottomNavigation> {
+class _BottomNavigationState extends ConsumerState<BottomNavigation>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  static const _introAnimationEnd = 60 / 240;
   int _pageIndex = 3;
 
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(vsync: this);
+  }
+
   final List<Widget> _widgetOptions = <Widget>[
-     Center(
-      child: Column(
-        children: [
-          const SizedBox(height: 50),
-           const Text(
-            'AstroNet is under prgress waiting Abdulrahman AlDumairi to finish it :()',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFF4A4B7B), 
-              fontSize: 15,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 50),
-          Lottie.asset(
-            'assets/animations/astronet.json',
-            width: 200,
-            height: 200,
-            repeat: true,
-            animate: true,
-          ),
-        ],
-      ),
-    ),
+    const Center(child: Text('ChatBot')),
     const Volunteers(),
     const UniversityPage(),
     const Index(),
@@ -51,6 +37,20 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
     setState(() {
       _pageIndex = index;
     });
+    if (_pageIndex == 0) {
+      _controller.reset();
+      _controller.animateTo(_introAnimationEnd,
+          duration: const Duration(seconds: 1));
+    } else {
+      _controller.animateTo(_introAnimationEnd,
+          duration: const Duration(seconds: 1));
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -74,51 +74,52 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation> {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
         ),
-        child: SizedBox(
-          height: 70,
-          child: BottomNavigationBar(
-            onTap: selectPage,
-            currentIndex: _pageIndex,
-            selectedItemColor: Theme.of(context).colorScheme.primary,
-            selectedIconTheme: Theme.of(context)
-                .iconTheme
-                .copyWith(color: Theme.of(context).colorScheme.primary),
-            unselectedIconTheme: Theme.of(context)
-                .iconTheme
-                .copyWith(color: Theme.of(context).colorScheme.secondary),
-            showSelectedLabels: false,
-            showUnselectedLabels: false,
-            iconSize: 30,
-            type: BottomNavigationBarType.fixed,
-            items: [
-              BottomNavigationBarItem(
-                icon: _pageIndex == 0
-                    ? Lottie.asset('assets/animations/starsBlue.json',
-                        width: 80, height: 36, repeat: true, animate: true)
-                    : Image.asset('assets/animations/images/starsStatic.png',
-                    width: 80, height: 29),
-                label: 'ChatBot',
+        child: BottomNavigationBar(
+          onTap: selectPage,
+          currentIndex: _pageIndex,
+          selectedItemColor: Theme.of(context).colorScheme.primary,
+          selectedIconTheme: Theme.of(context)
+              .iconTheme
+              .copyWith(color: Theme.of(context).colorScheme.primary),
+          unselectedIconTheme: Theme.of(context)
+              .iconTheme
+              .copyWith(color: Theme.of(context).colorScheme.secondary),
+          enableFeedback: false,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
+          useLegacyColorScheme: true,
+          iconSize: 30,
+          type: BottomNavigationBarType.fixed,
+          items: [
+            BottomNavigationBarItem(
+              icon: Lottie.asset(
+                'assets/animations/starsBlue.json',
+                width: 40,
+                controller: _controller,
+                animate: _pageIndex == 0,
+                onLoaded: (composition) => {
+                  _controller.animateTo(_introAnimationEnd,
+                      duration: const Duration(seconds: 1)),
+                },
               ),
-              BottomNavigationBarItem(
-                icon: Icon(_pageIndex == 1
-                    ? CupertinoIcons.person_2_fill
-                    : CupertinoIcons.person_2),
-                label: 'Volunteers',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(_pageIndex == 2
-                    ? CupertinoIcons.compass_fill
-                    : CupertinoIcons.compass),
-                label: 'University',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(_pageIndex == 3
-                    ? CupertinoIcons.person_fill
-                    : CupertinoIcons.person),
-                label: 'Profile',
-              ),
-            ],
-          ),
+              label: 'ChatBot',
+            ),
+            const BottomNavigationBarItem(
+              activeIcon: Icon(CupertinoIcons.person_2_fill),
+              icon: Icon(CupertinoIcons.person_2),
+              label: 'Volunteers',
+            ),
+            const BottomNavigationBarItem(
+              activeIcon: Icon(CupertinoIcons.compass_fill),
+              icon: Icon(CupertinoIcons.compass),
+              label: 'University',
+            ),
+            const BottomNavigationBarItem(
+              activeIcon: Icon(CupertinoIcons.person_fill),
+              icon: Icon(CupertinoIcons.person),
+              label: 'Profile',
+            ),
+          ],
         ),
       ),
     );
