@@ -1,5 +1,6 @@
 import 'package:finalproject/Screens/components/profile/pages/editProfile.dart';
 import 'package:finalproject/env/env.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
@@ -102,16 +103,31 @@ class _ProfileState extends ConsumerState<Profile> {
                   children: [
                     Row(
                       children: [
-                        CircleAvatar(
-                          radius: 40,
-                          backgroundImage: userState
-                                  .user.userProps.image.isNotEmpty
-                              ? CachedNetworkImageProvider(
-                                  "${Env.URI}${userState.user.userProps.image}${Env.API_KEY}")
-                              : null,
-                          child: userState.user.userProps.image.isEmpty
-                              ? const Icon(Icons.person, size: 30)
-                              : null,
+                        Container(
+                          width: 75,
+                          height: 75,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary
+                                  .withOpacity(.7),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundImage: userState
+                                    .user.userProps.image.isNotEmpty
+                                ? CachedNetworkImageProvider(
+                                    "${Env.URI}${userState.user.userProps.image}${Env.API_KEY}")
+                                : null,
+                            child: userState.user.userProps.image.isEmpty
+                                ? const Icon(Icons.person, size: 30)
+                                : null,
+                          ),
                         ),
                         const SizedBox(width: 10),
                         Text(
@@ -128,27 +144,42 @@ class _ProfileState extends ConsumerState<Profile> {
                     ),
                     const SizedBox(height: 10),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.school,
-                            color: Theme.of(context).colorScheme.secondary),
-                        const SizedBox(width: 5),
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.2),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Icon(
+                            Icons.school,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'University',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 7,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             Text(
-                              userState.user.userProps.university.isNotEmpty
-                                  ? userState.user.userProps.university
-                                  : 'Not Specified',
+                              userState.user.userProps.university.isEmpty
+                                  ? '-'
+                                  : userState.user.userProps.university,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
@@ -157,28 +188,43 @@ class _ProfileState extends ConsumerState<Profile> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    Row(
+                   Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Icon(Icons.edit,
-                            color: Theme.of(context).colorScheme.secondary),
-                        const SizedBox(width: 5),
+                        Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .primary
+                                .withOpacity(.2),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: Icon(
+                            CupertinoIcons.pen,
+                            color: Theme.of(context).colorScheme.primary,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               'Major',
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 7,
                                 fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),
                             Text(
-                              userState.user.userProps.major.isNotEmpty
-                                  ? userState.user.userProps.major
-                                  : 'Not Specified',
+                              userState.user.userProps.major.isEmpty
+                                  ? '-'
+                                  : userState.user.userProps.major,
                               style: TextStyle(
-                                fontSize: 14,
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
                                 color: Theme.of(context).colorScheme.onSurface,
                               ),
                             ),

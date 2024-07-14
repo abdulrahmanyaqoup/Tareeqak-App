@@ -334,8 +334,7 @@ class ProfileCard extends StatelessWidget {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 68, vertical: 5),
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 13, 31, 47)
-                          .withOpacity(0.8),
+                      color: Theme.of(context).colorScheme.primary,
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: const Icon(
