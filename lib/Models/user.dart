@@ -15,10 +15,6 @@ class User {
     this.userProps = const UserProps(),
   });
 
-  static User initial() {
-    return const User();
-  }
-
   User copyWith({
     String? id,
     String? name,

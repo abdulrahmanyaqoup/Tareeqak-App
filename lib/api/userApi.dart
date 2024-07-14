@@ -52,8 +52,7 @@ class UserApi {
         'api/users/register${Env.API_KEY}',
         data: formData,
       );
-
-      return response.data;
+      return jsonEncode(response.data);
     } on DioException catch (e) {
       throw (e.response?.data);
     }
@@ -71,7 +70,7 @@ class UserApi {
       );
       return jsonEncode(response.data);
     } on DioException catch (e) {
-      throw (e.response!.data);
+      throw (e.response?.data);
     }
   }
 
@@ -85,7 +84,7 @@ class UserApi {
           await dio.get('api/users/current${Env.API_KEY}', options: options);
       return jsonEncode(response.data);
     } on DioException catch (e) {
-      throw Exception(e.response!.data);
+      throw (e.response?.data);
     }
   }
 
@@ -94,11 +93,10 @@ class UserApi {
       Response response = await dio.get(
         'api/users${Env.API_KEY}',
       );
-
       List<dynamic> userList = response.data;
       return userList.map((userJson) => User.fromMap(userJson)).toList();
     } on DioException catch (e) {
-      throw Exception(e.response?.data);
+      throw (e.response?.data);
     }
   }
 

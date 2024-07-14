@@ -45,7 +45,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
 
   Future<void> signupUser() async {
     try {
-      String response = await ref.read(userProvider.notifier).signUp(
+      await ref.read(userProvider.notifier).signUp(
             widget.name,
             widget.email,
             widget.password,
@@ -54,13 +54,13 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
             contactController.text,
             _image,
           );
-      if (response.isNotEmpty && mounted) {
+      if (mounted) {
         Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => Profile(
             onSignOut: () {},
           ),
         ));
-        showSnackBar(context, response);
+        showSnackBar(context, 'You account has been created successfully');
       }
     } catch (e) {
       if (mounted) {
