@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,11 @@ class _VolunteersState extends ConsumerState<Volunteers> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    try {
       ref.read(userProvider.notifier).getAllUsers();
-    });
+    } catch (e) {
+      showSnackBar(context, e.toString());
+    }
   }
 
   @override
