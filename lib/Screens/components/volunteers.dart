@@ -35,7 +35,13 @@ class _VolunteersState extends ConsumerState<Volunteers> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       appBar: AppBar(
-        title: const Text('Contact With Advisors'),
+        title: Text(
+          'Contact With Advisors',
+          style: TextStyle(
+            color: Colors.white.withOpacity(.8),
+            fontSize: 20,
+          ),
+        ),
         elevation: 2,
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
