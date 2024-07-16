@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:searchfield/searchfield.dart';
 
 class UniversityPage extends StatefulWidget {
@@ -12,42 +12,60 @@ class _UniversityHomePageState extends State<UniversityPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            backgroundColor: Theme.of(context).primaryColor,
             expandedHeight: 120.0,
             floating: false,
             pinned: false,
+            flexibleSpace: FlexibleSpaceBar(
+              background: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                ),
+              ),
+            ),
           ),
           SliverPersistentHeader(
             pinned: true,
             delegate: _SliverHeaderDelegate(
-              minHeight: 80,
-              maxHeight: 80,
+              minHeight: 90,
+              maxHeight: 90,
               child: Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.symmetric(horizontal: 30),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
+                  gradient: LinearGradient(
+                    colors: [
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
+                    ],
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                   ),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Colors.transparent,
-                    ),
-                  ],
                 ),
-                child: Center(
-                  child: Text(
-                    'Universities',
-                    style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).colorScheme.primary),
+                alignment: Alignment.centerLeft,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(25),
+                      topRight: Radius.circular(25),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Universities',
+                      style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary),
+                    ),
                   ),
                 ),
               ),
@@ -227,3 +245,4 @@ class _SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
         child != oldDelegate.child;
   }
 }
+ */
