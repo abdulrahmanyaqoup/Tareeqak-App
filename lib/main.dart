@@ -19,7 +19,6 @@ const seedColor = Color(0xFF4A4B7B);
 final theme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
-    brightness: Brightness.light,
     seedColor: seedColor,
     primary: const Color(0xFF4A4B7B),
     secondary: const Color(0xFF3C3846),

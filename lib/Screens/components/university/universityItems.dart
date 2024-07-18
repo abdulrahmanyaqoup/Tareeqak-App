@@ -1,4 +1,3 @@
-// university_grid.dart
 import 'package:finalproject/Screens/components/university/universityItem.dart';
 import 'package:flutter/material.dart';
 
@@ -10,8 +9,7 @@ class UniversityGrid extends StatelessWidget {
     return SliverGrid(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: 10,
-        mainAxisSpacing: 30,
+        mainAxisSpacing: 10,
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) => UniversityGridItem(

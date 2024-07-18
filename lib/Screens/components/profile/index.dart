@@ -3,6 +3,7 @@ import 'package:finalproject/Screens/components/profile/pages/profile.dart';
 import 'package:finalproject/Screens/components/profile/pages/signin.dart';
 import 'package:finalproject/Screens/components/profile/pages/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -64,7 +65,7 @@ class _Index extends ConsumerState<Index> {
   Route<dynamic> _generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case '/signin':
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
           builder: (_) => Signin(
             onSignIn: signIn,
             onSignUpPressed: () {
@@ -73,7 +74,7 @@ class _Index extends ConsumerState<Index> {
           ),
         );
       case '/signup':
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
           builder: (_) => SignupScreen(
             onSignInPressed: () {
               _navigatorKey.currentState?.pushNamed('/signin');
@@ -82,7 +83,7 @@ class _Index extends ConsumerState<Index> {
         );
       case '/Profile':
       default:
-        return MaterialPageRoute(
+        return CupertinoPageRoute(
           builder: (_) => Profile(
             onSignOut: signOut,
           ),

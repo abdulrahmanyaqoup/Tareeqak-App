@@ -1,6 +1,7 @@
 import 'package:finalproject/Screens/components/university/universityItems.dart';
 import 'package:finalproject/Screens/components/university/universitySearch.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class UniversityPage extends StatefulWidget {
   const UniversityPage({super.key});
@@ -12,46 +13,75 @@ class UniversityPage extends StatefulWidget {
 class _UniversityHomePageState extends State<UniversityPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: 120.0,
-            floating: false,
-            pinned: false,
-            flexibleSpace: FlexibleSpaceBar(
-              background: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.secondary,
-                    ],
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
+    return Container(
+      color: Theme.of(context).colorScheme.primary,
+      child: SafeArea(
+        child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.surface,
+          body: CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: 120.0,
+                floating: false,
+                pinned: false,
+                flexibleSpace: FlexibleSpaceBar(
+                  title:  Text(
+                    'Universities',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white.withOpacity(0.8),
+                    ),
                   ),
+                  background: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.secondary,
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                  ),
+                  centerTitle: true,
+                  titlePadding: const EdgeInsets.only(bottom: 40),
                 ),
               ),
-            ),
+              SliverToBoxAdapter(
+                child: Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.secondary,
+                        ],
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                      ),
+                    ),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surface,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(25),
+                          topRight: Radius.circular(25),
+                        ),
+                      ),
+                      child: SearchUniversity())),
+              ),
+              const UniversityGrid(),
+            ],
           ),
-          const SliverPersistentHeader(
-            pinned: true,
-            delegate: SliverHeaderDelegate(
-              minHeight: 70,
-              maxHeight: 80,
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SearchUniversity(),
-          ),
-          const UniversityGrid(),
-        ],
+        ),
       ),
     );
   }
 }
 
-class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
+
+/* class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
 
@@ -69,6 +99,8 @@ class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+    double radius = (1 - shrinkOffset / maxExtent) * 25;
+    if (radius < 0) radius = 0;
     return Container(
       height: maxExtent,
       alignment: Alignment.bottomCenter,
@@ -86,9 +118,9 @@ class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           border: Border.all(color: Colors.transparent),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(25),
-            topRight: Radius.circular(25),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(radius),
+            topRight: Radius.circular(radius),
           ),
         ),
         child: Center(
@@ -109,3 +141,4 @@ class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
     return true;
   }
 }
+ */

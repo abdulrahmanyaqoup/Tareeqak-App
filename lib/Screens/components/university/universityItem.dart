@@ -63,10 +63,10 @@ class UniversityGridItem extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            offset: const Offset(0, 5),
+            offset: const Offset(0, 2),
             color: Theme.of(context).primaryColor.withOpacity(.2),
-            spreadRadius: 2,
-            blurRadius: 5,
+            spreadRadius: 0,
+            blurRadius: 3,
           )
         ],
       ),
