@@ -1,5 +1,5 @@
 import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/components/profile/pages/profile.dart';
+import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,12 +9,12 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:finalproject/Widgets/dropdown.dart';
 
-class SignupOptionalScreen extends ConsumerStatefulWidget {
+class SignupDetails extends ConsumerStatefulWidget {
   final String email;
   final String password;
   final String name;
 
-  const SignupOptionalScreen({
+  const SignupDetails({
     super.key,
     required this.email,
     required this.password,
@@ -22,10 +22,10 @@ class SignupOptionalScreen extends ConsumerStatefulWidget {
   });
 
   @override
-  _SignupOptionalScreenState createState() => _SignupOptionalScreenState();
+  _SignupDetails createState() => _SignupDetails();
 }
 
-class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
+class _SignupDetails extends ConsumerState<SignupDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController majorController = TextEditingController();
   final TextEditingController contactController = TextEditingController();
@@ -58,7 +58,7 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
             );
         if (mounted) {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => Profile(
+            builder: (_) => viewProfile(
               onSignOut: () {},
             ),
           ));
@@ -137,7 +137,8 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                   const SizedBox(height: 20),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
-                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
@@ -157,7 +158,8 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                           child: CircleAvatar(
                             radius: 50,
                             backgroundColor: Colors.grey[200],
-                            backgroundImage: _image != null ? FileImage(_image!) : null,
+                            backgroundImage:
+                                _image != null ? FileImage(_image!) : null,
                             child: _image == null
                                 ? const Icon(
                                     Icons.add_a_photo,
@@ -182,14 +184,17 @@ class _SignupOptionalScreenState extends ConsumerState<SignupOptionalScreen> {
                         CustomTextField(
                           controller: majorController,
                           hintText: 'Enter your major',
-                          validator: (value) => value!.isEmpty ? 'Major can\'t be empty!' : null,
+                          validator: (value) =>
+                              value!.isEmpty ? 'Major can\'t be empty!' : null,
                           obscureText: false,
                         ),
                         const SizedBox(height: 20),
                         CustomTextField(
                           controller: contactController,
                           hintText: 'Enter your contact',
-                          validator: (value) => value!.isEmpty ? 'Contact can\'t be empty!' : null,
+                          validator: (value) => value!.isEmpty
+                              ? 'Contact can\'t be empty!'
+                              : null,
                           obscureText: false,
                         ),
                         const SizedBox(height: 40),

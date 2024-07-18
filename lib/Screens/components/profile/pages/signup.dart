@@ -1,8 +1,8 @@
-import 'package:finalproject/Screens/components/profile/pages/profile.dart';
+import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Screens/components/profile/pages/signupExtended.dart';
+import 'package:finalproject/Screens/components/profile/pages/signupDetails.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
@@ -17,7 +17,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController nameController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
@@ -27,7 +28,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
       Navigator.push(
         context,
         CupertinoPageRoute(
-          builder: (context) => SignupOptionalScreen(
+          builder: (context) => SignupDetails(
             email: emailController.text,
             password: passwordController.text,
             name: nameController.text,
@@ -41,7 +42,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute(
-        builder: (context) => Profile(onSignOut: () {}),
+        builder: (context) => viewProfile(onSignOut: () {}),
       ),
       (route) => false,
     );
@@ -92,7 +93,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                   const SizedBox(height: 20),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
-                    padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(15),
@@ -111,7 +113,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           controller: nameController,
                           hintText: 'Enter your name*',
                           prefixIcon: const Icon(CupertinoIcons.person),
-                          validator: (value) => value!.isEmpty ? 'Name can\'t be empty!' : null,
+                          validator: (value) =>
+                              value!.isEmpty ? 'Name can\'t be empty!' : null,
                           obscureText: false,
                         ),
                         const SizedBox(height: 20),
@@ -119,7 +122,8 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           controller: emailController,
                           hintText: 'Enter your email*',
                           prefixIcon: const Icon(CupertinoIcons.mail),
-                          validator: (value) => value!.isEmpty ? 'Email can\'t be empty!' : null,
+                          validator: (value) =>
+                              value!.isEmpty ? 'Email can\'t be empty!' : null,
                           obscureText: false,
                         ),
                         const SizedBox(height: 20),
@@ -127,12 +131,16 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           controller: passwordController,
                           hintText: 'Enter your password*',
                           prefixIcon: const Icon(CupertinoIcons.lock),
-                          validator: (value) => value!.isEmpty ? 'Password can\'t be empty!' : null,
+                          validator: (value) => value!.isEmpty
+                              ? 'Password can\'t be empty!'
+                              : null,
                           obscureText: !_isPasswordVisible,
                           suffixIcon: IconButton(
                             highlightColor: Colors.transparent,
                             icon: Icon(
-                              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
                             onPressed: () {
                               setState(() {
@@ -158,11 +166,14 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                           suffixIcon: IconButton(
                             highlightColor: Colors.transparent,
                             icon: Icon(
-                              _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              _isConfirmPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
                             onPressed: () {
                               setState(() {
-                                _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                                _isConfirmPasswordVisible =
+                                    !_isConfirmPasswordVisible;
                               });
                             },
                           ),
@@ -171,8 +182,10 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ElevatedButton(
                           onPressed: goToOptionalSignup,
                           style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.all(Theme.of(context).colorScheme.primary),
-                            minimumSize: WidgetStateProperty.all(const Size(double.infinity, 50)),
+                            backgroundColor: WidgetStateProperty.all(
+                                Theme.of(context).colorScheme.primary),
+                            minimumSize: WidgetStateProperty.all(
+                                const Size(double.infinity, 50)),
                             shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),

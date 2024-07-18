@@ -7,15 +7,15 @@ import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lottie/lottie.dart';
 
-class Profile extends ConsumerStatefulWidget {
+class viewProfile extends ConsumerStatefulWidget {
   final VoidCallback onSignOut;
-  const Profile({super.key, required this.onSignOut});
+  const viewProfile({super.key, required this.onSignOut});
 
   @override
-  _ProfileState createState() => _ProfileState();
+  _viewProfileState createState() => _viewProfileState();
 }
 
-class _ProfileState extends ConsumerState<Profile> {
+class _viewProfileState extends ConsumerState<viewProfile> {
   @override
   void initState() {
     super.initState();
@@ -188,7 +188,7 @@ class _ProfileState extends ConsumerState<Profile> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                   Row(
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Container(

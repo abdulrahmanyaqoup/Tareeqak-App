@@ -1,7 +1,6 @@
 import 'package:finalproject/Screens/components/university/universityItems.dart';
 import 'package:finalproject/Screens/components/university/universitySearch.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class UniversityPage extends StatefulWidget {
   const UniversityPage({super.key});
@@ -25,7 +24,7 @@ class _UniversityHomePageState extends State<UniversityPage> {
                 floating: false,
                 pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
-                  title:  Text(
+                  title: Text(
                     'Universities',
                     style: TextStyle(
                       fontSize: 18,
@@ -62,14 +61,14 @@ class _UniversityHomePageState extends State<UniversityPage> {
                       ),
                     ),
                     child: Container(
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.surface,
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(25),
-                          topRight: Radius.circular(25),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).colorScheme.surface,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(25),
+                            topRight: Radius.circular(25),
+                          ),
                         ),
-                      ),
-                      child: SearchUniversity())),
+                        child: SearchUniversity())),
               ),
               const UniversityGrid(),
             ],

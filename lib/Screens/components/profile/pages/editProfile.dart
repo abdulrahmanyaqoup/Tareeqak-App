@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:finalproject/Models/user.dart';
-import 'package:finalproject/Screens/components/profile/pages/profile.dart';
+import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +86,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
       await ref.read(userProvider.notifier).deleteUser();
       if (mounted && !ref.read(userProvider).isLoggedIn) {
         Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => Profile(onSignOut: widget.onSignOut),
+          builder: (_) => viewProfile(onSignOut: widget.onSignOut),
         ));
         showSnackBar(context, 'User deleted successfully');
       }

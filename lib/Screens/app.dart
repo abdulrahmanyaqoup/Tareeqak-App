@@ -1,4 +1,4 @@
-import 'package:finalproject/Screens/components/profile/index.dart';
+import 'package:finalproject/Screens/components/profile/profile.dart';
 import 'package:finalproject/Screens/components/university/universityDashboard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
     const Center(child: Text('ChatBot')),
     const Volunteers(),
     const UniversityPage(),
-    const Index(),
+    const Profile(),
   ];
 
   void selectPage(int index) {

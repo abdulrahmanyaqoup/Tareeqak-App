@@ -1,20 +1,20 @@
 import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/components/profile/pages/profile.dart';
 import 'package:finalproject/Screens/components/profile/pages/signin.dart';
 import 'package:finalproject/Screens/components/profile/pages/signup.dart';
+import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Index extends ConsumerStatefulWidget {
-  const Index({super.key});
+class Profile extends ConsumerStatefulWidget {
+  const Profile({super.key});
 
   @override
-  _Index createState() => _Index();
+  _Profile createState() => _Profile();
 }
 
-class _Index extends ConsumerState<Index> {
+class _Profile extends ConsumerState<Profile> {
   final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -31,7 +31,7 @@ class _Index extends ConsumerState<Index> {
     if (ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
-          builder: (_) => Profile(
+          builder: (_) => viewProfile(
             onSignOut: signOut,
           ),
         ),
@@ -48,7 +48,7 @@ class _Index extends ConsumerState<Index> {
     if (!ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
         MaterialPageRoute(
-          builder: (_) => Profile(onSignOut: signOut),
+          builder: (_) => viewProfile(onSignOut: signOut),
         ),
       );
     }
@@ -84,7 +84,7 @@ class _Index extends ConsumerState<Index> {
       case '/Profile':
       default:
         return CupertinoPageRoute(
-          builder: (_) => Profile(
+          builder: (_) => viewProfile(
             onSignOut: signOut,
           ),
         );
