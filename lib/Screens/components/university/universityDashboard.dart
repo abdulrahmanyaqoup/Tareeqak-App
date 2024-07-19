@@ -68,7 +68,7 @@ class _UniversityHomePageState extends State<UniversityPage> {
                             topRight: Radius.circular(25),
                           ),
                         ),
-                        child: SearchUniversity())),
+                        child: const SearchUniversity())),
               ),
               const UniversityGrid(),
             ],

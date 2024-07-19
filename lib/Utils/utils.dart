@@ -10,7 +10,7 @@ void showSnackBar(BuildContext context, String text) {
   );
 }
 
-void httpErrorHandle({
+/* void httpErrorHandle({
   required http.Response response,
   required BuildContext context,
   required VoidCallback onSuccess,
@@ -35,3 +35,4 @@ void httpErrorHandle({
       showSnackBar(context, response.body);
   }
 }
+ */
