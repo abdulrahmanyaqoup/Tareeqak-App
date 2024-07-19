@@ -10,6 +10,30 @@ class UniversityPage extends StatefulWidget {
 }
 
 class _UniversityHomePageState extends State<UniversityPage> {
+  late ScrollController _scrollController;
+  double _opacity = 1.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController()
+      ..addListener(() {
+        setState(() {
+          // Calculate opacity based on scroll position
+          var offset = _scrollController.offset / 200;
+          _opacity = 1 - offset;
+          if (_opacity < 0) _opacity = 0;
+          if (_opacity > 1) _opacity = 1;
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -18,19 +42,24 @@ class _UniversityHomePageState extends State<UniversityPage> {
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           body: CustomScrollView(
-            physics : const ClampingScrollPhysics(),
+            controller: _scrollController,
+            physics: const ClampingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverAppBar(
                 expandedHeight: 120.0,
                 floating: false,
-                pinned: false,
+                pinned: false,  // Make AppBar pinned to see the effect while scrolling
                 flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    'Universities',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.8),
+                  title: Opacity(
+                    opacity: _opacity,  // Use dynamic opacity
+                    child: Text(
+                      'Universities',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white.withOpacity(0.8),
+                      ),
                     ),
                   ),
                   background: DecoratedBox(
@@ -60,64 +89,3 @@ class _UniversityHomePageState extends State<UniversityPage> {
     );
   }
 }
-/* class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
-  final double minHeight;
-  final double maxHeight;
-
-  const SliverHeaderDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-  });
-
-  @override
-  double get minExtent => minHeight;
-
-  @override
-  double get maxExtent => maxHeight;
-
-  @override
-  Widget build(
-      BuildContext context, double shrinkOffset, bool overlapsContent) {
-    double radius = (1 - shrinkOffset / maxExtent) * 25;
-    if (radius < 0) radius = 0;
-    return Container(
-      height: maxExtent,
-      alignment: Alignment.bottomCenter,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.primary,
-            Theme.of(context).colorScheme.secondary,
-          ],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        ),
-      ),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surface,
-          border: Border.all(color: Colors.transparent),
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(radius),
-            topRight: Radius.circular(radius),
-          ),
-        ),
-        child: Center(
-          child: Text(
-            'Universities',
-            style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Theme.of(context).colorScheme.primary),
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  bool shouldRebuild(SliverHeaderDelegate oldDelegate) {
-    return true;
-  }
-}
- */
