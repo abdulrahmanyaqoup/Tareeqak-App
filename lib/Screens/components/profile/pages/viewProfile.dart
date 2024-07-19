@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:finalproject/Screens/components/profile/pages/editProfile.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +21,15 @@ class _viewProfileState extends ConsumerState<viewProfile> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(userProvider.notifier).checkLoginStatus();
-    });
+    _checkLoginStatue();
+  }
+
+  Future<void> _checkLoginStatue() async {
+    try {
+      await ref.read(userProvider.notifier).checkLoginStatus();
+    } on DioException catch (e) {
+      if (mounted) showSnackBar(context, e.message!);
+    }
   }
 
   @override
@@ -122,7 +130,8 @@ class _viewProfileState extends ConsumerState<viewProfile> {
                             backgroundImage: userState
                                     .user.userProps.image.isNotEmpty
                                 ? CachedNetworkImageProvider(
-                                    "${Env.URI}${userState.user.userProps.image}${Env.API_KEY}")
+                                    "${Env.URI}${userState.user.userProps.image}",
+                                    headers: {'x-api-key': Env.API_KEY})
                                 : null,
                             child: userState.user.userProps.image.isEmpty
                                 ? const Icon(Icons.person, size: 30)

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,10 +22,14 @@ class _VolunteersState extends ConsumerState<Volunteers> {
   @override
   void initState() {
     super.initState();
+    _getAllUsers();
+  }
+
+  Future<void> _getAllUsers() async {
     try {
-      ref.read(userProvider.notifier).getAllUsers();
-    } catch (e) {
-      showSnackBar(context, e.toString());
+      await ref.read(userProvider.notifier).getAllUsers();
+    } on DioException catch (e) {
+      if (mounted) showSnackBar(context, e.message!);
     }
   }
 
@@ -218,7 +223,10 @@ class ProfileCard extends StatelessWidget {
                     radius: 35,
                     backgroundImage: user.userProps.image.isNotEmpty
                         ? CachedNetworkImageProvider(
-                            '${Env.URI}${user.userProps.image}${Env.API_KEY}')
+                            '${Env.URI}${user.userProps.image}',
+                            headers: {
+                                "x-api-key": Env.API_KEY,
+                              })
                         : null,
                     child: user.userProps.image.isEmpty
                         ? const Icon(Icons.person, size: 30)

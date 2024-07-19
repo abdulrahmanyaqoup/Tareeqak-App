@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/components/profile/pages/signin.dart';
 import 'package:finalproject/Screens/components/profile/pages/signup.dart';
@@ -25,8 +26,8 @@ class _Profile extends ConsumerState<Profile> {
   Future<void> signIn(String email, String password) async {
     try {
       await ref.read(userProvider.notifier).signIn(email, password);
-    } catch (e) {
-      showSnackBar(context, e.toString());
+    } on DioException catch (e) {
+      if (mounted) showSnackBar(context, e.message!);
     }
     if (ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(
@@ -43,7 +44,7 @@ class _Profile extends ConsumerState<Profile> {
     try {
       await ref.read(userProvider.notifier).signOut();
     } catch (e) {
-      showSnackBar(context, e.toString());
+      if (mounted) showSnackBar(context, e.toString());
     }
     if (!ref.read(userProvider).isLoggedIn) {
       _navigatorKey.currentState?.pushReplacement(

@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:dio/dio.dart';
 import 'package:finalproject/Models/user.dart';
 import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
@@ -74,10 +75,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
       if (mounted) {
         showSnackBar(context, 'User updated successfully');
       }
-    } catch (e) {
-      if (mounted) {
-        showSnackBar(context, e.toString());
-      }
+    } on DioException catch (e) {
+      if (mounted) showSnackBar(context, e.message!);
     }
   }
 
@@ -218,8 +217,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
           ClipOval(
               child: _image == null
                   ? CachedNetworkImage(
-                      imageUrl:
-                          "${Env.URI}${user.userProps.image}${Env.API_KEY}",
+                      imageUrl: "${Env.URI}${user.userProps.image}",
+                      httpHeaders: {'x-api-key': Env.API_KEY},
                       placeholder: (context, url) =>
                           const CircularProgressIndicator(),
                       errorWidget: (context, url, error) =>

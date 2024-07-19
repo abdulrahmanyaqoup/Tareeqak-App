@@ -1,9 +1,9 @@
+import 'package:dio/dio.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/api/userApi.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
@@ -47,7 +47,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   Future<void> signupUser() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await ref.read(userProvider.notifier).signUp(
+        String response = await ref.read(userProvider.notifier).signUp(
               widget.name,
               widget.email,
               widget.password,
@@ -57,16 +57,16 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
               _image,
             );
         if (mounted) {
+          showSnackBar(context, response);
           Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => viewProfile(
               onSignOut: () {},
             ),
           ));
-          showSnackBar(context, 'Your account has been created successfully');
         }
-      } catch (e) {
+      } on DioException catch (e) {
         if (mounted) {
-          showSnackBar(context, e.toString());
+          showSnackBar(context, e.message!);
         }
       }
     }

@@ -51,7 +51,7 @@ class UserNotifier extends StateNotifier<UserState> {
     }
   }
 
-  Future<void> signUp(
+  Future<String> signUp(
     String name,
     String email,
     String password,
@@ -60,21 +60,17 @@ class UserNotifier extends StateNotifier<UserState> {
     String contact,
     File? image,
   ) async {
-    try {
-      String response = await UserApi().signUp(
-        name: name,
-        email: email,
-        password: password,
-        university: university,
-        major: major,
-        contact: contact,
-        image: image,
-      );
-      User user = User.fromJson(response);
-      state = UserState(userList: [...state.userList, user], isLoading: false);
-    } catch (e) {
-      rethrow;
-    }
+    String response = await UserApi().signUp(
+      name: name,
+      email: email,
+      password: password,
+      university: university,
+      major: major,
+      contact: contact,
+      image: image,
+    );
+    state = state.copyWith(isLoading: false);
+    return response;
   }
 
   Future<void> signIn(
