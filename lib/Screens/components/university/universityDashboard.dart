@@ -18,6 +18,7 @@ class _UniversityHomePageState extends State<UniversityPage> {
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
           body: CustomScrollView(
+            physics : const ClampingScrollPhysics(),
             slivers: [
               SliverAppBar(
                 expandedHeight: 120.0,
