@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:finalproject/Screens/components/university/universityItems.dart';
 import 'package:finalproject/Screens/components/university/universitySearch.dart';
-import 'package:flutter/material.dart';
 
 class UniversityPage extends StatefulWidget {
   const UniversityPage({super.key});
@@ -17,39 +17,40 @@ class _UniversityHomePageState extends State<UniversityPage> {
       child: SafeArea(
         child: Scaffold(
           backgroundColor: Theme.of(context).colorScheme.surface,
-          body: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 120.0,
-                floating: false,
-                pinned: false,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Text(
-                    'Universities',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white.withOpacity(0.8),
-                    ),
-                  ),
-                  background: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Theme.of(context).colorScheme.primary,
-                          Theme.of(context).colorScheme.secondary,
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+          body: SafeArea(
+            child: CustomScrollView(
+              slivers: [
+                SliverAppBar(
+                  expandedHeight: 120.0,
+                  floating: false,
+                  pinned: false,
+                  flexibleSpace: FlexibleSpaceBar(
+                    title: Text(
+                      'Universities',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white.withOpacity(0.8),
                       ),
                     ),
+                    background: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                        ),
+                      ),
+                    ),
+                    centerTitle: true,
+                    titlePadding: const EdgeInsets.only(bottom: 40),
                   ),
-                  centerTitle: true,
-                  titlePadding: const EdgeInsets.only(bottom: 40),
                 ),
-              ),
-              SliverToBoxAdapter(
-                child: Container(
+                SliverToBoxAdapter(
+                  child: Container(
                     decoration: BoxDecoration(
                       gradient: LinearGradient(
                         colors: [
@@ -60,7 +61,9 @@ class _UniversityHomePageState extends State<UniversityPage> {
                         end: Alignment.topCenter,
                       ),
                     ),
-                    child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 0),
+                      child: Container(
                         decoration: BoxDecoration(
                           color: Theme.of(context).colorScheme.surface,
                           borderRadius: const BorderRadius.only(
@@ -68,18 +71,20 @@ class _UniversityHomePageState extends State<UniversityPage> {
                             topRight: Radius.circular(25),
                           ),
                         ),
-                        child: const SearchUniversity())),
-              ),
-              const UniversityGrid(),
-            ],
+                        child: const SearchUniversity(),
+                      ),
+                    ),
+                  ),
+                ),
+                const UniversityGrid(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
-
-
 /* class SliverHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double minHeight;
   final double maxHeight;
