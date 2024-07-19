@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http2_adapter/dio_http2_adapter.dart';
-import 'package:finalproject/api/dioErorrHandler.dart';
+import 'package:finalproject/api/dioExceptionHandler.dart';
 import 'package:finalproject/env/env.dart';
 
 Dio createDio() {
@@ -13,11 +13,7 @@ Dio createDio() {
   dio.options.headers = {
     'x-api-key': Env.API_KEY,
     'Content-Type': 'application/json; charset=UTF-8',
-    'Content-Security-Policy': "default-src 'self'",
-    'X-Content-Type-Options': 'nosniff',
-    'X-Frame-Options': 'DENY',
-    'Strict-Transport-Security': 'max-age=31536000; includeSubDomains',
-    'X-XSS-Protection': '1; mode=block',
+    'Accept': 'application/json',
   };
   print(dio.options.headers);
   dio.httpClientAdapter = Http2Adapter(
@@ -27,7 +23,7 @@ Dio createDio() {
     ),
   );
 
-  dio.interceptors.add(DioErrorHandler());
+  dio.interceptors.add(DioExceptionHandler());
 
   return dio;
 }

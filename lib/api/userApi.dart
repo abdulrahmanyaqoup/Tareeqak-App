@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:finalproject/api/dioClient.dart';
-import 'package:finalproject/env/env.dart';
 import 'package:finalproject/Models/user.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';

@@ -1,24 +1,14 @@
 import 'package:dio/dio.dart';
 
-class DioErrorHandler extends Interceptor {
-  @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    handler.next(options);
-  }
-
-  @override
-  void onResponse(Response response, ResponseInterceptorHandler handler) {
-    handler.next(response);
-  }
-
+class DioExceptionHandler extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    String errorMessage = handleDioError(err);
+    String errorMessage = _handleDioException(err);
     handler.next(DioException(
         requestOptions: err.requestOptions, message: errorMessage));
   }
 
-  String handleDioError(DioException e) {
+  String _handleDioException(DioException e) {
     final String errorMessage;
     switch (e.type) {
       case DioExceptionType.cancel:
