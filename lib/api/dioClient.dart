@@ -15,7 +15,6 @@ Dio createDio() {
     'Content-Type': 'application/json; charset=UTF-8',
     'Accept': 'application/json',
   };
-  print(dio.options.headers);
   dio.httpClientAdapter = Http2Adapter(
     ConnectionManager(
       idleTimeout: const Duration(milliseconds: 10000),
