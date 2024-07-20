@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:finalproject/api/dioClient.dart';
-import 'package:finalproject/Models/user.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Models/User/userProps.dart';
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
@@ -53,7 +53,7 @@ class UserApi {
     return response.data;
   }
 
-  Future<String> signInUser(
+  Future<Map<String, dynamic>> signInUser(
       {required String email, required String password}) async {
     Response response = await dio.post(
       'api/users/login',
@@ -62,16 +62,16 @@ class UserApi {
         'password': password,
       },
     );
-    return jsonEncode(response.data);
+    return response.data;
   }
 
-  Future<String> getUser(String token) async {
+  Future<Map<String, dynamic>> getUser(String token) async {
     Options options = Options(headers: {
       'x-auth-token': token,
     });
 
     Response response = await dio.get('api/users/current', options: options);
-    return jsonEncode(response.data);
+    return response.data;
   }
 
   Future<List<User>> getAllUsers() async {
@@ -79,10 +79,10 @@ class UserApi {
       'api/users',
     );
     List<dynamic> userList = response.data;
-    return userList.map((userJson) => User.fromMap(userJson)).toList();
+    return userList.map((user) => User.fromMap(user)).toList();
   }
 
-  Future<String> updateUser({
+  Future<Map<String, dynamic>> updateUser({
     required User updates,
     required String token,
   }) async {
@@ -114,7 +114,7 @@ class UserApi {
       options: options,
     );
 
-    return jsonEncode(response.data);
+    return response.data;
   }
 
   Future<String> deleteUser({
@@ -130,6 +130,6 @@ class UserApi {
       options: options,
     );
 
-    return jsonEncode(response.data);
+    return response.data;
   }
 }

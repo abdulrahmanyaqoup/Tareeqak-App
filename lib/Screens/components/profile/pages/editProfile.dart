@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:finalproject/Models/user.dart';
+import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
@@ -84,16 +84,16 @@ class EditProfileState extends ConsumerState<EditProfile> {
 
   Future<void> deleteUser() async {
     try {
-      await ref.read(userProvider.notifier).deleteUser();
+      String response = await ref.read(userProvider.notifier).deleteUser();
       if (mounted && !ref.read(userProvider).isLoggedIn) {
         Navigator.of(context).pushReplacement(CupertinoPageRoute(
           builder: (_) => ViewProfile(onSignOut: widget.onSignOut),
         ));
-        showSnackBar(context, 'User deleted successfully');
+        showSnackBar(context, response);
       }
-    } catch (e) {
+    } on DioException catch (e) {
       if (mounted) {
-        showSnackBar(context, e.toString());
+        showSnackBar(context, e.message!);
       }
     }
   }
@@ -239,6 +239,32 @@ class EditProfileState extends ConsumerState<EditProfile> {
                   ),
                 ),
               ],
+            ),
+          ),
+          Positioned(
+            bottom: 80,
+            left: 20,
+            right: 20,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: ElevatedButton(
+                onPressed: () => updateUser(),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'Update Account',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ),
           ),
           Positioned(

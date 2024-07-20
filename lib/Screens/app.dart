@@ -1,5 +1,6 @@
 import 'package:finalproject/Screens/components/profile/profile.dart';
 import 'package:finalproject/Screens/components/university/universityDashboard.dart';
+import 'package:finalproject/api/universityApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,11 +19,18 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
   late final AnimationController _controller;
   static const _introAnimationEnd = 60 / 240;
   int _pageIndex = 3;
+  final universities = UniversityApi();
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
+    _getUniversities();
+  }
+
+  _getUniversities() async {
+    final response = await universities.getUniversities();
+    print(response);
   }
 
   final List<Widget> _widgetOptions = <Widget>[

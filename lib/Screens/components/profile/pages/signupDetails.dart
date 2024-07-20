@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Widgets/textfield.dart';
@@ -58,11 +59,14 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
             );
         if (mounted) {
           showSnackBar(context, response);
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => ViewProfile(
-              onSignOut: () {},
+          Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(
+              builder: (_) => ViewProfile(
+                onSignOut: () {},
+              ),
             ),
-          ));
+            (Route<dynamic> route) => false,
+          );
         }
       } on DioException catch (e) {
         if (mounted) {
@@ -201,11 +205,11 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         ElevatedButton(
                           onPressed: signupUser,
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
+                            backgroundColor: WidgetStateProperty.all(
                                 Theme.of(context).colorScheme.primary),
-                            minimumSize: MaterialStateProperty.all(
+                            minimumSize: WidgetStateProperty.all(
                                 const Size(double.infinity, 50)),
-                            shape: MaterialStateProperty.all(
+                            shape: WidgetStateProperty.all(
                               RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
