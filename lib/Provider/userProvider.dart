@@ -3,8 +3,7 @@ import 'dart:io';
 
 import 'package:finalproject/api/userApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../Models/user.dart';
 
 class UserState {
@@ -42,8 +41,8 @@ class UserNotifier extends StateNotifier<UserState> {
   UserNotifier() : super(UserState(user: const User()));
 
   Future<void> checkLoginStatus() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('x-auth-token');
+    const storage = FlutterSecureStorage();
+    String? token = await storage.read(key: 'token');
     if (token != null && token.isNotEmpty) {
       var userData = await UserApi().getUser(token);
       state = state.copyWith(
@@ -80,14 +79,14 @@ class UserNotifier extends StateNotifier<UserState> {
     String response =
         await UserApi().signInUser(email: email, password: password);
     String token = jsonDecode(response)['token'];
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('x-auth-token', token);
+    const storage = FlutterSecureStorage();
+    await storage.write(key: 'token', value: token);
     state = state.copyWith(user: User.fromJson(response), isLoggedIn: true);
   }
 
   Future<void> signOut() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('x-auth-token');
+    const storage = FlutterSecureStorage();
+    await storage.delete(key: 'token');
     state =
         state.copyWith(user: const User(), isLoggedIn: false, isLoading: false);
   }
@@ -98,19 +97,19 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   Future<void> updateUser(updatedUser) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('x-auth-token') ?? '';
+    const storage = FlutterSecureStorage();
+    String? token = await storage.read(key: 'token');
     String response =
-        await UserApi().updateUser(updates: updatedUser, token: token);
+        await UserApi().updateUser(updates: updatedUser, token: token ?? '');
     state = state.copyWith(
         user: User.fromJson(response), isLoggedIn: true, isLoading: false);
   }
 
   Future<void> deleteUser() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String token = prefs.getString('x-auth-token') ?? '';
-    await UserApi().deleteUser(token: token);
-    prefs.remove('x-auth-token');
+    const storage = FlutterSecureStorage();
+    String? token = await storage.read(key: 'token');
+    await UserApi().deleteUser(token: token ?? '');
+    await storage.delete(key: 'token');
     List<User> refreshUserList =
         state.userList.where((user) => user.email != state.user.email).toList();
     state = state.copyWith(
