@@ -30,12 +30,13 @@ class _Profile extends ConsumerState<Profile> {
       if (mounted) showSnackBar(context, e.message!);
     }
     if (ref.read(userProvider).isLoggedIn) {
-      _navigatorKey.currentState?.pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => viewProfile(
+      _navigatorKey.currentState?.pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (_) => ViewProfile(
             onSignOut: signOut,
           ),
         ),
+        (Route<dynamic> route) => false,
       );
     }
   }
@@ -47,10 +48,11 @@ class _Profile extends ConsumerState<Profile> {
       if (mounted) showSnackBar(context, e.toString());
     }
     if (!ref.read(userProvider).isLoggedIn) {
-      _navigatorKey.currentState?.pushReplacement(
-        MaterialPageRoute(
-          builder: (_) => viewProfile(onSignOut: signOut),
+      _navigatorKey.currentState?.pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (_) => ViewProfile(onSignOut: signOut),
         ),
+        (Route<dynamic> route) => false,
       );
     }
   }
@@ -70,7 +72,10 @@ class _Profile extends ConsumerState<Profile> {
           builder: (_) => Signin(
             onSignIn: signIn,
             onSignUpPressed: () {
-              _navigatorKey.currentState?.pushNamed('/signup');
+              _navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                '/signup',
+                (Route<dynamic> route) => false,
+              );
             },
           ),
         );
@@ -78,14 +83,17 @@ class _Profile extends ConsumerState<Profile> {
         return CupertinoPageRoute(
           builder: (_) => SignupScreen(
             onSignInPressed: () {
-              _navigatorKey.currentState?.pushNamed('/signin');
+              _navigatorKey.currentState?.pushNamedAndRemoveUntil(
+                '/signin',
+                (Route<dynamic> route) => false,
+              );
             },
           ),
         );
       case '/Profile':
       default:
         return CupertinoPageRoute(
-          builder: (_) => viewProfile(
+          builder: (_) => ViewProfile(
             onSignOut: signOut,
           ),
         );

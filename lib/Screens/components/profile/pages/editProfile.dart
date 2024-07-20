@@ -7,6 +7,7 @@ import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Widgets/textfield.dart';
@@ -85,8 +86,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
     try {
       await ref.read(userProvider.notifier).deleteUser();
       if (mounted && !ref.read(userProvider).isLoggedIn) {
-        Navigator.of(context).push(MaterialPageRoute(
-          builder: (_) => viewProfile(onSignOut: widget.onSignOut),
+        Navigator.of(context).pushReplacement(CupertinoPageRoute(
+          builder: (_) => ViewProfile(onSignOut: widget.onSignOut),
         ));
         showSnackBar(context, 'User deleted successfully');
       }
@@ -104,7 +105,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
         return AlertDialog(
           title: const Text('Confirm Deletion'),
           content: const Text(
-              'Are you sure you want to delete your account? This action cannot be undone.'),
+              'Are you sure you want to delete your account? This action is irreversible.'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -147,12 +148,10 @@ class EditProfileState extends ConsumerState<EditProfile> {
         title: const Text('Profile', style: TextStyle(color: Colors.white)),
         centerTitle: true,
         actions: [
-          TextButton(
-            onPressed: updateUser,
-            child: const Text(
-              'Save',
-              style: TextStyle(color: Colors.white, fontSize: 18),
-            ),
+          IconButton(
+            onPressed: widget.onSignOut,
+            icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
+            iconSize: 18,
           ),
         ],
       ),

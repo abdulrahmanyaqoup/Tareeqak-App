@@ -9,15 +9,15 @@ import 'package:finalproject/Provider/userProvider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lottie/lottie.dart';
 
-class viewProfile extends ConsumerStatefulWidget {
+class ViewProfile extends ConsumerStatefulWidget {
   final VoidCallback onSignOut;
-  const viewProfile({super.key, required this.onSignOut});
+  const ViewProfile({super.key, required this.onSignOut});
 
   @override
-  _viewProfileState createState() => _viewProfileState();
+  _ViewProfileState createState() => _ViewProfileState();
 }
 
-class _viewProfileState extends ConsumerState<viewProfile> {
+class _ViewProfileState extends ConsumerState<ViewProfile> {
   @override
   void initState() {
     super.initState();
@@ -79,14 +79,17 @@ class _viewProfileState extends ConsumerState<viewProfile> {
                     onPressed: () {
                       if (userState.isLoggedIn) {
                         Navigator.of(context).push(
-                          MaterialPageRoute(
+                          CupertinoPageRoute(
                             builder: (_) => EditProfile(
                               onSignOut: widget.onSignOut,
                             ),
                           ),
                         );
                       } else {
-                        Navigator.of(context).pushNamed('/signup');
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/signup',
+                          (Route<dynamic> route) => false,
+                        );
                       }
                     },
                     child: Text(

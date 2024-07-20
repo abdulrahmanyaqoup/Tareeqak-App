@@ -59,7 +59,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         if (mounted) {
           showSnackBar(context, response);
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (_) => viewProfile(
+            builder: (_) => ViewProfile(
               onSignOut: () {},
             ),
           ));

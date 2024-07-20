@@ -42,7 +42,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute(
-        builder: (context) => viewProfile(onSignOut: () {}),
+        builder: (context) => ViewProfile(onSignOut: () {}),
       ),
       (route) => false,
     );
