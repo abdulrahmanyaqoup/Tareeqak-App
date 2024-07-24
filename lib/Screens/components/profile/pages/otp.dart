@@ -1,17 +1,22 @@
+import 'package:dio/dio.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/api/otpApi.dart';
 
-class OTPScreen extends ConsumerStatefulWidget {
-  const OTPScreen({super.key});
+class Otp extends ConsumerStatefulWidget {
+  final String email;
+  const Otp({super.key, required this.email});
 
   @override
-  _OTPScreenState createState() => _OTPScreenState();
+  _Otp createState() => _Otp();
 }
 
-class _OTPScreenState extends ConsumerState<OTPScreen> {
+class _Otp extends ConsumerState<Otp> {
   TextEditingController otpController = TextEditingController();
   bool isLoading = false;
   String? errorMessage;
@@ -28,15 +33,25 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
       errorMessage = null;
     });
 
-    final user = ref.read(userProvider).user;
-
     try {
-      final response = await OtpApi().verifyOTP(user.email, otpController.text);
-
-      print(response);
-    } catch (error) {
+      Map<String, dynamic> response =
+          await OtpApi().verifyOTP(widget.email, otpController.text);
+      String token = response['token'];
+      User user = User.fromMap(response);
+      ref.read(userProvider.notifier).signInVerfiedUser(user, token);
+      if (mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          CupertinoPageRoute(
+            builder: (_) => ViewProfile(
+              onSignOut: () => (),
+            ),
+          ),
+          (Route<dynamic> route) => false,
+        );
+      }
+    } on DioException catch (error) {
       setState(() {
-        errorMessage = 'Failed to verify OTP. Please try again.';
+        errorMessage = error.message;
       });
     } finally {
       setState(() {
@@ -70,7 +85,7 @@ class _OTPScreenState extends ConsumerState<OTPScreen> {
                 Text(errorMessage!, style: TextStyle(color: Colors.red)),
               const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: isLoading ? null : verifyOtp,
+                onPressed: () => verifyOtp(),
                 child: const Text('Verify OTP'),
               ),
             ],

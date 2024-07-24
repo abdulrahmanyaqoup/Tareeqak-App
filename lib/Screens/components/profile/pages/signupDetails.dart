@@ -62,7 +62,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
           showSnackBar(context, response);
           Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
-              builder: (_) => OTPScreen(),
+              builder: (_) => Otp(email: widget.email),
             ),
             (Route<dynamic> route) => false,
           );
