@@ -9,6 +9,7 @@ import 'package:finalproject/Widgets/textfield.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:finalproject/Widgets/dropdown.dart';
+import 'package:finalproject/Screens/components/profile/pages/otp.dart';
 
 class SignupDetails extends ConsumerStatefulWidget {
   final String email;
@@ -61,9 +62,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
           showSnackBar(context, response);
           Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
-              builder: (_) => ViewProfile(
-                onSignOut: () {},
-              ),
+              builder: (_) => OTPScreen(),
             ),
             (Route<dynamic> route) => false,
           );
