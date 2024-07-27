@@ -11,4 +11,13 @@ class OtpApi {
     );
     return response.data;
   }
+
+  Future deleteUnverified(String email) async {
+    await dio.delete(
+      'api/otp/delete',
+      data: {
+        'email': email,
+      },
+    );
+  }
 }
