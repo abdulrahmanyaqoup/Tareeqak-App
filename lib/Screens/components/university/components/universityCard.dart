@@ -1,11 +1,10 @@
-// university_grid_item.dart
 import 'package:flutter/material.dart';
 
-class UniversityGridItem extends StatelessWidget {
+class UniversityCard extends StatelessWidget {
   final String title;
   final String imagePath;
 
-  const UniversityGridItem({
+  const UniversityCard({
     super.key,
     required this.title,
     required this.imagePath,

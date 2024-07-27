@@ -1,4 +1,4 @@
-import 'package:finalproject/Screens/components/university/universityItem.dart';
+import 'package:finalproject/Screens/components/university/components/universityCard.dart';
 import 'package:flutter/material.dart';
 
 class UniversityGrid extends StatelessWidget {
@@ -12,7 +12,7 @@ class UniversityGrid extends StatelessWidget {
         mainAxisSpacing: 10,
       ),
       delegate: SliverChildBuilderDelegate(
-        (context, index) => UniversityGridItem(
+        (context, index) => UniversityCard(
           title: 'University ${index + 1}',
           imagePath: 'assets/images/university_${index + 1}.png',
         ),
