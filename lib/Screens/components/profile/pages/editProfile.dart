@@ -34,12 +34,17 @@ class EditProfileState extends ConsumerState<EditProfile> {
   @override
   void initState() {
     super.initState();
+    final user = ref.read(userProvider).user;
+    nameController = TextEditingController(text: user.name);
+    universityController =
+        TextEditingController(text: user.userProps.university);
+    majorController = TextEditingController(text: user.userProps.major);
+    contactController = TextEditingController(text: user.userProps.contact);
   }
 
   @override
   void dispose() {
     nameController.dispose();
-    emailController.dispose();
     universityController.dispose();
     majorController.dispose();
     contactController.dispose();
@@ -109,7 +114,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
           actions: <Widget>[
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: const Text('Cancel'),
             ),
@@ -128,18 +133,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(userProvider).user;
-    final double height = MediaQuery.of(context).size.height;
-    nameController = TextEditingController(text: user.name);
-    emailController = TextEditingController(text: user.email);
-    universityController =
-        TextEditingController(text: user.userProps.university);
-    majorController = TextEditingController(text: user.userProps.major);
-    contactController = TextEditingController(text: user.userProps.contact);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
+       appBar: AppBar(
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -158,53 +153,47 @@ class EditProfileState extends ConsumerState<EditProfile> {
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: height * 0.25),
-            height: height * 0.75,
-            padding: const EdgeInsets.all(16),
+            height: MediaQuery.of(context).size.height * 0.35,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.surface,
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(20)),
+              gradient: LinearGradient(
+                colors: [
+                  Theme.of(context).colorScheme.primary,
+                  Theme.of(context).colorScheme.secondary,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(30),
+                bottomRight: Radius.circular(30),
+              ),
             ),
           ),
-          Positioned(
-            top: height * 0.1 - 80,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                Container(
-                    padding: const EdgeInsets.all(6),
+          SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 40),
+                  imageProfile(ref.read(userProvider).user),
+                  const SizedBox(height: 20),
+                  Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 20),
                     decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .tertiary
-                            .withOpacity(.7),
-                        width: 1.0,
-                      ),
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 5,
+                          blurRadius: 7,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
-                    child: imageProfile(user)),
-                const SizedBox(height: 20),
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.2),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-                  child: Form(
-                    key: _formKey,
                     child: Column(
                       children: [
                         CustomTextField(
@@ -234,62 +223,58 @@ class EditProfileState extends ConsumerState<EditProfile> {
                           obscureText: false,
                           prefixIcon: const Icon(CupertinoIcons.phone),
                         ),
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => updateUser(),
+                              style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.transparent,
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.primary,
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                'Update Account',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () =>
+                                  _showDeleteConfirmationDialog(context),
+                              style: ElevatedButton.styleFrom(
+                                shadowColor: Colors.transparent,
+                                backgroundColor: Colors.grey[200],
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 15, horizontal: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              child: const Text(
+                                'Delete Account',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Color.fromARGB(255, 240, 81, 70),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 80,
-            left: 20,
-            right: 20,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: ElevatedButton(
-                onPressed: () => updateUser(),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Update Account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: ElevatedButton(
-                onPressed: () => _showDeleteConfirmationDialog(context),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  padding: const EdgeInsets.symmetric(vertical: 15),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                child: const Text(
-                  'Delete Account',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                  ),
-                ),
+                ],
               ),
             ),
           ),
