@@ -175,7 +175,19 @@ class EditProfileState extends ConsumerState<EditProfile> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(height: 40),
-                  imageProfile(ref.read(userProvider).user),
+                  Container(
+                    padding: const EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .tertiary
+                            .withOpacity(.7),
+                        width: 1.0,
+                      ),
+                    ),
+                    child: imageProfile(ref.read(userProvider).user)),
                   const SizedBox(height: 20),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -226,45 +238,52 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            ElevatedButton(
-                              onPressed: () => updateUser(),
-                              style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.transparent,
-                                backgroundColor:
-                                    Theme.of(context).colorScheme.primary,
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                            Expanded(
+                              flex: 1,
+                              child: ElevatedButton(
+                                onPressed: () => updateUser(),
+                                style: ElevatedButton.styleFrom(
+                                  shadowColor: Colors.transparent,
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.primary,
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                              ),
-                              child: const Text(
-                                'Update Account',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
+                                child: const Text(
+                                  'Update Account',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () =>
-                                  _showDeleteConfirmationDialog(context),
-                              style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.transparent,
-                                backgroundColor: Colors.grey[200],
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 15, horizontal: 16),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                            SizedBox(width: 10),
+                            Expanded(
+                              flex: 1,
+                              child: ElevatedButton(
+                                onPressed: () =>
+                                    _showDeleteConfirmationDialog(context),
+                                style: ElevatedButton.styleFrom(
+                                  shadowColor: Colors.transparent,
+                                  backgroundColor: Colors.grey[200],
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 15, horizontal: 14),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                              ),
-                              child: const Text(
-                                'Delete Account',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Color.fromARGB(255, 240, 81, 70),
-                                  fontSize: 16,
+                                child: const Text(
+                                  'Delete Account',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color.fromARGB(255, 240, 81, 70),
+                                    fontSize: 16,
+                                  ),
                                 ),
                               ),
                             ),
