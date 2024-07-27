@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

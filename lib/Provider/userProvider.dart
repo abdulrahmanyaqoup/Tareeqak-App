@@ -69,7 +69,6 @@ class UserNotifier extends StateNotifier<UserState> {
   }
 
   void signInVerfiedUser(User user, String tok) async {
-    print(tok);
     String token = tok;
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
