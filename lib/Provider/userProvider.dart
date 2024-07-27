@@ -4,7 +4,6 @@ import 'package:finalproject/api/userApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../Models/User/user.dart';
-import '../Models/User/userProps.dart';
 
 class UserState {
   final User user;
@@ -18,9 +17,6 @@ class UserState {
     this.isLoggedIn = false,
     this.isLoading = true,
   });
-
-  get userProps => const UserProps();
-  get name => user.name;
 
   UserState copyWith({
     User? user,

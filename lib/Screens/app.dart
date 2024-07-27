@@ -25,12 +25,6 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this);
-    _getUniversities();
-  }
-
-  _getUniversities() async {
-    final response = await universities.getUniversities();
-    print(response);
   }
 
   final List<Widget> _widgetOptions = <Widget>[
