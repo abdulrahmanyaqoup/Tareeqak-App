@@ -1,5 +1,5 @@
 import 'package:finalproject/Screens/components/profile/profile.dart';
-import 'package:finalproject/Screens/components/university/universityDashboard.dart';
+import 'package:finalproject/Screens/components/university/university.dart';
 import 'package:finalproject/api/universityApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

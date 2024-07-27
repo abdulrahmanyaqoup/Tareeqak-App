@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:finalproject/Screens/components/university/universityItems.dart';
-import 'package:finalproject/Screens/components/university/universitySearch.dart';
+import 'package:finalproject/Screens/components/university/universities.dart';
+import 'package:finalproject/Screens/components/university/components/search.dart';
 
 class UniversityPage extends StatefulWidget {
   const UniversityPage({super.key});
@@ -49,10 +49,11 @@ class _UniversityHomePageState extends State<UniversityPage> {
               SliverAppBar(
                 expandedHeight: 120.0,
                 floating: false,
-                pinned: false,  // Make AppBar pinned to see the effect while scrolling
+                pinned:
+                    false, // Make AppBar pinned to see the effect while scrolling
                 flexibleSpace: FlexibleSpaceBar(
                   title: Opacity(
-                    opacity: _opacity,  // Use dynamic opacity
+                    opacity: _opacity, // Use dynamic opacity
                     child: Text(
                       'Universities',
                       style: TextStyle(
@@ -79,7 +80,7 @@ class _UniversityHomePageState extends State<UniversityPage> {
                 ),
               ),
               const SliverToBoxAdapter(
-                child: SearchUniversity(),
+                child: Search(),
               ),
               const UniversityGrid(),
             ],
