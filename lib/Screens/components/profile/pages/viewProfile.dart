@@ -92,8 +92,21 @@ class _ViewProfileState extends ConsumerState<ViewProfile> {
                         );
                       }
                     },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 30,
+                        vertical: 10,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        
+                      ),
+                    ),
                     child: Text(
-                        userState.isLoggedIn ? 'Go to Profile' : 'Sign Up'),
+                      userState.isLoggedIn ? 'Go to Profile' : 'Sign Up',
+                      style: const TextStyle(color: Colors.white, fontSize: 16),
+                    ),
                   ),
                 ],
               ),

@@ -3,6 +3,7 @@ import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
@@ -27,12 +28,16 @@ class _Otp extends ConsumerState<Otp> {
     super.dispose();
   }
 
+  String censuredEmail(String email) {
+    const hiderPlaceholder = '****';
+    return email.replaceRange(3, email.indexOf("@"), hiderPlaceholder);
+  }
+
   Future<void> verifyOtp() async {
     setState(() {
       isLoading = true;
       errorMessage = null;
     });
-
     try {
       Map<String, dynamic> response =
           await OtpApi().verifyOTP(widget.email, otpController.text);
@@ -64,30 +69,118 @@ class _Otp extends ConsumerState<Otp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('OTP Verification'),
+        title: const Text('Verify OTP'),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(
+              builder: (_) => ViewProfile(
+                onSignOut: () => (),
+              ),
+            ),
+            (Route<dynamic> route) => false,
+          ),
+        ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(40.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              const SizedBox(height: 20.0),
+              Container(
+                height: 200,
+                width: 400,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                ),
+                child: Lottie.asset(
+                  'assets/animations/logo.json',
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(height: 20.0),
+              Text(
+                'Enter Verification Code',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyLarge
+                    ?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10.0),
+              Text(
+                'Please verifiy the OTP that has been sent to this Email ${censuredEmail(widget.email)}',
+                textAlign: TextAlign.center,
+                style: Theme.of(context).textTheme.titleSmall,
+              ),
+              const SizedBox(height: 40.0),
               PinCodeTextField(
                 controller: otpController,
                 appContext: context,
                 length: 6,
+                keyboardType: TextInputType.number,
                 onChanged: (value) {},
-                onCompleted: (value) {},
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(8),
+                  inActiveBoxShadow: const <BoxShadow>[
+                    BoxShadow(
+                      color: Colors.grey,
+                      blurRadius: 1.0,
+                      spreadRadius: .1,
+                    )
+                  ],
+                  fieldHeight: 50,
+                  fieldWidth: 50,
+                  activeFillColor: Colors.white,
+                  inactiveFillColor: Colors.grey.shade200,
+                  selectedFillColor: Colors.white,
+                  activeColor: Colors.transparent,
+                  inactiveColor: Colors.grey.shade200,
+                  selectedColor: Theme.of(context).colorScheme.primary,
+                ),
+                enableActiveFill: true,
               ),
               const SizedBox(height: 20.0),
-              if (isLoading) const CircularProgressIndicator(),
               if (errorMessage != null)
-                Text(errorMessage!, style: TextStyle(color: Colors.red)),
+                Text(
+                  errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
               const SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () => verifyOtp(),
-                child: const Text('Verify OTP'),
+                style: ElevatedButton.styleFrom(
+                  minimumSize: const Size(150, 40),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30,
+                    vertical: 10,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: isLoading
+                    ? Container(
+                        width: 24,
+                        height: 24,
+                        child: const CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                              strokeWidth: 2,
+                        ),
+                      )
+                    : const Text('Verify OTP',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                        )),
               ),
+              const SizedBox(height: 20.0),
             ],
           ),
         ),
