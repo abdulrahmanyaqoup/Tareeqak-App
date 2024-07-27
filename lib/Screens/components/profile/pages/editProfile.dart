@@ -62,7 +62,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
     });
   }
 
-  Future<void> updateUser() async {
+ Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
 
     final user = ref.read(userProvider).user;
@@ -74,7 +74,6 @@ class EditProfileState extends ConsumerState<EditProfile> {
     );
     final updatedUser = user.copyWith(
       name: nameController.text,
-      email: emailController.text,
       userProps: updatedUserProps,
     );
     try {
