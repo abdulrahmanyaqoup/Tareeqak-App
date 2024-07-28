@@ -1,4 +1,3 @@
-import 'package:finalproject/Screens/components/university/components/bottomSheet.dart';
 import 'package:finalproject/Screens/components/university/components/detailBase.dart';
 import 'package:flutter/material.dart';
 import 'package:finalproject/Models/University/major.dart';
