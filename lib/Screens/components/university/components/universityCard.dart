@@ -1,13 +1,13 @@
+import 'package:finalproject/Models/University/university.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:finalproject/Screens/components/university/details/universityDetails.dart';
 class UniversityCard extends StatelessWidget {
-  final String title;
-  final String imagePath;
+  final University university;
 
   const UniversityCard({
     super.key,
-    required this.title,
-    required this.imagePath,
+    required this.university,
   });
 
   @override
@@ -24,33 +24,8 @@ class UniversityCard extends StatelessWidget {
   void _navigateToDetail(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          body: Container(
-            color: Theme.of(context).colorScheme.surface,
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '$title Detail Page is under Development',
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Go Back'),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
+      CupertinoPageRoute(
+        builder: (context) => UniversityDetail(university: university),
       ),
     );
   }
@@ -85,7 +60,7 @@ class UniversityCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(title, style: Theme.of(context).textTheme.titleMedium),
+          Text(university.name, style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
           Text('Amman', style: Theme.of(context).textTheme.titleSmall),
         ],
       ),

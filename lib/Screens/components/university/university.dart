@@ -6,10 +6,10 @@ class UniversityPage extends StatefulWidget {
   const UniversityPage({super.key});
 
   @override
-  State<UniversityPage> createState() => _UniversityHomePageState();
+  State<UniversityPage> createState() => _UniversityPageState();
 }
 
-class _UniversityHomePageState extends State<UniversityPage> {
+class _UniversityPageState extends State<UniversityPage> {
   late ScrollController _scrollController;
   double _opacity = 1.0;
 
@@ -19,7 +19,6 @@ class _UniversityHomePageState extends State<UniversityPage> {
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          // Calculate opacity based on scroll position
           var offset = _scrollController.offset / 200;
           _opacity = 1 - offset;
           if (_opacity < 0) _opacity = 0;
@@ -49,11 +48,10 @@ class _UniversityHomePageState extends State<UniversityPage> {
               SliverAppBar(
                 expandedHeight: 120.0,
                 floating: false,
-                pinned:
-                    false, // Make AppBar pinned to see the effect while scrolling
+                pinned: false, 
                 flexibleSpace: FlexibleSpaceBar(
                   title: Opacity(
-                    opacity: _opacity, // Use dynamic opacity
+                    opacity: _opacity, 
                     child: Text(
                       'Universities',
                       style: TextStyle(

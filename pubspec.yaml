@@ -51,6 +51,15 @@ dependencies:
   lottie: ^3.1.2
   searchfield: ^1.0.6
   toastification: ^2.0.0
+  flutter_launcher_icons: ^0.13.1
+  smooth_page_indicator: ^1.2.0+3
+
+flutter_launcher_icons:
+  image_path: "assets/animations/images/tareeqak_logo.png"
+  android: true 
+  ios: true 
+  
+
 
 dev_dependencies:
   flutter_test:
