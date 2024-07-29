@@ -1,10 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DetailBase extends StatelessWidget {
   final String title;
   final String description;
+  final String? city;
+  final String? universityType;
   final List<String> facts;
   final List<Widget> buttons;
   final PageController _pageController = PageController();
@@ -13,6 +14,8 @@ class DetailBase extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+    this.city,
+    this.universityType,
     required this.facts,
     required this.buttons,
   });
@@ -86,34 +89,42 @@ class DetailBase extends StatelessWidget {
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.location_on,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                Text(
-                                  'Amman',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Icon(
-                                  Icons.business,
-                                  color: Theme.of(context).colorScheme.primary,
-                                ),
-                                Text(
-                                  'Government University',
-                                  style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold),
-                                ),
-                              ],
-                            ),
+                            city == null
+                                ? Container()
+                                : Row(
+                                    children: [
+                                      Icon(
+                                        Icons.location_on,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                      Text(
+                                        city!,
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                            universityType == null
+                                ? Container()
+                                : Row(
+                                    children: [
+                                      Icon(
+                                        Icons.business,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
+                                      ),
+                                      Text(
+                                        universityType!,
+                                        style: const TextStyle(
+                                            color: Colors.grey,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
                           ],
                         ),
                       ),
@@ -184,7 +195,8 @@ class DetailBase extends StatelessWidget {
                           count: facts.length,
                           effect: WormEffect(
                             dotColor: Colors.grey,
-                            activeDotColor: Theme.of(context).colorScheme.primary,
+                            activeDotColor:
+                                Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ],
@@ -203,5 +215,4 @@ class DetailBase extends StatelessWidget {
       ),
     );
   }
-
 }

@@ -15,6 +15,8 @@ class UniversityDetail extends StatelessWidget {
     return DetailBase(
       title: university.name,
       description: university.description,
+      city: 'Amman',
+      universityType: 'Public',
       facts: university.facts,
       buttons: [
         UniversityButtons(
@@ -80,7 +82,7 @@ class UniversityDetail extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return GridModalBottomSheet(title: title, items: items);
+        return GridModalBottomSheet(title: title, items: items,);
       },
     );
   }

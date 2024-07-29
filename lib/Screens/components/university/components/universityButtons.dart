@@ -19,17 +19,36 @@ class UniversityButtons extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconButton(
-          icon: Icon(icon, color: iconColor, size: 40),
-          onPressed: onPressed,
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.8),
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(
+              color: Theme.of(context).primaryColor.withOpacity(.2),
+            ),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 1),
+                color: Theme.of(context).primaryColor.withOpacity(.2),
+                spreadRadius: 0,
+                blurRadius: 1,
+              )
+            ],
+          ),
+          child: IconButton(
+            enableFeedback: true,
+            highlightColor: Colors.transparent,
+            icon: Icon(icon, color: iconColor, size: 50),
+            onPressed: onPressed,
+          ),
         ),
         const SizedBox(height: 8),
         SizedBox(
-          width: 80, 
+          width: 80,
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 12),
+            style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),
