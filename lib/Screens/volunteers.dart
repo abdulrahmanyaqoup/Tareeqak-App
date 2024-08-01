@@ -1,15 +1,16 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Volunteers extends ConsumerStatefulWidget {
   const Volunteers({super.key});
@@ -36,7 +37,6 @@ class _VolunteersState extends ConsumerState<Volunteers> {
   @override
   Widget build(BuildContext context) {
     List<User> users = ref.watch(userProvider).userList;
-
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       appBar: AppBar(
@@ -122,7 +122,7 @@ class CustomIconsPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Color.fromARGB(255, 56, 53, 63)
+      ..color = const Color.fromARGB(255, 56, 53, 63)
       ..style = PaintingStyle.fill
       ..strokeWidth = 2;
     PaintingStyle.fill;
@@ -159,6 +159,7 @@ class CustomIconsPainter extends CustomPainter {
 
 class ProfileCard extends StatelessWidget {
   const ProfileCard({super.key, required this.user});
+
   final User user;
 
   Future<void> whatsapp() async {
@@ -367,7 +368,7 @@ class ProfileCard extends StatelessWidget {
                       color: Colors.green.withOpacity(0.8),
                       borderRadius: BorderRadius.circular(5),
                     ),
-                    child: Icon(
+                    child: const Icon(
                       FontAwesomeIcons.whatsapp,
                       color: Colors.white,
                     ),

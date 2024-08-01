@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Utils/utils.dart';
+import 'package:finalproject/Widgets/dropdown.dart';
+import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Widgets/textfield.dart';
-import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-import 'package:finalproject/Widgets/dropdown.dart';
-import 'package:finalproject/Screens/components/profile/pages/otp.dart';
+
+import 'otp.dart';
 
 class SignupDetails extends ConsumerStatefulWidget {
   final String email;
@@ -45,7 +47,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
     'Al-Hussein Technical University',
   ];
 
-  Future<void> signupUser() async {
+  Future<void> _signupUser() async {
     if (_formKey.currentState!.validate()) {
       try {
         String response = await ref.read(userProvider.notifier).signUp(
@@ -201,7 +203,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         ),
                         const SizedBox(height: 40),
                         ElevatedButton(
-                          onPressed: signupUser,
+                          onPressed: _signupUser,
                           style: ButtonStyle(
                             backgroundColor: WidgetStateProperty.all(
                                 Theme.of(context).colorScheme.primary),

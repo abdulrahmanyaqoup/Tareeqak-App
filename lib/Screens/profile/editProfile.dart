@@ -1,21 +1,21 @@
 import 'dart:io';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Screens/profile/profileScreen.dart';
 import 'package:finalproject/Utils/utils.dart';
+import 'package:finalproject/Widgets/textfield.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Widgets/textfield.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
-  final VoidCallback onSignOut;
-  const EditProfile({super.key, required this.onSignOut});
+  const EditProfile({super.key});
 
   @override
   EditProfileState createState() => EditProfileState();
@@ -62,7 +62,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
     });
   }
 
- Future<void> updateUser() async {
+  Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
 
     final user = ref.read(userProvider).user;
@@ -86,13 +86,31 @@ class EditProfileState extends ConsumerState<EditProfile> {
     }
   }
 
-  Future<void> deleteUser() async {
+  Future<void> _signOut() async {
+    try {
+      await ref.read(userProvider.notifier).signOut();
+    } catch (e) {
+      if (mounted) showSnackBar(context, e.toString());
+    }
+    if (!ref.read(userProvider).isLoggedIn && mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (_) => const ProfileScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    }
+  }
+
+  Future<void> _deleteUser() async {
     try {
       String response = await ref.read(userProvider.notifier).deleteUser();
       if (mounted && !ref.read(userProvider).isLoggedIn) {
-        Navigator.of(context).pushReplacement(CupertinoPageRoute(
-          builder: (_) => ViewProfile(onSignOut: widget.onSignOut),
-        ));
+        Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute(
+              builder: (_) => const ProfileScreen(),
+            ),
+            (Route<dynamic> route) => false);
         showSnackBar(context, response);
       }
     } on DioException catch (e) {
@@ -120,7 +138,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-                deleteUser();
+                _deleteUser();
               },
               child: const Text('Delete'),
             ),
@@ -133,7 +151,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(
+      appBar: AppBar(
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -143,7 +161,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: widget.onSignOut,
+            onPressed: _signOut,
             icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
             iconSize: 18,
           ),
@@ -176,18 +194,18 @@ class EditProfileState extends ConsumerState<EditProfile> {
                 children: [
                   const SizedBox(height: 40),
                   Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .tertiary
-                            .withOpacity(.7),
-                        width: 1.0,
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .tertiary
+                              .withOpacity(.7),
+                          width: 1.0,
+                        ),
                       ),
-                    ),
-                    child: imageProfile(ref.read(userProvider).user)),
+                      child: imageProfile(ref.read(userProvider).user)),
                   const SizedBox(height: 20),
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20),

@@ -1,37 +1,49 @@
-import 'package:finalproject/Screens/components/university/components/bottomSheet.dart';
-import 'package:finalproject/Screens/components/university/components/detailBase.dart';
+import 'package:finalproject/Models/University/university.dart';
 import 'package:flutter/material.dart';
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Screens/components/university/components/universityButtons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class SchoolDetail extends StatelessWidget {
-  final School school;
+import 'components/bottomSheet.dart';
+import 'components/customButtons.dart';
+import 'components/detailBase.dart';
 
-  const SchoolDetail({super.key, required this.school});
+class UniversityScreen extends StatelessWidget {
+  final University university;
+
+  const UniversityScreen({super.key, required this.university});
 
   @override
   Widget build(BuildContext context) {
     return DetailBase(
-      title: school.name,
-      description: school.description,
-      facts: school.facts,
+      title: university.name,
+      description: university.description,
+      city: 'Amman',
+      universityType: 'Public',
+      facts: university.facts,
       buttons: [
-        UniversityButtons(
+        CustomButtons(
           icon: Icons.people,
           iconColor: Colors.green,
-          label: 'School Advisor',
+          label: 'University Advisors',
           onPressed: () {
-            _showModalBottomSheet(context, 'School Advisor');
+            _showModalBottomSheet(context, 'University Advisors');
           },
         ),
-        UniversityButtons(
+        CustomButtons(
+          icon: Icons.location_on,
+          iconColor: Colors.red,
+          label: 'University Location',
+          onPressed: () {
+            _launchURL(
+                'https://www.google.com/maps/place/University+of+Jordan/@32.0161048,35.8695456,15z/data=!4m6!3m5!1s0x151c9f765ba05b27:0x5a5ba049c504b635!8m2!3d32.0161048!4d35.8695456!16zL20vMDdxc2Q1?entry=ttu');
+          },
+        ),
+        CustomButtons(
           icon: Icons.school,
           iconColor: Colors.orange,
-          label: 'University Majors',
+          label: 'University Schools',
           onPressed: () {
             _showGridModalBottomSheet(
-                context, 'University Majors', school.majors);
+                context, 'University Schools', university.schools);
           },
         ),
       ],

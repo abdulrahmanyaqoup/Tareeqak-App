@@ -1,23 +1,24 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
-import 'package:finalproject/Screens/components/profile/pages/editProfile.dart';
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Screens/profile/signup.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lottie/lottie.dart';
 
-class ViewProfile extends ConsumerStatefulWidget {
-  final VoidCallback onSignOut;
-  const ViewProfile({super.key, required this.onSignOut});
+import 'editProfile.dart';
+
+class ProfileScreen extends ConsumerStatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  _ViewProfileState createState() => _ViewProfileState();
+  _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ViewProfileState extends ConsumerState<ViewProfile> {
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   void initState() {
     super.initState();
@@ -80,14 +81,14 @@ class _ViewProfileState extends ConsumerState<ViewProfile> {
                       if (userState.isLoggedIn) {
                         Navigator.of(context).push(
                           CupertinoPageRoute(
-                            builder: (_) => EditProfile(
-                              onSignOut: widget.onSignOut,
-                            ),
+                            builder: (_) => const EditProfile(),
                           ),
                         );
                       } else {
-                        Navigator.of(context).pushNamedAndRemoveUntil(
-                          '/signup',
+                        Navigator.of(context).pushAndRemoveUntil(
+                          CupertinoPageRoute(
+                            builder: (_) => const SignupScreen(),
+                          ),
                           (Route<dynamic> route) => false,
                         );
                       }
@@ -100,7 +101,6 @@ class _ViewProfileState extends ConsumerState<ViewProfile> {
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
-                        
                       ),
                     ),
                     child: Text(

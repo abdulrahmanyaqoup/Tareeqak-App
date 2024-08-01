@@ -1,16 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Screens/profile/profileScreen.dart';
+import 'package:finalproject/api/otpApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/api/otpApi.dart';
 
 class Otp extends ConsumerStatefulWidget {
   final String email;
+
   const Otp({super.key, required this.email});
 
   @override
@@ -47,9 +48,7 @@ class _Otp extends ConsumerState<Otp> {
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute(
-            builder: (_) => ViewProfile(
-              onSignOut: () => (),
-            ),
+            builder: (_) => const ProfileScreen(),
           ),
           (Route<dynamic> route) => false,
         );
@@ -76,9 +75,7 @@ class _Otp extends ConsumerState<Otp> {
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
-              builder: (_) => ViewProfile(
-                onSignOut: () => (),
-              ),
+              builder: (_) => const ProfileScreen(),
             ),
             (Route<dynamic> route) => false,
           ),
@@ -171,7 +168,7 @@ class _Otp extends ConsumerState<Otp> {
                         child: const CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.white),
-                              strokeWidth: 2,
+                          strokeWidth: 2,
                         ),
                       )
                     : const Text('Verify OTP',

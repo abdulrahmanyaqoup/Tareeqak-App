@@ -41,13 +41,4 @@ class School {
       majors: majors,
     );
   }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'description': description,
-      'facts': facts,
-      'majors': majors.map((m) => m.toJson()).toList(),
-    };
-  }
 }

@@ -9,11 +9,12 @@ Dio createDio() {
     baseUrl: Env.URI,
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 5),
+    sendTimeout: const Duration(seconds: 5),
   );
   dio.options.headers = {
     'x-api-key': Env.API_KEY,
-    'Content-Type': 'application/json; charset=UTF-8',
-    'Accept': 'application/json',
+    'content-Type': 'application/json; charset=UTF-8',
+    'accept': 'application/json',
   };
   dio.httpClientAdapter = Http2Adapter(
     ConnectionManager(

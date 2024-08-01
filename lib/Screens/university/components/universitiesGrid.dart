@@ -1,15 +1,30 @@
-import 'package:finalproject/Screens/components/university/components/universityCard.dart';
-import 'package:finalproject/Provider/universityProvider.dart';
+import 'package:finalproject/Screens/university/components/universityCard.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UniversityGrid extends ConsumerWidget {
-  const UniversityGrid({super.key});
+import '../../../Provider/universityProvider.dart';
+
+class UniversitiesGrid extends ConsumerStatefulWidget {
+  const UniversitiesGrid({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  _UniversitiesGridState createState() => _UniversitiesGridState();
+}
+
+class _UniversitiesGridState extends ConsumerState<UniversitiesGrid> {
+  late Future<void> _universitiesFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _universitiesFuture =
+        ref.read(universityProvider.notifier).getUniversities();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder(
-      future: ref.read(universityProvider.notifier).getUniversities(),
+      future: _universitiesFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SliverToBoxAdapter(

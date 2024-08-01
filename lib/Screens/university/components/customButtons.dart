@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-class UniversityButtons extends StatelessWidget {
+class CustomButtons extends StatelessWidget {
   final IconData icon;
   final Color iconColor;
   final String label;
   final VoidCallback onPressed;
 
-  const UniversityButtons({
+  const CustomButtons({
     super.key,
     required this.icon,
     required this.iconColor,
@@ -48,7 +48,8 @@ class UniversityButtons extends StatelessWidget {
           child: Text(
             label,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
+            style: const TextStyle(
+                fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w600),
             overflow: TextOverflow.ellipsis,
             maxLines: 2,
           ),

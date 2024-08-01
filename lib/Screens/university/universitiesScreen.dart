@@ -1,15 +1,16 @@
+import 'package:finalproject/Screens/university/components/universitiesGrid.dart';
 import 'package:flutter/material.dart';
-import 'package:finalproject/Screens/components/university/universities.dart';
-import 'package:finalproject/Screens/components/university/components/search.dart';
 
-class UniversityPage extends StatefulWidget {
-  const UniversityPage({super.key});
+import 'components/search.dart';
+
+class UniversitiesScreen extends StatefulWidget {
+  const UniversitiesScreen({super.key});
 
   @override
-  State<UniversityPage> createState() => _UniversityPageState();
+  State<UniversitiesScreen> createState() => _UniversitiesScreenState();
 }
 
-class _UniversityPageState extends State<UniversityPage> {
+class _UniversitiesScreenState extends State<UniversitiesScreen> {
   late ScrollController _scrollController;
   double _opacity = 1.0;
 
@@ -48,10 +49,10 @@ class _UniversityPageState extends State<UniversityPage> {
               SliverAppBar(
                 expandedHeight: 120.0,
                 floating: false,
-                pinned: false, 
+                pinned: false,
                 flexibleSpace: FlexibleSpaceBar(
                   title: Opacity(
-                    opacity: _opacity, 
+                    opacity: _opacity,
                     child: Text(
                       'Universities',
                       style: TextStyle(
@@ -80,7 +81,7 @@ class _UniversityPageState extends State<UniversityPage> {
               const SliverToBoxAdapter(
                 child: Search(),
               ),
-              const UniversityGrid(),
+              const UniversitiesGrid(),
             ],
           ),
         ),

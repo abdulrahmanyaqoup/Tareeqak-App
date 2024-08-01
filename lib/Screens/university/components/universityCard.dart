@@ -1,7 +1,9 @@
 import 'package:finalproject/Models/University/university.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:finalproject/Screens/components/university/details/universityDetails.dart';
+
+import '../universityScreen.dart';
+
 class UniversityCard extends StatelessWidget {
   final University university;
 
@@ -25,7 +27,7 @@ class UniversityCard extends StatelessWidget {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => UniversityDetail(university: university),
+        builder: (context) => UniversityScreen(university: university),
       ),
     );
   }
@@ -60,7 +62,9 @@ class UniversityCard extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Text(university.name, style: Theme.of(context).textTheme.titleMedium, textAlign: TextAlign.center),
+          Text(university.name,
+              style: Theme.of(context).textTheme.titleMedium,
+              textAlign: TextAlign.center),
           Text('Amman', style: Theme.of(context).textTheme.titleSmall),
         ],
       ),

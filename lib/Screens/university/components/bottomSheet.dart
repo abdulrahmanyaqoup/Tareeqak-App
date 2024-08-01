@@ -1,8 +1,9 @@
 import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Screens/components/university/details/majorDetails.dart';
-import 'package:finalproject/Screens/components/university/details/schoolDetails.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../majorScreen.dart';
+import '../schoolScreen.dart';
 
 class GridModalBottomSheet extends StatelessWidget {
   final String title;
@@ -51,7 +52,7 @@ class GridModalBottomSheet extends StatelessWidget {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => SchoolDetail(
+                            builder: (context) => SchoolScreen(
                               school: item,
                             ),
                           ),
@@ -60,7 +61,7 @@ class GridModalBottomSheet extends StatelessWidget {
                         Navigator.push(
                           context,
                           CupertinoPageRoute(
-                            builder: (context) => MajorDetail(
+                            builder: (context) => MajorScreen(
                               major: item,
                             ),
                           ),

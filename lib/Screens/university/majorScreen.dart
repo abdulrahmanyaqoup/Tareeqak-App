@@ -1,22 +1,23 @@
-import 'package:finalproject/Screens/components/university/components/detailBase.dart';
-import 'package:flutter/material.dart';
 import 'package:finalproject/Models/University/major.dart';
-import 'package:finalproject/Screens/components/university/components/universityButtons.dart';
+import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MajorDetail extends StatelessWidget {
+import 'components/customButtons.dart';
+import 'components/detailBase.dart';
+
+class MajorScreen extends StatelessWidget {
   final Major major;
 
-  const MajorDetail({super.key, required this.major});
+  const MajorScreen({super.key, required this.major});
 
   @override
   Widget build(BuildContext context) {
     return DetailBase(
       title: major.name,
       description: major.description,
-      facts: [],
+      facts: major.facts,
       buttons: [
-        UniversityButtons(
+        CustomButtons(
           icon: Icons.people,
           iconColor: Colors.green,
           label: 'Major Advisors',
@@ -24,7 +25,7 @@ class MajorDetail extends StatelessWidget {
             // _showModalBottomSheet(context, 'Major Advisors', major.advisors);
           },
         ),
-        UniversityButtons(
+        CustomButtons(
           icon: Icons.list_alt,
           iconColor: Colors.blue,
           label: 'Major\nPlan',
@@ -32,7 +33,7 @@ class MajorDetail extends StatelessWidget {
             _launchURL(major.roadmap);
           },
         ),
-        UniversityButtons(
+        CustomButtons(
           icon: Icons.work,
           iconColor: Colors.red,
           label: 'Future\nJobs',
@@ -55,8 +56,7 @@ class MajorDetail extends StatelessWidget {
       BuildContext context, String title, List<String> items) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors
-          .transparent, 
+      backgroundColor: Colors.transparent,
       builder: (BuildContext bc) {
         return Container(
           decoration: BoxDecoration(

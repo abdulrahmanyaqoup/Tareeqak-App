@@ -1,13 +1,13 @@
-import 'package:finalproject/Screens/components/profile/pages/viewProfile.dart';
+import 'package:finalproject/Screens/profile/profileScreen.dart';
+import 'package:finalproject/Screens/profile/signin.dart';
+import 'package:finalproject/Screens/profile/signupDetails.dart';
+import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Screens/components/profile/pages/signupDetails.dart';
-import 'package:finalproject/Widgets/textfield.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
-  final VoidCallback onSignInPressed;
-  const SignupScreen({super.key, required this.onSignInPressed});
+  const SignupScreen({super.key});
 
   @override
   _SignupScreenState createState() => _SignupScreenState();
@@ -42,7 +42,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute(
-        builder: (context) => ViewProfile(onSignOut: () {}),
+        builder: (context) => const ProfileScreen(),
       ),
       (route) => false,
     );
@@ -199,7 +199,12 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         ),
                         const SizedBox(height: 20),
                         TextButton(
-                          onPressed: widget.onSignInPressed,
+                          onPressed: () =>
+                              Navigator.of(context).pushReplacement(
+                            CupertinoPageRoute(
+                              builder: (context) => const Signin(),
+                            ),
+                          ),
                           child: const Text('Do you have an account? Sign in'),
                         ),
                       ],
