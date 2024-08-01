@@ -31,19 +31,16 @@ class GridModalBottomSheet extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 16),
           Expanded(
             child: SingleChildScrollView(
-              child: GridView(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
+              child: Column(
                 children: List.generate(items.length, (index) {
                   final item = items[index];
                   return InkWell(
@@ -69,10 +66,12 @@ class GridModalBottomSheet extends StatelessWidget {
                       }
                     },
                     child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      height: 80,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.2),
@@ -82,19 +81,24 @@ class GridModalBottomSheet extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      child: Row(
                         children: [
                           Icon(
                             Icons.school,
                             color: Theme.of(context).primaryColor,
                             size: 30,
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                            item.name,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            textAlign: TextAlign.center,
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Text(
+                              item.name,
+                              style: TextStyle(
+                                color: Theme.of(context).colorScheme.primary,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
                           ),
                         ],
                       ),
