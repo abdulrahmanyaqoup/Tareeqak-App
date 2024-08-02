@@ -15,10 +15,10 @@ class Signin extends ConsumerStatefulWidget {
   });
 
   @override
-  _SigninState createState() => _SigninState();
+  SigninState createState() => SigninState();
 }
 
-class _SigninState extends ConsumerState<Signin> {
+class SigninState extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

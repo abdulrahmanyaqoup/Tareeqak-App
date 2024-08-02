@@ -10,10 +10,10 @@ class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
 
   @override
-  _UniversitiesScreenState createState() => _UniversitiesScreenState();
+  UniversitiesScreenState createState() => UniversitiesScreenState();
 }
 
-class _UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
+class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
   late ScrollController _scrollController;
   double _opacity = 1.0;
 

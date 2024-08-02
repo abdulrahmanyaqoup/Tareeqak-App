@@ -1,4 +1,4 @@
-import 'package:finalproject/Screens/volunteers.dart';
+import 'package:finalproject/Screens/volunteers/volunteersScreen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -27,7 +27,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
 
   final List<Widget> _widgetOptions = <Widget>[
     const Center(child: Text('ChatBot')),
-    const Volunteers(),
+    const VolunteersScreen(),
     const UniversitiesScreen(),
     const ProfileScreen(),
   ];
