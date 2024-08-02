@@ -10,8 +10,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class VolunteerCard extends StatelessWidget {
-  const VolunteerCard({super.key, required this.user});
-
+  const VolunteerCard({super.key, required this.user, this.isProfile = false});
+  final bool isProfile;
   final User user;
 
   Future<void> _launchWhatsApp() async {
@@ -113,6 +113,7 @@ class VolunteerCard extends StatelessWidget {
                 label: 'Major',
                 value: user.userProps.major),
             const SizedBox(height: 10),
+            isProfile ? const SizedBox() : 
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
