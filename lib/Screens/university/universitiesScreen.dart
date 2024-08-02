@@ -1,22 +1,26 @@
+import 'package:dio/dio.dart';
 import 'package:finalproject/Screens/university/components/universitiesGrid.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../Provider/universityProvider.dart';
 import 'components/search.dart';
 
-class UniversitiesScreen extends StatefulWidget {
+class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
 
   @override
-  State<UniversitiesScreen> createState() => _UniversitiesScreenState();
+  _UniversitiesScreenState createState() => _UniversitiesScreenState();
 }
 
-class _UniversitiesScreenState extends State<UniversitiesScreen> {
+class _UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
   late ScrollController _scrollController;
   double _opacity = 1.0;
 
   @override
   void initState() {
     super.initState();
+    _getUniversities();
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -28,6 +32,21 @@ class _UniversitiesScreenState extends State<UniversitiesScreen> {
       });
   }
 
+  Future<void> _getUniversities() async {
+    try {
+      await ref.read(universityProvider.notifier).getUniversities();
+    } on DioException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.message!),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    }
+  }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -36,6 +55,7 @@ class _UniversitiesScreenState extends State<UniversitiesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final universityState = ref.watch(universityProvider);
     return Container(
       color: Theme.of(context).colorScheme.primary,
       child: SafeArea(
@@ -81,7 +101,9 @@ class _UniversitiesScreenState extends State<UniversitiesScreen> {
               const SliverToBoxAdapter(
                 child: Search(),
               ),
-              const UniversitiesGrid(),
+              UniversitiesGrid(
+                universityState: universityState,
+              ),
             ],
           ),
         ),

@@ -85,11 +85,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                         );
                       } else {
-                        Navigator.of(context).pushAndRemoveUntil(
+                        Navigator.of(context).push(
                           CupertinoPageRoute(
                             builder: (_) => const SignupScreen(),
                           ),
-                          (Route<dynamic> route) => false,
                         );
                       }
                     },

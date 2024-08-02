@@ -73,12 +73,7 @@ class _Otp extends ConsumerState<Otp> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute(
-              builder: (_) => const ProfileScreen(),
-            ),
-            (Route<dynamic> route) => false,
-          ),
+          onPressed: () => Navigator.of(context).pop(),
         ),
       ),
       body: SingleChildScrollView(
@@ -162,10 +157,10 @@ class _Otp extends ConsumerState<Otp> {
                   ),
                 ),
                 child: isLoading
-                    ? Container(
+                    ? const SizedBox(
                         width: 24,
                         height: 24,
-                        child: const CircularProgressIndicator(
+                        child: CircularProgressIndicator(
                           valueColor:
                               AlwaysStoppedAnimation<Color>(Colors.white),
                           strokeWidth: 2,

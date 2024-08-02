@@ -7,18 +7,17 @@ Dio createDio() {
   var dio = Dio();
   dio.options = BaseOptions(
     baseUrl: Env.URI,
-    connectTimeout: const Duration(seconds: 5),
-    receiveTimeout: const Duration(seconds: 5),
-    sendTimeout: const Duration(seconds: 5),
+    responseType: ResponseType.json,
+    headers: {
+      'x-api-key': Env.API_KEY,
+      'content-Type': 'application/json; charset=UTF-8',
+      'accept': 'application/json',
+    },
   );
-  dio.options.headers = {
-    'x-api-key': Env.API_KEY,
-    'content-Type': 'application/json; charset=UTF-8',
-    'accept': 'application/json',
-  };
+
   dio.httpClientAdapter = Http2Adapter(
     ConnectionManager(
-      idleTimeout: const Duration(milliseconds: 10000),
+      idleTimeout: const Duration(minutes: 1),
       onClientCreate: (_, config) => config.onBadCertificate = (_) => true,
     ),
   );

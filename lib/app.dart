@@ -1,5 +1,4 @@
 import 'package:finalproject/Screens/volunteers.dart';
-import 'package:finalproject/api/universityApi.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,8 +18,6 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   static const _introAnimationEnd = 60 / 240;
-  int _pageIndex = 3;
-  final universities = UniversityApi();
 
   @override
   void initState() {
@@ -34,20 +31,6 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
     const UniversitiesScreen(),
     const ProfileScreen(),
   ];
-
-  void selectPage(int index) {
-    setState(() {
-      _pageIndex = index;
-    });
-    if (_pageIndex == 0) {
-      _controller.reset();
-      _controller.animateTo(_introAnimationEnd,
-          duration: const Duration(seconds: 1));
-    } else {
-      _controller.animateTo(_introAnimationEnd,
-          duration: const Duration(seconds: 1));
-    }
-  }
 
   @override
   void dispose() {
@@ -67,8 +50,17 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         inactiveColor: Theme.of(context).colorScheme.primary,
-        onTap: selectPage,
-        currentIndex: _pageIndex,
+        onTap: (index) => {
+          if (index == 0)
+            {
+              _controller.reset(),
+              _controller.animateTo(
+                _introAnimationEnd,
+                duration: const Duration(seconds: 1),
+              ),
+            }
+        },
+        currentIndex: 3,
         items: [
           BottomNavigationBarItem(
             icon: Lottie.asset(

@@ -65,7 +65,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
             CupertinoPageRoute(
               builder: (_) => Otp(email: widget.email),
             ),
-            (Route<dynamic> route) => false,
+            (Route<dynamic> route) => route.isFirst,
           );
         }
       } on DioException catch (e) {
