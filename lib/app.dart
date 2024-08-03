@@ -17,6 +17,7 @@ class BottomNavigation extends ConsumerStatefulWidget {
 class _BottomNavigationState extends ConsumerState<BottomNavigation>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
+  static const int _defaultPageIndex = 3;
   static const _introAnimationEnd = 60 / 240;
 
   @override
@@ -60,7 +61,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
               ),
             }
         },
-        currentIndex: 3,
+        currentIndex: _defaultPageIndex,
         items: [
           BottomNavigationBarItem(
             icon: Lottie.asset(
@@ -106,9 +107,11 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         return CupertinoTabView(
           builder: (context) {
             return CupertinoPageScaffold(
-              navigationBar: index != 1 && index != 3 && index != 2
+              navigationBar: index != 3 && index != 2
                   ? CupertinoNavigationBar(
-                      middle: Text(_getPageTitle(index)),
+                      middle: index == 0
+                          ? Text(_getPageTitle(index))
+                          : const Text("Contact with Advisors"),
                     )
                   : null,
               child: IndexedStack(
