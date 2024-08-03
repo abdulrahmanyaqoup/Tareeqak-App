@@ -15,17 +15,15 @@ Dio createDio() {
       HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
       HttpHeaders.acceptHeader: 'application/json',
     },
-    connectTimeout: const Duration(seconds: 5),
-    receiveTimeout: const Duration(seconds: 3),
-    sendTimeout: const Duration(seconds: 3),
+    connectTimeout: const Duration(seconds: 30),
+    receiveTimeout: const Duration(seconds: 60),
+    sendTimeout: const Duration(seconds: 15),
     persistentConnection: true,
   );
 
   dio.httpClientAdapter = Http2Adapter(
     ConnectionManager(
-      idleTimeout: const Duration(seconds: 10),
-      // Ignore bad certificate for development
-      onClientCreate: (_, config) => config.onBadCertificate = (_) => false,
+      idleTimeout: const Duration(seconds: 30),
     ),
   );
 

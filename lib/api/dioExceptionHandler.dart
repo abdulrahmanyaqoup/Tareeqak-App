@@ -24,10 +24,17 @@ class DioExceptionHandler extends Interceptor {
         errorMessage = 'Send timeout';
         break;
       case DioExceptionType.badResponse:
-        errorMessage = e.response!.data;
+        if (e.response?.statusCode == 502 || e.response?.statusCode == 503) {
+          errorMessage = 'Internal server error';
+        } else {
+          errorMessage = e.response!.data;
+        }
+        break;
+      case DioExceptionType.badCertificate:
+        errorMessage = "Internal Server Error";
         break;
       case DioExceptionType.connectionError:
-        errorMessage = 'Internal server error';
+        errorMessage = "Connection Error";
         break;
       case DioExceptionType.unknown:
       default:
