@@ -8,22 +8,26 @@ class UniversityState {
   final List<University> universities;
   final List<School> schools;
   final List<Major> majors;
+  final bool isLoading;
 
   UniversityState({
     this.universities = const [],
     this.schools = const [],
     this.majors = const [],
+    this.isLoading = true,
   });
 
   UniversityState copyWith({
     List<University>? universities,
     List<School>? schools,
     List<Major>? majors,
+    bool? isLoading,
   }) {
     return UniversityState(
       universities: universities ?? this.universities,
       schools: schools ?? this.schools,
       majors: majors ?? this.majors,
+      isLoading: isLoading ?? this.isLoading,
     );
   }
 }
@@ -40,7 +44,7 @@ class UniversityNotifier extends StateNotifier<UniversityState> {
         allSchools.expand((school) => school.majors).toList();
 
     state = state.copyWith(
-        universities: universities, schools: allSchools, majors: allMajors);
+        universities: universities, schools: allSchools, majors: allMajors, isLoading: false);
   }
 }
 

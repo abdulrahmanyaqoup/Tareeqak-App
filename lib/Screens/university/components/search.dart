@@ -1,9 +1,9 @@
-// search_university.dart
 import 'package:flutter/material.dart';
-import 'package:searchfield/searchfield.dart';
 
 class Search extends StatelessWidget {
-  const Search({super.key});
+  final ValueChanged<String> onSearchChanged;
+
+  const Search({super.key, required this.onSearchChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class Search extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
-          borderRadius: BorderRadius.only(
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30),
             topRight: Radius.circular(30),
           ),
@@ -29,19 +29,13 @@ class Search extends StatelessWidget {
         child: Padding(
           padding:
               const EdgeInsets.only(bottom: 15, top: 25, left: 15, right: 15),
-          child: SearchField(
-            suggestions: [],
-            suggestionState: Suggestion.expand,
-            textInputAction: TextInputAction.next,
-            hint: 'Search for a university',
-            searchStyle: TextStyle(
-              fontSize: 16,
-              color: Colors.black.withOpacity(0.6),
-            ),
-            searchInputDecoration: InputDecoration(
+          child: TextField(
+            onChanged: onSearchChanged,
+            textInputAction: TextInputAction.search,
+            decoration: InputDecoration(
               hintText: 'Search for a university',
               filled: true,
-              fillColor: Theme.of(context).colorScheme.surfaceContainer,
+              fillColor: Theme.of(context).colorScheme.surface,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
               border: OutlineInputBorder(

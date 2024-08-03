@@ -1,12 +1,13 @@
+import 'package:finalproject/Models/University/university.dart';
 import 'package:finalproject/Screens/university/components/universityCard.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Provider/universityProvider.dart';
 
 class UniversitiesGrid extends StatefulWidget {
-  final UniversityState universityState;
+  final List<University> universities;
 
-  const UniversitiesGrid({super.key, required this.universityState});
+  const UniversitiesGrid({super.key, required this.universities});
 
   @override
   State<UniversitiesGrid> createState() => _UniversitiesGridState();
@@ -23,12 +24,12 @@ class _UniversitiesGridState extends State<UniversitiesGrid> {
       ),
       delegate: SliverChildBuilderDelegate(
         (context, index) {
-          final university = widget.universityState.universities[index];
+          final university = widget.universities[index];
           return UniversityCard(
             university: university,
           );
         },
-        childCount: widget.universityState.universities.length,
+        childCount: widget.universities.length,
       ),
     );
   }

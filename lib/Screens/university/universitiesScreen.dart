@@ -1,8 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:finalproject/Models/University/university.dart';
 import 'package:finalproject/Screens/university/components/universitiesGrid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'components/universityShimmer.dart';
 import '../../Provider/universityProvider.dart';
 import 'components/search.dart';
 
@@ -16,6 +17,7 @@ class UniversitiesScreen extends ConsumerStatefulWidget {
 class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
   late ScrollController _scrollController;
   double _opacity = 1.0;
+  List<University> filteredUniversities = [];
 
   @override
   void initState() {
@@ -35,6 +37,9 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
   Future<void> _getUniversities() async {
     try {
       await ref.read(universityProvider.notifier).getUniversities();
+      setState(() {
+        filteredUniversities = ref.read(universityProvider).universities;
+      });
     } on DioException catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -44,6 +49,22 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
           ),
         );
       }
+    }
+  }
+
+  void _filterUniversities(String query) {
+    final universityState = ref.read(universityProvider);
+    if (query.isEmpty) {
+      setState(() {
+        filteredUniversities = universityState.universities;
+      });
+    } else {
+      setState(() {
+        filteredUniversities = universityState.universities
+            .where((university) =>
+                university.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
     }
   }
 
@@ -98,12 +119,16 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
                   titlePadding: const EdgeInsets.only(bottom: 40),
                 ),
               ),
-              const SliverToBoxAdapter(
-                child: Search(),
+              SliverToBoxAdapter(
+                child: Search(
+                  onSearchChanged: _filterUniversities,
+                ),
               ),
-              UniversitiesGrid(
-                universityState: universityState,
-              ),
+              universityState.isLoading
+                  ? const UniversityShimmer()
+                  : UniversitiesGrid(
+                      universities: filteredUniversities,
+                    ),
             ],
           ),
         ),
