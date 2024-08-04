@@ -1,18 +1,24 @@
 import 'package:finalproject/Models/University/school.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Screens/university/components/volunteersSheet.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
 
 class SchoolScreen extends StatelessWidget {
   final School school;
+  final List<User>? universityVolunteers;
 
-  const SchoolScreen({super.key, required this.school});
+  const SchoolScreen({super.key, required this.school, this.universityVolunteers});
+
+  
 
   @override
   Widget build(BuildContext context) {
+    List<User> schoolVolunteers = universityVolunteers!
+        .where((user) => user.userProps.school == school.name)
+        .toList();
     return DetailBase(
       title: school.name,
       description: school.description,
@@ -23,7 +29,7 @@ class SchoolScreen extends StatelessWidget {
           iconColor: Colors.green,
           label: 'School Advisor',
           onPressed: () {
-            _showModalBottomSheet(context, 'School Advisor');
+            _showVolunteers(context, 'School Advisor', schoolVolunteers);
           },
         ),
         CustomButtons(
@@ -39,37 +45,19 @@ class SchoolScreen extends StatelessWidget {
     );
   }
 
-  void _launchURL(String url) async {
-    final uri = Uri.parse(url);
-    if (!await launchUrl(uri)) {
-      throw Exception('Could not launch $url');
-    }
-  }
-
-  void _showModalBottomSheet(BuildContext context, String title) {
+  void _showVolunteers(
+      BuildContext context, String title, List<User> volunteers) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext bc) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Details about $title',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
+      builder: (context) {
+        return VolunteersSheet(
+          title: title,
+          volunteers: volunteers,
         );
       },
     );
   }
+
 
   void _showGridModalBottomSheet(
       BuildContext context, String title, List<dynamic> items) {

@@ -2,8 +2,6 @@ import 'package:finalproject/Models/University/university.dart';
 import 'package:finalproject/Screens/university/components/universityCard.dart';
 import 'package:flutter/material.dart';
 
-import '../../../Provider/universityProvider.dart';
-
 class UniversitiesGrid extends StatefulWidget {
   final List<University> universities;
 

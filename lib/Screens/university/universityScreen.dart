@@ -1,18 +1,31 @@
 import 'package:finalproject/Models/University/university.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Provider/userProvider.dart';
+import 'package:finalproject/Screens/university/components/volunteersSheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
 
-class UniversityScreen extends StatelessWidget {
+class UniversityScreen extends ConsumerWidget {
   final University university;
 
-  const UniversityScreen({super.key, required this.university});
+  const UniversityScreen({
+    super.key,
+    required this.university,
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final allVolunteers = ref.watch(userProvider).userList;
+
+    List<User> universityVolunteers = allVolunteers
+        .where((user) => user.userProps.university == university.name)
+        .toList();
+
     return DetailBase(
       title: university.name,
       description: university.description,
@@ -25,7 +38,7 @@ class UniversityScreen extends StatelessWidget {
           iconColor: Colors.green,
           label: 'University Advisors',
           onPressed: () {
-            _showModalBottomSheet(context, 'University Advisors');
+            _showVolunteers(context, 'University Advisors', universityVolunteers);
           },
         ),
         CustomButtons(
@@ -43,7 +56,7 @@ class UniversityScreen extends StatelessWidget {
           label: 'University Schools',
           onPressed: () {
             _showGridModalBottomSheet(
-                context, 'University Schools', university.schools);
+                context, 'University Schools', university.schools, universityVolunteers );
           },
         ),
       ],
@@ -57,39 +70,28 @@ class UniversityScreen extends StatelessWidget {
     }
   }
 
-  void _showModalBottomSheet(BuildContext context, String title) {
+  void _showVolunteers(
+      BuildContext context, String title, List<User> volunteers) {
     showModalBottomSheet(
       context: context,
-      builder: (BuildContext bc) {
-        return Container(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text(
-                title,
-                style: Theme.of(context).textTheme.titleMedium,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Details about $title',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
+      builder: (context) {
+        return VolunteersSheet(
+          title: title,
+          volunteers: volunteers,
         );
       },
     );
   }
 
   void _showGridModalBottomSheet(
-      BuildContext context, String title, List<dynamic> items) {
+      BuildContext context, String title, List<dynamic> items, List<User> volunteers) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return GridModalBottomSheet(
           title: title,
           items: items,
+          universityVolunteers: volunteers,
         );
       },
     );

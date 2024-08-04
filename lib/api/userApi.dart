@@ -13,12 +13,14 @@ class UserApi {
     required String password,
     required String name,
     String university = '',
+    String school = '',
     String major = '',
     String contact = '',
     File? image,
   }) async {
     UserProps userProps = UserProps(
       university: university,
+      school: school,
       major: major,
       contact: contact,
       image: '',
@@ -35,6 +37,7 @@ class UserApi {
       'email': user.email,
       'password': password,
       'university': userProps.university,
+      'school': userProps.school,
       'major': userProps.major,
       'contact': userProps.contact,
     });
@@ -91,6 +94,7 @@ class UserApi {
       'name': updates.name,
       'email': updates.email,
       'university': updates.userProps.university,
+      'school': updates.userProps.school,
       'major': updates.userProps.major,
       'contact': updates.userProps.contact,
     });

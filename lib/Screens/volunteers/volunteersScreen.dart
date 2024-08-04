@@ -1,21 +1,27 @@
 import 'package:dio/dio.dart';
+import 'package:finalproject/Screens/volunteers/components/filterVolunteers.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Widgets/cardShimmer.dart';
 import 'package:finalproject/Screens/volunteers/components/customPaint.dart';
 import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
 import 'package:finalproject/Utils/utils.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:finalproject/Widgets/cardShimmer.dart';
 
 class VolunteersScreen extends ConsumerStatefulWidget {
   const VolunteersScreen({super.key});
 
   @override
-  _VolunteersScreenState createState() => _VolunteersScreenState();
+  VolunteersScreenState createState() => VolunteersScreenState();
 }
 
-class _VolunteersScreenState extends ConsumerState<VolunteersScreen> {
+class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
+  List<User> filteredUsers = [];
+  bool? matchUniversity;
+  bool? matchSchool;
+  bool? matchMajor;
+
   @override
   void initState() {
     super.initState();
@@ -25,15 +31,28 @@ class _VolunteersScreenState extends ConsumerState<VolunteersScreen> {
   Future<void> _getAllUsers() async {
     try {
       await ref.read(userProvider.notifier).getAllUsers();
+      filterUsers(null, null, null);
     } on DioException catch (e) {
       if (mounted) showSnackBar(context, e.message!);
     }
   }
 
+  void filterUsers(String? university, String? school, String? major) {
+    final users = ref.read(userProvider).userList;
+    setState(() {
+      filteredUsers = users.where((user) {
+        matchUniversity =
+            university == null || user.userProps.university == university;
+        matchSchool = school == null || user.userProps.school == school;
+        matchMajor = major == null || user.userProps.major == major;
+        return matchUniversity! && matchSchool! && matchMajor!;
+      }).toList();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<User> users = ref.watch(userProvider).userList;
-    bool isLoading = ref.watch(userProvider).isLoading;
+    final isLoading = ref.watch(userProvider).isLoading;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
       appBar: AppBar(
@@ -95,6 +114,14 @@ class _VolunteersScreenState extends ConsumerState<VolunteersScreen> {
                 ),
               ),
             ),
+            FilterVolunteers(
+              onClearFilters: (){
+                filterUsers(null, null, null);
+              },
+              onFilterChanged: (university, school, major) {
+                filterUsers(university, school, major);
+              },
+            ),
             isLoading
                 ? ListView.builder(
                     physics: const BouncingScrollPhysics(),
@@ -107,9 +134,9 @@ class _VolunteersScreenState extends ConsumerState<VolunteersScreen> {
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: users.length,
+                    itemCount: filteredUsers.length,
                     itemBuilder: (context, index) {
-                      final user = users[index];
+                      final user = filteredUsers[index];
                       return VolunteerCard(user: user);
                     },
                   ),

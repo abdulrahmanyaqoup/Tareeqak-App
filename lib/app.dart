@@ -107,7 +107,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         return CupertinoTabView(
           builder: (context) {
             return CupertinoPageScaffold(
-              navigationBar: index != 3 && index != 2
+              navigationBar: index != 3 && index != 2 && index != 1
                   ? CupertinoNavigationBar(
                       middle: index == 0
                           ? Text(_getPageTitle(index))

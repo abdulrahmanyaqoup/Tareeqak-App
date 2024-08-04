@@ -35,7 +35,7 @@ class Search extends StatelessWidget {
             decoration: InputDecoration(
               hintText: 'Search for a university',
               filled: true,
-              fillColor: Theme.of(context).colorScheme.surface,
+              fillColor: Colors.grey.shade100,
               contentPadding:
                   const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
               border: OutlineInputBorder(

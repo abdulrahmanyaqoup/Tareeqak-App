@@ -1,16 +1,20 @@
 import 'package:finalproject/Models/University/school.dart';
+import 'package:finalproject/Models/User/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import '../majorScreen.dart';
 import '../schoolScreen.dart';
 
 class GridModalBottomSheet extends StatelessWidget {
   final String title;
   final List<dynamic> items;
+  final bool? noRoute;
+  final List<User>? universityVolunteers;
 
   const GridModalBottomSheet({
     super.key,
+    this.noRoute,
+    this.universityVolunteers,
     required this.title,
     required this.items,
   });
@@ -45,24 +49,30 @@ class GridModalBottomSheet extends StatelessWidget {
                   final item = items[index];
                   return InkWell(
                     onTap: () {
-                      if (item is School) {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => SchoolScreen(
-                              school: item,
-                            ),
-                          ),
-                        );
+                      if (noRoute != null && noRoute!) {
+                        Navigator.pop(context, item.name);
                       } else {
-                        Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                            builder: (context) => MajorScreen(
-                              major: item,
+                        if (item is School) {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => SchoolScreen(
+                                universityVolunteers: universityVolunteers ?? [],
+                                school: item,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => MajorScreen(
+                                schoolVolunteers: universityVolunteers ?? [],
+                                major: item,
+                              ),
+                            ),
+                          );
+                        }
                       }
                     },
                     child: Container(

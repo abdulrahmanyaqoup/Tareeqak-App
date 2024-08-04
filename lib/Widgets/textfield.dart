@@ -6,26 +6,29 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final String? Function(String?)? validator;
   final Icon? prefixIcon;
-  final Widget? suffixIcon; // Changed to Widget to allow IconButton
+  final Widget? suffixIcon; 
+  final TextInputType? keyboardType;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    this.keyboardType,
     this.validator,
     this.prefixIcon,
     this.suffixIcon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      keyboardType: keyboardType,
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon, // Added suffixIcon
+        suffixIcon: suffixIcon, 
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),

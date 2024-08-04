@@ -88,25 +88,34 @@ class VolunteerCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      user.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        user.name,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        user.userProps.university,
+                        style: const TextStyle(
+                          color: Colors.grey,
+                          fontSize: 14,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 20),
             InfoRow(
                 icon: Icons.school,
-                label: 'University',
-                value: user.userProps.university),
+                label: 'School',
+                value: user.userProps.school),
             const SizedBox(height: 10),
             InfoRow(
                 icon: CupertinoIcons.pen,

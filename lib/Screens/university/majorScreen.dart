@@ -1,17 +1,22 @@
 import 'package:finalproject/Models/University/major.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Screens/university/components/volunteersSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
 
 class MajorScreen extends StatelessWidget {
   final Major major;
+  final List<User>? schoolVolunteers;
 
-  const MajorScreen({super.key, required this.major});
+  const MajorScreen({super.key, required this.major, this.schoolVolunteers});
 
   @override
   Widget build(BuildContext context) {
+    List<User> majorVolunteers = schoolVolunteers!
+        .where((user) => user.userProps.major == major.name)
+        .toList();
     return DetailBase(
       title: major.name,
       description: major.description,
@@ -22,7 +27,7 @@ class MajorScreen extends StatelessWidget {
           iconColor: Colors.green,
           label: 'Major Advisors',
           onPressed: () {
-            // _showModalBottomSheet(context, 'Major Advisors', major.advisors);
+            _showVolunteers(context, 'Major Advisors', majorVolunteers);
           },
         ),
         CustomButtons(
@@ -50,6 +55,19 @@ class MajorScreen extends StatelessWidget {
     if (!await launchUrl(uri)) {
       throw Exception('Could not launch $url');
     }
+  }
+
+  void _showVolunteers(
+      BuildContext context, String title, List<User> volunteers) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return VolunteersSheet(
+          title: title,
+          volunteers: volunteers,
+        );
+      },
+    );
   }
 
   void _showModalBottomSheet(

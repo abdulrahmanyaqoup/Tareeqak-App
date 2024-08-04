@@ -27,7 +27,7 @@ class UniversityCard extends StatelessWidget {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => UniversityScreen(university: university),
+        builder: (context) => UniversityScreen(university: university,),
       ),
     );
   }

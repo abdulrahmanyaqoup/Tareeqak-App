@@ -14,17 +14,23 @@ class ActionIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 5),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(5),
-        ),
-        child: Icon(
-          icon,
-          color: Colors.white,
+    final screenWidth = MediaQuery.of(context).size.width;
+    final horizontalPadding = screenWidth * 0.16; // 10% of screen width
+
+    return Flexible(
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: color,
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: Icon(
+            icon,
+            color: Colors.white,
+          ),
         ),
       ),
     );
