@@ -38,7 +38,7 @@ class SchoolScreen extends StatelessWidget {
           label: 'University Majors',
           onPressed: () {
             _showGridModalBottomSheet(
-                context, 'University Majors', school.majors);
+                context, 'University Majors', school.majors, schoolVolunteers );
           },
         ),
       ],
@@ -60,13 +60,14 @@ class SchoolScreen extends StatelessWidget {
 
 
   void _showGridModalBottomSheet(
-      BuildContext context, String title, List<dynamic> items) {
+      BuildContext context, String title, List<dynamic> items, List<User> volunteers) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         return GridModalBottomSheet(
           title: title,
           items: items,
+          schoolVolunteers: volunteers,
         );
       },
     );

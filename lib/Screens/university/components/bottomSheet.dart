@@ -10,11 +10,13 @@ class GridModalBottomSheet extends StatelessWidget {
   final List<dynamic> items;
   final bool? noRoute;
   final List<User>? universityVolunteers;
+  final List<User>? schoolVolunteers;
 
   const GridModalBottomSheet({
     super.key,
     this.noRoute,
     this.universityVolunteers,
+    this.schoolVolunteers,
     required this.title,
     required this.items,
   });
@@ -67,7 +69,7 @@ class GridModalBottomSheet extends StatelessWidget {
                             context,
                             CupertinoPageRoute(
                               builder: (context) => MajorScreen(
-                                schoolVolunteers: universityVolunteers ?? [],
+                                schoolVolunteers: schoolVolunteers ?? [],
                                 major: item,
                               ),
                             ),
