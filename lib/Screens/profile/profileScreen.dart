@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/profile/components/profileBody.dart';
+import 'package:finalproject/Screens/profile/signup.dart';
 import 'package:finalproject/Widgets/cardShimmer.dart';
 import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'editProfile.dart';
 
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -16,6 +19,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 }
 
 class ProfileScreenState extends ConsumerState<ProfileScreen> {
+
   @override
   void initState() {
     super.initState();
@@ -33,6 +37,24 @@ class ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userProvider);
+    final bool isLoading = userState.isLoading;
+    final bool isLoggedIn = userState.isLoggedIn;
+    final String greetings = isLoggedIn ? 'Welcome back!' : 'Be a part of our community!';
+    final String buttonText = isLoggedIn ? 'Edit Profile' : 'Sign Up';
+    final Function() onPressed = isLoggedIn
+        ? () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const EditProfile(),
+              ),
+            )
+        : () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const SignupScreen(),
+              ),
+            );
+
     final double height = MediaQuery.of(context).size.height;
     return Container(
       decoration:  BoxDecoration(

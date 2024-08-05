@@ -107,13 +107,17 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         return CupertinoTabView(
           builder: (context) {
             return CupertinoPageScaffold(
-              navigationBar: index != 3 && index != 2 && index != 1
+              navigationBar: index == 0
                   ? CupertinoNavigationBar(
-                      middle: index == 0
-                          ? Text(_getPageTitle(index))
-                          : const Text("Contact with Advisors"),
+                      middle: const Text("ChatBot", style: TextStyle(color:
+                      Colors.white, fontSize: 20)),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
                     )
-                  : null,
+                  : index == 1 ? CupertinoNavigationBar(
+                      middle: const Text("Contact With Advisors", style:
+                      TextStyle(color: Colors.white, fontSize: 17)),
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                    ) : null,
               child: IndexedStack(
                 index: index,
                 children: _widgetOptions,
@@ -123,19 +127,5 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         );
       },
     );
-  }
-
-  String _getPageTitle(int index) {
-    switch (index) {
-      case 0:
-        return 'ChatBot';
-      case 1:
-        return 'Volunteers';
-      case 2:
-        return 'University';
-      case 3:
-      default:
-        return 'Profile';
-    }
   }
 }
