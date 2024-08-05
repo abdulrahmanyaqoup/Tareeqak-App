@@ -27,8 +27,6 @@ class EditProfile extends ConsumerStatefulWidget {
 class EditProfileState extends ConsumerState<EditProfile> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
-  late TextEditingController universityController;
-  late TextEditingController majorController;
   late TextEditingController contactController;
   FileImage? _image;
   String? _selectedUniversity;
@@ -157,20 +155,16 @@ class EditProfileState extends ConsumerState<EditProfile> {
     List<School> schools = [];
     List<Major> majors = [];
 
-    if (_selectedUniversity != null) {
+    if (_selectedUniversity != null && universityState.universities.isNotEmpty) {
       var selectedUniversity = universityState.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
-        orElse: () => universityState.universities.isNotEmpty
-            ? universityState.universities.first
-            : throw Exception('No universities found'),
+        orElse: () => universityState.universities.first,
       );
       schools = selectedUniversity.schools;
-      if (_selectedSchool != null) {
+      if (_selectedSchool != null && selectedUniversity.schools.isNotEmpty) {
         var selectedSchool = selectedUniversity.schools.firstWhere(
           (school) => school.name == _selectedSchool,
-          orElse: () => selectedUniversity.schools.isNotEmpty
-              ? selectedUniversity.schools.first
-              : throw Exception('No schools found in the selected university'),
+          orElse: () => selectedUniversity.schools.first,
         );
         majors = selectedSchool.majors;
       }
@@ -209,8 +203,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                 const SizedBox(height: 20),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
@@ -232,7 +225,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         prefixIcon: const Icon(CupertinoIcons.person),
                       ),
                       const SizedBox(height: 20),
-                      CustomDropdown(
+                      Dropdown(
                         value: _selectedUniversity,
                         hintText: 'Select your university',
                         prefixIcon: Icons.business,
@@ -248,7 +241,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         },
                       ),
                       const SizedBox(height: 20),
-                      CustomDropdown(
+                      Dropdown(
                         value: _selectedSchool,
                         hintText: 'Select your school',
                         prefixIcon: Icons.school,
@@ -259,10 +252,11 @@ class EditProfileState extends ConsumerState<EditProfile> {
                             _selectedMajor = null;
                           });
                         },
-                        enabled: _selectedUniversity != null,
+                        enabled: _selectedUniversity != null &&
+                            _selectedUniversity!.isNotEmpty,
                       ),
                       const SizedBox(height: 20),
-                      CustomDropdown(
+                      Dropdown(
                         value: _selectedMajor,
                         hintText: 'Select your major',
                         prefixIcon: CupertinoIcons.pen,
@@ -272,7 +266,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
                             _selectedMajor = value ?? '';
                           });
                         },
-                        enabled: _selectedSchool != null,
+                        enabled: _selectedSchool != null &&
+                            _selectedSchool!.isNotEmpty,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(

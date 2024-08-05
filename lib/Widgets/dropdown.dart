@@ -1,112 +1,76 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
-class CustomDropdown extends StatelessWidget {
+class Dropdown extends StatefulWidget {
   final String? value;
   final String hintText;
   final List<String> items;
   final Function(String?) onChanged;
   final IconData prefixIcon;
-  final bool enabled;
+  final bool? enabled;
 
-  const CustomDropdown({
+  const Dropdown({
     super.key,
-    required this.value,
+    this.value,
     required this.hintText,
     required this.prefixIcon,
     required this.items,
     required this.onChanged,
-    this.enabled = true,
+    this.enabled,
   });
 
   @override
+  State<Dropdown> createState() => _DropdownState();
+}
+
+class _DropdownState extends State<Dropdown> {
+  @override
   Widget build(BuildContext context) {
+    String? initialItem = widget.items.contains(widget.value) ? widget.value : null;
+
     return FormField<String>(
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'This field cannot be empty';
-        }
-        return null;
-      },
+      initialValue: initialItem,
       builder: (FormFieldState<String> state) {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DropdownSearch<String>(
-              enabled: enabled,
-              items: items,
-              selectedItem: value,
-              dropdownDecoratorProps: DropDownDecoratorProps(
-                dropdownSearchDecoration: InputDecoration(
-                  prefixIcon: Icon(prefixIcon),
-                  hintText: hintText,
-                  contentPadding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: state.hasError
-                        ? const BorderSide(color: Colors.red, width: 1.0)
-                        : BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: state.hasError
-                        ? const BorderSide(color: Colors.red, width: 1.0)
-                        : BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    borderSide: state.hasError
-                        ? const BorderSide(color: Colors.red, width: 1.0)
-                        : BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),
-                  ),
-                  filled: true,
-                  fillColor: Colors.grey.shade500.withOpacity(0.1),
-                ),
-              ),
-              onChanged: (newValue) {
-                state.didChange(newValue);
-                onChanged(newValue);
+            CustomDropdown.search(
+              enabled: widget.enabled ?? true,
+              initialItem: initialItem ,
+              hintText: widget.hintText,
+              validator: (value) {
+                if (value == null) {
+                  return 'Please select ${widget.hintText}';
+                }
+                return null;
               },
-              popupProps: PopupProps.menu(
-                menuProps:  MenuProps(
-                  backgroundColor: Colors.white,
-                  barrierColor: Colors.black.withOpacity(0.3),
-                  borderRadius: const BorderRadius.all(Radius.circular(8)),
-                  shadowColor: Colors.black.withOpacity(0.1),
-                ),
-                showSearchBox: true,
-                searchFieldProps: TextFieldProps(
-                  decoration: InputDecoration(
-                    prefixIcon: const Icon(Icons.search),
-                    hintText: 'Search...',
-                    contentPadding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-                constraints: const BoxConstraints(maxHeight: 190, minHeight: 100),
-                title: Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Text(
-                    hintText,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                ),
-                fit: FlexFit.tight,
+              items: widget.items,
+              onChanged: widget.enabled ?? true
+                  ? (value) {
+                      state.didChange(value.toString());
+                      widget.onChanged(value.toString());
+                    }
+                  : null,
+              decoration: CustomDropdownDecoration(
+                closedFillColor: Colors.grey.shade500.withOpacity(0.1),
+                prefixIcon: Icon(widget.prefixIcon),
+                closedBorderRadius: BorderRadius.circular(8),
+                expandedBorderRadius: BorderRadius.circular(8),
+                closedBorder:
+                    Border.all(color: Colors.grey.shade500.withOpacity(0.1)),
+                expandedBorder:
+                    Border.all(color: Colors.grey.shade500.withOpacity(0.1)),
+                hintStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF757575)),
               ),
             ),
             if (state.hasError)
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: Text(
-                  state.errorText!,
+                  state.errorText ?? '',
                   style: const TextStyle(
                     color: Colors.red,
                     fontSize: 12,

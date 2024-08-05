@@ -41,6 +41,8 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   String? _selectedUniversity;
   String? _selectedSchool;
   String? _selectedMajor;
+  bool? enabledSchool = false;
+  bool? enabledMajor = false;
 
   @override
   void dispose() {
@@ -94,13 +96,17 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
     final universityState = ref.watch(universityProvider);
     List<School> schools = [];
     List<Major> majors = [];
-    if (_selectedUniversity != null) {
-      var selectedUniversity = universityState.universities
-          .firstWhere((university) => university.name == _selectedUniversity);
+    if (_selectedUniversity != null && universityState.universities.isNotEmpty) {
+      var selectedUniversity = universityState.universities.firstWhere(
+        (university) => university.name == _selectedUniversity,
+        orElse: () => universityState.universities.first,
+      );
       schools = selectedUniversity.schools;
-      if (_selectedSchool != null) {
-        var selectedSchool = selectedUniversity.schools
-            .firstWhere((school) => school.name == _selectedSchool);
+      if (_selectedSchool != null && selectedUniversity.schools.isNotEmpty) {
+        var selectedSchool = selectedUniversity.schools.firstWhere(
+          (school) => school.name == _selectedSchool,
+          orElse: () => selectedUniversity.schools.first,
+        );
         majors = selectedSchool.majors;
       }
     }
@@ -138,7 +144,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      CustomDropdown(
+                      Dropdown(
                         value: _selectedUniversity,
                         hintText: 'Select your university',
                         prefixIcon: Icons.business,
@@ -149,12 +155,15 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                           setState(() {
                             _selectedUniversity = value ?? '';
                             _selectedSchool = null;
-                            _selectedMajor = null;
+                            _selectedMajor = null ;
+                            if (_selectedUniversity != null) {
+                              enabledSchool = true;
+                            }
                           });
                         },
                       ),
                       const SizedBox(height: 20),
-                      CustomDropdown(
+                      Dropdown(
                         value: _selectedSchool,
                         hintText: 'Select your school',
                         prefixIcon: Icons.school,
@@ -163,12 +172,15 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                           setState(() {
                             _selectedSchool = value ?? '';
                             _selectedMajor = null;
+                            if (_selectedSchool != null) {
+                              enabledMajor = true;
+                            }
                           });
                         },
-                        enabled: _selectedUniversity != null,
+                        enabled: enabledSchool,
                       ),
                       const SizedBox(height: 20),
-                      CustomDropdown(
+                      Dropdown(
                         value: _selectedMajor,
                         hintText: 'Select your major',
                         prefixIcon: CupertinoIcons.pen,
@@ -178,7 +190,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                             _selectedMajor = value ?? '';
                           });
                         },
-                        enabled: _selectedSchool != null,
+                        enabled: enabledMajor,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
