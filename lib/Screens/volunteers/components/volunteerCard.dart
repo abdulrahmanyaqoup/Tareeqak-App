@@ -131,7 +131,7 @@ class VolunteerCard extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   onTap: _launchEmail,
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 10),
                 ActionIcon(
                   icon: FontAwesomeIcons.whatsapp,
                   color: Colors.green.withOpacity(0.8),
