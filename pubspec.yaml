@@ -56,6 +56,9 @@ dependencies:
   dropdown_search: ^5.0.6
   animated_custom_dropdown: ^3.1.1
 
+  envied: ^0.5.4+1
+
+
 flutter_launcher_icons:
   image_path: "assets/animations/images/tareeqak_logo.png"
   android: true 
@@ -73,9 +76,8 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
-  build_runner: ^2.1.7
+  build_runner: ^2.4.11
   envied_generator: ^0.5.4+1
-  envied: ^0.5.4+1
   http_parser: ^4.0.2
 
 # For information on the generic Dart part of this file, see the
