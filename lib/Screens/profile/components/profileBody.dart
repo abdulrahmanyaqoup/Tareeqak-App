@@ -1,19 +1,23 @@
 import 'package:finalproject/Screens/profile/components/buttonShimmer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:finalproject/Screens/profile/signup.dart';
-import 'package:finalproject/Screens/profile/editProfile.dart';
 
 class ProfileBody extends StatelessWidget {
   const ProfileBody({
     super.key,
-    required this.userState,
+    required this.buttonText,
+    required this.greeting,
+    required this.onPressed,
+    required this.isLoading,
+    required this.isLoggedIn,
     required this.height,
-  }); 
-
-  final dynamic userState;
+  });
+  final String buttonText;
+  final String greeting;
   final double height;
+  final bool isLoading;
+  final bool isLoggedIn;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -41,36 +45,20 @@ class ProfileBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            userState.isLoading
+            isLoading
                 ? const ButtonShimmer(height: 30)
                 : Text(
-                    userState.isLoggedIn
-                        ? 'Welcome back!'
-                        : 'Be a part of our community!',
+                    greeting,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
             const SizedBox(height: 10),
-            userState.isLoading
+            isLoading
                 ? const ButtonShimmer(height: 60)
                 : ElevatedButton(
-                    onPressed: () {
-                      if (userState.isLoggedIn) {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (_) => const EditProfile(),
-                          ),
-                        );
-                      } else {
-                        Navigator.of(context).push(
-                          CupertinoPageRoute(
-                            builder: (_) => const SignupScreen(),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: onPressed,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       padding: const EdgeInsets.symmetric(
@@ -82,7 +70,7 @@ class ProfileBody extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      userState.isLoggedIn ? 'Go to Profile' : 'Sign Up',
+                      buttonText,
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),

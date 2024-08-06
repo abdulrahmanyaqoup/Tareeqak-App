@@ -103,6 +103,7 @@ class VolunteerCard extends StatelessWidget {
                         user.userProps.university,
                         style: const TextStyle(
                           color: Colors.grey,
+                          fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
                       ),

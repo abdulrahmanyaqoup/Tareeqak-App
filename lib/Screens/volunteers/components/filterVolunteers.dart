@@ -1,6 +1,7 @@
 import 'package:finalproject/Widgets/customButton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:collection/collection.dart';
 import 'package:finalproject/Models/University/major.dart';
 import 'package:finalproject/Models/University/school.dart';
 import 'package:finalproject/Models/University/university.dart';
@@ -35,15 +36,22 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
     List<School> schools = [];
     List<Major> majors = [];
 
-    if (selectedUniversity != null) {
-      final university = universityState.universities
-          .firstWhere((u) => u.name == selectedUniversity);
-      schools = university.schools;
-      if (selectedSchool != null) {
-        final school =
-            university.schools.firstWhere((s) => s.name == selectedSchool);
-        majors = school.majors;
+      if (selectedUniversity != null) {
+      final university = universities.firstWhereOrNull((u) => u.name == selectedUniversity);
+      if (university != null) {
+        schools = university.schools;
+        if (selectedSchool != null) {
+          final school = schools.firstWhereOrNull((s) => s.name == selectedSchool);
+          if (school != null) {
+            majors = school.majors;
+          }
+        } else {
+          majors = schools.expand((s) => s.majors).toList();
+        }
       }
+    } else {
+      schools = universityState.schools;
+      majors = universityState.majors;
     }
 
     return Padding(
@@ -74,8 +82,6 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedUniversity = value;
-                    selectedSchool = null;
-                    selectedMajor = null;
                     widget.onFilterChanged(
                         selectedUniversity, selectedSchool, selectedMajor);
                   });
@@ -87,11 +93,9 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 'School',
                 selectedSchool,
                 schools,
-                enabled: selectedUniversity != null,
                 onSelected: (value) {
                   setState(() {
                     selectedSchool = value;
-                    selectedMajor = null;
                     widget.onFilterChanged(
                         selectedUniversity, selectedSchool, selectedMajor);
                   });
@@ -103,7 +107,6 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 'Major',
                 selectedMajor,
                 majors,
-                enabled: selectedSchool != null,
                 onSelected: (value) {
                   setState(() {
                     selectedMajor = value;

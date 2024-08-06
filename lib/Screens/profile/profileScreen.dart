@@ -71,7 +71,13 @@ class ProfileScreenState extends ConsumerState<ProfileScreen> {
         backgroundColor: Colors.transparent,
         body: Stack(
           children: [
-            ProfileBody(userState: userState, height: height),
+            ProfileBody(
+                buttonText: buttonText,
+                greeting: greetings,
+                onPressed: onPressed,
+                isLoading: isLoading,
+                isLoggedIn: isLoggedIn,
+                height: height),
             Positioned(
               top: height * 0.2 - 60,
               left: 16,

@@ -172,7 +172,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                           setState(() {
                             _selectedSchool = value ?? '';
                             _selectedMajor = null;
-                            if (_selectedSchool != null) {
+                            if (_selectedSchool != null ) {
                               enabledMajor = true;
                             }
                           });

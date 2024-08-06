@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../majorScreen.dart';
 import '../schoolScreen.dart';
 
-class GridModalBottomSheet extends StatelessWidget {
+class GridModalBottomSheet extends StatefulWidget {
   final String title;
   final List<dynamic> items;
   final bool? noRoute;
@@ -22,6 +22,30 @@ class GridModalBottomSheet extends StatelessWidget {
   });
 
   @override
+  GridModalBottomSheetState createState() => GridModalBottomSheetState();
+}
+
+class GridModalBottomSheetState extends State<GridModalBottomSheet> {
+  String searchQuery = '';
+  List<dynamic> filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredItems = widget.items;
+  }
+
+  void updateSearchQuery(String query) {
+    setState(() {
+      searchQuery = query;
+      filteredItems = widget.items
+          .where((item) =>
+              item.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          .toList();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
@@ -36,7 +60,7 @@ class GridModalBottomSheet extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            title,
+            widget.title,
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
               fontSize: 20,
@@ -44,14 +68,29 @@ class GridModalBottomSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
+          TextField(
+            onChanged: updateSearchQuery,
+            decoration: InputDecoration(
+              hintText: 'Search...',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide.none,
+              ),
+              filled: true,
+              fillColor: Colors.grey.shade200,
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+            ),
+          ),
+          const SizedBox(height: 16),
           Expanded(
             child: SingleChildScrollView(
               child: Column(
-                children: List.generate(items.length, (index) {
-                  final item = items[index];
+                children: List.generate(filteredItems.length, (index) {
+                  final item = filteredItems[index];
                   return InkWell(
                     onTap: () {
-                      if (noRoute != null && noRoute!) {
+                      if (widget.noRoute != null && widget.noRoute!) {
                         Navigator.pop(context, item.name);
                       } else {
                         if (item is School) {
@@ -59,7 +98,7 @@ class GridModalBottomSheet extends StatelessWidget {
                             context,
                             CupertinoPageRoute(
                               builder: (context) => SchoolScreen(
-                                universityVolunteers: universityVolunteers ?? [],
+                                universityVolunteers: widget.universityVolunteers ?? [],
                                 school: item,
                               ),
                             ),
@@ -69,7 +108,7 @@ class GridModalBottomSheet extends StatelessWidget {
                             context,
                             CupertinoPageRoute(
                               builder: (context) => MajorScreen(
-                                schoolVolunteers: schoolVolunteers ?? [],
+                                schoolVolunteers: widget.schoolVolunteers ?? [],
                                 major: item,
                               ),
                             ),

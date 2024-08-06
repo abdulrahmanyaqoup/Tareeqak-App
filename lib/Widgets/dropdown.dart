@@ -53,7 +53,7 @@ class _DropdownState extends State<Dropdown> {
                   : null,
               decoration: CustomDropdownDecoration(
                 closedFillColor: Colors.grey.shade500.withOpacity(0.1),
-                prefixIcon: Icon(widget.prefixIcon),
+                prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
                 closedBorderRadius: BorderRadius.circular(8),
                 expandedBorderRadius: BorderRadius.circular(8),
                 closedBorder:
