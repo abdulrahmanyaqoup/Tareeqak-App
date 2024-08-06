@@ -17,76 +17,94 @@ class VolunteersScreen extends ConsumerStatefulWidget {
 }
 
 class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
+  List<User> allUsers = [];
   List<User> filteredUsers = [];
-  bool? matchUniversity;
-  bool? matchSchool;
-  bool? matchMajor;
+  Future<void>? _usersFuture;
 
   @override
   void initState() {
     super.initState();
-    _getAllUsers();
+    _usersFuture = _getAllUsers();
   }
 
   Future<void> _getAllUsers() async {
     try {
       await ref.read(userProvider.notifier).getAllUsers();
-      filterUsers(null, null, null);
+      setState(() {
+        allUsers = ref.read(userProvider).userList;
+        filteredUsers = allUsers; 
+      });
     } on DioException catch (e) {
       if (mounted) showSnackBar(context, e.message!, ContentType.failure);
     }
   }
 
   void filterUsers(String? university, String? school, String? major) {
-    final users = ref.read(userProvider).userList;
     setState(() {
-      filteredUsers = users.where((user) {
-        matchUniversity =
-            university == null || user.userProps.university == university;
-        matchSchool = school == null || user.userProps.school == school;
-        matchMajor = major == null || user.userProps.major == major;
-        return matchUniversity! && matchSchool! && matchMajor!;
+      filteredUsers = allUsers.where((user) {
+        final matchUniversity = university == null || user.userProps.university == university;
+        final matchSchool = school == null || user.userProps.school == school;
+        final matchMajor = major == null || user.userProps.major == major;
+        return matchUniversity && matchSchool && matchMajor;
       }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = ref.watch(userProvider).isLoading;
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            FilterVolunteers(
-              onClearFilters: (){
-                filterUsers(null, null, null);
+      body: FutureBuilder<void>(
+        future: _usersFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return const CardShimmer();
               },
-              onFilterChanged: (university, school, major) {
-                filterUsers(university, school, major);
-              },
+            );
+          } else if (snapshot.hasError) {
+            return Center(
+              child: Text('Error: ${snapshot.error}'),
+            );
+          }
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                FilterVolunteers(
+                  onClearFilters: () {
+                    setState(() {
+                      filteredUsers = allUsers;
+                    });
+                  },
+                  onFilterChanged: (university, school, major) {
+                    filterUsers(university, school, major);
+                  },
+                ),
+                filteredUsers.isEmpty
+                    ?  Center(
+                        child: Text('No advisors found', style: TextStyle(fontSize: 20,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.bold
+                        ),),
+                      )
+                    :
+                ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: filteredUsers.length,
+                  itemBuilder: (context, index) {
+                    final user = filteredUsers[index];
+                    return VolunteerCard(user: user);
+                  },
+                ),
+              ],
             ),
-            isLoading
-                ? ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: 6,
-                    itemBuilder: (context, index) {
-                      return const CardShimmer();
-                    },
-                  )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: filteredUsers.length,
-                    itemBuilder: (context, index) {
-                      final user = filteredUsers[index];
-                      return VolunteerCard(user: user);
-                    },
-                  ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
