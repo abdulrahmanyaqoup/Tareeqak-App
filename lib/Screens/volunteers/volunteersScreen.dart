@@ -32,17 +32,23 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
       await ref.read(userProvider.notifier).getAllUsers();
       setState(() {
         allUsers = ref.read(userProvider).userList;
-        filteredUsers = allUsers; 
+        filteredUsers = allUsers;
       });
     } on DioException catch (e) {
-      if (mounted) showSnackBar(context, e.message!, ContentType.failure);
+      if (mounted) {
+        CustomSnackBar(
+            context: context,
+            text: e.message!,
+            contentType: ContentType.failure);
+      }
     }
   }
 
   void filterUsers(String? university, String? school, String? major) {
     setState(() {
       filteredUsers = allUsers.where((user) {
-        final matchUniversity = university == null || user.userProps.university == university;
+        final matchUniversity =
+            university == null || user.userProps.university == university;
         final matchSchool = school == null || user.userProps.school == school;
         final matchMajor = major == null || user.userProps.major == major;
         return matchUniversity && matchSchool && matchMajor;
@@ -85,22 +91,24 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
                   },
                 ),
                 filteredUsers.isEmpty
-                    ?  Center(
-                        child: Text('No advisors found', style: TextStyle(fontSize: 20,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold
-                        ),),
+                    ? Center(
+                        child: Text(
+                          'No advisors found',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold),
+                        ),
                       )
-                    :
-                ListView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: filteredUsers.length,
-                  itemBuilder: (context, index) {
-                    final user = filteredUsers[index];
-                    return VolunteerCard(user: user);
-                  },
-                ),
+                    : ListView.builder(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: filteredUsers.length,
+                        itemBuilder: (context, index) {
+                          final user = filteredUsers[index];
+                          return VolunteerCard(user: user);
+                        },
+                      ),
               ],
             ),
           );

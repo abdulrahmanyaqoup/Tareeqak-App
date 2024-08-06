@@ -64,7 +64,10 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
               _image,
             );
         if (mounted) {
-          showSnackBar(context, response,ContentType.success);
+          CustomSnackBar(
+              context: context,
+              text: response,
+              contentType: ContentType.success);
           Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
               builder: (_) => Otp(email: widget.email),
@@ -74,7 +77,10 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         }
       } on DioException catch (e) {
         if (mounted) {
-          showSnackBar(context, e.message!,ContentType.failure);
+          CustomSnackBar(
+              context: context,
+              text: e.message!,
+              contentType: ContentType.failure);
         }
       }
     }
@@ -96,7 +102,8 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
     final universityState = ref.watch(universityProvider);
     List<School> schools = [];
     List<Major> majors = [];
-    if (_selectedUniversity != null && universityState.universities.isNotEmpty) {
+    if (_selectedUniversity != null &&
+        universityState.universities.isNotEmpty) {
       var selectedUniversity = universityState.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
         orElse: () => universityState.universities.first,
@@ -155,7 +162,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                           setState(() {
                             _selectedUniversity = value ?? '';
                             _selectedSchool = null;
-                            _selectedMajor = null ;
+                            _selectedMajor = null;
                             if (_selectedUniversity != null) {
                               enabledSchool = true;
                             }
@@ -172,7 +179,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                           setState(() {
                             _selectedSchool = value ?? '';
                             _selectedMajor = null;
-                            if (_selectedSchool != null ) {
+                            if (_selectedSchool != null) {
                               enabledMajor = true;
                             }
                           });

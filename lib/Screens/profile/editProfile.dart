@@ -17,6 +17,7 @@ import '../../Widgets/customButton.dart';
 import 'components/gradientBackground.dart';
 import 'components/profileImage.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
 
@@ -80,10 +81,18 @@ class EditProfileState extends ConsumerState<EditProfile> {
     try {
       await ref.read(userProvider.notifier).updateUser(updatedUser);
       if (mounted) {
-        showSnackBar(context, 'Profile updated successfully', ContentType.success);
+        CustomSnackBar(
+            context: context,
+            text: 'Profile updated successfully',
+            contentType: ContentType.success);
       }
     } on DioException catch (e) {
-      if (mounted) showSnackBar(context, e.message!, ContentType.failure);
+      if (mounted) {
+        CustomSnackBar(
+            context: context,
+            text: e.message!,
+            contentType: ContentType.failure);
+      }
     }
   }
 
@@ -91,7 +100,12 @@ class EditProfileState extends ConsumerState<EditProfile> {
     try {
       await ref.read(userProvider.notifier).signOut();
     } catch (e) {
-      if (mounted) showSnackBar(context, e.toString(), ContentType.failure);
+      if (mounted) {
+        CustomSnackBar(
+            context: context,
+            text: e.toString(),
+            contentType: ContentType.failure);
+      }
     }
     if (!ref.read(userProvider).isLoggedIn && mounted) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -112,11 +126,15 @@ class EditProfileState extends ConsumerState<EditProfile> {
               builder: (_) => const ProfileScreen(),
             ),
             (Route<dynamic> route) => false);
-        showSnackBar(context, response, ContentType.success);
+        CustomSnackBar(
+            context: context, text: response, contentType: ContentType.success);
       }
     } on DioException catch (e) {
       if (mounted) {
-        showSnackBar(context, e.message!, ContentType.failure);
+        CustomSnackBar(
+            context: context,
+            text: e.toString(),
+            contentType: ContentType.failure);
       }
     }
   }

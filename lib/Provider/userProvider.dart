@@ -36,13 +36,18 @@ class UserState {
 class UserNotifier extends StateNotifier<UserState> {
   UserNotifier() : super(UserState(user: const User()));
 
-  Future<void> checkLoginStatus() async {
+  Future<User> checkLoginStatus() async {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
     if (token != null && token.isNotEmpty) {
       Map<String, dynamic> userData = await UserApi().getUser(token);
+
       state = state.copyWith(
           user: User.fromMap(userData), isLoggedIn: true, isLoading: false);
+      return User.fromMap(userData);
+    } else {
+      state = state.copyWith(user: const User(), isLoading: false);
+      return const User();
     }
   }
 
@@ -70,17 +75,13 @@ class UserNotifier extends StateNotifier<UserState> {
     return response;
   }
 
-  void signInVerfiedUser(User user, String tok) async {
-    String token = tok;
+  void signInVerifiedUser(User user, String token) async {
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
     state = state.copyWith(user: user, isLoading: false, isLoggedIn: true);
   }
 
-  Future<void> signIn(
-    String email,
-    String password,
-  ) async {
+  Future<void> signIn(String email, String password) async {
     Map<String, dynamic> response =
         await UserApi().signInUser(email: email, password: password);
     String token = response['token'] as String;
@@ -101,7 +102,7 @@ class UserNotifier extends StateNotifier<UserState> {
     state = state.copyWith(userList: users, isLoading: false);
   }
 
-  Future<void> updateUser(updatedUser) async {
+  Future<void> updateUser(User updatedUser) async {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
     Map<String, dynamic> response =

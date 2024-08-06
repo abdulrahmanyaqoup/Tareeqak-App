@@ -5,19 +5,18 @@ import 'package:lottie/lottie.dart';
 class ProfileBody extends StatelessWidget {
   const ProfileBody({
     super.key,
-    required this.buttonText,
-    required this.greeting,
-    required this.onPressed,
+    this.buttonText,
+    this.greeting,
+    this.onPressed,
     required this.isLoading,
-    required this.isLoggedIn,
     required this.height,
   });
-  final String buttonText;
-  final String greeting;
-  final double height;
+
+  final String? buttonText;
+  final String? greeting;
   final bool isLoading;
-  final bool isLoggedIn;
-  final Function() onPressed;
+  final double height;
+  final Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class ProfileBody extends StatelessWidget {
             isLoading
                 ? const ButtonShimmer(height: 30)
                 : Text(
-                    greeting,
+                    greeting!,
                     style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -70,7 +69,7 @@ class ProfileBody extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      buttonText,
+                      buttonText!,
                       style: const TextStyle(color: Colors.white, fontSize: 16),
                     ),
                   ),

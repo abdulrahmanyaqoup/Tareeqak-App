@@ -44,7 +44,7 @@ class _Otp extends ConsumerState<Otp> {
           await OtpApi().verifyOTP(widget.email, otpController.text);
       String token = response['token'];
       User user = User.fromMap(response);
-      ref.read(userProvider.notifier).signInVerfiedUser(user, token);
+      ref.read(userProvider.notifier).signInVerifiedUser(user, token);
       if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute(

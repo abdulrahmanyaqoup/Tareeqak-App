@@ -6,6 +6,18 @@
 	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow access to photo library</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Allow access to camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Allow access to microphone</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow access to location</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Allow access to location</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow access to location</string>
 	<key>CFBundleDisplayName</key>
 	<string>Finalproject</string>
 	<key>CFBundleExecutable</key>
