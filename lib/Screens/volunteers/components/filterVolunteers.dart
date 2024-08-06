@@ -9,8 +9,7 @@ import 'package:finalproject/Provider/universityProvider.dart';
 import 'package:finalproject/Screens/university/components/bottomSheet.dart';
 
 class FilterVolunteers extends ConsumerStatefulWidget {
-  final Function(String? university, String? school, String? major)
-      onFilterChanged;
+  final Function(String? university, String? school, String? major) onFilterChanged;
   final VoidCallback onClearFilters;
 
   const FilterVolunteers({
@@ -32,45 +31,44 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
   Widget build(BuildContext context) {
     final universityState = ref.watch(universityProvider);
 
-    List<University> universities = universityState.universities;
+    List<University> universities = universityState.universities.uniqueByName().toList();
     List<School> schools = [];
     List<Major> majors = [];
 
-      if (selectedUniversity != null) {
+    if (selectedUniversity != null) {
       final university = universities.firstWhereOrNull((u) => u.name == selectedUniversity);
       if (university != null) {
-        schools = university.schools;
+        schools = university.schools.uniqueByName().toList();
         if (selectedSchool != null) {
           final school = schools.firstWhereOrNull((s) => s.name == selectedSchool);
           if (school != null) {
-            majors = school.majors;
+            majors = school.majors.uniqueByName().toList();
           }
         } else {
-          majors = schools.expand((s) => s.majors).toList();
+          majors = schools.expand((s) => s.majors).uniqueByName().toList();
         }
       }
     } else {
-      schools = universityState.schools;
-      majors = universityState.majors;
+      schools = universityState.schools.uniqueByName().toList();
+      majors = universityState.majors.uniqueByName().toList();
     }
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
-          if (selectedUniversity != null ||
-              selectedSchool != null ||
-              selectedMajor != null)
+          if (selectedUniversity != null || selectedSchool != null || selectedMajor != null)
             CustomButton(
-                onPressed: () {
-                  setState(() {
-                    selectedUniversity = null;
-                    selectedSchool = null;
-                    selectedMajor = null;
-                    widget.onClearFilters();
-                  });
-                },
-                text: 'Clear Filters'),
+              onPressed: () {
+                setState(() {
+                  selectedUniversity = null;
+                  selectedSchool = null;
+                  selectedMajor = null;
+                  widget.onClearFilters();
+                });
+              },
+              text: 'Clear Filters',
+            ),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -82,8 +80,7 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedUniversity = value;
-                    widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor);
+                    widget.onFilterChanged(selectedUniversity, selectedSchool, selectedMajor);
                   });
                 },
               ),
@@ -96,8 +93,7 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedSchool = value;
-                    widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor);
+                    widget.onFilterChanged(selectedUniversity, selectedSchool, selectedMajor);
                   });
                 },
               ),
@@ -110,8 +106,7 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedMajor = value;
-                    widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor);
+                    widget.onFilterChanged(selectedUniversity, selectedSchool, selectedMajor);
                   });
                 },
               ),
@@ -126,14 +121,14 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
     BuildContext context,
     String title,
     String? selectedValue,
-    List<T> items, {
+    List<dynamic> items, {
     bool enabled = true,
     required ValueChanged<String?> onSelected,
   }) {
     return Expanded(
       child: InkWell(
         onTap: enabled
-            ? () => showModalBottomSheet(
+            ? () => showModalBottomSheet<String>(
                   context: context,
                   builder: (context) => GridModalBottomSheet(
                     title: 'Select $title',
@@ -176,5 +171,20 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
         ),
       ),
     );
+  }
+}
+
+extension UniqueByName<T> on Iterable<T> {
+  Iterable<T> uniqueByName() {
+    final names = <String>{};
+    return where((element) {
+      final name = (element as dynamic).name as String;
+      if (names.contains(name)) {
+        return false;
+      } else {
+        names.add(name);
+        return true;
+      }
+    });
   }
 }
