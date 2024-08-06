@@ -16,7 +16,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../Widgets/customButton.dart';
 import 'components/gradientBackground.dart';
 import 'components/profileImage.dart';
-
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({super.key});
 
@@ -80,10 +80,10 @@ class EditProfileState extends ConsumerState<EditProfile> {
     try {
       await ref.read(userProvider.notifier).updateUser(updatedUser);
       if (mounted) {
-        showSnackBar(context, 'User updated successfully');
+        showSnackBar(context, 'Profile updated successfully', ContentType.success);
       }
     } on DioException catch (e) {
-      if (mounted) showSnackBar(context, e.message!);
+      if (mounted) showSnackBar(context, e.message!, ContentType.failure);
     }
   }
 
@@ -91,7 +91,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
     try {
       await ref.read(userProvider.notifier).signOut();
     } catch (e) {
-      if (mounted) showSnackBar(context, e.toString());
+      if (mounted) showSnackBar(context, e.toString(), ContentType.failure);
     }
     if (!ref.read(userProvider).isLoggedIn && mounted) {
       Navigator.of(context).pushAndRemoveUntil(
@@ -112,11 +112,11 @@ class EditProfileState extends ConsumerState<EditProfile> {
               builder: (_) => const ProfileScreen(),
             ),
             (Route<dynamic> route) => false);
-        showSnackBar(context, response);
+        showSnackBar(context, response, ContentType.success);
       }
     } on DioException catch (e) {
       if (mounted) {
-        showSnackBar(context, e.message!);
+        showSnackBar(context, e.message!, ContentType.failure);
       }
     }
   }
@@ -155,7 +155,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
     List<School> schools = [];
     List<Major> majors = [];
 
-    if (_selectedUniversity != null && universityState.universities.isNotEmpty) {
+    if (_selectedUniversity != null &&
+        universityState.universities.isNotEmpty) {
       var selectedUniversity = universityState.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
         orElse: () => universityState.universities.first,
@@ -175,7 +176,10 @@ class EditProfileState extends ConsumerState<EditProfile> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            Navigator.of(context).pop();
+          },
         ),
         title: const Text('Profile', style: TextStyle(color: Colors.white)),
         centerTitle: true,
@@ -203,7 +207,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
                 const SizedBox(height: 20),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),

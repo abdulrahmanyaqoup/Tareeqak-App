@@ -8,7 +8,7 @@ import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../../../Provider/userProvider.dart';
 import '../../../Utils/utils.dart';
 
@@ -29,7 +29,7 @@ class SigninState extends ConsumerState<Signin> {
     try {
       await ref.read(userProvider.notifier).signIn(email, password);
     } on DioException catch (e) {
-      if (mounted) showSnackBar(context, e.message!);
+      if (mounted) showSnackBar(context, e.message!,ContentType.failure);
     }
     if (ref.read(userProvider).isLoggedIn && mounted) {
       Navigator.pushAndRemoveUntil(

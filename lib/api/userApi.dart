@@ -133,8 +133,9 @@ class UserApi {
     Response response = await dio.delete(
       'api/users/delete',
       options: options,
+      data: {},
     );
-
+    print(response.data);
     return response.data;
   }
 }

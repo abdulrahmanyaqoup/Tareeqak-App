@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:dio/dio.dart';
 import 'package:finalproject/Models/University/major.dart';
 import 'package:finalproject/Models/University/school.dart';
@@ -64,7 +64,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
               _image,
             );
         if (mounted) {
-          showSnackBar(context, response);
+          showSnackBar(context, response,ContentType.success);
           Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
               builder: (_) => Otp(email: widget.email),
@@ -74,7 +74,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         }
       } on DioException catch (e) {
         if (mounted) {
-          showSnackBar(context, e.message!);
+          showSnackBar(context, e.message!,ContentType.failure);
         }
       }
     }

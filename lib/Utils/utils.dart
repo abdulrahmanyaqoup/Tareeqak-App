@@ -1,38 +1,27 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
-void showSnackBar(BuildContext context, String text) {
+void showSnackBar(BuildContext context, String text, ContentType contentType) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      content: Text(text),
+      content: Center(
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: AwesomeSnackbarContent(
+            title: 'Note:',
+            titleFontSize: 16,
+            messageFontSize: 14,
+            message: text,
+            contentType: contentType,
+          ),
+        ),
+      ),
+      duration: const Duration(seconds: 3),
+      dismissDirection: DismissDirection.horizontal,
+      margin: const EdgeInsets.only(left: 40, right: 40, top: 100),
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: Colors.transparent,
+      elevation: 0,
     ),
   );
 }
-
-/* void httpErrorHandle({
-  required http.Response response,
-  required BuildContext context,
-  required VoidCallback onSuccess,
-}) {
-  switch (response.statusCode) {
-    case 200:
-      onSuccess();
-      break;
-    case 400:
-      showSnackBar(context, jsonDecode(response.body)['error']);
-      break;
-    case 401:
-      showSnackBar(context, jsonDecode(response.body)['error']);
-      break;
-    case 404:
-      showSnackBar(context, jsonDecode(response.body)['error']);
-      break;
-    case 500:
-      showSnackBar(context, jsonDecode(response.body)['error']);
-      break;
-    default:
-      showSnackBar(context, response.body);
-  }
-}
- */

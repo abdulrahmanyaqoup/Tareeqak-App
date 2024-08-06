@@ -7,6 +7,7 @@ import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
 import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/Widgets/cardShimmer.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class VolunteersScreen extends ConsumerStatefulWidget {
   const VolunteersScreen({super.key});
@@ -32,7 +33,7 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
       await ref.read(userProvider.notifier).getAllUsers();
       filterUsers(null, null, null);
     } on DioException catch (e) {
-      if (mounted) showSnackBar(context, e.message!);
+      if (mounted) showSnackBar(context, e.message!, ContentType.failure);
     }
   }
 
