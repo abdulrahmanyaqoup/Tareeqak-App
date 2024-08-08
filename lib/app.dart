@@ -1,31 +1,29 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
 import 'Screens/volunteers/volunteersScreen.dart';
 
-class BottomNavigation extends ConsumerStatefulWidget {
+class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
 
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
-class _BottomNavigationState extends ConsumerState<BottomNavigation>
+class _BottomNavigationState extends State<BottomNavigation>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
-  int _index = 3;
   static const _introAnimationEnd = 60 / 240;
-  late TabController tabController;
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
-    tabController = TabController(
+    _tabController = TabController(
       vsync: this,
-      initialIndex: _index,
+      initialIndex: 3,
       length: _navigatorKeys.length,
     );
     _controller = AnimationController(vsync: this);
@@ -40,21 +38,20 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
 
   @override
   void dispose() {
-    tabController.dispose();
+    _tabController.dispose();
     _controller.dispose();
     super.dispose();
   }
 
   void _onItemTapped(int index) {
     setState(() {
-      _index = index;
-      tabController.animateTo(
+      _tabController.animateTo(
         index,
         curve: Curves.easeInOutCubic,
       );
     });
 
-    if (_index == 0) {
+    if (_tabController.index == 0) {
       _controller.reset();
       _controller.animateTo(
         _introAnimationEnd,
@@ -67,7 +64,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
   Widget build(BuildContext context) {
     return Scaffold(
       body: TabBarView(
-        controller: tabController,
+        controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           _buildNavigator(0, const Center(child: Text('ChatBot'))),
@@ -86,7 +83,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         backgroundColor: Theme.of(context).colorScheme.surface,
         inactiveColor: Theme.of(context).colorScheme.primary,
         onTap: _onItemTapped,
-        currentIndex: _index,
+        currentIndex: _tabController.index,
         items: [
           BottomNavigationBarItem(
             icon: Lottie.asset(

@@ -1,13 +1,12 @@
-import 'package:dio/dio.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:finalproject/Screens/volunteers/components/filterVolunteers.dart';
+import 'package:finalproject/Utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
-import 'package:finalproject/Utils/utils.dart';
 import 'package:finalproject/Widgets/cardShimmer.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class VolunteersScreen extends ConsumerStatefulWidget {
   const VolunteersScreen({super.key});
@@ -30,13 +29,12 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
   }
 
   Future<void> _getAllUsers() async {
-    try {
-      await ref.read(userProvider.notifier).getAllUsers();
-    } on DioException catch (e) {
-      if (mounted) {
-        showSnackBar(context, e.message!, ContentType.failure);
-      }
-    }
+    await ref
+        .read(userProvider.notifier)
+        .getAllUsers()
+        .onError((error, stackTrace) {
+      showSnackBar(context, error.toString(), ContentType.failure);
+    });
   }
 
   @override

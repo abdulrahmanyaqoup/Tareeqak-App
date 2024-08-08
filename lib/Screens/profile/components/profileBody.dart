@@ -8,7 +8,7 @@ class ProfileBody extends StatelessWidget {
     this.buttonText,
     this.greeting,
     this.onPressed,
-    required this.isLoading,
+    this.isLoading = false,
     required this.height,
   });
 
@@ -45,37 +45,76 @@ class ProfileBody extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             isLoading
-                ? const ButtonShimmer(height: 30)
-                : Text(
-                    greeting!,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-            const SizedBox(height: 10),
-            isLoading
-                ? const ButtonShimmer(height: 60)
-                : ElevatedButton(
+                ? const ProfileLoadingBody()
+                : ProfileDataBody(
+                    greeting: greeting,
+                    buttonText: buttonText,
                     onPressed: onPressed,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 10,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                    ),
-                    child: Text(
-                      buttonText!,
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
                   ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class ProfileLoadingBody extends StatelessWidget {
+  const ProfileLoadingBody({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Column(
+      children: [
+        ButtonShimmer(height: 30),
+        SizedBox(height: 10),
+        ButtonShimmer(height: 60),
+      ],
+    );
+  }
+}
+
+class ProfileDataBody extends StatelessWidget {
+  const ProfileDataBody({
+    super.key,
+    required this.greeting,
+    required this.buttonText,
+    required this.onPressed,
+  });
+
+  final String? greeting;
+  final String? buttonText;
+  final Function()? onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          greeting!,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        ElevatedButton(
+          onPressed: onPressed,
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 30,
+              vertical: 10,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+          child: Text(
+            buttonText!,
+            style: const TextStyle(color: Colors.white, fontSize: 16),
+          ),
+        ),
+      ],
     );
   }
 }

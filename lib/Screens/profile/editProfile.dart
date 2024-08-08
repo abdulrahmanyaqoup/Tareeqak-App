@@ -82,15 +82,13 @@ class EditProfileState extends ConsumerState<EditProfile> {
       name: nameController.text,
       userProps: updatedUserProps,
     );
-    try {
-      await ref.read(userProvider.notifier).updateUser(updatedUser);
-      showSnackBar(
-          context, 'Profile updated successfully', ContentType.success);
-    } on DioException catch (e) {
-      if (mounted) {
-        showSnackBar(context, e.message!, ContentType.failure);
-      }
-    }
+    await ref
+        .read(userProvider.notifier)
+        .updateUser(updatedUser)
+        .whenComplete(() => showSnackBar(
+            context, 'Profile updated successfully', ContentType.success))
+        .onError((error, stackTrace) =>
+            showSnackBar(context, error.toString(), ContentType.failure));
   }
 
   Future<void> _signOut() async {
@@ -101,7 +99,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
         showSnackBar(context, e.toString(), ContentType.failure);
       }
     }
-    if (!ref.read(userProvider).isLoading && mounted) {
+    if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
           builder: (_) => const ProfileScreen(),
@@ -114,7 +112,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
   Future<void> _deleteUser() async {
     try {
       String response = await ref.read(userProvider.notifier).deleteUser();
-      if (mounted && !ref.read(userProvider).isLoading) {
+      if (mounted) {
         Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
               builder: (_) => const ProfileScreen(),
