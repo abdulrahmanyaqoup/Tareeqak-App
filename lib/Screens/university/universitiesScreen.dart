@@ -1,8 +1,9 @@
-import 'package:dio/dio.dart';
-import 'package:finalproject/Models/University/university.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:finalproject/Screens/university/components/universitiesGrid.dart';
+import 'package:finalproject/Widgets/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../Utils/getUniversities.dart';
 import 'components/universityShimmer.dart';
 import '../../Provider/universityProvider.dart';
 import 'components/search.dart';
@@ -21,12 +22,11 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
 
   late ScrollController _scrollController;
   double _opacity = 1.0;
-  List<University> filteredUniversities = [];
 
   @override
   void initState() {
     super.initState();
-    _getUniversities();
+    Future.microtask(() => _getUniversities());
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -39,37 +39,9 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
   }
 
   Future<void> _getUniversities() async {
-    try {
-      await ref.read(universityProvider.notifier).getUniversities();
-      setState(() {
-        filteredUniversities = ref.read(universityProvider).universities;
-      });
-    } on DioException catch (error) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(error.message!),
-            backgroundColor: Theme.of(context).colorScheme.error,
-          ),
-        );
-      }
-    }
-  }
-
-  void _filterUniversities(String query) {
-    final universityState = ref.read(universityProvider);
-    if (query.isEmpty) {
-      setState(() {
-        filteredUniversities = universityState.universities;
-      });
-    } else {
-      setState(() {
-        filteredUniversities = universityState.universities
-            .where((university) =>
-                university.name.toLowerCase().contains(query.toLowerCase()))
-            .toList();
-      });
-    }
+    await getUniversities(ref, context).onError((error, stackTrace) {
+      showSnackBar(context, error.toString(), ContentType.failure);
+    });
   }
 
   @override
@@ -81,7 +53,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final universityState = ref.watch(universityProvider);
+    final universities = ref.watch(universityProvider);
 
     return Container(
       color: Theme.of(context).colorScheme.primary,
@@ -127,14 +99,18 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
               ),
               SliverToBoxAdapter(
                 child: Search(
-                  onSearchChanged: _filterUniversities,
+                  onSearchChanged: (query) => ref
+                      .read(universityProvider.notifier)
+                      .filterUniversities(query),
                 ),
               ),
-              universityState.isLoading
-                  ? const UniversityShimmer()
-                  : UniversitiesGrid(
-                      universities: filteredUniversities,
-                    ),
+              universities.when(
+                loading: () => const UniversityShimmer(),
+                error: (error, stackTrace) => const SliverToBoxAdapter(),
+                data: (universities) => UniversitiesGrid(
+                  universities: universities.filteredUniversities,
+                ),
+              ),
             ],
           ),
         ),

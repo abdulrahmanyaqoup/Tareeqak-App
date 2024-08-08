@@ -17,6 +17,7 @@ class MajorScreen extends StatelessWidget {
     List<User> majorVolunteers = schoolVolunteers!
         .where((user) => user.userProps.major == major.name)
         .toList();
+
     return DetailBase(
       title: major.name,
       description: major.description,

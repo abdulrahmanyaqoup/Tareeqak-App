@@ -20,6 +20,11 @@ class UniversityScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final allVolunteers = ref.watch(userProvider);
+    List<User> universityVolunteers = allVolunteers.value!.userList
+        .where((user) => user.userProps.university == university.name)
+        .toList();
+
     return DetailBase(
       title: university.name,
       description: university.description,
@@ -32,7 +37,8 @@ class UniversityScreen extends ConsumerWidget {
           iconColor: Colors.green,
           label: 'University Advisors',
           onPressed: () {
-            _showVolunteers(context, 'University Advisors', []);
+            _showVolunteers(
+                context, 'University Advisors', universityVolunteers);
           },
         ),
         CustomButtons(
@@ -49,8 +55,8 @@ class UniversityScreen extends ConsumerWidget {
           iconColor: Colors.orange,
           label: 'University Schools',
           onPressed: () {
-            _showGridModalBottomSheet(
-                context, 'University Schools', university.schools, []);
+            _showGridModalBottomSheet(context, 'University Schools',
+                university.schools, universityVolunteers);
           },
         ),
       ],

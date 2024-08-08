@@ -45,7 +45,11 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
 
-    if (token == null) return;
+    if (token == null) {
+      state = await AsyncValue.guard(() async => state.valueOrNull!);
+      return;
+    }
+
     try {
       Map<String, dynamic> userData = await UserApi().getUser(token);
       final User user = User.fromMap(userData);
@@ -61,26 +65,22 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   }
 
   Future<String> signUp(
-    String name,
-    String email,
+    User user,
     String password,
-    String university,
-    String school,
-    String major,
-    String contact,
     File? image,
   ) async {
-    String response = await UserApi().signUp(
-      name: name,
-      email: email,
-      password: password,
-      university: university,
-      school: school,
-      major: major,
-      contact: contact,
-      image: image,
-    );
-    return response;
+    state = const AsyncLoading();
+    try {
+      String response = await UserApi().signUp(
+        user: user,
+        password: password,
+        image: image,
+      );
+      state = await AsyncValue.guard(() async => state.valueOrNull!);
+      return response;
+    } on DioException catch (error) {
+      throw error.message!;
+    }
   }
 
   Future<void> signInVerifiedUser(User user, String token) async {
@@ -151,8 +151,9 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
 
     try {
       Map<String, dynamic> response =
-          await UserApi().updateUser(updates: updatedUser, token: token ?? '');
+          await UserApi().updateUser(user: updatedUser, token: token ?? '');
       final User user = User.fromMap(response);
+
       final currentState = state.valueOrNull!;
       final List<User> updatedUserList = currentState.userList
           .map((user1) => user1.email == user.email ? user : user1)
@@ -178,7 +179,6 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       String response = await UserApi().deleteUser(token: token);
       await storage.delete(key: 'token');
       final currentState = state.valueOrNull!;
-
       List<User> refreshUserList = currentState.userList
           .where((user) => user.email != currentState.user.email)
           .toList();
@@ -190,7 +190,6 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
           isLoggedIn: false,
         );
       });
-
       return response;
     } on DioException catch (error) {
       throw error.message!;

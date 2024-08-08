@@ -1,14 +1,15 @@
 import 'dart:io';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dio/dio.dart';
 import 'package:finalproject/Models/University/major.dart';
 import 'package:finalproject/Models/University/school.dart';
+import 'package:finalproject/Models/User/user.dart';
+import 'package:finalproject/Models/User/userProps.dart';
 import 'package:finalproject/Provider/universityProvider.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Widgets/customButton.dart';
 import 'package:finalproject/Screens/profile/components/formContainer.dart';
 import 'package:finalproject/Screens/profile/components/gradientBackground.dart';
-import 'package:finalproject/Utils/utils.dart';
+import 'package:finalproject/Widgets/snackBar.dart';
 import 'package:finalproject/Widgets/dropdown.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,9 +39,9 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController contactController = TextEditingController();
   File? _image;
-  String? _selectedUniversity;
-  String? _selectedSchool;
-  String? _selectedMajor;
+  String _selectedUniversity = '';
+  String _selectedSchool = '';
+  String _selectedMajor = '';
   bool? enabledSchool = false;
   bool? enabledMajor = false;
 
@@ -51,33 +52,37 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   }
 
   Future<void> _signupUser() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        String response = await ref.read(userProvider.notifier).signUp(
-              widget.name,
-              widget.email,
-              widget.password,
-              _selectedUniversity ?? '',
-              _selectedSchool ?? '',
-              _selectedMajor ?? '',
-              contactController.text,
-              _image,
-            );
-        if (mounted) {
-          showSnackBar(context, response, ContentType.success);
-          Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute(
-              builder: (_) => Otp(email: widget.email),
-            ),
-            (Route<dynamic> route) => route.isFirst,
-          );
-        }
-      } on DioException catch (e) {
-        if (mounted) {
-          showSnackBar(context, e.message!, ContentType.failure);
-        }
-      }
+    if (!_formKey.currentState!.validate()) return;
+
+    User user = User(
+      name: widget.name,
+      email: widget.email,
+      userProps: UserProps(
+        university: _selectedUniversity,
+        school: _selectedSchool,
+        major: _selectedMajor,
+        contact: contactController.text,
+      ),
+    );
+
+    String response = await ref
+        .read(userProvider.notifier)
+        .signUp(user, widget.password, _image)
+        .catchError((error, stackTrace) =>
+            showSnackBar(context, error.toString(), ContentType.failure));
+
+    if (_image != null) {
+      _image = null;
     }
+
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+      CupertinoPageRoute(
+        builder: (_) => Otp(email: widget.email),
+      ),
+      (Route<dynamic> route) => route.isFirst,
+    );
+    showSnackBar(context, response, ContentType.success);
   }
 
   Future<void> _pickImage() async {
@@ -96,14 +101,15 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
     final universityState = ref.watch(universityProvider);
     List<School> schools = [];
     List<Major> majors = [];
-    if (_selectedUniversity != null &&
-        universityState.universities.isNotEmpty) {
-      var selectedUniversity = universityState.universities.firstWhere(
+    if (_selectedUniversity.isNotEmpty &&
+        universityState.valueOrNull!.universities.isNotEmpty) {
+      var selectedUniversity =
+          universityState.valueOrNull!.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
-        orElse: () => universityState.universities.first,
+        orElse: () => universityState.valueOrNull!.universities.first,
       );
       schools = selectedUniversity.schools;
-      if (_selectedSchool != null && selectedUniversity.schools.isNotEmpty) {
+      if (_selectedSchool.isNotEmpty && selectedUniversity.schools.isNotEmpty) {
         var selectedSchool = selectedUniversity.schools.firstWhere(
           (school) => school.name == _selectedSchool,
           orElse: () => selectedUniversity.schools.first,
@@ -149,15 +155,15 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         value: _selectedUniversity,
                         hintText: 'Select your university',
                         prefixIcon: Icons.business,
-                        items: universityState.universities
+                        items: universityState.valueOrNull!.universities
                             .map((university) => university.name)
                             .toList(),
                         onChanged: (String? value) {
                           setState(() {
                             _selectedUniversity = value ?? '';
-                            _selectedSchool = null;
-                            _selectedMajor = null;
-                            if (_selectedUniversity != null) {
+                            _selectedSchool = '';
+                            _selectedMajor = '';
+                            if (_selectedUniversity.isNotEmpty) {
                               enabledSchool = true;
                             }
                           });
@@ -172,8 +178,8 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         onChanged: (String? value) {
                           setState(() {
                             _selectedSchool = value ?? '';
-                            _selectedMajor = null;
-                            if (_selectedSchool != null) {
+                            _selectedMajor = '';
+                            if (_selectedSchool.isNotEmpty) {
                               enabledMajor = true;
                             }
                           });

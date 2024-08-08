@@ -1,12 +1,11 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:finalproject/Models/University/major.dart';
 import 'package:finalproject/Models/University/school.dart';
 import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Provider/universityProvider.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/profile/profileScreen.dart';
-import 'package:finalproject/Utils/utils.dart';
+import 'package:finalproject/Widgets/snackBar.dart';
 import 'package:finalproject/Widgets/dropdown.dart';
 import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,9 +33,9 @@ class EditProfileState extends ConsumerState<EditProfile> {
   late TextEditingController nameController;
   late TextEditingController contactController;
   FileImage? _image;
-  late String? _selectedUniversity;
-  late String? _selectedSchool;
-  late String? _selectedMajor;
+  String _selectedUniversity = '';
+  String _selectedSchool = '';
+  String _selectedMajor = '';
 
   @override
   void initState() {
@@ -71,9 +70,9 @@ class EditProfileState extends ConsumerState<EditProfile> {
     if (!_formKey.currentState!.validate()) return;
 
     final updatedUserProps = UserProps(
-      university: _selectedUniversity!,
-      school: _selectedSchool!,
-      major: _selectedMajor!,
+      university: _selectedUniversity,
+      school: _selectedSchool,
+      major: _selectedMajor,
       contact: contactController.text,
       image: _image?.file.path ?? '',
     );
@@ -89,16 +88,17 @@ class EditProfileState extends ConsumerState<EditProfile> {
             context, 'Profile updated successfully', ContentType.success))
         .onError((error, stackTrace) =>
             showSnackBar(context, error.toString(), ContentType.failure));
+
+    if (_image != null) {
+      _image = null;
+    }
   }
 
   Future<void> _signOut() async {
-    try {
-      await ref.read(userProvider.notifier).signOut();
-    } catch (e) {
-      if (mounted) {
-        showSnackBar(context, e.toString(), ContentType.failure);
-      }
-    }
+    await ref.read(userProvider.notifier).signOut().onError(
+        (error, stackTrace) =>
+            showSnackBar(context, error.toString(), ContentType.failure));
+
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
@@ -110,21 +110,19 @@ class EditProfileState extends ConsumerState<EditProfile> {
   }
 
   Future<void> _deleteUser() async {
-    try {
-      String response = await ref.read(userProvider.notifier).deleteUser();
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute(
-              builder: (_) => const ProfileScreen(),
-            ),
-            (Route<dynamic> route) => false);
-        showSnackBar(context, response, ContentType.success);
-      }
-    } on DioException catch (e) {
-      if (mounted) {
-        showSnackBar(context, e.toString(), ContentType.failure);
-      }
-    }
+    String response = await ref
+        .read(userProvider.notifier)
+        .deleteUser()
+        .catchError((error, stackTrace) =>
+            showSnackBar(context, error.toString(), ContentType.failure));
+
+    if (!mounted) return;
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (_) => const ProfileScreen(),
+        ),
+        (Route<dynamic> route) => false);
+    showSnackBar(context, response, ContentType.success);
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
@@ -161,14 +159,15 @@ class EditProfileState extends ConsumerState<EditProfile> {
     List<School> schools = [];
     List<Major> majors = [];
 
-    if (_selectedUniversity != null &&
-        universityState.universities.isNotEmpty) {
-      var selectedUniversity = universityState.universities.firstWhere(
+    if (_selectedUniversity.isNotEmpty &&
+        universityState.valueOrNull!.universities.isNotEmpty) {
+      var selectedUniversity =
+          universityState.valueOrNull!.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
-        orElse: () => universityState.universities.first,
+        orElse: () => universityState.valueOrNull!.universities.first,
       );
       schools = selectedUniversity.schools;
-      if (_selectedSchool != null && selectedUniversity.schools.isNotEmpty) {
+      if (_selectedSchool.isNotEmpty && selectedUniversity.schools.isNotEmpty) {
         var selectedSchool = selectedUniversity.schools.firstWhere(
           (school) => school.name == _selectedSchool,
           orElse: () => selectedUniversity.schools.first,
@@ -240,14 +239,14 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         value: _selectedUniversity,
                         hintText: 'Select your university',
                         prefixIcon: Icons.business,
-                        items: universityState.universities
+                        items: universityState.valueOrNull!.universities
                             .map((university) => university.name)
                             .toList(),
                         onChanged: (String? value) {
                           setState(() {
                             _selectedUniversity = value ?? '';
-                            _selectedSchool = null;
-                            _selectedMajor = null;
+                            _selectedSchool = '';
+                            _selectedMajor = '';
                           });
                         },
                       ),
@@ -260,11 +259,10 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         onChanged: (String? value) {
                           setState(() {
                             _selectedSchool = value ?? '';
-                            _selectedMajor = null;
+                            _selectedMajor = '';
                           });
                         },
-                        enabled: _selectedUniversity != null &&
-                            _selectedUniversity!.isNotEmpty,
+                        enabled: _selectedUniversity.isNotEmpty,
                       ),
                       const SizedBox(height: 20),
                       Dropdown(
@@ -277,8 +275,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                             _selectedMajor = value ?? '';
                           });
                         },
-                        enabled: _selectedSchool != null &&
-                            _selectedSchool!.isNotEmpty,
+                        enabled: _selectedSchool.isNotEmpty,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(

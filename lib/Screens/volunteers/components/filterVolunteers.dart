@@ -9,7 +9,8 @@ import 'package:finalproject/Provider/universityProvider.dart';
 import 'package:finalproject/Screens/university/components/bottomSheet.dart';
 
 class FilterVolunteers extends ConsumerStatefulWidget {
-  final Function(String? university, String? school, String? major) onFilterChanged;
+  final Function(String? university, String? school, String? major)
+      onFilterChanged;
   final VoidCallback onClearFilters;
 
   const FilterVolunteers({
@@ -29,24 +30,24 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
 
   @override
   Widget build(BuildContext context) {
-    final universityState = ref.watch(universityProvider);
+    final universityState = ref.watch(universityProvider).value!;
 
-    List<University> universities = universityState.universities.uniqueByName().toList();
+    List<University> universities =
+        universityState.universities.uniqueByName().toList();
     List<School> schools = [];
     List<Major> majors = [];
 
     if (selectedUniversity != null) {
-      final university = universities.firstWhereOrNull((u) => u.name == selectedUniversity);
+      final university =
+          universities.firstWhereOrNull((u) => u.name == selectedUniversity);
       if (university != null) {
         schools = university.schools.uniqueByName().toList();
-        if (selectedSchool != null) {
-          final school = schools.firstWhereOrNull((s) => s.name == selectedSchool);
-          if (school != null) {
-            majors = school.majors.uniqueByName().toList();
-          }
-        } else {
-          majors = schools.expand((s) => s.majors).uniqueByName().toList();
-        }
+        final school = selectedSchool != null
+            ? schools.firstWhereOrNull((s) => s.name == selectedSchool)
+            : null;
+        majors = school != null
+            ? school.majors.uniqueByName().toList()
+            : schools.expand((s) => s.majors).uniqueByName().toList();
       }
     } else {
       schools = universityState.schools.uniqueByName().toList();
@@ -57,7 +58,9 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
-          if (selectedUniversity != null || selectedSchool != null || selectedMajor != null)
+          if (selectedUniversity != null ||
+              selectedSchool != null ||
+              selectedMajor != null)
             CustomButton(
               onPressed: () {
                 setState(() {
@@ -80,7 +83,8 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedUniversity = value;
-                    widget.onFilterChanged(selectedUniversity, selectedSchool, selectedMajor);
+                    widget.onFilterChanged(
+                        selectedUniversity, selectedSchool, selectedMajor);
                   });
                 },
               ),
@@ -93,7 +97,8 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedSchool = value;
-                    widget.onFilterChanged(selectedUniversity, selectedSchool, selectedMajor);
+                    widget.onFilterChanged(
+                        selectedUniversity, selectedSchool, selectedMajor);
                   });
                 },
               ),
@@ -106,7 +111,8 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 onSelected: (value) {
                   setState(() {
                     selectedMajor = value;
-                    widget.onFilterChanged(selectedUniversity, selectedSchool, selectedMajor);
+                    widget.onFilterChanged(
+                        selectedUniversity, selectedSchool, selectedMajor);
                   });
                 },
               ),

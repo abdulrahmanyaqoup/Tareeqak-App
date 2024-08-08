@@ -10,15 +10,15 @@ class SchoolScreen extends StatelessWidget {
   final School school;
   final List<User>? universityVolunteers;
 
-  const SchoolScreen({super.key, required this.school, this.universityVolunteers});
-
-  
+  const SchoolScreen(
+      {super.key, required this.school, this.universityVolunteers});
 
   @override
   Widget build(BuildContext context) {
     List<User> schoolVolunteers = universityVolunteers!
         .where((user) => user.userProps.school == school.name)
         .toList();
+
     return DetailBase(
       title: school.name,
       description: school.description,
@@ -38,7 +38,7 @@ class SchoolScreen extends StatelessWidget {
           label: 'University Majors',
           onPressed: () {
             _showGridModalBottomSheet(
-                context, 'University Majors', school.majors, schoolVolunteers );
+                context, 'University Majors', school.majors, schoolVolunteers);
           },
         ),
       ],
@@ -58,9 +58,8 @@ class SchoolScreen extends StatelessWidget {
     );
   }
 
-
-  void _showGridModalBottomSheet(
-      BuildContext context, String title, List<dynamic> items, List<User> volunteers) {
+  void _showGridModalBottomSheet(BuildContext context, String title,
+      List<dynamic> items, List<User> volunteers) {
     showModalBottomSheet(
       context: context,
       builder: (context) {

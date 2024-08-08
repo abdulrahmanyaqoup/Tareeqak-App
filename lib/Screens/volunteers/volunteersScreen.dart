@@ -1,6 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:finalproject/Screens/volunteers/components/filterVolunteers.dart';
-import 'package:finalproject/Utils/utils.dart';
+import 'package:finalproject/Widgets/snackBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,9 +23,7 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _getAllUsers();
-    });
+    Future.microtask(() => _getAllUsers());
   }
 
   Future<void> _getAllUsers() async {
@@ -49,56 +47,59 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
             style: TextStyle(color: Colors.white, fontSize: 17)),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: users.when(
-        skipError: true,
-        loading: () {
-          return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return const CardShimmer();
-              });
-        },
-        error: (error, stackTrace) => Text('Error: $error'),
-        data: (userState) {
-          return SingleChildScrollView(
-            child: Column(
-              children: [
-                FilterVolunteers(
-                  onClearFilters: () {
-                    setState(() {
-                      userState.filteredUsers = userState.userList;
-                    });
-                  },
-                  onFilterChanged: (university, school, major) {
-                    ref.read(userProvider.notifier).filterUsers(
-                        userState.userList, university, school, major);
-                  },
-                ),
-                userState.filteredUsers.isEmpty
-                    ? Center(
-                        child: Text(
-                          'No advisors found',
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Theme.of(context).colorScheme.primary,
-                              fontWeight: FontWeight.bold),
+      body: RefreshIndicator(
+        onRefresh: _getAllUsers,
+        child: users.when(
+          skipError: true,
+          loading: () {
+            return ListView.builder(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 6,
+                itemBuilder: (context, index) {
+                  return const CardShimmer();
+                });
+          },
+          error: (error, stackTrace) => Text('Error: $error'),
+          data: (userState) {
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  FilterVolunteers(
+                    onClearFilters: () {
+                      setState(() {
+                        userState.filteredUsers = userState.userList;
+                      });
+                    },
+                    onFilterChanged: (university, school, major) {
+                      ref.read(userProvider.notifier).filterUsers(
+                          userState.userList, university, school, major);
+                    },
+                  ),
+                  userState.filteredUsers.isEmpty
+                      ? Center(
+                          child: Text(
+                            'No advisors found',
+                            style: TextStyle(
+                                fontSize: 20,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      : ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: userState.filteredUsers.length,
+                          itemBuilder: (context, index) {
+                            final user = userState.filteredUsers[index];
+                            return VolunteerCard(user: user);
+                          },
                         ),
-                      )
-                    : ListView.builder(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: userState.filteredUsers.length,
-                        itemBuilder: (context, index) {
-                          final user = userState.filteredUsers[index];
-                          return VolunteerCard(user: user);
-                        },
-                      ),
-              ],
-            ),
-          );
-        },
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
