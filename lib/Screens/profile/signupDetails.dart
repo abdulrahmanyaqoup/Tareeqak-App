@@ -64,10 +64,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
               _image,
             );
         if (mounted) {
-          CustomSnackBar(
-              context: context,
-              text: response,
-              contentType: ContentType.success);
+          showSnackBar(context, response, ContentType.success);
           Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
               builder: (_) => Otp(email: widget.email),
@@ -77,10 +74,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         }
       } on DioException catch (e) {
         if (mounted) {
-          CustomSnackBar(
-              context: context,
-              text: e.message!,
-              contentType: ContentType.failure);
+          showSnackBar(context, e.message!, ContentType.failure);
         }
       }
     }

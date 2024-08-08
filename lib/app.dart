@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-
 import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
 import 'Screens/volunteers/volunteersScreen.dart';
@@ -15,34 +14,69 @@ class BottomNavigation extends ConsumerStatefulWidget {
 }
 
 class _BottomNavigationState extends ConsumerState<BottomNavigation>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _controller;
-  static const int _defaultPageIndex = 3;
+  int _index = 3;
   static const _introAnimationEnd = 60 / 240;
+  late TabController tabController;
 
   @override
   void initState() {
     super.initState();
+    tabController = TabController(
+      vsync: this,
+      initialIndex: _index,
+      length: _navigatorKeys.length,
+    );
     _controller = AnimationController(vsync: this);
   }
 
-  final List<Widget> _widgetOptions = <Widget>[
-    const Center(child: Text('ChatBot')),
-    const VolunteersScreen(),
-    const UniversitiesScreen(),
-    const ProfileScreen(),
+  final List<GlobalKey<NavigatorState>> _navigatorKeys = [
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
+    GlobalKey<NavigatorState>(),
   ];
 
   @override
   void dispose() {
+    tabController.dispose();
     _controller.dispose();
     super.dispose();
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _index = index;
+      tabController.animateTo(
+        index,
+        curve: Curves.easeInOut,
+      );
+    });
+
+    if (_index == 0) {
+      _controller.reset();
+      _controller.animateTo(
+        _introAnimationEnd,
+        duration: const Duration(seconds: 1),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return CupertinoTabScaffold(
-      tabBar: CupertinoTabBar(
+    return Scaffold(
+      body: TabBarView(
+        controller: tabController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: [
+          _buildNavigator(0, const Center(child: Text('ChatBot'))),
+          _buildNavigator(1, const VolunteersScreen()),
+          _buildNavigator(2, const UniversitiesScreen()),
+          _buildNavigator(3, const ProfileScreen()),
+        ],
+      ),
+      bottomNavigationBar: CupertinoTabBar(
         border: Border(
           top: BorderSide(
             color: Theme.of(context).colorScheme.primary,
@@ -51,17 +85,8 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         ),
         backgroundColor: Theme.of(context).colorScheme.surface,
         inactiveColor: Theme.of(context).colorScheme.primary,
-        onTap: (index) => {
-          if (index == 0)
-            {
-              _controller.reset(),
-              _controller.animateTo(
-                _introAnimationEnd,
-                duration: const Duration(seconds: 1),
-              ),
-            }
-        },
-        currentIndex: _defaultPageIndex,
+        onTap: _onItemTapped,
+        currentIndex: _index,
         items: [
           BottomNavigationBarItem(
             icon: Lottie.asset(
@@ -71,9 +96,9 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
               fit: BoxFit.fill,
               animate: false,
               controller: _controller,
-              onLoaded: (composition) => {
+              onLoaded: (composition) {
                 _controller.animateTo(_introAnimationEnd,
-                    duration: const Duration(seconds: 1)),
+                    duration: const Duration(seconds: 1));
               },
             ),
             activeIcon: Lottie.asset(
@@ -83,9 +108,9 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
               fit: BoxFit.fill,
               controller: _controller,
               animate: false,
-              onLoaded: (composition) => {
+              onLoaded: (composition) {
                 _controller.animateTo(_introAnimationEnd,
-                    duration: const Duration(seconds: 1)),
+                    duration: const Duration(seconds: 1));
               },
             ),
           ),
@@ -103,27 +128,15 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
           ),
         ],
       ),
-      tabBuilder: (context, index) {
-        return CupertinoTabView(
-          builder: (context) {
-            return CupertinoPageScaffold(
-              navigationBar: index == 0
-                  ? CupertinoNavigationBar(
-                      middle: const Text("ChatBot", style: TextStyle(color:
-                      Colors.white, fontSize: 20)),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    )
-                  : index == 1 ? CupertinoNavigationBar(
-                      middle: const Text("Contact With Advisors", style:
-                      TextStyle(color: Colors.white, fontSize: 17)),
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                    ) : null,
-              child: IndexedStack(
-                index: index,
-                children: _widgetOptions,
-              ),
-            );
-          },
+    );
+  }
+
+  Widget _buildNavigator(int index, Widget child) {
+    return Navigator(
+      key: _navigatorKeys[index],
+      onGenerateRoute: (routeSettings) {
+        return CupertinoPageRoute(
+          builder: (context) => child,
         );
       },
     );

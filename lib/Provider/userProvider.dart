@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:finalproject/api/userApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,45 +8,53 @@ class UserState {
   final User user;
   final List<User> userList;
   final bool isLoggedIn;
-  final bool isLoading;
 
   UserState({
     this.user = const User(),
     this.userList = const [],
     this.isLoggedIn = false,
-    this.isLoading = true,
   });
 
   UserState copyWith({
     User? user,
     List<User>? userList,
-    bool isLoggedIn = false,
-    bool? isLoading,
+    bool? isLoggedIn,
   }) {
     return UserState(
       user: user ?? this.user,
       userList: userList ?? this.userList,
-      isLoggedIn: isLoggedIn,
-      isLoading: isLoading ?? this.isLoading,
+      isLoggedIn: isLoggedIn ?? this.isLoggedIn,
     );
   }
 }
 
-class UserNotifier extends StateNotifier<UserState> {
-  UserNotifier() : super(UserState(user: const User()));
+class UserNotifier extends AutoDisposeAsyncNotifier<UserState> {
+  UserNotifier() : super();
 
-  Future<User> checkLoginStatus() async {
+  @override
+  Future<UserState> build() async {
+    return UserState();
+  }
+
+  Future<void> checkLoginStatus() async {
+    state = const AsyncValue.loading();
     const storage = FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
     if (token != null && token.isNotEmpty) {
-      Map<String, dynamic> userData = await UserApi().getUser(token);
-
-      state = state.copyWith(
-          user: User.fromMap(userData), isLoggedIn: true, isLoading: false);
-      return User.fromMap(userData);
+      state = await AsyncValue.guard(() async {
+        Map<String, dynamic> userData = await UserApi().getUser(token);
+        return state.value!.copyWith(
+          user: User.fromMap(userData),
+          isLoggedIn: true,
+        );
+      });
     } else {
-      state = state.copyWith(user: const User(), isLoading: false);
-      return const User();
+      state = await AsyncValue.guard(() async {
+        return state.value!.copyWith(
+          user: const User(),
+          isLoggedIn: false,
+        );
+      });
     }
   }
 
@@ -71,58 +78,90 @@ class UserNotifier extends StateNotifier<UserState> {
       contact: contact,
       image: image,
     );
-    state = state.copyWith(isLoading: false);
     return response;
   }
 
-  void signInVerifiedUser(User user, String token) async {
+  Future<void> signInVerifiedUser(User user, String token) async {
+    state = const AsyncValue.loading();
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
-    state = state.copyWith(user: user, isLoading: false, isLoggedIn: true);
+    state = await AsyncValue.guard(() async {
+      return state.value!.copyWith(user: user, isLoggedIn: true);
+    });
   }
 
   Future<void> signIn(String email, String password) async {
+    state = const AsyncValue.loading();
     Map<String, dynamic> response =
         await UserApi().signInUser(email: email, password: password);
     String token = response['token'] as String;
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
-    state = state.copyWith(user: User.fromMap(response), isLoggedIn: true);
+    state = await AsyncValue.guard(() async {
+      return state.value!.copyWith(
+        user: User.fromMap(response),
+        isLoggedIn: true,
+      );
+    });
   }
 
   Future<void> signOut() async {
+    state = const AsyncValue.loading();
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'token');
-    state =
-        state.copyWith(user: const User(), isLoggedIn: false, isLoading: false);
+    state = await AsyncValue.guard(() async {
+      return state.value!.copyWith(
+        user: const User(),
+        isLoggedIn: false,
+      );
+    });
   }
 
   Future<void> getAllUsers() async {
-    List<User> users = await UserApi().getAllUsers();
-    state = state.copyWith(userList: users, isLoading: false);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      List<User> users = await UserApi().getAllUsers();
+      return state.value!.copyWith(userList: users);
+    });
   }
 
   Future<void> updateUser(User updatedUser) async {
-    const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: 'token');
-    Map<String, dynamic> response =
-        await UserApi().updateUser(updates: updatedUser, token: token ?? '');
-    state = state.copyWith(
-        user: User.fromMap(response), isLoggedIn: true, isLoading: false);
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      const storage = FlutterSecureStorage();
+      String? token = await storage.read(key: 'token');
+      Map<String, dynamic> response =
+          await UserApi().updateUser(updates: updatedUser, token: token ?? '');
+      final User user = User.fromMap(response);
+      return state.value!.copyWith(
+        user: user,
+        userList: state.value!.userList
+            .map((user1) => user1.email == user.email ? user : user1)
+            .toList(),
+      );
+    });
   }
 
   Future<String> deleteUser() async {
-    const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: 'token');
-    String response = await UserApi().deleteUser(token: token ?? '');
-    await storage.delete(key: 'token');
-    List<User> refreshUserList =
-        state.userList.where((user) => user.email != state.user.email).toList();
-    state = state.copyWith(
-        userList: refreshUserList, user: const User(), isLoggedIn: false);
+    state = const AsyncValue.loading();
+    String response = '';
+    state = await AsyncValue.guard(() async {
+      const storage = FlutterSecureStorage();
+      String? token = await storage.read(key: 'token');
+      response = await UserApi().deleteUser(token: token ?? '');
+      await storage.delete(key: 'token');
+      List<User> refreshUserList = state.value!.userList
+          .where((user) => user.email != state.value!.user.email)
+          .toList();
+      return state.value!.copyWith(
+        userList: refreshUserList,
+        user: const User(),
+        isLoggedIn: false,
+      );
+    });
     return response;
   }
 }
 
-final userProvider =
-    StateNotifierProvider<UserNotifier, UserState>((ref) => UserNotifier());
+final userProvider = AsyncNotifierProvider.autoDispose<UserNotifier, UserState>(
+    UserNotifier.new);

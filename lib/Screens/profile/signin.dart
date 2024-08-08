@@ -30,13 +30,10 @@ class SigninState extends ConsumerState<Signin> {
       await ref.read(userProvider.notifier).signIn(email, password);
     } on DioException catch (e) {
       if (mounted) {
-        CustomSnackBar(
-            context: context,
-            text: e.message!,
-            contentType: ContentType.failure);
+        showSnackBar(context, e.message!, ContentType.failure);
       }
     }
-    if (ref.read(userProvider).isLoggedIn && mounted) {
+    if (ref.read(userProvider).hasValue && mounted) {
       Navigator.pushAndRemoveUntil(
         context,
         CupertinoPageRoute(

@@ -14,7 +14,11 @@ class UniversitiesScreen extends ConsumerStatefulWidget {
   UniversitiesScreenState createState() => UniversitiesScreenState();
 }
 
-class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
+class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   late ScrollController _scrollController;
   double _opacity = 1.0;
   List<University> filteredUniversities = [];
@@ -76,7 +80,9 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final universityState = ref.watch(universityProvider);
+
     return Container(
       color: Theme.of(context).colorScheme.primary,
       child: SafeArea(

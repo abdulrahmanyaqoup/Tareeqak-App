@@ -1,16 +1,11 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dio/dio.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/profile/components/profileBody.dart';
 import 'package:finalproject/Screens/profile/signup.dart';
-import 'package:finalproject/Widgets/cardShimmer.dart';
-import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
-import 'package:finalproject/Utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../../Models/User/user.dart';
+import 'package:flutter/cupertino.dart';
+import '../../Provider/userProvider.dart';
+import '../../Widgets/cardShimmer.dart';
+import '../volunteers/components/volunteerCard.dart';
+import 'components/profileBody.dart';
 import 'editProfile.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -20,26 +15,26 @@ class ProfileScreen extends ConsumerStatefulWidget {
   ProfileScreenState createState() => ProfileScreenState();
 }
 
-class ProfileScreenState extends ConsumerState<ProfileScreen> {
+class ProfileScreenState extends ConsumerState<ProfileScreen>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(userProvider.notifier).checkLoginStatus();
+    });
   }
-
-  final _loginStatus = FutureProvider<User>((ref) async {
-    try {
-      return await ref.read(userProvider.notifier).checkLoginStatus();
-    } on DioException catch (e) {
-      throw e.message!;
-    }
-  });
 
   @override
   Widget build(BuildContext context) {
-    final user = ref.watch(_loginStatus);
+    super.build(context);
+    final asyncUser = ref.watch(userProvider);
     final double height = MediaQuery.of(context).size.height;
 
-    return user.when(
+    return asyncUser.when(
       loading: () => Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -56,26 +51,23 @@ class ProfileScreenState extends ConsumerState<ProfileScreen> {
           body: Stack(
             children: [
               ProfileBody(
-                isLoading: true,
+                isLoading: asyncUser.isLoading,
                 height: height,
               ),
               Positioned(
-                  top: height * 0.2 - 60,
-                  left: 16,
-                  right: 16,
-                  child: const CardShimmer(showButtons: false)),
+                top: height * 0.2 - 60,
+                left: 16,
+                right: 16,
+                child: const CardShimmer(showButtons: false),
+              ),
             ],
           ),
         ),
       ),
-      error: (error, stackTrace) => Scaffold(
-        body: CustomSnackBar(
-            context: context,
-            text: error.toString(),
-            contentType: ContentType.failure),
-      ),
-      data: (user) {
-        final isLoggedIn = user.name.isNotEmpty;
+      error: (error, stackTrace) => Container(),
+      data: (userState) {
+        final user = userState.user;
+        final isLoggedIn = userState.isLoggedIn;
         final buttonText = isLoggedIn ? 'Edit Profile' : 'Sign Up';
         final greetings = isLoggedIn
             ? 'Welcome back, ${user.name}'
@@ -84,7 +76,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen> {
             ? () => Navigator.push(
                   context,
                   CupertinoPageRoute(
-                    builder: (_) => const EditProfile(),
+                    builder: (_) => EditProfile(user: user),
                   ),
                 )
             : () => Navigator.push(
@@ -112,7 +104,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ProfileBody(
                   buttonText: buttonText,
                   greeting: greetings,
-                  isLoading: false,
+                  isLoading: asyncUser.isLoading,
                   onPressed: onPressed,
                   height: height,
                 ),

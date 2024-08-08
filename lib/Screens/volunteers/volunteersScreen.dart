@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:finalproject/Screens/volunteers/components/filterVolunteers.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:finalproject/Models/User/user.dart';
@@ -16,35 +17,33 @@ class VolunteersScreen extends ConsumerStatefulWidget {
   VolunteersScreenState createState() => VolunteersScreenState();
 }
 
-class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
-  List<User> allUsers = [];
+class VolunteersScreenState extends ConsumerState<VolunteersScreen>
+    with AutomaticKeepAliveClientMixin {
   List<User> filteredUsers = [];
-  Future<void>? _usersFuture;
+
+  @override
+  bool get wantKeepAlive => ref.read(userProvider).hasValue;
 
   @override
   void initState() {
     super.initState();
-    _usersFuture = _getAllUsers();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _getAllUsers();
+    });
   }
 
   Future<void> _getAllUsers() async {
     try {
       await ref.read(userProvider.notifier).getAllUsers();
-      setState(() {
-        allUsers = ref.read(userProvider).userList;
-        filteredUsers = allUsers;
-      });
     } on DioException catch (e) {
       if (mounted) {
-        CustomSnackBar(
-            context: context,
-            text: e.message!,
-            contentType: ContentType.failure);
+        showSnackBar(context, e.message!, ContentType.failure);
       }
     }
   }
 
-  void filterUsers(String? university, String? school, String? major) {
+  void filterUsers(
+      List<User> allUsers, String? university, String? school, String? major) {
     setState(() {
       filteredUsers = allUsers.where((user) {
         final matchUniversity =
@@ -58,24 +57,32 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+    final userState = ref.watch(userProvider);
+
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary.withOpacity(0.1),
-      body: FutureBuilder<void>(
-        future: _usersFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return ListView.builder(
+      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.4),
+      appBar: CupertinoNavigationBar(
+        middle: const Text("Contact With Advisors",
+            style: TextStyle(color: Colors.white, fontSize: 17)),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: userState.when(
+        loading: () {
+          return ListView.builder(
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               itemCount: 6,
               itemBuilder: (context, index) {
                 return const CardShimmer();
-              },
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
+              });
+        },
+        error: (error, stackTrace) => Text('Error: $error'),
+        data: (userState) {
+          if (filteredUsers.isEmpty) {
+            setState(() {
+              filteredUsers = userState.userList;
+            });
           }
           return SingleChildScrollView(
             child: Column(
@@ -83,14 +90,14 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
                 FilterVolunteers(
                   onClearFilters: () {
                     setState(() {
-                      filteredUsers = allUsers;
+                      filteredUsers = userState.userList;
                     });
                   },
                   onFilterChanged: (university, school, major) {
-                    filterUsers(university, school, major);
+                    filterUsers(userState.userList, university, school, major);
                   },
                 ),
-                filteredUsers.isEmpty
+                userState.userList.isEmpty
                     ? Center(
                         child: Text(
                           'No advisors found',
@@ -103,9 +110,9 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen> {
                     : ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: filteredUsers.length,
+                        itemCount: userState.userList.length,
                         itemBuilder: (context, index) {
-                          final user = filteredUsers[index];
+                          final user = userState.userList[index];
                           return VolunteerCard(user: user);
                         },
                       ),

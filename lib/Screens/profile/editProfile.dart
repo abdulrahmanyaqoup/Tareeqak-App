@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:finalproject/Models/University/major.dart';
 import 'package:finalproject/Models/University/school.dart';
+import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Provider/universityProvider.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/profile/profileScreen.dart';
@@ -13,13 +14,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../Models/User/userProps.dart';
 import '../../Widgets/customButton.dart';
 import 'components/gradientBackground.dart';
 import 'components/profileImage.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
-  const EditProfile({super.key});
+  const EditProfile({super.key, required this.user});
+
+  final User user;
 
   @override
   EditProfileState createState() => EditProfileState();
@@ -30,14 +34,14 @@ class EditProfileState extends ConsumerState<EditProfile> {
   late TextEditingController nameController;
   late TextEditingController contactController;
   FileImage? _image;
-  String? _selectedUniversity;
-  String? _selectedSchool;
-  String? _selectedMajor;
+  late String? _selectedUniversity;
+  late String? _selectedSchool;
+  late String? _selectedMajor;
 
   @override
   void initState() {
     super.initState();
-    final user = ref.read(userProvider).user;
+    final user = widget.user;
     nameController = TextEditingController(text: user.name);
     contactController = TextEditingController(text: user.userProps.contact);
     _selectedUniversity = user.userProps.university;
@@ -66,32 +70,25 @@ class EditProfileState extends ConsumerState<EditProfile> {
   Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final user = ref.read(userProvider).user;
-    final updatedUserProps = user.userProps.copyWith(
-      university: _selectedUniversity,
-      school: _selectedSchool,
-      major: _selectedMajor,
+    final updatedUserProps = UserProps(
+      university: _selectedUniversity!,
+      school: _selectedSchool!,
+      major: _selectedMajor!,
       contact: contactController.text,
       image: _image?.file.path ?? '',
     );
-    final updatedUser = user.copyWith(
+    final updatedUser = User(
+      email: widget.user.email,
       name: nameController.text,
       userProps: updatedUserProps,
     );
     try {
       await ref.read(userProvider.notifier).updateUser(updatedUser);
-      if (mounted) {
-        CustomSnackBar(
-            context: context,
-            text: 'Profile updated successfully',
-            contentType: ContentType.success);
-      }
+      showSnackBar(
+          context, 'Profile updated successfully', ContentType.success);
     } on DioException catch (e) {
       if (mounted) {
-        CustomSnackBar(
-            context: context,
-            text: e.message!,
-            contentType: ContentType.failure);
+        showSnackBar(context, e.message!, ContentType.failure);
       }
     }
   }
@@ -101,13 +98,10 @@ class EditProfileState extends ConsumerState<EditProfile> {
       await ref.read(userProvider.notifier).signOut();
     } catch (e) {
       if (mounted) {
-        CustomSnackBar(
-            context: context,
-            text: e.toString(),
-            contentType: ContentType.failure);
+        showSnackBar(context, e.toString(), ContentType.failure);
       }
     }
-    if (!ref.read(userProvider).isLoggedIn && mounted) {
+    if (!ref.read(userProvider).isLoading && mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
           builder: (_) => const ProfileScreen(),
@@ -120,21 +114,17 @@ class EditProfileState extends ConsumerState<EditProfile> {
   Future<void> _deleteUser() async {
     try {
       String response = await ref.read(userProvider.notifier).deleteUser();
-      if (mounted && !ref.read(userProvider).isLoggedIn) {
+      if (mounted && !ref.read(userProvider).isLoading) {
         Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute(
               builder: (_) => const ProfileScreen(),
             ),
             (Route<dynamic> route) => false);
-        CustomSnackBar(
-            context: context, text: response, contentType: ContentType.success);
+        showSnackBar(context, response, ContentType.success);
       }
     } on DioException catch (e) {
       if (mounted) {
-        CustomSnackBar(
-            context: context,
-            text: e.toString(),
-            contentType: ContentType.failure);
+        showSnackBar(context, e.toString(), ContentType.failure);
       }
     }
   }
@@ -218,7 +208,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
               children: [
                 const SizedBox(height: 40),
                 ProfileImage(
-                  user: ref.read(userProvider).user,
+                  user: widget.user,
                   image: _image,
                   onImagePick: _pickImage,
                 ),
