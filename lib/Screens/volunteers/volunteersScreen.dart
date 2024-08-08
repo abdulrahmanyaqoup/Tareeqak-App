@@ -3,7 +3,6 @@ import 'package:finalproject/Screens/volunteers/components/filterVolunteers.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
 import 'package:finalproject/Utils/utils.dart';
@@ -18,9 +17,7 @@ class VolunteersScreen extends ConsumerStatefulWidget {
 }
 
 class VolunteersScreenState extends ConsumerState<VolunteersScreen>
-    with AutomaticKeepAliveClientMixin {
-  List<User> filteredUsers = [];
-
+    with AutomaticKeepAliveClientMixin<VolunteersScreen> {
   @override
   bool get wantKeepAlive => ref.read(userProvider).hasValue;
 
@@ -42,23 +39,10 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
     }
   }
 
-  void filterUsers(
-      List<User> allUsers, String? university, String? school, String? major) {
-    setState(() {
-      filteredUsers = allUsers.where((user) {
-        final matchUniversity =
-            university == null || user.userProps.university == university;
-        final matchSchool = school == null || user.userProps.school == school;
-        final matchMajor = major == null || user.userProps.major == major;
-        return matchUniversity && matchSchool && matchMajor;
-      }).toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final userState = ref.watch(userProvider);
+    final users = ref.watch(userProvider);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.4),
@@ -67,7 +51,8 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
             style: TextStyle(color: Colors.white, fontSize: 17)),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: userState.when(
+      body: users.when(
+        skipError: true,
         loading: () {
           return ListView.builder(
               physics: const BouncingScrollPhysics(),
@@ -79,25 +64,21 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
         },
         error: (error, stackTrace) => Text('Error: $error'),
         data: (userState) {
-          if (filteredUsers.isEmpty) {
-            setState(() {
-              filteredUsers = userState.userList;
-            });
-          }
           return SingleChildScrollView(
             child: Column(
               children: [
                 FilterVolunteers(
                   onClearFilters: () {
                     setState(() {
-                      filteredUsers = userState.userList;
+                      userState.filteredUsers = userState.userList;
                     });
                   },
                   onFilterChanged: (university, school, major) {
-                    filterUsers(userState.userList, university, school, major);
+                    ref.read(userProvider.notifier).filterUsers(
+                        userState.userList, university, school, major);
                   },
                 ),
-                userState.userList.isEmpty
+                userState.filteredUsers.isEmpty
                     ? Center(
                         child: Text(
                           'No advisors found',
@@ -110,9 +91,9 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                     : ListView.builder(
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: userState.userList.length,
+                        itemCount: userState.filteredUsers.length,
                         itemBuilder: (context, index) {
-                          final user = userState.userList[index];
+                          final user = userState.filteredUsers[index];
                           return VolunteerCard(user: user);
                         },
                       ),

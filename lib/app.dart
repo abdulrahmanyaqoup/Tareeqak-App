@@ -50,7 +50,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
       _index = index;
       tabController.animateTo(
         index,
-        curve: Curves.easeInOut,
+        curve: Curves.easeInOutCubic,
       );
     });
 

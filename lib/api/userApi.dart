@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Models/User/userProps.dart';
 import 'package:finalproject/api/dioClient.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:http_parser/http_parser.dart';
 
@@ -112,13 +113,11 @@ class UserApi {
         'x-auth-token': token,
       },
     );
-
     Response response = await dio.patch(
       'api/users/update',
       data: formData,
       options: options,
     );
-
     return response.data;
   }
 

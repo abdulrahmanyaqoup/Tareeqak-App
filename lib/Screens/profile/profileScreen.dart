@@ -35,6 +35,8 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
     final double height = MediaQuery.of(context).size.height;
 
     return asyncUser.when(
+      skipError: true,
+      skipLoadingOnRefresh: true,
       loading: () => Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(

@@ -4,6 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'Provider/universityProvider.dart';
+import 'Provider/userProvider.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
@@ -46,8 +49,19 @@ final theme = ThemeData(
   ),
 );
 
-class Tareeqak extends StatelessWidget {
+class Tareeqak extends ConsumerStatefulWidget {
   const Tareeqak({super.key});
+
+  @override
+  TareeqakState createState() => TareeqakState();
+}
+
+class TareeqakState extends ConsumerState {
+  @override
+  initState() {
+    super.initState();
+    ref.read(universityProvider.notifier).getUniversities();
+  }
 
   @override
   Widget build(BuildContext context) {
