@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:finalproject/Widgets/customButton.dart';
 import 'package:finalproject/Screens/profile/components/formContainer.dart';
 import 'package:finalproject/Screens/profile/components/gradientBackground.dart';
@@ -10,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import '../../../Provider/userProvider.dart';
-import '../../../Utils/utils.dart';
+import '../../Widgets/snackBar.dart';
 
 class Signin extends ConsumerStatefulWidget {
   const Signin({super.key});
@@ -26,22 +25,22 @@ class SigninState extends ConsumerState<Signin> {
   bool _isPasswordVisible = false;
 
   Future<void> _signIn(String email, String password) async {
-    try {
-      await ref.read(userProvider.notifier).signIn(email, password);
-    } on DioException catch (e) {
-      if (mounted) {
-        showSnackBar(context, e.message!, ContentType.failure);
-      }
-    }
-    if (ref.read(userProvider).hasValue && mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute(
-          builder: (_) => const ProfileScreen(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
+    await ref
+        .read(userProvider.notifier)
+        .signIn(email, password)
+        .whenComplete(
+          () => Navigator.pushAndRemoveUntil(
+            context,
+            CupertinoPageRoute(
+              builder: (_) => const ProfileScreen(),
+            ),
+            (Route<dynamic> route) => false,
+          ),
+        )
+        .onError(
+          (error, stackTrace) =>
+              showSnackBar(context, error.toString(), ContentType.failure),
+        );
   }
 
   @override

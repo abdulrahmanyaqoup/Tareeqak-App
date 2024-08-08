@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Models/User/userProps.dart';
 import 'package:finalproject/api/dioClient.dart';
 
 // ignore: depend_on_referenced_packages
@@ -10,37 +8,19 @@ import 'package:http_parser/http_parser.dart';
 
 class UserApi {
   Future<String> signUp({
-    required String email,
+    required User user,
     required String password,
-    required String name,
-    String university = '',
-    String school = '',
-    String major = '',
-    String contact = '',
     File? image,
   }) async {
-    UserProps userProps = UserProps(
-      university: university,
-      school: school,
-      major: major,
-      contact: contact,
-      image: '',
-    );
-
-    User user = User(
-      name: name,
-      email: email,
-      userProps: userProps,
-    );
-
     FormData formData = FormData.fromMap({
+      'image': image,
       'name': user.name,
       'email': user.email,
       'password': password,
-      'university': userProps.university,
-      'school': userProps.school,
-      'major': userProps.major,
-      'contact': userProps.contact,
+      'university': user.userProps.university,
+      'school': user.userProps.school,
+      'major': user.userProps.major,
+      'contact': user.userProps.contact,
     });
 
     if (image != null) {
@@ -88,22 +68,23 @@ class UserApi {
   }
 
   Future<Map<String, dynamic>> updateUser({
-    required User updates,
+    required User user,
     required String token,
   }) async {
     FormData formData = FormData.fromMap({
-      'name': updates.name,
-      'email': updates.email,
-      'university': updates.userProps.university,
-      'school': updates.userProps.school,
-      'major': updates.userProps.major,
-      'contact': updates.userProps.contact,
+      'image': user.userProps.image,
+      'name': user.name,
+      'university': user.userProps.university,
+      'school': user.userProps.school,
+      'major': user.userProps.major,
+      'contact': user.userProps.contact,
     });
-    if (updates.userProps.image.isNotEmpty) {
+
+    if (user.userProps.image.isNotEmpty) {
       formData.files.add(MapEntry(
         'image',
         await MultipartFile.fromFile(
-          updates.userProps.image,
+          user.userProps.image,
           contentType: MediaType('image', 'jpg/jpeg/webp/png'),
         ),
       ));
@@ -134,7 +115,6 @@ class UserApi {
       options: options,
       data: {},
     );
-    print(response.data);
     return response.data;
   }
 }

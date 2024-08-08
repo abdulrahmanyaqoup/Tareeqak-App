@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/cupertino.dart';
 import '../../Provider/userProvider.dart';
-import '../../Utils/utils.dart';
+import '../../Widgets/snackBar.dart';
 import '../../Widgets/cardShimmer.dart';
 import '../volunteers/components/volunteerCard.dart';
 import 'components/profileBody.dart';

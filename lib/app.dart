@@ -1,18 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
 import 'Screens/volunteers/volunteersScreen.dart';
+import 'Utils/getUniversities.dart';
 
-class BottomNavigation extends StatefulWidget {
+class BottomNavigation extends ConsumerStatefulWidget {
   const BottomNavigation({super.key});
 
   @override
   _BottomNavigationState createState() => _BottomNavigationState();
 }
 
-class _BottomNavigationState extends State<BottomNavigation>
+class _BottomNavigationState extends ConsumerState<BottomNavigation>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
   static const _introAnimationEnd = 60 / 240;
@@ -21,6 +23,7 @@ class _BottomNavigationState extends State<BottomNavigation>
   @override
   void initState() {
     super.initState();
+    Future.microtask(() => getUniversities(ref, context));
     _tabController = TabController(
       vsync: this,
       initialIndex: 3,

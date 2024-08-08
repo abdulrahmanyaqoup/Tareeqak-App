@@ -1,0 +1,1 @@
+import '../Provider/universityProvider.dart';Future<void> getUniversities(ref, context) async {  await ref.read(universityProvider.notifier).getUniversities();}

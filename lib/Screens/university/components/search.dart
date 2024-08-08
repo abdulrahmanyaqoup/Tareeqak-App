@@ -34,24 +34,15 @@ class Search extends StatelessWidget {
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
               hintText: 'Search for a university',
-              filled: true,
-              fillColor: Colors.grey.shade100,
-              contentPadding:
-                  const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
+              prefixIcon: const Icon(Icons.search),
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
+                borderRadius: BorderRadius.circular(10),
                 borderSide: BorderSide.none,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(color: Colors.grey.shade300, width: 1.0),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                borderSide: BorderSide(
-                    color: Theme.of(context).colorScheme.primary, width: 1.5),
-              ),
-              prefixIcon: Icon(Icons.search, color: Colors.grey.shade600),
+              filled: true,
+              fillColor: Colors.grey.shade200,
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
             ),
           ),
         ),

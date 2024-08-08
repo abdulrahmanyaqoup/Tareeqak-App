@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:finalproject/Models/User/user.dart';
 import 'package:finalproject/Provider/userProvider.dart';
 import 'package:finalproject/Screens/profile/profileScreen.dart';
@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+
+import '../../Widgets/snackBar.dart';
 
 class Otp extends ConsumerStatefulWidget {
   final String email;
@@ -39,29 +41,32 @@ class _Otp extends ConsumerState<Otp> {
       isLoading = true;
       errorMessage = null;
     });
-    try {
-      Map<String, dynamic> response =
-          await OtpApi().verifyOTP(widget.email, otpController.text);
-      String token = response['token'];
-      User user = User.fromMap(response);
-      ref.read(userProvider.notifier).signInVerifiedUser(user, token);
-      if (mounted) {
-        Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute(
-            builder: (_) => const ProfileScreen(),
-          ),
-          (Route<dynamic> route) => false,
-        );
-      }
-    } on DioException catch (error) {
-      setState(() {
-        errorMessage = error.message;
-      });
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
+
+    Map<String, dynamic> response = await OtpApi()
+        .verifyOTP(widget.email, otpController.text)
+        .catchError((error) => setState(() {
+              errorMessage = error.message;
+              isLoading = false;
+            }));
+    String token = response['token'];
+    User user = User.fromMap(response);
+    ref.read(userProvider.notifier).signInVerifiedUser(user, token).onError(
+        (error, stackTrace) =>
+            showSnackBar(context, error.toString(), ContentType.failure));
+    if (mounted) {
+      Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (_) => const ProfileScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
     }
+  }
+
+  Future<void> _deleteUnverfiedUser() async {
+    await OtpApi().deleteUnverified(widget.email).onError((error, stackTrace) {
+      showSnackBar(context, error.toString(), ContentType.failure);
+    });
   }
 
   @override
@@ -73,7 +78,10 @@ class _Otp extends ConsumerState<Otp> {
         backgroundColor: Theme.of(context).colorScheme.surface,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => {
+            _deleteUnverfiedUser(),
+            Navigator.of(context).pop(),
+          },
         ),
       ),
       body: SingleChildScrollView(
