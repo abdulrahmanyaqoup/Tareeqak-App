@@ -58,7 +58,7 @@ class ChatBotState extends State<ChatBot>
       _messages.add(''); // Placeholder for typing indicator
     });
 
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future<void>.delayed(const Duration(milliseconds: 10));
     final response = await _api.sendMessage(message);
 
     await _simulateTyping(response);
@@ -77,7 +77,7 @@ class ChatBotState extends State<ChatBot>
         break;
       }
 
-      await Future.delayed(const Duration(milliseconds: 2));
+      await Future<void>.delayed(const Duration(milliseconds: 2));
       setState(() {
         _messages[_messages.length - 1] += response[i];
       });
@@ -132,7 +132,7 @@ class ChatBotState extends State<ChatBot>
                         width: 300,
                         child: Text(
                           // ignore: lines_longer_than_80_chars
-                          'Hello! I am Astronet, Know about universities, courses, and more in Jordan.',
+                          'Hello! I am Astronet, Know about universities, majors, and more in Jordan.',
                           textAlign: TextAlign.center,
                           softWrap: true,
                           style: TextStyle(

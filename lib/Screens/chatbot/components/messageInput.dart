@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
 class MessageInput extends StatelessWidget {
-  final TextEditingController controller;
-  final bool isTyping;
-  final VoidCallback onSend;
-
   const MessageInput({
-    super.key,
     required this.controller,
     required this.isTyping,
     required this.onSend,
+    super.key,
   });
+  final TextEditingController controller;
+  final bool isTyping;
+  final VoidCallback onSend;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class MessageInput extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[200],
       ),
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       child: Row(
         children: [
           Expanded(
@@ -30,8 +29,7 @@ class MessageInput extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                   borderSide: BorderSide.none,
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                    vertical: 0, horizontal: 16),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
             ),
           ),

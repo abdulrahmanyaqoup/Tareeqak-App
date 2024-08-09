@@ -3,16 +3,13 @@ import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MessageList extends StatefulWidget {
+
+  const MessageList({
+    required this.messages, required this.animationController, required this.scrollController, super.key,
+  });
   final List<String> messages;
   final AnimationController animationController;
   final ScrollController scrollController;
-
-  const MessageList({
-    super.key,
-    required this.messages,
-    required this.animationController,
-    required this.scrollController,
-  });
 
   @override
   State<MessageList> createState() => _MessageListState();
@@ -25,17 +22,17 @@ class _MessageListState extends State<MessageList> {
       highlightColor: Colors.grey[100]!,
       child: Row(
         children: [
-          const CircleAvatar(radius: 16.0),
-          const SizedBox(width: 8.0),
+          const CircleAvatar(radius: 16),
+          const SizedBox(width: 8),
           Expanded(
             child: Align(
               alignment: Alignment.centerLeft,
               child: Container(
                 padding:
-                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                    const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(16.0),
+                  borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),
@@ -48,7 +45,7 @@ class _MessageListState extends State<MessageList> {
               ),
             ),
           ),
-          const SizedBox(width: 8.0),
+          const SizedBox(width: 8),
         ],
       ),
     );
@@ -61,24 +58,24 @@ class _MessageListState extends State<MessageList> {
       itemCount: widget.messages.length,
       itemBuilder: (context, index) {
         final message = widget.messages[index];
-        final isUser = index % 2 == 0;
+        final isUser = (index % 2).isEven;
 
         if (message.isEmpty) {
           return Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: _buildTypingIndicator(),
           );
         }
 
         return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (!isUser)
                 CircleAvatar(
-                  radius: 16.0,
+                  radius: 16,
                   backgroundColor: Colors.transparent,
                   child: Lottie.asset(
                     'assets/animations/starsFilled.json',
@@ -87,15 +84,15 @@ class _MessageListState extends State<MessageList> {
                   ),
                 )
               else
-                const SizedBox(width: 24.0),
-              const SizedBox(width: 4.0),
+                const SizedBox(width: 24),
+              const SizedBox(width: 4),
               Expanded(
                 child: Align(
                   alignment:
                       isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
+                        vertical: 8, horizontal: 16,),
                     decoration: BoxDecoration(
                       gradient: isUser
                           ? LinearGradient(
@@ -108,7 +105,7 @@ class _MessageListState extends State<MessageList> {
                             )
                           : null,
                       color: !isUser ? Colors.grey[200] : null,
-                      borderRadius: BorderRadius.circular(16.0),
+                      borderRadius: BorderRadius.circular(16),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black.withOpacity(0.05),
@@ -126,7 +123,7 @@ class _MessageListState extends State<MessageList> {
                   ),
                 ),
               ),
-              const SizedBox(width: 8.0),
+              const SizedBox(width: 8),
             ],
           ),
         );
