@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-import 'Screens/chatbot.dart';
+import 'Screens/chatbot/chatbot.dart';
 import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
 import 'Screens/volunteers/volunteersScreen.dart';
