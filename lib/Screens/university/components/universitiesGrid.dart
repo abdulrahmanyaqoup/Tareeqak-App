@@ -15,20 +15,24 @@ class UniversitiesGrid extends StatefulWidget {
 class _UniversitiesGridState extends State<UniversitiesGrid> {
   @override
   Widget build(BuildContext context) {
-    return SliverGrid(
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          final university = widget.universities[index];
-          return UniversityCard(
-            university: university,
-          );
-        },
-        childCount: widget.universities.length,
+    return SliverPadding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      sliver: SliverGrid(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 15,
+          mainAxisSpacing: 15,
+          mainAxisExtent: 200,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            final university = widget.universities[index];
+            return UniversityCard(
+              university: university,
+            );
+          },
+          childCount: widget.universities.length,
+        ),
       ),
     );
   }

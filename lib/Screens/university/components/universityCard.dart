@@ -1,24 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../../../Models/University/university.dart';
 import '../universityScreen.dart';
 
 class UniversityCard extends StatelessWidget {
-
   const UniversityCard({
-    required this.university, super.key,
+    required this.university,
+    super.key,
   });
   final University university;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10, top: 10),
-      child: InkWell(
-        onTap: () => _navigateToDetail(context),
-        child: _buildContent(context),
-      ),
+    return InkWell(
+      onTap: () => _navigateToDetail(context),
+      child: _buildContent(context),
     );
   }
 
@@ -36,36 +34,42 @@ class UniversityCard extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(.8),
+        color: Colors.grey[100],
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            offset: const Offset(0, 2),
+            offset: const Offset(0, 1),
             color: Theme.of(context).primaryColor.withOpacity(.2),
             blurRadius: 3,
           ),
         ],
       ),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              shape: BoxShape.circle,
-            ),
-            child: const Icon(
-              Icons.school,
-              color: Colors.white,
-              size: 30,
+          SvgPicture.asset(
+            'assets/images/universities/ju.svg',
+            width: 80,
+            height: 80,
+          ),
+          Text(
+            university.name,
+            textAlign: TextAlign.center,
+            softWrap: true,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
-          Text(university.name,
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,),
-          Text('Amman', style: Theme.of(context).textTheme.titleSmall),
+          Text(
+            university.city,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
         ],
       ),
     );

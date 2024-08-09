@@ -63,7 +63,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
       color: Theme.of(context).colorScheme.primary,
       child: SafeArea(
         child: Scaffold(
-          backgroundColor: Theme.of(context).colorScheme.surface,
+          backgroundColor: Colors.white,
           body: CustomScrollView(
             controller: _scrollController,
             physics: const ClampingScrollPhysics(),
