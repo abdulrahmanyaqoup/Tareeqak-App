@@ -5,15 +5,15 @@ import 'package:uuid/uuid.dart';
 
 import '../api/openaiApi.dart';
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+class ChatBot extends StatefulWidget {
+  const ChatBot({super.key});
 
   @override
-  ChatScreenState createState() => ChatScreenState();
+  State<ChatBot> createState() => _ChatBotState();
 }
 
-class ChatScreenState extends State<ChatScreen>
-    with AutomaticKeepAliveClientMixin<ChatScreen> {
+class _ChatBotState extends State<ChatBot>
+    with AutomaticKeepAliveClientMixin<ChatBot> {
   @override
   bool get wantKeepAlive => true;
 

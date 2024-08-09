@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
+import 'Screens/chatbot.dart';
 import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
 import 'Screens/volunteers/volunteersScreen.dart';
@@ -72,7 +73,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          _buildNavigator(0, const Center(child: Text('ChatBot'))),
+          _buildNavigator(0, const ChatBot()),
           _buildNavigator(1, const VolunteersScreen()),
           _buildNavigator(2, const UniversitiesScreen()),
           _buildNavigator(3, const ProfileScreen()),
