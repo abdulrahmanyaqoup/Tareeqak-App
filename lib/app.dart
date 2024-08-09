@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
+
 import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
 import 'Screens/volunteers/volunteersScreen.dart';
@@ -11,7 +12,7 @@ class BottomNavigation extends ConsumerStatefulWidget {
   const BottomNavigation({super.key});
 
   @override
-  _BottomNavigationState createState() => _BottomNavigationState();
+  ConsumerState<BottomNavigation> createState() => _BottomNavigationState();
 }
 
 class _BottomNavigationState extends ConsumerState<BottomNavigation>
@@ -23,7 +24,7 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => getUniversities(ref, context));
+    Future.microtask(() => getUniversities(ref));
     _tabController = TabController(
       vsync: this,
       initialIndex: 3,
@@ -55,11 +56,12 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
     });
 
     if (_tabController.index == 0) {
-      _controller.reset();
-      _controller.animateTo(
-        _introAnimationEnd,
-        duration: const Duration(seconds: 1),
-      );
+      _controller
+        ..reset()
+        ..animateTo(
+          _introAnimationEnd,
+          duration: const Duration(seconds: 1),
+        );
     }
   }
 
@@ -97,8 +99,10 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
               animate: false,
               controller: _controller,
               onLoaded: (composition) {
-                _controller.animateTo(_introAnimationEnd,
-                    duration: const Duration(seconds: 1));
+                _controller.animateTo(
+                  _introAnimationEnd,
+                  duration: const Duration(seconds: 1),
+                );
               },
             ),
             activeIcon: Lottie.asset(
@@ -109,8 +113,10 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
               controller: _controller,
               animate: false,
               onLoaded: (composition) {
-                _controller.animateTo(_introAnimationEnd,
-                    duration: const Duration(seconds: 1));
+                _controller.animateTo(
+                  _introAnimationEnd,
+                  duration: const Duration(seconds: 1),
+                );
               },
             ),
           ),

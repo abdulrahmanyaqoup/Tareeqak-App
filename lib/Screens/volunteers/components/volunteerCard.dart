@@ -1,25 +1,29 @@
 import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Screens/volunteers/components/customButton.dart';
-import 'package:finalproject/Screens/volunteers/components/volunteerInfo.dart';
-import 'package:finalproject/env/env.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../Models/User/user.dart';
+import '../../../env/env.dart';
+import 'customButton.dart';
+import 'volunteerInfo.dart';
+
 class VolunteerCard extends StatelessWidget {
-  const VolunteerCard({super.key, required this.user, this.isProfile = false});
+  const VolunteerCard({required this.user, super.key, this.isProfile = false});
+
   final bool isProfile;
   final User user;
 
   Future<void> _launchWhatsApp() async {
-    String contact = '+962${user.userProps.contact.substring(1)}';
-    Uri androidUri = Uri.parse("whatsapp://send?phone=$contact&text=hi");
-    Uri iosUri = Uri.parse("https://wa.me/$contact");
-    Uri webUri = Uri.parse(
-        'https://api.whatsapp.com/send/?phone=$contact&text=Hello Advisor ${user.name} \nCan you help me with my academic year ?');
+    final contact = '+962${user.userProps.contact.substring(1)}';
+    final androidUri = Uri.parse('whatsapp://send?phone=$contact&text=hi');
+    final iosUri = Uri.parse('https://wa.me/$contact');
+    final webUri = Uri.parse(
+      'https://api.whatsapp.com/send/?phone=$contact&text=Hello Advisor ${user.name} \nCan you help me with my academic year ?',
+    );
 
     if (Platform.isIOS) {
       if (await canLaunchUrl(iosUri)) {
@@ -29,8 +33,10 @@ class VolunteerCard extends StatelessWidget {
       }
     } else {
       if (await canLaunchUrl(androidUri)) {
-        await launchUrl(androidUri,
-            mode: LaunchMode.externalNonBrowserApplication);
+        await launchUrl(
+          androidUri,
+          mode: LaunchMode.externalNonBrowserApplication,
+        );
       } else {
         await launchUrl(webUri, mode: LaunchMode.externalNonBrowserApplication);
       }
@@ -38,8 +44,11 @@ class VolunteerCard extends StatelessWidget {
   }
 
   Future<void> _launchEmail() async {
-    final Uri email = Uri.parse(
-      'mailto:${user.email}?subject=Advisor&body=Hello Advisor ${user.name}.\n\nHope you are doing well!\n\nCan you help me with my academic year?\n\nThanks.',
+    final email = Uri.parse(
+      'mailto:${user.email}'
+      '?subject=Advisor&body=Hello Advisor ${user.name}.\n\n'
+      'Hope you are doing well!\n\n'
+      'Can you help me with my academic year?\n\nThanks.',
     );
     if (!await launchUrl(email)) {
       throw Exception('Could not launch $email');
@@ -55,13 +64,11 @@ class VolunteerCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(14),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
                   width: 75,
@@ -72,7 +79,6 @@ class VolunteerCard extends StatelessWidget {
                     border: Border.all(
                       color:
                           Theme.of(context).colorScheme.primary.withOpacity(.7),
-                      width: 1.0,
                     ),
                   ),
                   child: CircleAvatar(
@@ -80,7 +86,8 @@ class VolunteerCard extends StatelessWidget {
                     backgroundImage: user.userProps.image.isNotEmpty
                         ? CachedNetworkImageProvider(
                             '${Env.URI}${user.userProps.image}',
-                            headers: {"x-api-key": Env.API_KEY})
+                            headers: {'x-api-key': Env.API_KEY},
+                          )
                         : null,
                     child: user.userProps.image.isEmpty
                         ? const Icon(Icons.person, size: 30)
@@ -114,32 +121,35 @@ class VolunteerCard extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             InfoRow(
-                icon: Icons.school,
-                label: 'School',
-                value: user.userProps.school),
+              icon: Icons.school,
+              label: 'School',
+              value: user.userProps.school,
+            ),
             const SizedBox(height: 10),
             InfoRow(
-                icon: CupertinoIcons.pen,
-                label: 'Major',
-                value: user.userProps.major),
-            const SizedBox(height: 10),
-            isProfile ? const SizedBox() : 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ActionIcon(
-                  icon: FontAwesomeIcons.envelope,
-                  color: Theme.of(context).colorScheme.primary,
-                  onTap: _launchEmail,
-                ),
-                const SizedBox(width: 10),
-                ActionIcon(
-                  icon: FontAwesomeIcons.whatsapp,
-                  color: Colors.green.withOpacity(0.8),
-                  onTap: _launchWhatsApp,
-                ),
-              ],
+              icon: CupertinoIcons.pen,
+              label: 'Major',
+              value: user.userProps.major,
             ),
+            const SizedBox(height: 10),
+            if (isProfile)
+              const SizedBox()
+            else
+              Row(
+                children: [
+                  ActionIcon(
+                    icon: FontAwesomeIcons.envelope,
+                    color: Theme.of(context).colorScheme.primary,
+                    onTap: _launchEmail,
+                  ),
+                  const SizedBox(width: 10),
+                  ActionIcon(
+                    icon: FontAwesomeIcons.whatsapp,
+                    color: Colors.green.withOpacity(0.8),
+                    onTap: _launchWhatsApp,
+                  ),
+                ],
+              ),
           ],
         ),
       ),

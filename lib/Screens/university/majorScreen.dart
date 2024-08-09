@@ -1,20 +1,21 @@
-import 'package:finalproject/Models/University/major.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Screens/university/components/volunteersSheet.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../../Models/University/major.dart';
+import '../../Models/User/user.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
+import 'components/volunteersSheet.dart';
 
 class MajorScreen extends StatelessWidget {
+
+  const MajorScreen({required this.major, super.key, this.schoolVolunteers});
   final Major major;
   final List<User>? schoolVolunteers;
 
-  const MajorScreen({super.key, required this.major, this.schoolVolunteers});
-
   @override
   Widget build(BuildContext context) {
-    List<User> majorVolunteers = schoolVolunteers!
+    final majorVolunteers = schoolVolunteers!
         .where((user) => user.userProps.major == major.name)
         .toList();
 
@@ -51,7 +52,7 @@ class MajorScreen extends StatelessWidget {
     );
   }
 
-  void _launchURL(String url) async {
+  Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
     if (!await launchUrl(uri)) {
       throw Exception('Could not launch $url');
@@ -59,8 +60,8 @@ class MajorScreen extends StatelessWidget {
   }
 
   void _showVolunteers(
-      BuildContext context, String title, List<User> volunteers) {
-    showModalBottomSheet(
+      BuildContext context, String title, List<User> volunteers,) {
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) {
         return VolunteersSheet(
@@ -72,8 +73,8 @@ class MajorScreen extends StatelessWidget {
   }
 
   void _showModalBottomSheet(
-      BuildContext context, String title, List<String> items) {
-    showModalBottomSheet(
+      BuildContext context, String title, List<String> items,) {
+    showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,
       builder: (BuildContext bc) {

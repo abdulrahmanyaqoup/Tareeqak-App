@@ -1,23 +1,24 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/profile/profileScreen.dart';
-import 'package:finalproject/api/otpApi.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
+import '../../Models/User/user.dart';
+import '../../Provider/userProvider.dart';
 import '../../Widgets/snackBar.dart';
+import '../../api/otpApi.dart';
+import 'profileScreen.dart';
 
 class Otp extends ConsumerStatefulWidget {
+  const Otp({required this.email, super.key});
+
   final String email;
 
-  const Otp({super.key, required this.email});
-
   @override
-  _Otp createState() => _Otp();
+  ConsumerState<Otp> createState() => _Otp();
 }
 
 class _Otp extends ConsumerState<Otp> {
@@ -33,7 +34,7 @@ class _Otp extends ConsumerState<Otp> {
 
   String censuredEmail(String email) {
     const hiderPlaceholder = '****';
-    return email.replaceRange(3, email.indexOf("@"), hiderPlaceholder);
+    return email.replaceRange(3, email.indexOf('@'), hiderPlaceholder);
   }
 
   Future<void> verifyOtp() async {
@@ -42,20 +43,27 @@ class _Otp extends ConsumerState<Otp> {
       errorMessage = null;
     });
 
-    Map<String, dynamic> response = await OtpApi()
+    final response = await OtpApi()
         .verifyOTP(widget.email, otpController.text)
-        .catchError((error) => setState(() {
-              errorMessage = error.message;
-              isLoading = false;
-            }));
-    String token = response['token'];
-    User user = User.fromMap(response);
-    ref.read(userProvider.notifier).signInVerifiedUser(user, token).onError(
-        (error, stackTrace) =>
-            showSnackBar(context, error.toString(), ContentType.failure));
+        .catchError((Object error) {
+      setState(() {
+        errorMessage = (error as DioException).message;
+        isLoading = false;
+      });
+      return <String, dynamic>{};
+    });
+    final token = response['token'] as String;
+    final user = User.fromMap(response);
+    await ref
+        .read(userProvider.notifier)
+        .signInVerifiedUser(user, token)
+        .onError(
+          (error, stackTrace) =>
+              showSnackBar(context, error.toString(), ContentType.failure),
+        );
     if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
+      await Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute<void>(
           builder: (_) => const ProfileScreen(),
         ),
         (Route<dynamic> route) => false,
@@ -86,11 +94,11 @@ class _Otp extends ConsumerState<Otp> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(40.0),
+          padding: const EdgeInsets.all(40),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 20),
               Container(
                 height: 200,
                 width: 400,
@@ -102,7 +110,7 @@ class _Otp extends ConsumerState<Otp> {
                   fit: BoxFit.contain,
                 ),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 20),
               Text(
                 'Enter Verification Code',
                 style: Theme.of(context)
@@ -110,13 +118,14 @@ class _Otp extends ConsumerState<Otp> {
                     .bodyLarge
                     ?.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 10),
               Text(
-                'Please verifiy the OTP that has been sent to this Email ${censuredEmail(widget.email)}',
+                'Please verifiy the OTP that has been sent to this Email '
+                '${censuredEmail(widget.email)}',
                 textAlign: TextAlign.center,
                 style: Theme.of(context).textTheme.titleSmall,
               ),
-              const SizedBox(height: 40.0),
+              const SizedBox(height: 40),
               PinCodeTextField(
                 controller: otpController,
                 appContext: context,
@@ -129,9 +138,9 @@ class _Otp extends ConsumerState<Otp> {
                   inActiveBoxShadow: const <BoxShadow>[
                     BoxShadow(
                       color: Colors.grey,
-                      blurRadius: 1.0,
+                      blurRadius: 1,
                       spreadRadius: .1,
-                    )
+                    ),
                   ],
                   fieldHeight: 50,
                   fieldWidth: 50,
@@ -144,15 +153,15 @@ class _Otp extends ConsumerState<Otp> {
                 ),
                 enableActiveFill: true,
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 20),
               if (errorMessage != null)
                 Text(
                   errorMessage!,
                   style: const TextStyle(color: Colors.red),
                 ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () => verifyOtp(),
+                onPressed: verifyOtp,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(150, 40),
                   backgroundColor: Theme.of(context).colorScheme.primary,
@@ -174,13 +183,15 @@ class _Otp extends ConsumerState<Otp> {
                           strokeWidth: 2,
                         ),
                       )
-                    : const Text('Verify OTP',
+                    : const Text(
+                        'Verify OTP',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 16,
-                        )),
+                        ),
+                      ),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 20),
             ],
           ),
         ),

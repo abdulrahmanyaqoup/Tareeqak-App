@@ -1,14 +1,15 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:finalproject/Screens/profile/signup.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/cupertino.dart';
+
 import '../../Provider/userProvider.dart';
-import '../../Widgets/snackBar.dart';
 import '../../Widgets/cardShimmer.dart';
+import '../../Widgets/snackBar.dart';
 import '../volunteers/components/volunteerCard.dart';
 import 'components/profileBody.dart';
 import 'editProfile.dart';
+import 'signup.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
   const ProfileScreen({super.key});
@@ -25,7 +26,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => _checkLoginStatus());
+    Future.microtask(_checkLoginStatus);
   }
 
   Future<void> _checkLoginStatus() async {
@@ -40,7 +41,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final double height = MediaQuery.of(context).size.height;
+    final height = MediaQuery.of(context).size.height;
     final getUser = ref.watch(userProvider);
 
     return getUser.when(
@@ -83,13 +84,13 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
         final onPressed = user.name.isNotEmpty
             ? () => Navigator.push(
                   context,
-                  CupertinoPageRoute(
+                  CupertinoPageRoute<void>(
                     builder: (_) => EditProfile(user: user),
                   ),
                 )
             : () => Navigator.push(
                   context,
-                  CupertinoPageRoute(
+                  CupertinoPageRoute<void>(
                     builder: (_) => const SignupScreen(),
                   ),
                 );

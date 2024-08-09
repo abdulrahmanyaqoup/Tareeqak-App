@@ -1,11 +1,12 @@
-import 'package:finalproject/Models/University/university.dart';
-import 'package:finalproject/Screens/university/components/universityCard.dart';
 import 'package:flutter/material.dart';
 
-class UniversitiesGrid extends StatefulWidget {
-  final List<University> universities;
+import '../../../Models/University/university.dart';
+import 'universityCard.dart';
 
-  const UniversitiesGrid({super.key, required this.universities});
+class UniversitiesGrid extends StatefulWidget {
+
+  const UniversitiesGrid({required this.universities, super.key});
+  final List<University> universities;
 
   @override
   State<UniversitiesGrid> createState() => _UniversitiesGridState();

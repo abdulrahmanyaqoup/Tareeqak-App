@@ -1,15 +1,16 @@
-import 'package:finalproject/Widgets/customButton.dart';
-import 'package:finalproject/Screens/profile/components/formContainer.dart';
-import 'package:finalproject/Screens/profile/components/gradientBackground.dart';
-import 'package:finalproject/Screens/profile/profileScreen.dart';
-import 'package:finalproject/Screens/profile/signup.dart';
-import 'package:finalproject/Widgets/textfield.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import '../../../Provider/userProvider.dart';
+
+import '../../Provider/userProvider.dart';
+import '../../Widgets/customButton.dart';
 import '../../Widgets/snackBar.dart';
+import '../../Widgets/textfield.dart';
+import 'components/formContainer.dart';
+import 'components/gradientBackground.dart';
+import 'profileScreen.dart';
+import 'signup.dart';
 
 class Signin extends ConsumerStatefulWidget {
   const Signin({super.key});
@@ -25,22 +26,21 @@ class SigninState extends ConsumerState<Signin> {
   bool _isPasswordVisible = false;
 
   Future<void> _signIn(String email, String password) async {
-    await ref
-        .read(userProvider.notifier)
-        .signIn(email, password)
-        .whenComplete(
-          () => Navigator.pushAndRemoveUntil(
-            context,
-            CupertinoPageRoute(
-              builder: (_) => const ProfileScreen(),
-            ),
-            (Route<dynamic> route) => false,
-          ),
-        )
-        .onError(
-          (error, stackTrace) =>
-              showSnackBar(context, error.toString(), ContentType.failure),
-        );
+    try {
+      await ref.read(userProvider.notifier).signIn(email, password);
+      if (!mounted) return;
+      await Navigator.pushAndRemoveUntil(
+        context,
+        CupertinoPageRoute<void>(
+          builder: (_) => const ProfileScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    } catch (error) {
+      if (!mounted) return;
+      final errorMessage = error.toString().replaceFirst('Exception: ', '');
+      showSnackBar(context, errorMessage, ContentType.failure);
+    }
   }
 
   @override
@@ -61,7 +61,7 @@ class SigninState extends ConsumerState<Signin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 150),
-                const HeaderText(text: "Login"),
+                const HeaderText(text: 'Login'),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(
@@ -72,7 +72,7 @@ class SigninState extends ConsumerState<Signin> {
                         prefixIcon: const Icon(CupertinoIcons.mail),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Email can\'t be empty!';
+                            return "Email can't be empty!";
                           } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
                               .hasMatch(value)) {
                             return 'Enter a valid email address!';
@@ -88,7 +88,7 @@ class SigninState extends ConsumerState<Signin> {
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Password can\'t be empty!';
+                            return "Password can't be empty!";
                           }
                           return null;
                         },
@@ -112,20 +112,22 @@ class SigninState extends ConsumerState<Signin> {
                         textColor: Colors.white,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            _signIn(_emailController.text,
-                                _passwordController.text);
+                            _signIn(
+                              _emailController.text,
+                              _passwordController.text,
+                            );
                           }
                         },
-                        text: "Login",
+                        text: 'Login',
                       ),
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
-                          CupertinoPageRoute(
+                          CupertinoPageRoute<void>(
                             builder: (_) => const SignupScreen(),
                           ),
                         ),
-                        child: const Text('Don\'t have an account? Sign up'),
+                        child: const Text("Don't have an account? Sign up"),
                       ),
                     ],
                   ),

@@ -1,13 +1,13 @@
-import 'package:finalproject/api/dioClient.dart';
+import 'dioClient.dart';
 
 class OpenaiApi {
   Future<String> sendMessage(String message) async {
-    final response = await dio.post(
+    final response = await dio.post<dynamic>(
       'api/openai/response',
       data: {
         'message': message,
       },
     );
-    return response.data;
+    return response.data as String;
   }
 }

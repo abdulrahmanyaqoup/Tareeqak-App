@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CardShimmer extends StatelessWidget {
-  final bool showButtons;
 
   const CardShimmer({super.key, this.showButtons = true});
+  final bool showButtons;
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +15,14 @@ class CardShimmer extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(14),
         child: Shimmer.fromColors(
           baseColor: Colors.grey[400]!,
           highlightColor: Colors.grey[100]!,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Container(
                     width: 75,
@@ -34,12 +32,11 @@ class CardShimmer extends StatelessWidget {
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: Colors.grey[200]!,
-                        width: 1.0,
                       ),
                     ),
                     child: CircleAvatar(
                       radius: 35,
-                      backgroundColor: Colors.grey[100]!,
+                      backgroundColor: Colors.grey[100],
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -49,13 +46,13 @@ class CardShimmer extends StatelessWidget {
                       Container(
                         height: 20,
                         width: 100,
-                        color: Colors.grey[100]!,
+                        color: Colors.grey[100],
                       ),
                       const SizedBox(height: 5),
                       Container(
                         height: 20,
                         width: 150,
-                        color: Colors.grey[100]!,
+                        color: Colors.grey[100],
                       ),
                     ],
                   ),
@@ -68,7 +65,7 @@ class CardShimmer extends StatelessWidget {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100]!,
+                      color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -76,7 +73,7 @@ class CardShimmer extends StatelessWidget {
                   Expanded(
                     child: Container(
                       height: 20,
-                      color: Colors.grey[100]!,
+                      color: Colors.grey[100],
                     ),
                   ),
                 ],
@@ -88,7 +85,7 @@ class CardShimmer extends StatelessWidget {
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      color: Colors.grey[100]!,
+                      color: Colors.grey[100],
                       borderRadius: BorderRadius.circular(5),
                     ),
                   ),
@@ -96,7 +93,7 @@ class CardShimmer extends StatelessWidget {
                   Expanded(
                     child: Container(
                       height: 20,
-                      color: Colors.grey[100]!,
+                      color: Colors.grey[100],
                     ),
                   ),
                 ],
@@ -110,7 +107,7 @@ class CardShimmer extends StatelessWidget {
                       width: 100,
                       height: 25,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100]!,
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
@@ -118,7 +115,7 @@ class CardShimmer extends StatelessWidget {
                       width: 100,
                       height: 25,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100]!,
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),

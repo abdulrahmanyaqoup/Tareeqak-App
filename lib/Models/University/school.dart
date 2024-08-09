@@ -4,16 +4,30 @@ import 'major.dart';
 
 @immutable
 class School {
+  const School({
+    required this.name,
+    required this.description,
+    required this.facts,
+    required this.majors,
+  });
+
+  factory School.fromMap(Map<String, dynamic> map) {
+    final majorsList = map['majors'] as List<dynamic>? ?? [];
+    final majors = majorsList
+        .map((m) => Major.fromMap(m as Map<String, dynamic>))
+        .toList();
+    return School(
+      name: map['name'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      facts: List<String>.from(map['facts'] as List<dynamic>? ?? const []),
+      majors: majors,
+    );
+  }
+
   final String name;
   final String description;
   final List<String> facts;
   final List<Major> majors;
-
-  const School(
-      {required this.name,
-      required this.description,
-      required this.facts,
-      required this.majors});
 
   School copyWith({
     String? name,
@@ -26,19 +40,6 @@ class School {
       description: description ?? this.description,
       facts: facts ?? this.facts,
       majors: majors ?? this.majors,
-    );
-  }
-
-  static School fromMap(Map<String, dynamic> map) {
-    var majorsList = map['majors'] as List<dynamic>? ?? [];
-    List<Major> majors = majorsList
-        .map((m) => Major.fromMap(m as Map<String, dynamic>))
-        .toList();
-    return School(
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      facts: List<String>.from(map['facts'] ?? []),
-      majors: majors,
     );
   }
 }

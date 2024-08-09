@@ -1,8 +1,9 @@
 import 'package:chatview/chatview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:finalproject/api/openaiApi.dart';
 import 'package:uuid/uuid.dart';
+
+import '../api/openaiApi.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -20,7 +21,6 @@ class ChatScreenState extends State<ChatScreen>
 
   final OpenaiApi _api = OpenaiApi();
   final Uuid _uuid = const Uuid();
-  bool _isTyping = false;
 
   final _chatController = ChatController(
     initialMessageList: [],
@@ -32,7 +32,10 @@ class ChatScreenState extends State<ChatScreen>
   );
 
   void _onSendTap(
-      String messageText, ReplyMessage replyMessage, MessageType messageType) {
+    String messageText,
+    ReplyMessage replyMessage,
+    MessageType messageType,
+  ) {
     final userMessage = Message(
       id: _uuid.v4(),
       message: messageText,
@@ -45,10 +48,8 @@ class ChatScreenState extends State<ChatScreen>
     _sendMessageToApi(messageText);
   }
 
-  void _sendMessageToApi(String message) async {
-    setState(() {
-      _isTyping = true;
-    });
+  Future<void> _sendMessageToApi(String message) async {
+    setState(() {});
 
     final response = await _api.sendMessage(message);
 
@@ -60,11 +61,9 @@ class ChatScreenState extends State<ChatScreen>
     );
 
     setState(() {
-      _isTyping = false;
       _chatController.addMessage(botMessage);
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +75,7 @@ class ChatScreenState extends State<ChatScreen>
       backgroundColor: theme.colorScheme.surface.withOpacity(0.4),
       appBar: CupertinoNavigationBar(
         middle: const Text(
-          "Chat AI",
+          'Chat AI',
           style: TextStyle(color: Colors.white, fontSize: 17),
         ),
         backgroundColor: theme.colorScheme.primary,
@@ -87,29 +86,38 @@ class ChatScreenState extends State<ChatScreen>
         chatViewState: _chatController.initialMessageList.isEmpty
             ? ChatViewState.noData
             : ChatViewState.hasMessages,
-        
         chatViewStateConfig: ChatViewStateConfiguration(
           loadingWidgetConfig: ChatViewStateWidgetConfiguration(
             loadingIndicatorColor: theme.colorScheme.secondary,
           ),
         ),
-        
         chatBubbleConfig: ChatBubbleConfiguration(
           outgoingChatBubbleConfig: ChatBubble(
             color: theme.colorScheme.primary,
-            textStyle: const TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),
+            textStyle: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
           inComingChatBubbleConfig: ChatBubble(
             color: Theme.of(context).colorScheme.tertiary,
-            textStyle: TextStyle(color: Theme.of(context).colorScheme.secondary,fontSize: 16,fontWeight: FontWeight.bold),
-            senderNameTextStyle: TextStyle(color: Theme.of(context).colorScheme.secondary,fontSize: 16,fontWeight: FontWeight.bold),
+            textStyle: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            senderNameTextStyle: TextStyle(
+              color: Theme.of(context).colorScheme.secondary,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-        emojiPickerSheetConfig: Config(
+        emojiPickerSheetConfig: const Config(
           bottomActionBarConfig: BottomActionBarConfig(
             enabled: false,
-            
-          )
+          ),
         ),
         chatBackgroundConfig: ChatBackgroundConfiguration(
           backgroundColor: theme.colorScheme.surface,
@@ -133,7 +141,6 @@ class ChatScreenState extends State<ChatScreen>
           replyMessageColor: theme.colorScheme.surface,
           defaultSendButtonColor: theme.colorScheme.primary,
         ),
-        
       ),
     );
   }

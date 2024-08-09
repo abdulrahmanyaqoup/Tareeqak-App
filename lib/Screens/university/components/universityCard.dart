@@ -1,16 +1,15 @@
-import 'package:finalproject/Models/University/university.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Models/University/university.dart';
 import '../universityScreen.dart';
 
 class UniversityCard extends StatelessWidget {
-  final University university;
 
   const UniversityCard({
-    super.key,
-    required this.university,
+    required this.university, super.key,
   });
+  final University university;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +25,10 @@ class UniversityCard extends StatelessWidget {
   void _navigateToDetail(BuildContext context) {
     Navigator.push(
       context,
-      CupertinoPageRoute(
-        builder: (context) => UniversityScreen(university: university,),
+      CupertinoPageRoute<void>(
+        builder: (context) => UniversityScreen(
+          university: university,
+        ),
       ),
     );
   }
@@ -41,9 +42,8 @@ class UniversityCard extends StatelessWidget {
           BoxShadow(
             offset: const Offset(0, 2),
             color: Theme.of(context).primaryColor.withOpacity(.2),
-            spreadRadius: 0,
             blurRadius: 3,
-          )
+          ),
         ],
       ),
       child: Column(
@@ -64,7 +64,7 @@ class UniversityCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(university.name,
               style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center),
+              textAlign: TextAlign.center,),
           Text('Amman', style: Theme.of(context).textTheme.titleSmall),
         ],
       ),

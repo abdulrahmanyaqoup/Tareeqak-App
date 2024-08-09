@@ -4,6 +4,32 @@ import 'school.dart';
 
 @immutable
 class University {
+  const University({
+    required this.name,
+    required this.description,
+    required this.location,
+    required this.city,
+    required this.website,
+    required this.facts,
+    required this.schools,
+  });
+
+  factory University.fromMap(Map<String, dynamic> map) {
+    final schoolsList = map['schools'] as List<dynamic>? ?? [];
+    final schools = schoolsList
+        .map((s) => School.fromMap(s as Map<String, dynamic>))
+        .toList();
+    return University(
+      name: map['name'] as String? ?? '',
+      description: map['description'] as String? ?? '',
+      location: map['location'] as String? ?? '',
+      city: map['city'] as String? ?? '',
+      website: map['website'] as String? ?? '',
+      facts: List<String>.from(map['facts'] as List<dynamic>? ?? const []),
+      schools: schools,
+    );
+  }
+
   final String name;
   final String description;
   final String location;
@@ -11,15 +37,6 @@ class University {
   final String website;
   final List<String> facts;
   final List<School> schools;
-
-  const University(
-      {required this.name,
-      required this.description,
-      required this.location,
-      required this.city,
-      required this.website,
-      required this.facts,
-      required this.schools});
 
   University copyWith({
     String? name,
@@ -38,22 +55,6 @@ class University {
       website: website ?? this.website,
       facts: facts ?? this.facts,
       schools: schools ?? this.schools,
-    );
-  }
-
-  static University fromMap(Map<String, dynamic> map) {
-    var schoolsList = map['schools'] as List<dynamic>? ?? [];
-    List<School> schools = schoolsList
-        .map((s) => School.fromMap(s as Map<String, dynamic>))
-        .toList();
-    return University(
-      name: map['name'] ?? '',
-      description: map['description'] ?? '',
-      location: map['location'] ?? '',
-      city: map['city'] ?? '',
-      website: map['website'] ?? '',
-      facts: List<String>.from(map['facts'] ?? []),
-      schools: schools,
     );
   }
 }

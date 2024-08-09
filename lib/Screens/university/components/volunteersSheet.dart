@@ -1,16 +1,16 @@
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
 import 'package:flutter/material.dart';
 
+import '../../../Models/User/user.dart';
+import '../../volunteers/components/volunteerCard.dart';
+
 class VolunteersSheet extends StatelessWidget {
-  final String title;
-  final List<User>? volunteers;
 
   const VolunteersSheet({
-    super.key,
-    required this.title,
+    required this.title, super.key,
     this.volunteers,
   });
+  final String title;
+  final List<User>? volunteers;
 
   @override
   Widget build(BuildContext context) {

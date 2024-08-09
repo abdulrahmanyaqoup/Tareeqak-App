@@ -2,6 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DetailBase extends StatelessWidget {
+  DetailBase({
+    required this.title,
+    required this.description,
+    required this.facts,
+    required this.buttons,
+    super.key,
+    this.city,
+    this.universityType,
+  });
+
   final String title;
   final String description;
   final String? city;
@@ -9,16 +19,6 @@ class DetailBase extends StatelessWidget {
   final List<String> facts;
   final List<Widget> buttons;
   final PageController _pageController = PageController();
-
-  DetailBase({
-    super.key,
-    required this.title,
-    required this.description,
-    this.city,
-    this.universityType,
-    required this.facts,
-    required this.buttons,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +71,7 @@ class DetailBase extends StatelessWidget {
             ),
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -90,42 +90,44 @@ class DetailBase extends StatelessWidget {
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              city == null
-                                  ? Container()
-                                  : Row(
-                                      children: [
-                                        Icon(
-                                          Icons.location_on,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        Text(
-                                          city!,
-                                          style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                              if (city == null)
+                                Container()
+                              else
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.location_on,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
                                     ),
-                              universityType == null
-                                  ? Container()
-                                  : Row(
-                                      children: [
-                                        Icon(
-                                          Icons.business,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                        ),
-                                        Text(
-                                          universityType!,
-                                          style: const TextStyle(
-                                              color: Colors.grey,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ],
+                                    Text(
+                                      city!,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
+                                  ],
+                                ),
+                              if (universityType == null)
+                                Container()
+                              else
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.business,
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                    ),
+                                    Text(
+                                      universityType!,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                             ],
                           ),
                         ),
@@ -175,7 +177,7 @@ class DetailBase extends StatelessWidget {
                                   controller: _pageController,
                                   itemBuilder: (context, index) => Center(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(16.0),
+                                      padding: const EdgeInsets.all(16),
                                       child: Text(
                                         facts[index],
                                         textAlign: TextAlign.center,
@@ -195,7 +197,6 @@ class DetailBase extends StatelessWidget {
                             controller: _pageController,
                             count: facts.length,
                             effect: WormEffect(
-                              dotColor: Colors.grey,
                               activeDotColor:
                                   Theme.of(context).colorScheme.primary,
                             ),

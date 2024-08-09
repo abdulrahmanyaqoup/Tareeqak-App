@@ -1,38 +1,40 @@
 import 'dart:io';
+
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:finalproject/Models/University/major.dart';
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Models/User/userProps.dart';
-import 'package:finalproject/Provider/universityProvider.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Widgets/customButton.dart';
-import 'package:finalproject/Screens/profile/components/formContainer.dart';
-import 'package:finalproject/Screens/profile/components/gradientBackground.dart';
-import 'package:finalproject/Widgets/snackBar.dart';
-import 'package:finalproject/Widgets/dropdown.dart';
-import 'package:finalproject/Widgets/textfield.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../Models/University/major.dart';
+import '../../Models/University/school.dart';
+import '../../Models/User/user.dart';
+import '../../Models/User/userProps.dart';
+import '../../Provider/universityProvider.dart';
+import '../../Provider/userProvider.dart';
+import '../../Widgets/customButton.dart';
+import '../../Widgets/dropdown.dart';
+import '../../Widgets/snackBar.dart';
+import '../../Widgets/textfield.dart';
+import 'components/formContainer.dart';
+import 'components/gradientBackground.dart';
 import 'otp.dart';
 
 class SignupDetails extends ConsumerStatefulWidget {
+  const SignupDetails({
+    required this.email,
+    required this.password,
+    required this.name,
+    super.key,
+  });
+
   final String email;
   final String password;
   final String name;
 
-  const SignupDetails({
-    super.key,
-    required this.email,
-    required this.password,
-    required this.name,
-  });
-
   @override
-  _SignupDetails createState() => _SignupDetails();
+  ConsumerState<SignupDetails> createState() => _SignupDetails();
 }
 
 class _SignupDetails extends ConsumerState<SignupDetails> {
@@ -54,7 +56,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   Future<void> _signupUser() async {
     if (!_formKey.currentState!.validate()) return;
 
-    User user = User(
+    final user = User(
       name: widget.name,
       email: widget.email,
       userProps: UserProps(
@@ -65,24 +67,28 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
       ),
     );
 
-    String response = await ref
-        .read(userProvider.notifier)
-        .signUp(user, widget.password, _image)
-        .catchError((error, stackTrace) =>
-            showSnackBar(context, error.toString(), ContentType.failure));
+    try {
+      final response = await ref
+          .read(userProvider.notifier)
+          .signUp(user, widget.password, _image);
 
-    if (_image != null) {
-      _image = null;
+      if (_image != null) {
+        _image = null;
+      }
+
+      if (!mounted) return;
+      await Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute<void>(
+          builder: (_) => Otp(email: widget.email),
+        ),
+        (Route<dynamic> route) => route.isFirst,
+      );
+
+      if (!mounted) return;
+      showSnackBar(context, response, ContentType.success);
+    } on DioException catch (error) {
+      showSnackBar(context, error.toString(), ContentType.failure);
     }
-
-    if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-      CupertinoPageRoute(
-        builder: (_) => Otp(email: widget.email),
-      ),
-      (Route<dynamic> route) => route.isFirst,
-    );
-    showSnackBar(context, response, ContentType.success);
   }
 
   Future<void> _pickImage() async {
@@ -99,18 +105,18 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   @override
   Widget build(BuildContext context) {
     final universityState = ref.watch(universityProvider);
-    List<School> schools = [];
-    List<Major> majors = [];
+    var schools = <School>[];
+    var majors = <Major>[];
     if (_selectedUniversity.isNotEmpty &&
         universityState.valueOrNull!.universities.isNotEmpty) {
-      var selectedUniversity =
+      final selectedUniversity =
           universityState.valueOrNull!.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
         orElse: () => universityState.valueOrNull!.universities.first,
       );
       schools = selectedUniversity.schools;
       if (_selectedSchool.isNotEmpty && selectedUniversity.schools.isNotEmpty) {
-        var selectedSchool = selectedUniversity.schools.firstWhere(
+        final selectedSchool = selectedUniversity.schools.firstWhere(
           (school) => school.name == _selectedSchool,
           orElse: () => selectedUniversity.schools.first,
         );
@@ -129,7 +135,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                 const SizedBox(height: 40),
                 const CustomBackButton(),
                 const SizedBox(height: 80),
-                const HeaderText(text: "Signup"),
+                const HeaderText(text: 'Signup'),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(
@@ -207,7 +213,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         keyboardType: TextInputType.number,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Contact can\'t be empty!';
+                            return "Contact can't be empty!";
                           } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
                             return 'Enter a valid contact number!';
                           }

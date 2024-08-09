@@ -28,9 +28,8 @@ class UniversityShimmer extends StatelessWidget {
                     BoxShadow(
                       offset: const Offset(0, 2),
                       color: Theme.of(context).primaryColor.withOpacity(.2),
-                      spreadRadius: 0,
                       blurRadius: 3,
-                    )
+                    ),
                   ],
                 ),
                 child: Column(
@@ -52,13 +51,13 @@ class UniversityShimmer extends StatelessWidget {
                     Container(
                       height: 20,
                       width: 100,
-                      color: Colors.grey[100]!,
+                      color: Colors.grey[100],
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 20,
                       width: 60,
-                      color: Colors.grey[100]!,
+                      color: Colors.grey[100],
                     ),
                   ],
                 ),

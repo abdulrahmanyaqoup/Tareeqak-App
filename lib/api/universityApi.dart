@@ -1,13 +1,14 @@
-import 'package:finalproject/Models/University/university.dart';
-import 'package:finalproject/api/dioClient.dart';
+import '../Models/University/university.dart';
+import 'dioClient.dart';
 
 class UniversityApi {
   Future<List<University>> getUniversities() async {
-    final response = await dio.get('api/universities');
+    final response = await dio.get<dynamic>('api/universities');
 
-    List<dynamic> universityList = response.data;
+    final universityList = response.data as List<dynamic>;
     return universityList
-        .map((university) => University.fromMap(university))
+        .map((university) =>
+            University.fromMap(university as Map<String, dynamic>),)
         .toList();
   }
 }

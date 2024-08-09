@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class FormContainer extends StatelessWidget {
+  const FormContainer({required this.child, super.key});
   final Widget child;
-  const FormContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {

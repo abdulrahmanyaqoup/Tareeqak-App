@@ -1,12 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:finalproject/Screens/university/components/universitiesGrid.dart';
-import 'package:finalproject/Widgets/snackBar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../Utils/getUniversities.dart';
-import 'components/universityShimmer.dart';
+
 import '../../Provider/universityProvider.dart';
+import '../../Utils/getUniversities.dart';
+import '../../Widgets/snackBar.dart';
 import 'components/search.dart';
+import 'components/universitiesGrid.dart';
+import 'components/universityShimmer.dart';
 
 class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
@@ -21,16 +22,16 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
   bool get wantKeepAlive => true;
 
   late ScrollController _scrollController;
-  double _opacity = 1.0;
+  double _opacity = 1;
 
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => _getUniversities());
+    Future.microtask(_getUniversities);
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
-          var offset = _scrollController.offset / 200;
+          final offset = _scrollController.offset / 200;
           _opacity = 1 - offset;
           if (_opacity < 0) _opacity = 0;
           if (_opacity > 1) _opacity = 1;
@@ -39,7 +40,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
   }
 
   Future<void> _getUniversities() async {
-    await getUniversities(ref, context).onError((error, stackTrace) {
+    await getUniversities(ref).onError((error, stackTrace) {
       showSnackBar(context, error.toString(), ContentType.failure);
     });
   }
@@ -55,7 +56,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
     super.build(context);
     final universities = ref.watch(universityProvider);
 
-    return Container(
+    return ColoredBox(
       color: Theme.of(context).colorScheme.primary,
       child: SafeArea(
         child: Scaffold(
@@ -66,9 +67,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             slivers: [
               SliverAppBar(
-                expandedHeight: 120.0,
-                floating: false,
-                pinned: false,
+                expandedHeight: 120,
                 flexibleSpace: FlexibleSpaceBar(
                   title: Opacity(
                     opacity: _opacity,

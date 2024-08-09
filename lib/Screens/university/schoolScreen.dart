@@ -1,21 +1,22 @@
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Screens/university/components/volunteersSheet.dart';
 import 'package:flutter/material.dart';
+
+import '../../Models/University/school.dart';
+import '../../Models/User/user.dart';
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
+import 'components/volunteersSheet.dart';
 
 class SchoolScreen extends StatelessWidget {
+
+  const SchoolScreen(
+      {required this.school, super.key, this.universityVolunteers,});
   final School school;
   final List<User>? universityVolunteers;
 
-  const SchoolScreen(
-      {super.key, required this.school, this.universityVolunteers});
-
   @override
   Widget build(BuildContext context) {
-    List<User> schoolVolunteers = universityVolunteers!
+    final schoolVolunteers = universityVolunteers!
         .where((user) => user.userProps.school == school.name)
         .toList();
 
@@ -38,7 +39,7 @@ class SchoolScreen extends StatelessWidget {
           label: 'University Majors',
           onPressed: () {
             _showGridModalBottomSheet(
-                context, 'University Majors', school.majors, schoolVolunteers);
+                context, 'University Majors', school.majors, schoolVolunteers,);
           },
         ),
       ],
@@ -46,8 +47,8 @@ class SchoolScreen extends StatelessWidget {
   }
 
   void _showVolunteers(
-      BuildContext context, String title, List<User> volunteers) {
-    showModalBottomSheet(
+      BuildContext context, String title, List<User> volunteers,) {
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) {
         return VolunteersSheet(
@@ -59,8 +60,8 @@ class SchoolScreen extends StatelessWidget {
   }
 
   void _showGridModalBottomSheet(BuildContext context, String title,
-      List<dynamic> items, List<User> volunteers) {
-    showModalBottomSheet(
+      List<dynamic> items, List<User> volunteers,) {
+    showModalBottomSheet<void>(
       context: context,
       builder: (context) {
         return GridModalBottomSheet(

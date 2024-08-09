@@ -1,12 +1,13 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:finalproject/Screens/volunteers/components/filterVolunteers.dart';
-import 'package:finalproject/Widgets/snackBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/volunteers/components/volunteerCard.dart';
-import 'package:finalproject/Widgets/cardShimmer.dart';
+
+import '../../Provider/userProvider.dart';
+import '../../Widgets/cardShimmer.dart';
+import '../../Widgets/snackBar.dart';
+import 'components/filterVolunteers.dart';
+import 'components/volunteerCard.dart';
 
 class VolunteersScreen extends ConsumerStatefulWidget {
   const VolunteersScreen({super.key});
@@ -23,7 +24,7 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => _getAllUsers());
+    Future.microtask(_getAllUsers);
   }
 
   Future<void> _getAllUsers() async {
@@ -43,8 +44,8 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.4),
       appBar: CupertinoNavigationBar(
-        middle: const Text("Contact With Advisors",
-            style: TextStyle(color: Colors.white, fontSize: 17)),
+        middle: const Text('Contact With Advisors',
+            style: TextStyle(color: Colors.white, fontSize: 17),),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: RefreshIndicator(
@@ -58,7 +59,7 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                 itemCount: 6,
                 itemBuilder: (context, index) {
                   return const CardShimmer();
-                });
+                },);
           },
           error: (error, stackTrace) => Text('Error: $error'),
           data: (userState) {
@@ -73,20 +74,18 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                     },
                     onFilterChanged: (university, school, major) {
                       ref.read(userProvider.notifier).filterUsers(
-                          userState.userList, university, school, major);
+                          userState.userList, university, school, major,);
                     },
                   ),
-                  userState.filteredUsers.isEmpty
-                      ? Center(
+                  if (userState.filteredUsers.isEmpty) Center(
                           child: Text(
                             'No advisors found',
                             style: TextStyle(
                                 fontSize: 20,
                                 color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold),
+                                fontWeight: FontWeight.bold,),
                           ),
-                        )
-                      : ListView.builder(
+                        ) else ListView.builder(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: userState.filteredUsers.length,

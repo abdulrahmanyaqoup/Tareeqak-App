@@ -2,22 +2,22 @@ import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
 class Dropdown extends StatefulWidget {
-  final String? value;
-  final String hintText;
-  final List<String> items;
-  final Function(String?) onChanged;
-  final IconData prefixIcon;
-  final bool? enabled;
-
   const Dropdown({
-    super.key,
-    this.value,
     required this.hintText,
     required this.prefixIcon,
     required this.items,
     required this.onChanged,
+    super.key,
+    this.value,
     this.enabled,
   });
+
+  final String? value;
+  final String hintText;
+  final List<String> items;
+  final void Function(String?) onChanged;
+  final IconData prefixIcon;
+  final bool? enabled;
 
   @override
   State<Dropdown> createState() => _DropdownState();
@@ -26,7 +26,8 @@ class Dropdown extends StatefulWidget {
 class _DropdownState extends State<Dropdown> {
   @override
   Widget build(BuildContext context) {
-    String? initialItem = widget.items.contains(widget.value) ? widget.value : null;
+    final initialItem =
+        widget.items.contains(widget.value) ? widget.value : null;
 
     return FormField<String>(
       initialValue: initialItem,
@@ -36,7 +37,7 @@ class _DropdownState extends State<Dropdown> {
           children: [
             CustomDropdown.search(
               enabled: widget.enabled ?? true,
-              initialItem: initialItem ,
+              initialItem: initialItem,
               hintText: widget.hintText,
               validator: (value) {
                 if (value == null) {
@@ -61,14 +62,15 @@ class _DropdownState extends State<Dropdown> {
                 expandedBorder:
                     Border.all(color: Colors.grey.shade500.withOpacity(0.1)),
                 hintStyle: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFF757575)),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  color: Color(0xFF757575),
+                ),
               ),
             ),
             if (state.hasError)
               Padding(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 5),
                 child: Text(
                   state.errorText ?? '',
                   style: const TextStyle(

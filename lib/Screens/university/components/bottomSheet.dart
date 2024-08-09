@@ -1,25 +1,27 @@
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Models/User/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../../../Models/University/major.dart';
+import '../../../Models/University/school.dart';
+import '../../../Models/User/user.dart';
 import '../majorScreen.dart';
 import '../schoolScreen.dart';
 
 class GridModalBottomSheet extends StatefulWidget {
+  const GridModalBottomSheet({
+    required this.title,
+    required this.items,
+    super.key,
+    this.noRoute,
+    this.universityVolunteers,
+    this.schoolVolunteers,
+  });
+
   final String title;
   final List<dynamic> items;
   final bool? noRoute;
   final List<User>? universityVolunteers;
   final List<User>? schoolVolunteers;
-
-  const GridModalBottomSheet({
-    super.key,
-    this.noRoute,
-    this.universityVolunteers,
-    this.schoolVolunteers,
-    required this.title,
-    required this.items,
-  });
 
   @override
   GridModalBottomSheetState createState() => GridModalBottomSheetState();
@@ -39,8 +41,11 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
     setState(() {
       searchQuery = query;
       filteredItems = widget.items
-          .where((item) =>
-              item.name.toLowerCase().contains(searchQuery.toLowerCase()))
+          .where(
+            (item) => ((item as dynamic).name as String)
+                .toLowerCase()
+                .contains(searchQuery.toLowerCase()),
+          )
           .toList();
     });
   }
@@ -79,7 +84,7 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
               ),
               filled: true,
               fillColor: Colors.grey.shade200,
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             ),
           ),
           const SizedBox(height: 16),
@@ -91,22 +96,23 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                   return InkWell(
                     onTap: () {
                       if (widget.noRoute != null && widget.noRoute!) {
-                        Navigator.pop(context, item.name);
+                        Navigator.pop(context, (item as dynamic).name);
                       } else {
                         if (item is School) {
                           Navigator.push(
                             context,
-                            CupertinoPageRoute(
+                            CupertinoPageRoute<void>(
                               builder: (context) => SchoolScreen(
-                                universityVolunteers: widget.universityVolunteers ?? [],
+                                universityVolunteers:
+                                    widget.universityVolunteers ?? [],
                                 school: item,
                               ),
                             ),
                           );
-                        } else {
+                        } else if (item is Major) {
                           Navigator.push(
                             context,
-                            CupertinoPageRoute(
+                            CupertinoPageRoute<void>(
                               builder: (context) => MajorScreen(
                                 schoolVolunteers: widget.schoolVolunteers ?? [],
                                 major: item,
@@ -126,7 +132,6 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.2),
-                            spreadRadius: 0,
                             blurRadius: 1,
                             offset: const Offset(0, 3),
                           ),
@@ -142,7 +147,7 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                           const SizedBox(width: 16),
                           Expanded(
                             child: Text(
-                              item.name,
+                              (item as dynamic).name as String,
                               style: TextStyle(
                                 color: Theme.of(context).colorScheme.primary,
                                 fontSize: 16,

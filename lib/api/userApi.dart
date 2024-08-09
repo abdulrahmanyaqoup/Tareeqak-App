@@ -1,10 +1,10 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/api/dioClient.dart';
 
-// ignore: depend_on_referenced_packages
+import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
+
+import '../Models/User/user.dart';
+import 'dioClient.dart';
 
 class UserApi {
   Future<String> signUp({
@@ -12,7 +12,7 @@ class UserApi {
     required String password,
     File? image,
   }) async {
-    FormData formData = FormData.fromMap({
+    final formData = FormData.fromMap({
       'image': image,
       'name': user.name,
       'email': user.email,
@@ -24,54 +24,66 @@ class UserApi {
     });
 
     if (image != null) {
-      formData.files.add(MapEntry(
-        'image',
-        await MultipartFile.fromFile(image.path,
-            contentType: MediaType('image', 'jpg/jpeg/webp/png')),
-      ));
+      formData.files.add(
+        MapEntry(
+          'image',
+          await MultipartFile.fromFile(
+            image.path,
+            contentType: MediaType('image', 'jpg/jpeg/webp/png'),
+          ),
+        ),
+      );
     }
 
-    Response response = await dio.post(
+    final response = await dio.post<dynamic>(
       'api/users/register',
       data: formData,
     );
-    return response.data;
+    return response.data as String;
   }
 
-  Future<Map<String, dynamic>> signInUser(
-      {required String email, required String password}) async {
-    Response response = await dio.post(
+  Future<Map<String, dynamic>> signInUser({
+    required String email,
+    required String password,
+  }) async {
+    final response = await dio.post<dynamic>(
       'api/users/login',
       data: {
         'email': email,
         'password': password,
       },
     );
-    return response.data;
+    return response.data as Map<String, dynamic>;
   }
 
   Future<Map<String, dynamic>> getUser(String token) async {
-    Options options = Options(headers: {
-      'x-auth-token': token,
-    });
+    final options = Options(
+      headers: {
+        'x-auth-token': token,
+      },
+    );
 
-    Response response = await dio.get('api/users/current', options: options);
-    return response.data;
+    final response =
+        await dio.get<dynamic>('api/users/current', options: options);
+
+    return response.data as Map<String, dynamic>;
   }
 
   Future<List<User>> getAllUsers() async {
-    Response response = await dio.get(
+    final response = await dio.get<dynamic>(
       'api/users',
     );
-    List<dynamic> userList = response.data;
-    return userList.map((user) => User.fromMap(user)).toList();
+    final userList = response.data as List<dynamic>;
+    return userList
+        .map((user) => User.fromMap(user as Map<String, dynamic>))
+        .toList();
   }
 
   Future<Map<String, dynamic>> updateUser({
     required User user,
     required String token,
   }) async {
-    FormData formData = FormData.fromMap({
+    final formData = FormData.fromMap({
       'image': user.userProps.image,
       'name': user.name,
       'university': user.userProps.university,
@@ -81,40 +93,42 @@ class UserApi {
     });
 
     if (user.userProps.image.isNotEmpty) {
-      formData.files.add(MapEntry(
-        'image',
-        await MultipartFile.fromFile(
-          user.userProps.image,
-          contentType: MediaType('image', 'jpg/jpeg/webp/png'),
+      formData.files.add(
+        MapEntry(
+          'image',
+          await MultipartFile.fromFile(
+            user.userProps.image,
+            contentType: MediaType('image', 'jpg/jpeg/webp/png'),
+          ),
         ),
-      ));
+      );
     }
-    Options options = Options(
+    final options = Options(
       headers: {
         'x-auth-token': token,
       },
     );
-    Response response = await dio.patch(
+    final response = await dio.patch<dynamic>(
       'api/users/update',
       data: formData,
       options: options,
     );
-    return response.data;
+    return response.data as Map<String, dynamic>;
   }
 
   Future<String> deleteUser({
     required String token,
   }) async {
-    Options options = Options(
+    final options = Options(
       headers: {
         'x-auth-token': token,
       },
     );
-    Response response = await dio.delete(
+    final response = await dio.delete<dynamic>(
       'api/users/delete',
       options: options,
       data: {},
     );
-    return response.data;
+    return response.data as String;
   }
 }

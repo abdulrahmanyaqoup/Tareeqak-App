@@ -1,13 +1,14 @@
-import 'package:finalproject/Widgets/customButton.dart';
-import 'package:finalproject/Screens/profile/components/formContainer.dart';
-import 'package:finalproject/Screens/profile/components/gradientBackground.dart';
-import 'package:finalproject/Screens/profile/profileScreen.dart';
-import 'package:finalproject/Screens/profile/signin.dart';
-import 'package:finalproject/Screens/profile/signupDetails.dart';
-import 'package:finalproject/Widgets/textfield.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../Widgets/customButton.dart';
+import '../../Widgets/textfield.dart';
+import 'components/formContainer.dart';
+import 'components/gradientBackground.dart';
+import 'profileScreen.dart';
+import 'signin.dart';
+import 'signupDetails.dart';
 
 class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
@@ -30,7 +31,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
     if (_formKey.currentState!.validate()) {
       Navigator.push(
         context,
-        CupertinoPageRoute(
+        CupertinoPageRoute<void>(
           builder: (context) => SignupDetails(
             email: emailController.text,
             password: passwordController.text,
@@ -44,7 +45,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
   void profileScreen() {
     Navigator.pushAndRemoveUntil(
       context,
-      CupertinoPageRoute(
+      CupertinoPageRoute<void>(
         builder: (context) => const ProfileScreen(),
       ),
       (route) => false,
@@ -71,7 +72,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 150),
-                const HeaderText(text: "Signup"),
+                const HeaderText(text: 'Signup'),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(
@@ -82,7 +83,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                         prefixIcon: const Icon(CupertinoIcons.person),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Name can\'t be empty!';
+                            return "Name can't be empty!";
                           }
                           return null;
                         },
@@ -95,7 +96,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                         prefixIcon: const Icon(CupertinoIcons.mail),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Email can\'t be empty!';
+                            return "Email can't be empty!";
                           } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
                               .hasMatch(value)) {
                             return 'Enter a valid email address!';
@@ -111,7 +112,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Password can\'t be empty!';
+                            return "Password can't be empty!";
                           } else if (value.length < 6) {
                             return 'Password must be at least 6 characters!';
                           }
@@ -138,7 +139,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Confirm Password can\'t be empty!';
+                            return "Confirm Password can't be empty!";
                           } else if (value != passwordController.text) {
                             return 'Passwords do not match!';
                           }
@@ -169,7 +170,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                       const SizedBox(height: 20),
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
-                          CupertinoPageRoute(
+                          CupertinoPageRoute<void>(
                             builder: (context) => const Signin(),
                           ),
                         ),

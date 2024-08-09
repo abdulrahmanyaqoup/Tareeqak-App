@@ -1,26 +1,28 @@
 import 'dart:io';
-import 'package:finalproject/Models/University/major.dart';
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/Provider/universityProvider.dart';
-import 'package:finalproject/Provider/userProvider.dart';
-import 'package:finalproject/Screens/profile/profileScreen.dart';
-import 'package:finalproject/Widgets/snackBar.dart';
-import 'package:finalproject/Widgets/dropdown.dart';
-import 'package:finalproject/Widgets/textfield.dart';
+
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../Models/University/major.dart';
+import '../../Models/University/school.dart';
+import '../../Models/User/user.dart';
 import '../../Models/User/userProps.dart';
+import '../../Provider/universityProvider.dart';
+import '../../Provider/userProvider.dart';
 import '../../Widgets/customButton.dart';
+import '../../Widgets/dropdown.dart';
+import '../../Widgets/snackBar.dart';
+import '../../Widgets/textfield.dart';
 import 'components/gradientBackground.dart';
 import 'components/profileImage.dart';
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'profileScreen.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
-  const EditProfile({super.key, required this.user});
+  const EditProfile({required this.user, super.key});
 
   final User user;
 
@@ -84,10 +86,17 @@ class EditProfileState extends ConsumerState<EditProfile> {
     await ref
         .read(userProvider.notifier)
         .updateUser(updatedUser)
-        .whenComplete(() => showSnackBar(
-            context, 'Profile updated successfully', ContentType.success))
-        .onError((error, stackTrace) =>
-            showSnackBar(context, error.toString(), ContentType.failure));
+        .whenComplete(
+          () => showSnackBar(
+            context,
+            'Profile updated successfully',
+            ContentType.success,
+          ),
+        )
+        .onError(
+          (error, stackTrace) =>
+              showSnackBar(context, error.toString(), ContentType.failure),
+        );
 
     if (_image != null) {
       _image = null;
@@ -96,43 +105,50 @@ class EditProfileState extends ConsumerState<EditProfile> {
 
   Future<void> _signOut() async {
     await ref.read(userProvider.notifier).signOut().onError(
-        (error, stackTrace) =>
-            showSnackBar(context, error.toString(), ContentType.failure));
+          (error, stackTrace) =>
+              showSnackBar(context, error.toString(), ContentType.failure),
+        );
 
-    if (mounted) {
-      Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
-          builder: (_) => const ProfileScreen(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
+    if (!mounted) return;
+    await Navigator.of(context).pushAndRemoveUntil(
+      CupertinoPageRoute<void>(
+        builder: (_) => const ProfileScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
 
   Future<void> _deleteUser() async {
-    String response = await ref
+    final response = await ref
         .read(userProvider.notifier)
         .deleteUser()
-        .catchError((error, stackTrace) =>
-            showSnackBar(context, error.toString(), ContentType.failure));
+        .catchError((Object error, stackTrace) {
+      showSnackBar(context, error.toString(), ContentType.failure);
+      return '';
+    });
 
     if (!mounted) return;
-    Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
-          builder: (_) => const ProfileScreen(),
-        ),
-        (Route<dynamic> route) => false);
+    await Navigator.of(context).pushAndRemoveUntil(
+      CupertinoPageRoute<void>(
+        builder: (_) => const ProfileScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
+
+    if (!mounted) return;
     showSnackBar(context, response, ContentType.success);
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Confirm Deletion'),
           content: const Text(
-              'Are you sure you want to delete your account? This action is irreversible.'),
+            'Are you sure you want to delete your account? '
+            'This action is irreversible.',
+          ),
           actions: <Widget>[
             TextButton(
               onPressed: () {
@@ -156,19 +172,19 @@ class EditProfileState extends ConsumerState<EditProfile> {
   @override
   Widget build(BuildContext context) {
     final universityState = ref.watch(universityProvider);
-    List<School> schools = [];
-    List<Major> majors = [];
+    var schools = <School>[];
+    var majors = <Major>[];
 
     if (_selectedUniversity.isNotEmpty &&
         universityState.valueOrNull!.universities.isNotEmpty) {
-      var selectedUniversity =
+      final selectedUniversity =
           universityState.valueOrNull!.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
         orElse: () => universityState.valueOrNull!.universities.first,
       );
       schools = selectedUniversity.schools;
       if (_selectedSchool.isNotEmpty && selectedUniversity.schools.isNotEmpty) {
-        var selectedSchool = selectedUniversity.schools.firstWhere(
+        final selectedSchool = selectedUniversity.schools.firstWhere(
           (school) => school.name == _selectedSchool,
           orElse: () => selectedUniversity.schools.first,
         );
@@ -289,7 +305,6 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 1,
                             child: CustomButton(
                               onPressed: updateUser,
                               text: 'Update',
@@ -299,12 +314,11 @@ class EditProfileState extends ConsumerState<EditProfile> {
                           ),
                           const SizedBox(width: 10),
                           Expanded(
-                            flex: 1,
                             child: CustomButton(
                               onPressed: () =>
                                   _showDeleteConfirmationDialog(context),
                               text: 'Delete',
-                              color: Colors.grey[200]!,
+                              color: Colors.grey[200],
                               textColor: const Color.fromARGB(255, 240, 81, 70),
                             ),
                           ),

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class Search extends StatelessWidget {
-  final ValueChanged<String> onSearchChanged;
 
-  const Search({super.key, required this.onSearchChanged});
+  const Search({required this.onSearchChanged, super.key});
+  final ValueChanged<String> onSearchChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +42,7 @@ class Search extends StatelessWidget {
               filled: true,
               fillColor: Colors.grey.shade200,
               contentPadding:
-                  const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                  const EdgeInsets.symmetric(horizontal: 16),
             ),
           ),
         ),

@@ -3,9 +3,9 @@ import 'package:dio/dio.dart';
 class DioExceptionHandler extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
-    String errorMessage = _handleDioException(err);
+    final errorMessage = _handleDioException(err);
     handler.next(DioException(
-        requestOptions: err.requestOptions, message: errorMessage));
+        requestOptions: err.requestOptions, message: errorMessage,),);
   }
 
   String _handleDioException(DioException e) {
@@ -13,33 +13,24 @@ class DioExceptionHandler extends Interceptor {
     switch (e.type) {
       case DioExceptionType.cancel:
         errorMessage = 'Request was cancelled';
-        break;
       case DioExceptionType.connectionTimeout:
         errorMessage = 'Connection timeout';
-        break;
       case DioExceptionType.receiveTimeout:
         errorMessage = 'Receive timeout';
-        break;
       case DioExceptionType.sendTimeout:
         errorMessage = 'Send timeout';
-        break;
       case DioExceptionType.badResponse:
         if (e.response?.statusCode == 502 || e.response?.statusCode == 503) {
           errorMessage = 'Internal server error';
         } else {
-          errorMessage = e.response!.data;
+          errorMessage = e.response!.data as String;
         }
-        break;
       case DioExceptionType.badCertificate:
-        errorMessage = "Internal Server Error";
-        break;
+        errorMessage = 'Internal Server Error';
       case DioExceptionType.connectionError:
-        errorMessage = "Connection Error";
-        break;
+        errorMessage = 'Connection Error';
       case DioExceptionType.unknown:
-      default:
         errorMessage = 'Something went wrong';
-        break;
     }
     return errorMessage;
   }

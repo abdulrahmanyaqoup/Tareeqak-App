@@ -1,20 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:finalproject/Models/User/user.dart';
-import 'package:finalproject/env/env.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileImage extends StatelessWidget {
-  final User user;
-  final FileImage? image;
-  final Function(ImageSource) onImagePick;
+import '../../../Models/User/user.dart';
+import '../../../env/env.dart';
 
+class ProfileImage extends StatelessWidget {
   const ProfileImage({
-    super.key,
     required this.user,
     required this.image,
     required this.onImagePick,
+    super.key,
   });
+
+  final User user;
+  final FileImage? image;
+  final void Function(ImageSource) onImagePick;
 
   @override
   Widget build(BuildContext context) {
@@ -24,18 +25,20 @@ class ProfileImage extends StatelessWidget {
           ClipOval(
             child: image == null
                 ? CachedNetworkImage(
-                    imageUrl: "${Env.URI}${user.userProps.image}",
+                    imageUrl: '${Env.URI}${user.userProps.image}',
                     httpHeaders: {'x-api-key': Env.API_KEY},
-                    placeholder: (context, url) => const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    placeholder: (context, url) =>
+                        const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) =>
+                        const Icon(Icons.error),
                     fit: BoxFit.cover,
-                    width: 130.0,
-                    height: 130.0,
+                    width: 130,
+                    height: 130,
                   )
                 : Image(
                     image: image!,
-                    width: 130.0,
-                    height: 130.0,
+                    width: 130,
+                    height: 130,
                     fit: BoxFit.cover,
                   ),
           ),
@@ -54,7 +57,7 @@ class ProfileImage extends StatelessWidget {
                 child: Icon(
                   Icons.photo_camera,
                   color: Theme.of(context).primaryColor,
-                  size: 28.0,
+                  size: 28,
                 ),
               ),
             ),
@@ -65,7 +68,7 @@ class ProfileImage extends StatelessWidget {
   }
 
   void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
+    showModalBottomSheet<void>(
       context: context,
       builder: (builder) => _bottomSheet(context),
     );
@@ -73,14 +76,14 @@ class ProfileImage extends StatelessWidget {
 
   Widget _bottomSheet(BuildContext context) {
     return Container(
-      height: 100.0,
+      height: 100,
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: Column(
         children: [
           const Text(
-            "Choose Profile photo",
-            style: TextStyle(fontSize: 20.0),
+            'Choose Profile photo',
+            style: TextStyle(fontSize: 20),
           ),
           const SizedBox(height: 20),
           Row(

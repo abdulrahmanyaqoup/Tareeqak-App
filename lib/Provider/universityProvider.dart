@@ -1,22 +1,23 @@
 import 'package:dio/dio.dart';
-import 'package:finalproject/Models/University/major.dart';
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Models/University/university.dart';
-import 'package:finalproject/api/universityApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class UniversityState {
-  final List<University> universities;
-  final List<University> filteredUniversities;
-  final List<School> schools;
-  final List<Major> majors;
+import '../Models/University/major.dart';
+import '../Models/University/school.dart';
+import '../Models/University/university.dart';
+import '../api/universityApi.dart';
 
+class UniversityState {
   UniversityState({
     this.universities = const [],
     this.filteredUniversities = const [],
     this.schools = const [],
     this.majors = const [],
   });
+
+  final List<University> universities;
+  final List<University> filteredUniversities;
+  final List<School> schools;
+  final List<Major> majors;
 
   UniversityState copyWith({
     List<University>? universities,
@@ -43,11 +44,10 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
     state = const AsyncLoading();
 
     try {
-      List<University> universities = await UniversityApi().getUniversities();
-      List<School> allSchools =
+      final universities = await UniversityApi().getUniversities();
+      final allSchools =
           universities.expand((university) => university.schools).toList();
-      List<Major> allMajors =
-          allSchools.expand((school) => school.majors).toList();
+      final allMajors = allSchools.expand((school) => school.majors).toList();
 
       state = await AsyncValue.guard(() async {
         return state.valueOrNull!.copyWith(
@@ -58,7 +58,7 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
         );
       });
     } on DioException catch (error) {
-      throw error.message!;
+      throw Exception(error.message);
     }
   }
 
@@ -69,9 +69,11 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
           filteredUniversities: state.valueOrNull!.universities,
         );
       } else {
-        List<University> filteredUniversities = state.valueOrNull!.universities
-            .where((university) =>
-                university.name.toLowerCase().contains(query.toLowerCase()))
+        final filteredUniversities = state.valueOrNull!.universities
+            .where(
+              (university) =>
+                  university.name.toLowerCase().contains(query.toLowerCase()),
+            )
             .toList();
         return state.valueOrNull!.copyWith(
           filteredUniversities: filteredUniversities,
@@ -83,4 +85,5 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
 
 final universityProvider =
     AsyncNotifierProvider<UniversityNotifier, UniversityState>(
-        UniversityNotifier.new);
+  UniversityNotifier.new,
+);

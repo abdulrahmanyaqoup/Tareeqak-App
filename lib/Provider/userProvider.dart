@@ -1,23 +1,25 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
-import 'package:finalproject/api/userApi.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
 import '../Models/User/user.dart';
+import '../api/userApi.dart';
 
 class UserState {
-  final User user;
-  final List<User> userList;
-  List<User> filteredUsers;
-  final bool isLoggedIn;
-
   UserState({
     this.user = const User(),
     this.userList = const [],
     this.filteredUsers = const [],
     this.isLoggedIn = false,
   });
+
+  final User user;
+  final List<User> userList;
+  List<User> filteredUsers;
+  final bool isLoggedIn;
 
   UserState copyWith({
     User? user,
@@ -43,7 +45,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   Future<void> checkLoginStatus() async {
     state = const AsyncLoading();
     const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: 'token');
+    final token = await storage.read(key: 'token');
 
     if (token == null) {
       state = await AsyncValue.guard(() async => state.valueOrNull!);
@@ -51,8 +53,8 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     }
 
     try {
-      Map<String, dynamic> userData = await UserApi().getUser(token);
-      final User user = User.fromMap(userData);
+      final userData = await UserApi().getUser(token);
+      final user = User.fromMap(userData);
       state = await AsyncValue.guard(() async {
         return state.valueOrNull!.copyWith(
           user: user,
@@ -60,7 +62,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
         );
       });
     } on DioException catch (error) {
-      throw error.message!;
+      throw error.message! as Exception;
     }
   }
 
@@ -69,9 +71,8 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     String password,
     File? image,
   ) async {
-    state = const AsyncLoading();
     try {
-      String response = await UserApi().signUp(
+      final response = await UserApi().signUp(
         user: user,
         password: password,
         image: image,
@@ -79,12 +80,11 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       state = await AsyncValue.guard(() async => state.valueOrNull!);
       return response;
     } on DioException catch (error) {
-      throw error.message!;
+      throw error.message! as DioException;
     }
   }
 
   Future<void> signInVerifiedUser(User user, String token) async {
-    state = const AsyncLoading();
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
     state = await AsyncValue.guard(() async {
@@ -96,12 +96,10 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   }
 
   Future<void> signIn(String email, String password) async {
-    state = const AsyncLoading();
-
     try {
-      Map<String, dynamic> response =
+      final response =
           await UserApi().signInUser(email: email, password: password);
-      String token = response['token'] as String;
+      final token = response['token'] as String;
       const storage = FlutterSecureStorage();
       await storage.write(key: 'token', value: token);
       state = await AsyncValue.guard(() async {
@@ -111,12 +109,11 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
         );
       });
     } on DioException catch (error) {
-      throw error.message!;
+      throw Exception(error.message);
     }
   }
 
   Future<void> signOut() async {
-    state = const AsyncLoading();
     const storage = FlutterSecureStorage();
     await storage.delete(key: 'token');
 
@@ -132,7 +129,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     state = const AsyncLoading();
 
     try {
-      List<User> users = await UserApi().getAllUsers();
+      final users = await UserApi().getAllUsers();
       state = await AsyncValue.guard(() async {
         return state.valueOrNull!.copyWith(
           userList: users,
@@ -140,22 +137,21 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
         );
       });
     } on DioException catch (error) {
-      throw error.message!;
+      throw error.message! as DioException;
     }
   }
 
   Future<void> updateUser(User updatedUser) async {
-    state = const AsyncLoading();
     const storage = FlutterSecureStorage();
-    String? token = await storage.read(key: 'token');
+    final token = await storage.read(key: 'token');
 
     try {
-      Map<String, dynamic> response =
+      final response =
           await UserApi().updateUser(user: updatedUser, token: token ?? '');
-      final User user = User.fromMap(response);
+      final user = User.fromMap(response);
 
       final currentState = state.valueOrNull!;
-      final List<User> updatedUserList = currentState.userList
+      final updatedUserList = currentState.userList
           .map((user1) => user1.email == user.email ? user : user1)
           .toList();
       state = await AsyncValue.guard(() async {
@@ -166,20 +162,19 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
         );
       });
     } on DioException catch (error) {
-      throw error.message!;
+      throw error.message! as DioException;
     }
   }
 
   Future<String> deleteUser() async {
-    state = const AsyncLoading();
     const storage = FlutterSecureStorage();
-    String token = await storage.read(key: 'token') ?? '';
+    final token = await storage.read(key: 'token') ?? '';
 
     try {
-      String response = await UserApi().deleteUser(token: token);
+      final response = await UserApi().deleteUser(token: token);
       await storage.delete(key: 'token');
       final currentState = state.valueOrNull!;
-      List<User> refreshUserList = currentState.userList
+      final refreshUserList = currentState.userList
           .where((user) => user.email != currentState.user.email)
           .toList();
       state = await AsyncValue.guard(() async {
@@ -192,16 +187,18 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       });
       return response;
     } on DioException catch (error) {
-      throw error.message!;
+      throw error.message! as DioException;
     }
   }
 
-  Future<void> filterUsers(List<User> allUsers, String? university,
-      String? school, String? major) async {
-    state = const AsyncLoading();
-
+  Future<void> filterUsers(
+    List<User> allUsers,
+    String? university,
+    String? school,
+    String? major,
+  ) async {
     state = await AsyncValue.guard(() async {
-      List<User> filterUsers = allUsers.where((user) {
+      final filterUsers = allUsers.where((user) {
         final matchUniversity =
             university == null || user.userProps.university == university;
         final matchSchool = school == null || user.userProps.school == school;

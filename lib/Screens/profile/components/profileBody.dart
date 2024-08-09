@@ -1,22 +1,23 @@
-import 'package:finalproject/Screens/profile/components/buttonShimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import 'buttonShimmer.dart';
+
 class ProfileBody extends StatelessWidget {
   const ProfileBody({
+    required this.height,
     super.key,
     this.buttonText,
     this.greeting,
     this.onPressed,
     this.isLoading = false,
-    required this.height,
   });
 
   final String? buttonText;
   final String? greeting;
   final bool isLoading;
   final double height;
-  final Function()? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -44,13 +45,14 @@ class ProfileBody extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            isLoading
-                ? const ProfileLoadingBody()
-                : ProfileDataBody(
-                    greeting: greeting,
-                    buttonText: buttonText,
-                    onPressed: onPressed,
-                  ),
+            if (isLoading)
+              const ProfileLoadingBody()
+            else
+              ProfileDataBody(
+                greeting: greeting,
+                buttonText: buttonText,
+                onPressed: onPressed,
+              ),
           ],
         ),
       ),
@@ -75,15 +77,15 @@ class ProfileLoadingBody extends StatelessWidget {
 
 class ProfileDataBody extends StatelessWidget {
   const ProfileDataBody({
-    super.key,
     required this.greeting,
     required this.buttonText,
     required this.onPressed,
+    super.key,
   });
 
   final String? greeting;
   final String? buttonText;
-  final Function()? onPressed;
+  final void Function()? onPressed;
 
   @override
   Widget build(BuildContext context) {

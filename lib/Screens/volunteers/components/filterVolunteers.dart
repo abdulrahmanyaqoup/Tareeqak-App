@@ -1,23 +1,23 @@
-import 'package:finalproject/Widgets/customButton.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:collection/collection.dart';
-import 'package:finalproject/Models/University/major.dart';
-import 'package:finalproject/Models/University/school.dart';
-import 'package:finalproject/Models/University/university.dart';
-import 'package:finalproject/Provider/universityProvider.dart';
-import 'package:finalproject/Screens/university/components/bottomSheet.dart';
+
+import '../../../Models/University/major.dart';
+import '../../../Models/University/school.dart';
+import '../../../Provider/universityProvider.dart';
+import '../../../Widgets/customButton.dart';
+import '../../university/components/bottomSheet.dart';
 
 class FilterVolunteers extends ConsumerStatefulWidget {
-  final Function(String? university, String? school, String? major)
-      onFilterChanged;
-  final VoidCallback onClearFilters;
-
   const FilterVolunteers({
-    super.key,
     required this.onFilterChanged,
     required this.onClearFilters,
+    super.key,
   });
+
+  final void Function(String? university, String? school, String? major)
+      onFilterChanged;
+  final VoidCallback onClearFilters;
 
   @override
   FilterVolunteersState createState() => FilterVolunteersState();
@@ -32,10 +32,9 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
   Widget build(BuildContext context) {
     final universityState = ref.watch(universityProvider).value!;
 
-    List<University> universities =
-        universityState.universities.uniqueByName().toList();
-    List<School> schools = [];
-    List<Major> majors = [];
+    final universities = universityState.universities.uniqueByName().toList();
+    var schools = <School>[];
+    var majors = <Major>[];
 
     if (selectedUniversity != null) {
       final university =
@@ -75,7 +74,7 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
           const SizedBox(height: 8),
           Row(
             children: [
-              _buildDropdown(
+              _buildDropdown<void>(
                 context,
                 'University',
                 selectedUniversity,
@@ -84,12 +83,12 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                   setState(() {
                     selectedUniversity = value;
                     widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor);
+                        selectedUniversity, selectedSchool, selectedMajor,);
                   });
                 },
               ),
               const SizedBox(width: 8),
-              _buildDropdown(
+              _buildDropdown<void>(
                 context,
                 'School',
                 selectedSchool,
@@ -98,12 +97,12 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                   setState(() {
                     selectedSchool = value;
                     widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor);
+                        selectedUniversity, selectedSchool, selectedMajor,);
                   });
                 },
               ),
               const SizedBox(width: 8),
-              _buildDropdown(
+              _buildDropdown<void>(
                 context,
                 'Major',
                 selectedMajor,
@@ -112,7 +111,7 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                   setState(() {
                     selectedMajor = value;
                     widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor);
+                        selectedUniversity, selectedSchool, selectedMajor,);
                   });
                 },
               ),
@@ -128,8 +127,8 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
     String title,
     String? selectedValue,
     List<dynamic> items, {
-    bool enabled = true,
     required ValueChanged<String?> onSelected,
+    bool enabled = true,
   }) {
     return Expanded(
       child: InkWell(

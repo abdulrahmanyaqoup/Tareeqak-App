@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class ActionIcon extends StatelessWidget {
   const ActionIcon({
-    super.key,
     required this.icon,
     required this.color,
     required this.onTap,
+    super.key,
   });
 
   final IconData icon;
@@ -21,7 +21,10 @@ class ActionIcon extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 5),
+          padding: EdgeInsets.symmetric(
+            horizontal: horizontalPadding,
+            vertical: 5,
+          ),
           width: double.infinity,
           decoration: BoxDecoration(
             color: color,

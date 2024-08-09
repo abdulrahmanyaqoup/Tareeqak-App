@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
+
+  const CustomButton({
+    required this.onPressed, required this.text, super.key,
+    this.color,
+    this.textColor,
+    this.width,
+    this.height,
+    this.borderRadius,
+    this.fontSize,
+  });
   final VoidCallback onPressed;
   final String text;
   final Color? color;
@@ -9,18 +19,6 @@ class CustomButton extends StatelessWidget {
   final double? height;
   final double? borderRadius;
   final double? fontSize;
-
-  const CustomButton({
-    super.key,
-    required this.onPressed,
-    required this.text,
-    this.color,
-    this.textColor,
-    this.width,
-    this.height,
-    this.borderRadius,
-    this.fontSize,
-  });
 
   @override
   Widget build(BuildContext context) {
@@ -64,8 +62,8 @@ class CustomBackButton extends StatelessWidget {
 }
 
 class HeaderText extends StatelessWidget {
+  const HeaderText({required this.text, super.key});
   final String text;
-  const HeaderText({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {
