@@ -27,7 +27,7 @@ class EditProfile extends ConsumerStatefulWidget {
   final User user;
 
   @override
-  EditProfileState createState() => EditProfileState();
+  ConsumerState<EditProfile> createState() => EditProfileState();
 }
 
 class EditProfileState extends ConsumerState<EditProfile> {

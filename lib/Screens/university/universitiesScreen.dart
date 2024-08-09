@@ -13,7 +13,7 @@ class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
 
   @override
-  UniversitiesScreenState createState() => UniversitiesScreenState();
+  ConsumerState<UniversitiesScreen> createState() => UniversitiesScreenState();
 }
 
 class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>

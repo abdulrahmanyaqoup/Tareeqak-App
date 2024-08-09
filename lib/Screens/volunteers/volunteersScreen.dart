@@ -13,7 +13,7 @@ class VolunteersScreen extends ConsumerStatefulWidget {
   const VolunteersScreen({super.key});
 
   @override
-  VolunteersScreenState createState() => VolunteersScreenState();
+  ConsumerState<VolunteersScreen> createState() => VolunteersScreenState();
 }
 
 class VolunteersScreenState extends ConsumerState<VolunteersScreen>

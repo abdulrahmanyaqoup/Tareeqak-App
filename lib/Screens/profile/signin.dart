@@ -16,7 +16,7 @@ class Signin extends ConsumerStatefulWidget {
   const Signin({super.key});
 
   @override
-  SigninState createState() => SigninState();
+  ConsumerState<Signin> createState() => SigninState();
 }
 
 class SigninState extends ConsumerState<Signin> {

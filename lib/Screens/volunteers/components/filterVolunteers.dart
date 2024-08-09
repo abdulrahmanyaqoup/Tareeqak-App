@@ -20,7 +20,7 @@ class FilterVolunteers extends ConsumerStatefulWidget {
   final VoidCallback onClearFilters;
 
   @override
-  FilterVolunteersState createState() => FilterVolunteersState();
+  ConsumerState<FilterVolunteers> createState() => FilterVolunteersState();
 }
 
 class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
@@ -83,7 +83,10 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                   setState(() {
                     selectedUniversity = value;
                     widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor,);
+                      selectedUniversity,
+                      selectedSchool,
+                      selectedMajor,
+                    );
                   });
                 },
               ),
@@ -97,7 +100,10 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                   setState(() {
                     selectedSchool = value;
                     widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor,);
+                      selectedUniversity,
+                      selectedSchool,
+                      selectedMajor,
+                    );
                   });
                 },
               ),
@@ -111,7 +117,10 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                   setState(() {
                     selectedMajor = value;
                     widget.onFilterChanged(
-                        selectedUniversity, selectedSchool, selectedMajor,);
+                      selectedUniversity,
+                      selectedSchool,
+                      selectedMajor,
+                    );
                   });
                 },
               ),

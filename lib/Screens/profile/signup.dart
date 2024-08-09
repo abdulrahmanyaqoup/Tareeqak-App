@@ -14,7 +14,7 @@ class SignupScreen extends ConsumerStatefulWidget {
   const SignupScreen({super.key});
 
   @override
-  SignupScreenState createState() => SignupScreenState();
+  ConsumerState<SignupScreen> createState() => SignupScreenState();
 }
 
 class SignupScreenState extends ConsumerState<SignupScreen> {

@@ -24,7 +24,7 @@ class GridModalBottomSheet extends StatefulWidget {
   final List<User>? schoolVolunteers;
 
   @override
-  GridModalBottomSheetState createState() => GridModalBottomSheetState();
+  State<GridModalBottomSheet> createState() => GridModalBottomSheetState();
 }
 
 class GridModalBottomSheetState extends State<GridModalBottomSheet> {
