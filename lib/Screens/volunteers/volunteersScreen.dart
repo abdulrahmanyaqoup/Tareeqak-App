@@ -19,7 +19,7 @@ class VolunteersScreen extends ConsumerStatefulWidget {
 class VolunteersScreenState extends ConsumerState<VolunteersScreen>
     with AutomaticKeepAliveClientMixin<VolunteersScreen> {
   @override
-  bool get wantKeepAlive => ref.read(userProvider).hasValue;
+  bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -28,12 +28,12 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
   }
 
   Future<void> _getAllUsers() async {
-    await ref
-        .read(userProvider.notifier)
-        .getAllUsers()
-        .onError((error, stackTrace) {
-      showSnackBar(context, error.toString(), ContentType.failure);
-    });
+    await ref.read(userProvider.notifier).getAllUsers().catchError(
+          (Object error) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   @override
@@ -44,8 +44,10 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.4),
       appBar: CupertinoNavigationBar(
-        middle: const Text('Contact With Advisors',
-            style: TextStyle(color: Colors.white, fontSize: 17),),
+        middle: const Text(
+          'Contact With Advisors',
+          style: TextStyle(color: Colors.white, fontSize: 17),
+        ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: RefreshIndicator(
@@ -54,12 +56,13 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
           skipError: true,
           loading: () {
             return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 6,
-                itemBuilder: (context, index) {
-                  return const CardShimmer();
-                },);
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return const CardShimmer();
+              },
+            );
           },
           error: (error, stackTrace) => Text('Error: $error'),
           data: (userState) {
@@ -74,26 +77,34 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                     },
                     onFilterChanged: (university, school, major) {
                       ref.read(userProvider.notifier).filterUsers(
-                          userState.userList, university, school, major,);
+                            userState.userList,
+                            university,
+                            school,
+                            major,
+                          );
                     },
                   ),
-                  if (userState.filteredUsers.isEmpty) Center(
-                          child: Text(
-                            'No advisors found',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,),
-                          ),
-                        ) else ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: userState.filteredUsers.length,
-                          itemBuilder: (context, index) {
-                            final user = userState.filteredUsers[index];
-                            return VolunteerCard(user: user);
-                          },
+                  if (userState.filteredUsers.isEmpty)
+                    Center(
+                      child: Text(
+                        'No advisors found',
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.bold,
                         ),
+                      ),
+                    )
+                  else
+                    ListView.builder(
+                      physics: const BouncingScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount: userState.filteredUsers.length,
+                      itemBuilder: (context, index) {
+                        final user = userState.filteredUsers[index];
+                        return VolunteerCard(user: user);
+                      },
+                    ),
                 ],
               ),
             );

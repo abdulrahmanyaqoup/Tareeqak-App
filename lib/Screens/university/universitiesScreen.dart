@@ -40,9 +40,12 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
   }
 
   Future<void> _getUniversities() async {
-    await getUniversities(ref).onError((error, stackTrace) {
-      showSnackBar(context, error.toString(), ContentType.failure);
-    });
+    await getUniversities(ref).catchError(
+      (Object error) => {
+        showSnackBar(context, error.toString(), ContentType.failure),
+        throw Error(),
+      },
+    );
   }
 
   @override

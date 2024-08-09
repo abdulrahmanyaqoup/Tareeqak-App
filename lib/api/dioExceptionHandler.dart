@@ -4,8 +4,12 @@ class DioExceptionHandler extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final errorMessage = _handleDioException(err);
-    handler.next(DioException(
-        requestOptions: err.requestOptions, message: errorMessage,),);
+    handler.next(
+      DioException(
+        requestOptions: err.requestOptions,
+        message: errorMessage,
+      ),
+    );
   }
 
   String _handleDioException(DioException e) {
@@ -34,4 +38,13 @@ class DioExceptionHandler extends Interceptor {
     }
     return errorMessage;
   }
+}
+
+class CustomException implements Exception {
+  CustomException(this.message);
+
+  final String message;
+
+  @override
+  String toString() => message;
 }

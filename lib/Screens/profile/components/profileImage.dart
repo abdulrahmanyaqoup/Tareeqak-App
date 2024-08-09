@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../../Models/User/user.dart';
 import '../../../env/env.dart';
@@ -15,7 +14,7 @@ class ProfileImage extends StatelessWidget {
 
   final User user;
   final FileImage? image;
-  final void Function(ImageSource) onImagePick;
+  final Future<void> Function() onImagePick;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +52,7 @@ class ProfileImage extends StatelessWidget {
                 borderRadius: BorderRadius.circular(60),
               ),
               child: InkWell(
-                onTap: () => _showBottomSheet(context),
+                onTap: onImagePick,
                 child: Icon(
                   Icons.photo_camera,
                   color: Theme.of(context).primaryColor,
@@ -61,43 +60,6 @@ class ProfileImage extends StatelessWidget {
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet<void>(
-      context: context,
-      builder: (builder) => _bottomSheet(context),
-    );
-  }
-
-  Widget _bottomSheet(BuildContext context) {
-    return Container(
-      height: 100,
-      width: MediaQuery.of(context).size.width,
-      margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        children: [
-          const Text(
-            'Choose Profile photo',
-            style: TextStyle(fontSize: 20),
-          ),
-          const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.camera),
-                onPressed: () => onImagePick(ImageSource.camera),
-              ),
-              IconButton(
-                icon: const Icon(Icons.image),
-                onPressed: () => onImagePick(ImageSource.gallery),
-              ),
-            ],
           ),
         ],
       ),

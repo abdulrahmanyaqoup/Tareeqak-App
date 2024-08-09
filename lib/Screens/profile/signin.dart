@@ -26,21 +26,24 @@ class SigninState extends ConsumerState<Signin> {
   bool _isPasswordVisible = false;
 
   Future<void> _signIn(String email, String password) async {
-    try {
-      await ref.read(userProvider.notifier).signIn(email, password);
-      if (!mounted) return;
-      await Navigator.pushAndRemoveUntil(
-        context,
-        CupertinoPageRoute<void>(
-          builder: (_) => const ProfileScreen(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    } catch (error) {
-      if (!mounted) return;
-      final errorMessage = error.toString().replaceFirst('Exception: ', '');
-      showSnackBar(context, errorMessage, ContentType.failure);
-    }
+    await ref
+        .read(userProvider.notifier)
+        .signIn(email, password)
+        .then(
+          (response) => Navigator.pushAndRemoveUntil(
+            context,
+            CupertinoPageRoute<void>(
+              builder: (_) => const ProfileScreen(),
+            ),
+            (Route<dynamic> route) => false,
+          ),
+        )
+        .catchError(
+          (Object error, stackTrace) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   @override

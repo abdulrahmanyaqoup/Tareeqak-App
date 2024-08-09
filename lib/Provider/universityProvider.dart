@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../Models/University/major.dart';
@@ -43,23 +42,19 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
   Future<void> getUniversities() async {
     state = const AsyncLoading();
 
-    try {
-      final universities = await UniversityApi().getUniversities();
-      final allSchools =
-          universities.expand((university) => university.schools).toList();
-      final allMajors = allSchools.expand((school) => school.majors).toList();
+    final universities = await UniversityApi().getUniversities();
+    final allSchools =
+        universities.expand((university) => university.schools).toList();
+    final allMajors = allSchools.expand((school) => school.majors).toList();
 
-      state = await AsyncValue.guard(() async {
-        return state.valueOrNull!.copyWith(
-          universities: universities,
-          filteredUniversities: universities,
-          schools: allSchools,
-          majors: allMajors,
-        );
-      });
-    } on DioException catch (error) {
-      throw Exception(error.message);
-    }
+    state = await AsyncValue.guard(() async {
+      return state.valueOrNull!.copyWith(
+        universities: universities,
+        filteredUniversities: universities,
+        schools: allSchools,
+        majors: allMajors,
+      );
+    });
   }
 
   Future<void> filterUniversities(String query) async {

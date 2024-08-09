@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -52,36 +50,28 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       return;
     }
 
-    try {
-      final userData = await UserApi().getUser(token);
-      final user = User.fromMap(userData);
-      state = await AsyncValue.guard(() async {
-        return state.valueOrNull!.copyWith(
-          user: user,
-          isLoggedIn: true,
-        );
-      });
-    } on DioException catch (error) {
-      throw error.message! as Exception;
-    }
+    final userData = await UserApi().getUser(token);
+    final user = User.fromMap(userData);
+    state = await AsyncValue.guard(() async {
+      return state.valueOrNull!.copyWith(
+        user: user,
+        isLoggedIn: true,
+      );
+    });
   }
 
   Future<String> signUp(
     User user,
     String password,
-    File? image,
+    String image,
   ) async {
-    try {
-      final response = await UserApi().signUp(
-        user: user,
-        password: password,
-        image: image,
-      );
-      state = await AsyncValue.guard(() async => state.valueOrNull!);
-      return response;
-    } on DioException catch (error) {
-      throw error.message! as DioException;
-    }
+    final response = await UserApi().signUp(
+      user: user,
+      password: password,
+      image: image,
+    );
+    state = await AsyncValue.guard(() async => state.valueOrNull!);
+    return response;
   }
 
   Future<void> signInVerifiedUser(User user, String token) async {
@@ -96,21 +86,17 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   }
 
   Future<void> signIn(String email, String password) async {
-    try {
-      final response =
-          await UserApi().signInUser(email: email, password: password);
-      final token = response['token'] as String;
-      const storage = FlutterSecureStorage();
-      await storage.write(key: 'token', value: token);
-      state = await AsyncValue.guard(() async {
-        return state.valueOrNull!.copyWith(
-          user: User.fromMap(response),
-          isLoggedIn: true,
-        );
-      });
-    } on DioException catch (error) {
-      throw Exception(error.message);
-    }
+    final response =
+        await UserApi().signInUser(email: email, password: password);
+    final token = response['token'] as String;
+    const storage = FlutterSecureStorage();
+    await storage.write(key: 'token', value: token);
+    state = await AsyncValue.guard(() async {
+      return state.valueOrNull!.copyWith(
+        user: User.fromMap(response),
+        isLoggedIn: true,
+      );
+    });
   }
 
   Future<void> signOut() async {
@@ -127,68 +113,55 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
 
   Future<void> getAllUsers() async {
     state = const AsyncLoading();
-
-    try {
-      final users = await UserApi().getAllUsers();
-      state = await AsyncValue.guard(() async {
-        return state.valueOrNull!.copyWith(
-          userList: users,
-          filteredUsers: users,
-        );
-      });
-    } on DioException catch (error) {
-      throw error.message! as DioException;
-    }
+    final users = await UserApi().getAllUsers();
+    state = await AsyncValue.guard(() async {
+      return state.valueOrNull!.copyWith(
+        userList: users,
+        filteredUsers: users,
+      );
+    });
   }
 
   Future<void> updateUser(User updatedUser) async {
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
 
-    try {
-      final response =
-          await UserApi().updateUser(user: updatedUser, token: token ?? '');
-      final user = User.fromMap(response);
+    final response =
+        await UserApi().updateUser(user: updatedUser, token: token ?? '');
+    final user = User.fromMap(response);
 
-      final currentState = state.valueOrNull!;
-      final updatedUserList = currentState.userList
-          .map((user1) => user1.email == user.email ? user : user1)
-          .toList();
-      state = await AsyncValue.guard(() async {
-        return currentState.copyWith(
-          user: user,
-          userList: updatedUserList,
-          filteredUsers: updatedUserList,
-        );
-      });
-    } on DioException catch (error) {
-      throw error.message! as DioException;
-    }
+    final currentState = state.valueOrNull!;
+    final updatedUserList = currentState.userList
+        .map((user1) => user1.email == user.email ? user : user1)
+        .toList();
+    state = await AsyncValue.guard(() async {
+      return currentState.copyWith(
+        user: user,
+        userList: updatedUserList,
+        filteredUsers: updatedUserList,
+      );
+    });
   }
 
   Future<String> deleteUser() async {
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token') ?? '';
 
-    try {
-      final response = await UserApi().deleteUser(token: token);
-      await storage.delete(key: 'token');
-      final currentState = state.valueOrNull!;
-      final refreshUserList = currentState.userList
-          .where((user) => user.email != currentState.user.email)
-          .toList();
-      state = await AsyncValue.guard(() async {
-        return currentState.copyWith(
-          userList: refreshUserList,
-          filteredUsers: refreshUserList,
-          user: const User(),
-          isLoggedIn: false,
-        );
-      });
-      return response;
-    } on DioException catch (error) {
-      throw error.message! as DioException;
-    }
+    final response = await UserApi().deleteUser(token: token);
+    await storage.delete(key: 'token');
+    final currentState = state.valueOrNull!;
+    final refreshUserList = currentState.userList
+        .where((user) => user.email != currentState.user.email)
+        .toList();
+    state = await AsyncValue.guard(() async {
+      return currentState.copyWith(
+        userList: refreshUserList,
+        filteredUsers: refreshUserList,
+        user: const User(),
+        isLoggedIn: false,
+      );
+    });
+    return response;
   }
 
   Future<void> filterUsers(

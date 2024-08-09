@@ -30,12 +30,12 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
   }
 
   Future<void> _checkLoginStatus() async {
-    await ref
-        .read(userProvider.notifier)
-        .checkLoginStatus()
-        .onError((error, stackTrace) {
-      showSnackBar(context, error.toString(), ContentType.failure);
-    });
+    await ref.read(userProvider.notifier).checkLoginStatus().catchError(
+          (Object error) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   @override

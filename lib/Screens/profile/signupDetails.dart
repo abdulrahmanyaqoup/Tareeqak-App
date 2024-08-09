@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,7 +39,7 @@ class SignupDetails extends ConsumerStatefulWidget {
 class _SignupDetails extends ConsumerState<SignupDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController contactController = TextEditingController();
-  File? _image;
+  FileImage? _image;
   String _selectedUniversity = '';
   String _selectedSchool = '';
   String _selectedMajor = '';
@@ -66,38 +65,39 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         contact: contactController.text,
       ),
     );
-
-    try {
-      final response = await ref
-          .read(userProvider.notifier)
-          .signUp(user, widget.password, _image);
-
-      if (_image != null) {
-        _image = null;
-      }
-
-      if (!mounted) return;
-      await Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute<void>(
-          builder: (_) => Otp(email: widget.email),
-        ),
-        (Route<dynamic> route) => route.isFirst,
-      );
-
-      if (!mounted) return;
-      showSnackBar(context, response, ContentType.success);
-    } on DioException catch (error) {
-      showSnackBar(context, error.toString(), ContentType.failure);
-    }
+    await ref
+        .read(userProvider.notifier)
+        .signUp(user, widget.password, _image?.file.path ?? '')
+        .then(
+          (response) => {
+            if (_image != null) _image = null,
+            Navigator.of(context).pushAndRemoveUntil(
+              CupertinoPageRoute<void>(
+                builder: (_) => Otp(email: widget.email),
+              ),
+              (Route<dynamic> route) => route.isFirst,
+            ),
+            showSnackBar(context, response, ContentType.success),
+          },
+        )
+        .catchError(
+          (Object error) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
 
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
+        _image = FileImage(File(pickedFile.path));
       }
     });
   }
@@ -145,8 +145,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         child: CircleAvatar(
                           radius: 50,
                           backgroundColor: Colors.grey[200],
-                          backgroundImage:
-                              _image != null ? FileImage(_image!) : null,
+                          backgroundImage: _image,
                           child: _image == null
                               ? const Icon(
                                   Icons.add_a_photo,

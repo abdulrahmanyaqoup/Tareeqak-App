@@ -57,9 +57,12 @@ class EditProfileState extends ConsumerState<EditProfile> {
     super.dispose();
   }
 
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _pickImage() async {
     final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source, maxWidth: 600);
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
 
     setState(() {
       if (pickedFile != null) {
@@ -86,57 +89,61 @@ class EditProfileState extends ConsumerState<EditProfile> {
     await ref
         .read(userProvider.notifier)
         .updateUser(updatedUser)
-        .whenComplete(
-          () => showSnackBar(
-            context,
-            'Profile updated successfully',
-            ContentType.success,
-          ),
+        .then(
+          (response) => {
+            if (_image != null) _image = null,
+            showSnackBar(
+              context,
+              'Profile updated successfully',
+              ContentType.success,
+            ),
+          },
         )
-        .onError(
-          (error, stackTrace) =>
-              showSnackBar(context, error.toString(), ContentType.failure),
+        .catchError(
+          (Object error) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
         );
-
-    if (_image != null) {
-      _image = null;
-    }
   }
 
   Future<void> _signOut() async {
-    await ref.read(userProvider.notifier).signOut().onError(
-          (error, stackTrace) =>
-              showSnackBar(context, error.toString(), ContentType.failure),
+    await ref
+        .read(userProvider.notifier)
+        .signOut()
+        .then(
+          (response) => Navigator.of(context).pushAndRemoveUntil(
+            CupertinoPageRoute<void>(builder: (_) => const ProfileScreen()),
+            (Route<dynamic> route) => false,
+          ),
+        )
+        .catchError(
+          (Object error) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
         );
-
-    if (!mounted) return;
-    await Navigator.of(context).pushAndRemoveUntil(
-      CupertinoPageRoute<void>(
-        builder: (_) => const ProfileScreen(),
-      ),
-      (Route<dynamic> route) => false,
-    );
   }
 
   Future<void> _deleteUser() async {
-    final response = await ref
+    await ref
         .read(userProvider.notifier)
         .deleteUser()
-        .catchError((Object error, stackTrace) {
-      showSnackBar(context, error.toString(), ContentType.failure);
-      return '';
-    });
-
-    if (!mounted) return;
-    await Navigator.of(context).pushAndRemoveUntil(
-      CupertinoPageRoute<void>(
-        builder: (_) => const ProfileScreen(),
-      ),
-      (Route<dynamic> route) => false,
-    );
-
-    if (!mounted) return;
-    showSnackBar(context, response, ContentType.success);
+        .then(
+          (response) => {
+            Navigator.of(context).pushAndRemoveUntil(
+              CupertinoPageRoute<void>(builder: (_) => const ProfileScreen()),
+              (Route<dynamic> route) => false,
+            ),
+            showSnackBar(context, response, ContentType.success),
+          },
+        )
+        .catchError(
+          (Object error) => {
+            showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   void _showDeleteConfirmationDialog(BuildContext context) {
