@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:json_theme/json_theme.dart';
 
 import 'app.dart';
 
@@ -13,29 +10,38 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  final themeStr = await rootBundle.loadString('assets/theme/appainter_theme'
-      '.json');
-  final themeJson = jsonDecode(themeStr);
-  final theme = ThemeDecoder.decodeThemeData(themeJson)!;
-
   runApp(
-    ProviderScope(child: Tareeqak(theme: theme)),
+    const ProviderScope(child: Tareeqak()),
   );
 }
 
-const seedColor = Color(0xFF4A4B7B);
+final ThemeData customTheme = ThemeData(
+  primaryColor: const Color(0xFF1A405B),
+  colorScheme: ColorScheme.fromSeed(
+    seedColor: const Color(0xFF1A405B),
+    primary: const Color(0xFF1A405B),
+    secondary: const Color(0xFF001E31),
+  ),
+  scaffoldBackgroundColor: Colors.white,
+  fontFamily: 'Helvetica Neue',
+  buttonTheme: const ButtonThemeData(
+    buttonColor: Color(0xFF1A405B),
+    textTheme: ButtonTextTheme.primary,
+  ),
+  navigationBarTheme: const NavigationBarThemeData(
+    backgroundColor: Color(0xFF1A405B),
+  ),
+);
 
 class Tareeqak extends StatelessWidget {
-  const Tareeqak({this.theme, super.key});
-
-  final ThemeData? theme;
+  const Tareeqak({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tareeqak',
-      theme: theme,
+      theme: customTheme,
       home: const BottomNavigation(),
     );
   }

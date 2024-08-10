@@ -80,7 +80,10 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 60),
-                const HeaderText(text: 'Signup'),
+                const Text(
+                  'Signup',
+                  style: TextStyle(fontSize: 30, color: Colors.white),
+                ),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(

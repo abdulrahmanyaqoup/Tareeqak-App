@@ -82,6 +82,7 @@ class VolunteerCard extends StatelessWidget {
                     ),
                   ),
                   child: CircleAvatar(
+                    backgroundColor: Theme.of(context).colorScheme.primary,
                     radius: 35,
                     backgroundImage: user.userProps.image.isNotEmpty
                         ? CachedNetworkImageProvider(
@@ -90,7 +91,11 @@ class VolunteerCard extends StatelessWidget {
                           )
                         : null,
                     child: user.userProps.image.isEmpty
-                        ? const Icon(Icons.person, size: 30)
+                        ? const Icon(
+                            Icons.person,
+                            size: 30,
+                            color: Colors.white,
+                          )
                         : null,
                   ),
                 ),

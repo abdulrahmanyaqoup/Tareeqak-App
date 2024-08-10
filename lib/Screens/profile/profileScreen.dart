@@ -45,6 +45,11 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
     final getUser = ref.watch(userProvider);
 
     return Scaffold(
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        border: null,
+        padding: EdgeInsetsDirectional.zero,
+      ),
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: getUser.when(
         skipError: true,
@@ -94,7 +99,6 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
                 height: height,
               ),
               Positioned(
-                top: height * 0.2 - 60,
                 left: 16,
                 right: 16,
                 child: VolunteerCard(

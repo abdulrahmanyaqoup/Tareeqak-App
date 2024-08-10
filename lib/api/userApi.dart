@@ -19,6 +19,7 @@ class UserApi {
         'school': user.userProps.school,
         'major': user.userProps.major,
         'contact': user.userProps.contact,
+        'image': user.userProps.image,
       });
 
       if (user.userProps.image.isNotEmpty) {
@@ -27,6 +28,7 @@ class UserApi {
             'image',
             await MultipartFile.fromFile(
               user.userProps.image,
+              filename: user.userProps.image,
               contentType: MediaType('image', 'jpg/jpeg/webp/png'),
             ),
           ),
@@ -102,6 +104,7 @@ class UserApi {
         'school': user.userProps.school,
         'major': user.userProps.major,
         'contact': user.userProps.contact,
+        'image': user.userProps.image,
       });
 
       if (user.userProps.image.isNotEmpty) {
@@ -110,6 +113,7 @@ class UserApi {
             'image',
             await MultipartFile.fromFile(
               user.userProps.image,
+              filename: user.userProps.image,
               contentType: MediaType('image', 'jpg/jpeg/webp/png'),
             ),
           ),
@@ -118,6 +122,7 @@ class UserApi {
       final options = Options(
         headers: {
           'x-auth-token': token,
+          'Content-Type': 'multipart/form-data',
         },
       );
       final response = await dio.patch<dynamic>(

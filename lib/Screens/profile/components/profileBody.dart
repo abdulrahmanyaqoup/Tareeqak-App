@@ -23,8 +23,9 @@ class ProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: height * 0.25),
+      margin: EdgeInsets.only(top: height * 0.13),
       height: height * 0.75,
+      width: 500,
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
@@ -33,17 +34,11 @@ class ProfileBody extends StatelessWidget {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 150),
-            Container(
+            SizedBox(height: height * 0.15),
+            Lottie.asset(
               height: 200,
-              width: 400,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-              ),
-              child: Lottie.asset(
-                'assets/animations/logo.json',
-                fit: BoxFit.contain,
-              ),
+              'assets/animations/logo.json',
+              fit: BoxFit.cover,
             ),
             const SizedBox(height: 10),
             if (isLoading)

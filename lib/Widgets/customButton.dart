@@ -30,7 +30,7 @@ class CustomButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         shadowColor: Colors.transparent,
-        padding: padding ?? const EdgeInsets.symmetric(vertical: 23),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
         backgroundColor: color ?? Theme.of(context).colorScheme.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(borderRadius ?? 8),
@@ -44,24 +44,11 @@ class CustomButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
+          fontFamily: 'Helvetica Neue Roman',
           color: textColor ?? Colors.white,
           fontSize: fontSize ?? 16,
         ),
       ),
-    );
-  }
-}
-
-class HeaderText extends StatelessWidget {
-  const HeaderText({required this.text, super.key});
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: const TextStyle(fontSize: 30, color: Colors.white),
     );
   }
 }

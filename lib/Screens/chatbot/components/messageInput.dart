@@ -17,7 +17,6 @@ class MessageInput extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(30)),
       ),
       margin: const EdgeInsets.only(bottom: 15, left: 12, right: 12),

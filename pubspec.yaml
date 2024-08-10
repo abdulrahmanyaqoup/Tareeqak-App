@@ -54,4 +54,8 @@ flutter:
     - assets/animations/
     - assets/images/
     - assets/images/universities/
-    - assets/theme/appainter_theme.json
+
+  fonts:
+    - family: Helvetica Neue
+      fonts:
+        - asset: assets/fonts/helvetica-neue-regular.ttf

@@ -72,7 +72,10 @@ class SigninState extends ConsumerState<Signin> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 80),
-                const HeaderText(text: 'Signin'),
+                const Text(
+                  'Signin',
+                  style: TextStyle(fontSize: 30, color: Colors.white),
+                ),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(

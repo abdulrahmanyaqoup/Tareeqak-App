@@ -50,8 +50,8 @@ class ProfileImage extends StatelessWidget {
           ),
         ),
         Positioned(
-          bottom: 0,
-          right: 0,
+          bottom: -4,
+          right: -4,
           child: FloatingActionButton(
             backgroundColor: Theme.of(context).colorScheme.primary,
             onPressed: onImagePick,
@@ -59,9 +59,10 @@ class ProfileImage extends StatelessWidget {
             highlightElevation: 0,
             mini: true,
             shape: const CircleBorder(),
-            child: const Icon(
+            child: Icon(
               CupertinoIcons.camera_circle_fill,
               size: 40,
+              color: Colors.grey.shade300,
             ),
           ),
         ),
