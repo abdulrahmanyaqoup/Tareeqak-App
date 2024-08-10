@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
 
-class MessageList extends StatefulWidget {
+import '../../../Utils/getLanguageCode.dart';
 
+class MessageList extends StatefulWidget {
   const MessageList({
-    required this.messages, required this.animationController, required this.scrollController, super.key,
+    required this.messages,
+    required this.animationController,
+    required this.scrollController,
+    super.key,
   });
+
   final List<String> messages;
   final AnimationController animationController;
   final ScrollController scrollController;
@@ -54,6 +60,7 @@ class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      physics: const ClampingScrollPhysics(),
       controller: widget.scrollController,
       itemCount: widget.messages.length,
       itemBuilder: (context, index) {
@@ -62,11 +69,11 @@ class _MessageListState extends State<MessageList> {
 
         if (message.isEmpty) {
           return Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             child: _buildTypingIndicator(),
           );
         }
+        final languageCode = getLanguageCode(message);
 
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
@@ -92,32 +99,39 @@ class _MessageListState extends State<MessageList> {
                       isUser ? Alignment.centerRight : Alignment.centerLeft,
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        vertical: 8, horizontal: 16,),
-                    decoration: BoxDecoration(
-                      gradient: isUser
-                          ? LinearGradient(
-                              colors: [
-                                Theme.of(context).colorScheme.primary,
-                                Theme.of(context).colorScheme.secondary,
-                              ],
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                            )
-                          : null,
-                      color: !isUser ? Colors.grey[200] : null,
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
-                          blurRadius: 5,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                      vertical: 8,
+                      horizontal: 16,
                     ),
-                    child: Text(
-                      message,
-                      style: TextStyle(
-                        color: isUser ? Colors.white : Colors.black,
+                    decoration: BoxDecoration(
+                      color: isUser
+                          ? Theme.of(context).colorScheme.primary
+                          : Colors.grey.shade200,
+                      borderRadius: isUser
+                          ? const BorderRadius.only(
+                              topRight: Radius.circular(16),
+                              topLeft: Radius.circular(16),
+                              bottomLeft: Radius.circular(16),
+                            )
+                          : const BorderRadius.only(
+                              topRight: Radius.circular(16),
+                              bottomRight: Radius.circular(16),
+                              bottomLeft: Radius.circular(16),
+                            ),
+                    ),
+                    child: Directionality(
+                      textDirection: languageCode == 'ar'
+                          ? TextDirection.rtl
+                          : TextDirection.ltr,
+                      child: MarkdownBody(
+                        data: message,
+                        styleSheet: MarkdownStyleSheet(
+                          p: TextStyle(
+                            color: isUser
+                                ? Colors.white
+                                : Theme.of(context).colorScheme.onSurface,
+                            fontSize: 16,
+                          ),
+                        ),
                       ),
                     ),
                   ),

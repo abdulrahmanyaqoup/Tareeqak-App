@@ -19,15 +19,22 @@ class ChatBotState extends State<ChatBot>
   bool get wantKeepAlive => true;
 
   final TextEditingController _controller = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
   final List<String> _messages = [];
   final OpenaiApi _api = OpenaiApi();
   bool _isTyping = false;
   bool _stopTyping = false;
-  late final AnimationController _animationController = AnimationController(
-    value: 0.25,
-    vsync: this,
-  );
+  late final AnimationController _animationController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController(keepScrollOffset: false);
+    _animationController = AnimationController(
+      vsync: this,
+      value: 0.25,
+    );
+  }
 
   @override
   void dispose() {
@@ -55,7 +62,7 @@ class ChatBotState extends State<ChatBot>
       _messages.add(message);
       _isTyping = true;
       _stopTyping = false;
-      _messages.add(''); // Placeholder for typing indicator
+      _messages.add('');
     });
 
     await Future<void>.delayed(const Duration(milliseconds: 10));
@@ -94,8 +101,8 @@ class ChatBotState extends State<ChatBot>
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeOut,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.bounceInOut,
         );
       }
     });
@@ -105,52 +112,58 @@ class ChatBotState extends State<ChatBot>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.4),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: CupertinoNavigationBar(
         middle: const Text(
-          'Chat AI',
-          style: TextStyle(color: Colors.white, fontSize: 17),
+          'Aspire AI',
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: Column(
-        children: [
-          if (_messages.isEmpty) Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 200,
-                        width: 200,
-                        child: Lottie.asset(
-                          'assets/animations/astronet.json',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      const SizedBox(height: 20, width: 100),
-                      SizedBox(
-                        width: 300,
-                        child: Text(
-                          // ignore: lines_longer_than_80_chars
-                          'Hello! I am Astronet, Know about universities, majors, and more in Jordan.',
-                          textAlign: TextAlign.center,
-                          softWrap: true,
-                          style: TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ],
+        children: <Widget>[
+          if (_messages.isEmpty)
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: Lottie.asset(
+                      'assets/animations/astronet.json',
+                      fit: BoxFit.contain,
+                    ),
                   ),
-                ) else Expanded(
-                  child: MessageList(
-                    messages: _messages,
-                    animationController: _animationController,
-                    scrollController: _scrollController,
+                  const SizedBox(height: 20, width: 100),
+                  SizedBox(
+                    width: 300,
+                    child: Text(
+                      // ignore: lines_longer_than_80_chars
+                      'Hello! I’m Aspire AI, your personal university guide. '
+                      'How can I assist you on your academic journey?',
+                      textAlign: TextAlign.center,
+                      softWrap: true,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onSurface,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                ),
+                ],
+              ),
+            )
+          else
+            Expanded(
+              child: MessageList(
+                messages: _messages,
+                animationController: _animationController,
+                scrollController: _scrollController,
+              ),
+            ),
           MessageInput(
             controller: _controller,
             isTyping: _isTyping,

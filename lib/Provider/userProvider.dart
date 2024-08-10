@@ -63,12 +63,10 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   Future<String> signUp(
     User user,
     String password,
-    String image,
   ) async {
     final response = await UserApi().signUp(
       user: user,
       password: password,
-      image: image,
     );
     state = await AsyncValue.guard(() async => state.valueOrNull!);
     return response;

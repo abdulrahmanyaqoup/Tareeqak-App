@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -59,63 +60,41 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
     super.build(context);
     final universities = ref.watch(universityProvider);
 
-    return ColoredBox(
-      color: Theme.of(context).colorScheme.primary,
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: CustomScrollView(
-            controller: _scrollController,
-            physics: const ClampingScrollPhysics(),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            slivers: [
-              SliverAppBar(
-                expandedHeight: 120,
-                flexibleSpace: FlexibleSpaceBar(
-                  title: Opacity(
-                    opacity: _opacity,
-                    child: Text(
-                      'Universities',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white.withOpacity(0.8),
-                      ),
-                    ),
-                  ),
-                  background: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          Theme.of(context).colorScheme.primary,
-                          Theme.of(context).colorScheme.secondary,
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                      ),
-                    ),
-                  ),
-                  centerTitle: true,
-                  titlePadding: const EdgeInsets.only(bottom: 40),
-                ),
+    return Scaffold(
+      body: CustomScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        slivers: [
+          CupertinoSliverNavigationBar(
+            middle: const Text(
+              'Universities',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            alwaysShowMiddle: false,
+            largeTitle: const Text(
+              'Universities',
+              style: TextStyle(
+                color: Colors.white,
               ),
-              SliverToBoxAdapter(
-                child: Search(
-                  onSearchChanged: (query) => ref
-                      .read(universityProvider.notifier)
-                      .filterUniversities(query),
-                ),
-              ),
-              universities.when(
-                loading: () => const UniversityShimmer(),
-                error: (error, stackTrace) => const SliverToBoxAdapter(),
-                data: (universities) => UniversitiesGrid(
-                  universities: universities.filteredUniversities,
-                ),
-              ),
-            ],
+            ),
+            brightness: Brightness.dark,
+            stretch: true,
+            backgroundColor: Theme.of(context).colorScheme.primary,
           ),
-        ),
+          SliverToBoxAdapter(
+            child: Search(
+              onSearchChanged: (query) => ref
+                  .read(universityProvider.notifier)
+                  .filterUniversities(query),
+            ),
+          ),
+          universities.when(
+            loading: () => const UniversityShimmer(),
+            error: (error, stackTrace) => const SizedBox.shrink(),
+            data: (universities) => UniversitiesGrid(
+              universities: universities.filteredUniversities,
+            ),
+          ),
+        ],
       ),
     );
   }

@@ -9,11 +9,9 @@ class UserApi {
   Future<String> signUp({
     required User user,
     required String password,
-    String? image,
   }) async {
     try {
       final formData = FormData.fromMap({
-        'image': image,
         'name': user.name,
         'email': user.email,
         'password': password,
@@ -23,12 +21,12 @@ class UserApi {
         'contact': user.userProps.contact,
       });
 
-      if (image != null) {
+      if (user.userProps.image.isNotEmpty) {
         formData.files.add(
           MapEntry(
             'image',
             await MultipartFile.fromFile(
-              image,
+              user.userProps.image,
               contentType: MediaType('image', 'jpg/jpeg/webp/png'),
             ),
           ),
@@ -99,7 +97,6 @@ class UserApi {
   }) async {
     try {
       final formData = FormData.fromMap({
-        'image': user.userProps.image,
         'name': user.name,
         'university': user.userProps.university,
         'school': user.userProps.school,

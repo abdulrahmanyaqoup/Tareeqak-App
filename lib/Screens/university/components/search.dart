@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
 
 class Search extends StatelessWidget {
-
   const Search({required this.onSearchChanged, super.key});
+
   final ValueChanged<String> onSearchChanged;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            Theme.of(context).colorScheme.secondary,
-            Theme.of(context).colorScheme.primary,
-          ],
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-        ),
-      ),
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.primary,
       child: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
@@ -28,8 +19,11 @@ class Search extends StatelessWidget {
         ),
         child: Padding(
           padding:
-              const EdgeInsets.only(bottom: 15, top: 25, left: 15, right: 15),
+              const EdgeInsets.only(bottom: 10, top: 20, left: 15, right: 15),
           child: TextField(
+            onTapOutside: (pointerEvent) {
+              FocusScope.of(context).unfocus();
+            },
             onChanged: onSearchChanged,
             textInputAction: TextInputAction.search,
             decoration: InputDecoration(
@@ -41,8 +35,7 @@ class Search extends StatelessWidget {
               ),
               filled: true,
               fillColor: Colors.grey.shade200,
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 16),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
             ),
           ),
         ),

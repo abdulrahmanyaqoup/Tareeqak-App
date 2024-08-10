@@ -44,20 +44,11 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
     final height = MediaQuery.of(context).size.height;
     final getUser = ref.watch(userProvider);
 
-    return getUser.when(
-      skipError: true,
-      loading: () => Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Theme.of(context).colorScheme.primary,
-              Theme.of(context).colorScheme.secondary,
-            ],
-            begin: Alignment.topRight,
-            end: Alignment.topLeft,
-          ),
-        ),
-        child: Stack(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      body: getUser.when(
+        skipError: true,
+        loading: () => Stack(
           children: [
             ProfileBody(
               isLoading: true,
@@ -71,42 +62,30 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
             ),
           ],
         ),
-      ),
-      error: (error, stackTrace) {
-        return const Scaffold();
-      },
-      data: (userState) {
-        final user = userState.user;
-        final buttonText = user.name.isNotEmpty ? 'Edit Profile' : 'Sign Up';
-        final greetings = user.name.isNotEmpty
-            ? 'Welcome back, ${user.name}'
-            : 'Welcome to our community';
-        final onPressed = user.name.isNotEmpty
-            ? () => Navigator.push(
-                  context,
-                  CupertinoPageRoute<void>(
-                    builder: (_) => EditProfile(user: user),
-                  ),
-                )
-            : () => Navigator.push(
-                  context,
-                  CupertinoPageRoute<void>(
-                    builder: (_) => const SignupScreen(),
-                  ),
-                );
+        error: (error, stackTrace) {
+          return const Scaffold();
+        },
+        data: (userState) {
+          final user = userState.user;
+          final buttonText = user.name.isNotEmpty ? 'Edit Profile' : 'Sign Up';
+          final greetings = user.name.isNotEmpty
+              ? 'Welcome back, ${user.name}'
+              : 'Welcome to our community';
+          final onPressed = user.name.isNotEmpty
+              ? () => Navigator.push(
+                    context,
+                    CupertinoPageRoute<void>(
+                      builder: (_) => EditProfile(user: user),
+                    ),
+                  )
+              : () => Navigator.push(
+                    context,
+                    CupertinoPageRoute<void>(
+                      builder: (_) => const SignupScreen(),
+                    ),
+                  );
 
-        return Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Theme.of(context).colorScheme.primary,
-                Theme.of(context).colorScheme.secondary,
-              ],
-              begin: Alignment.topRight,
-              end: Alignment.topLeft,
-            ),
-          ),
-          child: Stack(
+          return Stack(
             children: [
               ProfileBody(
                 buttonText: buttonText,
@@ -124,9 +103,9 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
                 ),
               ),
             ],
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

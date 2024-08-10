@@ -17,7 +17,7 @@ import '../../Widgets/dropdown.dart';
 import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
-import 'components/gradientBackground.dart';
+import 'components/roundedBackground.dart';
 import 'otp.dart';
 
 class SignupDetails extends ConsumerStatefulWidget {
@@ -63,11 +63,12 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         school: _selectedSchool,
         major: _selectedMajor,
         contact: contactController.text,
+        image: _image?.file.path ?? '',
       ),
     );
     await ref
         .read(userProvider.notifier)
-        .signUp(user, widget.password, _image?.file.path ?? '')
+        .signUp(user, widget.password)
         .then(
           (response) => {
             if (_image != null) _image = null,
@@ -125,17 +126,26 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
     }
 
     return Scaffold(
-      body: GradientBackground(
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        border: null,
+      ),
+      body: RoundedBackground(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 const SizedBox(height: 40),
-                const CustomBackButton(),
-                const SizedBox(height: 80),
-                const HeaderText(text: 'Signup'),
+                const Text(
+                  'Signup',
+                  style: TextStyle(fontSize: 30, color: Colors.white),
+                ),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(
@@ -222,8 +232,10 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        color: Theme.of(context).colorScheme.primary,
-                        textColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 20,
+                        ),
                         onPressed: _signupUser,
                         text: 'Sign up',
                       ),

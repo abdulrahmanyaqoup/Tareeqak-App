@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../Models/User/user.dart';
@@ -18,51 +19,53 @@ class ProfileImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Stack(
-        children: [
-          ClipOval(
-            child: image == null
-                ? CachedNetworkImage(
-                    imageUrl: '${Env.URI}${user.userProps.image}',
-                    httpHeaders: {'x-api-key': Env.API_KEY},
-                    placeholder: (context, url) =>
-                        const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                    fit: BoxFit.cover,
-                    width: 130,
-                    height: 130,
-                  )
-                : Image(
-                    image: image!,
-                    width: 130,
-                    height: 130,
-                    fit: BoxFit.cover,
-                  ),
-          ),
-          Positioned(
-            bottom: 5,
-            right: 0,
-            child: Container(
-              height: 35,
-              width: 35,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surface,
-                borderRadius: BorderRadius.circular(60),
-              ),
-              child: InkWell(
-                onTap: onImagePick,
-                child: Icon(
-                  Icons.photo_camera,
-                  color: Theme.of(context).primaryColor,
-                  size: 28,
-                ),
-              ),
+    return Stack(
+      children: [
+        Container(
+          width: 120,
+          height: 120,
+          padding: const EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.white,
             ),
           ),
-        ],
-      ),
+          child: CircleAvatar(
+            radius: 60,
+            backgroundImage: image ??
+                CachedNetworkImageProvider(
+                  '${Env.URI}${user.userProps.image}',
+                  headers: {'x-api-key': Env.API_KEY},
+                  maxWidth: 130,
+                  maxHeight: 130,
+                ),
+            child: image == null && user.userProps.image.isEmpty
+                ? const Icon(
+                    Icons.person,
+                    size: 60,
+                    color: Colors.white,
+                  )
+                : null,
+          ),
+        ),
+        Positioned(
+          bottom: 0,
+          right: 0,
+          child: FloatingActionButton(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            onPressed: onImagePick,
+            elevation: 0,
+            highlightElevation: 0,
+            mini: true,
+            shape: const CircleBorder(),
+            child: const Icon(
+              CupertinoIcons.camera_circle_fill,
+              size: 40,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

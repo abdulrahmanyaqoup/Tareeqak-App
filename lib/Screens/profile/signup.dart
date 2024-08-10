@@ -5,7 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../Widgets/customButton.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
-import 'components/gradientBackground.dart';
+import 'components/roundedBackground.dart';
 import 'profileScreen.dart';
 import 'signin.dart';
 import 'signupDetails.dart';
@@ -64,14 +64,22 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GradientBackground(
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        border: null,
+      ),
+      body: RoundedBackground(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 150),
+                const SizedBox(height: 60),
                 const HeaderText(text: 'Signup'),
                 const SizedBox(height: 20),
                 FormContainer(
@@ -165,6 +173,10 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                         color: Theme.of(context).colorScheme.primary,
                         textColor: Colors.white,
                         onPressed: goToOptionalSignup,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 20,
+                        ),
                         text: 'Next',
                       ),
                       const SizedBox(height: 20),
@@ -172,6 +184,11 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
                             builder: (context) => const Signin(),
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: const Text('Do you have an account? Sign in'),

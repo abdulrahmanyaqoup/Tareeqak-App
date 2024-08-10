@@ -35,7 +35,7 @@ class _DropdownState extends State<Dropdown> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CustomDropdown.search(
+            CustomDropdown(
               enabled: widget.enabled ?? true,
               initialItem: initialItem,
               hintText: widget.hintText,

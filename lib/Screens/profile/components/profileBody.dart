@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../../Widgets/customButton.dart';
 import 'buttonShimmer.dart';
 
 class ProfileBody extends StatelessWidget {
@@ -99,22 +100,10 @@ class ProfileDataBody extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: onPressed,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            padding: const EdgeInsets.symmetric(
-              horizontal: 30,
-              vertical: 10,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-          child: Text(
-            buttonText!,
-            style: const TextStyle(color: Colors.white, fontSize: 16),
-          ),
+        CustomButton(
+          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          onPressed: onPressed!,
+          text: buttonText!,
         ),
       ],
     );

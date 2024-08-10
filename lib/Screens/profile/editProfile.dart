@@ -17,8 +17,8 @@ import '../../Widgets/customButton.dart';
 import '../../Widgets/dropdown.dart';
 import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
-import 'components/gradientBackground.dart';
 import 'components/profileImage.dart';
+import 'components/roundedBackground.dart';
 import 'profileScreen.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
@@ -200,8 +200,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
     }
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.white),
           onPressed: () {
@@ -209,30 +209,32 @@ class EditProfileState extends ConsumerState<EditProfile> {
             Navigator.of(context).pop();
           },
         ),
-        title: const Text('Profile', style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: _signOut,
-            icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
-            iconSize: 18,
-          ),
-        ],
+        middle: const Text(
+          'Profile',
+          style: TextStyle(color: Colors.white, fontSize: 23),
+        ),
+        trailing: IconButton(
+          onPressed: _signOut,
+          icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
+          color: Colors.white,
+          iconSize: 22,
+        ),
+        border: null,
       ),
-      body: GradientBackground(
+      body: RoundedBackground(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 40),
+                const SizedBox(height: 25),
                 ProfileImage(
                   user: widget.user,
                   image: _image,
                   onImagePick: _pickImage,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 40),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding:
@@ -315,7 +317,6 @@ class EditProfileState extends ConsumerState<EditProfile> {
                             child: CustomButton(
                               onPressed: updateUser,
                               text: 'Update',
-                              color: Theme.of(context).colorScheme.primary,
                               textColor: Colors.white,
                             ),
                           ),

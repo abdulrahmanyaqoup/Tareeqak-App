@@ -1,0 +1,1 @@
+String getLanguageCode(String string) {  final arabic = RegExp(r'^[\u0621-\u064A]+');  if (arabic.hasMatch(string)) return 'ar';  return 'en';}

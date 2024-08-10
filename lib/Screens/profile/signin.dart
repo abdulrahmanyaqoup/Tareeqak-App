@@ -8,7 +8,7 @@ import '../../Widgets/customButton.dart';
 import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
-import 'components/gradientBackground.dart';
+import 'components/roundedBackground.dart';
 import 'profileScreen.dart';
 import 'signup.dart';
 
@@ -56,15 +56,23 @@ class SigninState extends ConsumerState<Signin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: GradientBackground(
+      appBar: CupertinoNavigationBar(
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        border: null,
+      ),
+      body: RoundedBackground(
         child: SingleChildScrollView(
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 150),
-                const HeaderText(text: 'Login'),
+                const SizedBox(height: 80),
+                const HeaderText(text: 'Signin'),
                 const SizedBox(height: 20),
                 FormContainer(
                   child: Column(
@@ -111,8 +119,6 @@ class SigninState extends ConsumerState<Signin> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        color: Theme.of(context).colorScheme.primary,
-                        textColor: Colors.white,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _signIn(
@@ -121,6 +127,10 @@ class SigninState extends ConsumerState<Signin> {
                             );
                           }
                         },
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 25,
+                          vertical: 20,
+                        ),
                         text: 'Login',
                       ),
                       const SizedBox(height: 20),
@@ -128,6 +138,11 @@ class SigninState extends ConsumerState<Signin> {
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
                             builder: (_) => const SignupScreen(),
+                          ),
+                        ),
+                        style: TextButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: const Text("Don't have an account? Sign up"),
