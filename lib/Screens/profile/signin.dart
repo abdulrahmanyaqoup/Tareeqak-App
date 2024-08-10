@@ -130,10 +130,6 @@ class SigninState extends ConsumerState<Signin> {
                             );
                           }
                         },
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 25,
-                          vertical: 20,
-                        ),
                         text: 'Login',
                       ),
                       const SizedBox(height: 20),

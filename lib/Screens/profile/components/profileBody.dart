@@ -23,7 +23,7 @@ class ProfileBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: height * 0.13),
+      margin: EdgeInsets.only(top: height * 0.16),
       height: height * 0.75,
       width: 500,
       padding: const EdgeInsets.all(16),
@@ -63,9 +63,11 @@ class ProfileLoadingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Column(
       children: [
-        ButtonShimmer(height: 30),
-        SizedBox(height: 10),
-        ButtonShimmer(height: 60),
+        ButtonShimmer(height: 40, width: 250),
+        ButtonShimmer(
+          height: 40,
+          width: 250,
+        ),
       ],
     );
   }
@@ -96,7 +98,7 @@ class ProfileDataBody extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         CustomButton(
-          padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 20),
+          width: MediaQuery.of(context).size.width * 0.55,
           onPressed: onPressed!,
           text: buttonText!,
         ),

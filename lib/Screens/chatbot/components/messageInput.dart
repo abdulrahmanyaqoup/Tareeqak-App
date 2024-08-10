@@ -15,40 +15,27 @@ class MessageInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(30)),
-      ),
-      margin: const EdgeInsets.only(bottom: 15, left: 12, right: 12),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        textBaseline: TextBaseline.alphabetic,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Expanded(
-            child: TextField(
-              onTapOutside: (pointerEvent) {
-                FocusScope.of(context).unfocus();
-              },
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: 'Ask me about universities',
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                filled: true,
-                fillColor: Colors.grey.shade200,
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-              ),
-            ),
+    return Material(
+      elevation: 1,
+      shadowColor: Colors.grey.shade100,
+      borderRadius: BorderRadius.circular(10),
+      child: TextField(
+        onTapOutside: (pointerEvent) {
+          FocusScope.of(context).unfocus();
+        },
+        controller: controller,
+        decoration: InputDecoration(
+          hintText: 'Ask me about universities',
+          border: OutlineInputBorder(
+            borderSide: BorderSide.none,
+            borderRadius: BorderRadius.circular(10),
           ),
-          CupertinoButton(
+          filled: true,
+          fillColor: Colors.grey.shade200,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          suffixIcon: CupertinoButton(
             pressedOpacity: 0.8,
-            padding: const EdgeInsets.only(
-              left: 5,
-            ),
+            padding: EdgeInsets.zero,
             onPressed: onSend,
             child: Icon(
               isTyping
@@ -57,11 +44,11 @@ class MessageInput extends StatelessWidget {
               color: isTyping
                   ? Colors.red.shade500
                   : Theme.of(context).colorScheme.primary,
-              size: 45,
+              size: 35, // Adjust the size as needed
               applyTextScaling: true,
             ),
           ),
-        ],
+        ),
       ),
     );
   }

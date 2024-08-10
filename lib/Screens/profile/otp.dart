@@ -37,7 +37,7 @@ class _Otp extends ConsumerState<Otp> {
     return email.replaceRange(3, email.indexOf('@'), hiderPlaceholder);
   }
 
-  Future<void> verifyOtp() async {
+  Future<void> _verifyOtp() async {
     setState(() {
       isLoading = true;
       errorMessage = null;
@@ -45,23 +45,18 @@ class _Otp extends ConsumerState<Otp> {
     var token = '';
     var user = const User();
 
-    await OtpApi()
-        .verifyOTP(widget.email, otpController.text)
-        .then(
-          (response) => {
-            token = response['token'] as String,
-            user = User.fromMap(response),
-          },
-        )
-        .catchError((Object error) {
+    try {
+      final response =
+          await OtpApi().verifyOTP(widget.email, otpController.text);
+      token = response['token'] as String;
+      user = User.fromMap(response);
+      await _signInVerified(user, token);
+    } catch (error) {
       setState(() {
-        errorMessage = (error as DioException).message;
+        errorMessage = error.toString();
         isLoading = false;
       });
-      throw Error();
-    });
-
-    await _signInVerified(user, token);
+    }
   }
 
   Future<void> _signInVerified(User user, String token) async {
@@ -85,12 +80,12 @@ class _Otp extends ConsumerState<Otp> {
   }
 
   Future<void> _deleteUnverifiedUser() async {
-    await OtpApi().deleteUnverified(widget.email).catchError(
-          (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
-            throw Error(),
-          },
-        );
+    try {
+      await OtpApi().deleteUnverified(widget.email);
+    } on DioException catch (error) {
+      if (!mounted) return;
+      showSnackBar(context, error.toString(), ContentType.failure);
+    }
   }
 
   @override
@@ -177,7 +172,7 @@ class _Otp extends ConsumerState<Otp> {
                 ),
               const SizedBox(height: 20),
               ElevatedButton(
-                onPressed: verifyOtp,
+                onPressed: _verifyOtp,
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(150, 40),
                   backgroundColor: Theme.of(context).colorScheme.primary,

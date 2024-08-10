@@ -60,7 +60,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
               height: height,
             ),
             Positioned(
-              top: height * 0.2 - 60,
+              top: height * 0.04,
               left: 16,
               right: 16,
               child: const CardShimmer(showButtons: false),
@@ -75,7 +75,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
           final buttonText = user.name.isNotEmpty ? 'Edit Profile' : 'Sign Up';
           final greetings = user.name.isNotEmpty
               ? 'Welcome back, ${user.name}'
-              : 'Welcome to our community';
+              : 'Sign up to be an advisor!';
           final onPressed = user.name.isNotEmpty
               ? () => Navigator.push(
                     context,
@@ -99,6 +99,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
                 height: height,
               ),
               Positioned(
+                top: height * 0.04,
                 left: 16,
                 right: 16,
                 child: VolunteerCard(

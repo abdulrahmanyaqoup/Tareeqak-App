@@ -8,6 +8,7 @@ class UniversityCard extends StatelessWidget {
     required this.university,
     super.key,
   });
+
   final University university;
 
   @override
@@ -43,14 +44,16 @@ class UniversityCard extends StatelessWidget {
             height: 80,
             width: 80,
           ),
-          Text(
-            university.name,
-            textAlign: TextAlign.center,
-            softWrap: true,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(
+              university.name,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
           Text(

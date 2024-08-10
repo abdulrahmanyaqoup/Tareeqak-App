@@ -42,74 +42,94 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
     final users = ref.watch(userProvider);
 
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface.withOpacity(0.4),
-      appBar: CupertinoNavigationBar(
-        middle: const Text(
-          'Contact With Advisors',
-          style: TextStyle(color: Colors.white, fontSize: 17),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-      body: RefreshIndicator(
-        onRefresh: _getAllUsers,
-        child: users.when(
-          skipError: true,
-          loading: () {
-            return ListView.builder(
-              physics: const BouncingScrollPhysics(),
-              shrinkWrap: true,
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return const CardShimmer();
-              },
-            );
-          },
-          error: (error, stackTrace) => Text('Error: $error'),
-          data: (userState) {
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  FilterVolunteers(
-                    onClearFilters: () {
-                      setState(() {
-                        userState.filteredUsers = userState.userList;
-                      });
-                    },
-                    onFilterChanged: (university, school, major) {
-                      ref.read(userProvider.notifier).filterUsers(
-                            userState.userList,
-                            university,
-                            school,
-                            major,
-                          );
-                    },
-                  ),
-                  if (userState.filteredUsers.isEmpty)
-                    Center(
-                      child: Text(
-                        'No advisors found',
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    )
-                  else
-                    ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      itemCount: userState.filteredUsers.length,
-                      itemBuilder: (context, index) {
-                        final user = userState.filteredUsers[index];
-                        return VolunteerCard(user: user);
-                      },
-                    ),
-                ],
+      body: CustomScrollView(
+        slivers: [
+          CupertinoSliverNavigationBar(
+            middle: const Text(
+              'Advisors',
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            alwaysShowMiddle: false,
+            largeTitle: const Text(
+              'Advisors',
+              style: TextStyle(
+                color: Colors.white,
               ),
-            );
-          },
-        ),
+            ),
+            brightness: Brightness.dark,
+            stretch: true,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+          SliverToBoxAdapter(
+            child: ColoredBox(
+              color: Theme.of(context).colorScheme.primary,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: FilterVolunteers(
+                  onClearFilters: () {
+                    setState(() {
+                      ref.read(userProvider);
+                      users.valueOrNull!.filteredUsers =
+                          users.valueOrNull!.userList;
+                    });
+                  },
+                  onFilterChanged: (university, school, major) {
+                    ref.read(userProvider.notifier).filterUsers(
+                          ref.read(userProvider).valueOrNull!.userList,
+                          university,
+                          school,
+                          major,
+                        );
+                  },
+                ),
+              ),
+            ),
+          ),
+          users.when(
+            skipError: true,
+            loading: () {
+              return SliverList.builder(
+                itemBuilder: (context, index) => const CardShimmer(),
+                itemCount: 6,
+              );
+            },
+            error: (error, stackTrace) => SliverToBoxAdapter(
+              child: Center(child: Text('Error: $error')),
+            ),
+            data: (userState) {
+              if (userState.filteredUsers.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    heightFactor: 12,
+                    child: Text(
+                      'No advisors found!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 27,
+                        color: Colors.red.shade700,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                );
+              } else {
+                return SliverList.builder(
+                  itemBuilder: (context, index) {
+                    final user = userState.filteredUsers[index];
+                    return VolunteerCard(user: user);
+                  },
+                  itemCount: userState.filteredUsers.length,
+                );
+              }
+            },
+          ),
+        ],
       ),
     );
   }

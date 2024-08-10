@@ -102,7 +102,7 @@ class ChatBotState extends State<ChatBot>
         _scrollController.animateTo(
           _scrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 200),
-          curve: Curves.bounceInOut,
+          curve: Curves.easeInOut,
         );
       }
     });
@@ -112,7 +112,6 @@ class ChatBotState extends State<ChatBot>
   Widget build(BuildContext context) {
     super.build(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: CupertinoNavigationBar(
         middle: const Text(
           'Aspire AI',
@@ -122,52 +121,49 @@ class ChatBotState extends State<ChatBot>
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
-      body: Column(
+      body: Stack(
         children: <Widget>[
           if (_messages.isEmpty)
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 200,
-                    width: 200,
-                    child: Lottie.asset(
-                      'assets/animations/astronet.json',
-                      fit: BoxFit.contain,
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Lottie.asset(
+                  'assets/animations/astronet.json',
+                  fit: BoxFit.contain,
+                  width: 200,
+                ),
+                const SizedBox(height: 20, width: 100),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    // ignore: lines_longer_than_80_chars
+                    'Hello! I’m Aspire AI, your personal university guide. '
+                    'How can I assist you on your academic journey?',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onSurface,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 20, width: 100),
-                  SizedBox(
-                    width: 300,
-                    child: Text(
-                      // ignore: lines_longer_than_80_chars
-                      'Hello! I’m Aspire AI, your personal university guide. '
-                      'How can I assist you on your academic journey?',
-                      textAlign: TextAlign.center,
-                      softWrap: true,
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             )
           else
-            Expanded(
-              child: MessageList(
-                messages: _messages,
-                animationController: _animationController,
-                scrollController: _scrollController,
-              ),
+            MessageList(
+              messages: _messages,
+              animationController: _animationController,
+              scrollController: _scrollController,
             ),
-          MessageInput(
-            controller: _controller,
-            isTyping: _isTyping,
-            onSend: _sendMessage,
+          Positioned(
+            bottom: 13,
+            left: 10,
+            right: 10,
+            child: MessageInput(
+              controller: _controller,
+              isTyping: _isTyping,
+              onSend: _sendMessage,
+            ),
           ),
         ],
       ),

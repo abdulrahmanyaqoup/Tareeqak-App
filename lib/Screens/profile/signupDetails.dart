@@ -232,10 +232,6 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 25,
-                          vertical: 20,
-                        ),
                         onPressed: _signupUser,
                         text: 'Sign up',
                       ),

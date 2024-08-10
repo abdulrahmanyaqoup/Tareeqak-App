@@ -27,6 +27,28 @@ final ThemeData customTheme = ThemeData(
   buttonTheme: const ButtonThemeData(
     buttonColor: Color(0xFF1A405B),
     textTheme: ButtonTextTheme.primary,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      shadowColor: Colors.transparent,
+      padding: const EdgeInsets.symmetric(
+        horizontal: 20,
+        vertical: 10,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: TextButton.styleFrom(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+    ),
   ),
   navigationBarTheme: const NavigationBarThemeData(
     backgroundColor: Color(0xFF1A405B),

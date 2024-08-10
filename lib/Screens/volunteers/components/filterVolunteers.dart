@@ -158,13 +158,8 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey.shade500.withOpacity(0.1),
-            ),
             borderRadius: BorderRadius.circular(8),
-            color: enabled
-                ? Theme.of(context).colorScheme.surface
-                : Colors.grey.shade300,
+            color: Colors.grey.shade100,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

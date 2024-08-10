@@ -7,9 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Models/User/user.dart';
+import '../../../Widgets/infoRow.dart';
 import '../../../env/env.dart';
-import 'customButton.dart';
-import 'volunteerInfo.dart';
+import 'customIconButton.dart';
 
 class VolunteerCard extends StatelessWidget {
   const VolunteerCard({required this.user, super.key, this.isProfile = false});
@@ -58,8 +58,9 @@ class VolunteerCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
+      elevation: isProfile ? 1 : 0,
       margin: const EdgeInsets.all(15),
+      color: !isProfile ? Colors.grey.shade100 : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
@@ -77,8 +78,7 @@ class VolunteerCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color:
-                          Theme.of(context).colorScheme.primary.withOpacity(.7),
+                      color: Theme.of(context).colorScheme.primary,
                     ),
                   ),
                   child: CircleAvatar(
@@ -142,13 +142,13 @@ class VolunteerCard extends StatelessWidget {
             else
               Row(
                 children: [
-                  ActionIcon(
+                  CustomIconButton(
                     icon: FontAwesomeIcons.envelope,
                     color: Theme.of(context).colorScheme.primary,
                     onTap: _launchEmail,
                   ),
                   const SizedBox(width: 10),
-                  ActionIcon(
+                  CustomIconButton(
                     icon: FontAwesomeIcons.whatsapp,
                     color: Colors.green.withOpacity(0.8),
                     onTap: _launchWhatsApp,

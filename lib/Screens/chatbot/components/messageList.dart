@@ -60,6 +60,7 @@ class _MessageListState extends State<MessageList> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
+      padding: const EdgeInsets.only(bottom: 70),
       physics: const ClampingScrollPhysics(),
       controller: widget.scrollController,
       itemCount: widget.messages.length,

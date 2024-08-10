@@ -33,6 +33,7 @@ class ProfileImage extends StatelessWidget {
           ),
           child: CircleAvatar(
             radius: 60,
+            backgroundColor: Colors.white12,
             backgroundImage: image ??
                 CachedNetworkImageProvider(
                   '${Env.URI}${user.userProps.image}',

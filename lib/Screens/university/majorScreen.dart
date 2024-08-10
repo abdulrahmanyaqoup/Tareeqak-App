@@ -14,6 +14,7 @@ class MajorScreen extends StatelessWidget {
     this.schoolVolunteers,
     this.universityWebsite,
   });
+
   final Major major;
   final List<User>? schoolVolunteers;
   final String? universityWebsite;
@@ -91,59 +92,53 @@ class MajorScreen extends StatelessWidget {
   ) {
     showModalBottomSheet<void>(
       context: context,
-      backgroundColor: Colors.transparent,
       builder: (BuildContext bc) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.surface,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Center(
-                  child: Text(
-                    title,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 20),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).colorScheme.primary,
                 ),
-                const SizedBox(height: 16),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return ListTile(
-                      leading: Icon(
-                        Icons.circle,
-                        size: 10,
-                        color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Expanded(
+              child: ListView.separated(
+                itemCount: items.length,
+                separatorBuilder: (context, index) => const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 15),
+                ),
+                itemBuilder: (context, int index) {
+                  final item = items[index];
+                  return ListTile(
+                    title: Text(
+                      item,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
                       ),
-                      title: Text(
-                        item,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey.shade700,
+                    ),
+                    leading: CircleAvatar(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      child: Text(
+                        item[0].toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    );
-                  },
-                ),
-              ],
+                    ),
+                  );
+                },
+              ),
             ),
-          ),
+          ],
         );
       },
     );

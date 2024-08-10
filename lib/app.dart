@@ -83,10 +83,10 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         border: Border(
           top: BorderSide(
             color: Theme.of(context).colorScheme.primary,
-            width: 0.05,
+            width: 0.1,
           ),
         ),
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: Colors.white,
         inactiveColor: Theme.of(context).colorScheme.primary,
         onTap: _onItemTapped,
         currentIndex: _tabController.index,

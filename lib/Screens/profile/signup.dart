@@ -173,12 +173,11 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        color: Theme.of(context).colorScheme.primary,
                         textColor: Colors.white,
                         onPressed: goToOptionalSignup,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 25,
-                          vertical: 20,
+                          horizontal: 45,
+                          vertical: 10,
                         ),
                         text: 'Next',
                       ),

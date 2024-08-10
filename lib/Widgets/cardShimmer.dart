@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CardShimmer extends StatelessWidget {
-
   const CardShimmer({super.key, this.showButtons = true});
+
   final bool showButtons;
 
   @override
@@ -15,7 +15,7 @@ class CardShimmer extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(14),
+        padding: const EdgeInsets.only(left: 14, right: 14, bottom: 25),
         child: Shimmer.fromColors(
           baseColor: Colors.grey[400]!,
           highlightColor: Colors.grey[100]!,
@@ -26,7 +26,7 @@ class CardShimmer extends StatelessWidget {
                 children: [
                   Container(
                     width: 75,
-                    height: 75,
+                    height: 100,
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -58,7 +58,7 @@ class CardShimmer extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               Row(
                 children: [
                   Container(
