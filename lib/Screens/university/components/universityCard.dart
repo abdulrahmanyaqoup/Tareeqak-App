@@ -34,13 +34,6 @@ class UniversityCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(0, 1),
-            color: Theme.of(context).primaryColor.withOpacity(.2),
-            blurRadius: 3,
-          ),
-        ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:finalproject/Widgets/infoRow.dart';
 
 class DetailBase extends StatelessWidget {
   DetailBase({
@@ -25,20 +26,12 @@ class DetailBase extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CupertinoNavigationBar(
-        middle: Text(
-          title,
-          style: const TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-          ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
         leading: IconButton(
           icon: const Icon(CupertinoIcons.arrow_left),
           onPressed: () => Navigator.pop(context),
           color: Colors.white,
         ),
+        border: null,
         backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: ColoredBox(
@@ -67,67 +60,47 @@ class DetailBase extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  title,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(bottom: 8, top: 8),
+                                  child: Text(
+                                    title,
+                                    softWrap: true,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
                                 if (city == null)
-                                  Container()
+                                  const SizedBox()
                                 else
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.location_on,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      Text(
-                                        city!,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                  InfoRow(
+                                    icon: Icons.location_on,
+                                    value: city!,
                                   ),
+                                const SizedBox(height: 8),
                                 if (universityType == null)
                                   Container()
                                 else
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.business,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
-                                      ),
-                                      Text(
-                                        universityType!,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                                  InfoRow(
+                                    icon: Icons.school,
+                                    value: universityType!,
                                   ),
                               ],
                             ),
                           ),
                           const SizedBox(width: 16),
-                          const CircleAvatar(
-                            radius: 70,
-                            child: Icon(
-                              Icons.school,
-                              size: 40,
-                            ),
-                          ),
+                          if (city != null)
+                            Image.asset(
+                              'assets/images/universities/ju.png',
+                              width: 100,
+                            )
+                          else
+                            const SizedBox(),
                         ],
                       ),
                       const SizedBox(height: 16),
@@ -145,35 +118,30 @@ class DetailBase extends StatelessWidget {
                         child: Column(
                           children: [
                             Expanded(
-                              child: Card(
-                                shape: RoundedRectangleBorder(
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Theme.of(context).colorScheme.primary,
+                                      Theme.of(context).colorScheme.secondary,
+                                    ],
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                  ),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Theme.of(context).colorScheme.primary,
-                                        Theme.of(context).colorScheme.secondary,
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    ),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: PageView.builder(
-                                    itemCount: facts.length,
-                                    controller: _pageController,
-                                    itemBuilder: (context, index) => Center(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(16),
-                                        child: Text(
-                                          facts[index],
-                                          textAlign: TextAlign.center,
-                                          style: const TextStyle(
-                                            color: Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                child: PageView.builder(
+                                  itemCount: facts.length,
+                                  controller: _pageController,
+                                  itemBuilder: (context, index) => Center(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8),
+                                      child: Text(
+                                        facts[index],
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
                                     ),
@@ -186,6 +154,8 @@ class DetailBase extends StatelessWidget {
                               controller: _pageController,
                               count: facts.length,
                               effect: WormEffect(
+                                dotWidth: 12,
+                                dotHeight: 12,
                                 activeDotColor:
                                     Theme.of(context).colorScheme.primary,
                               ),

@@ -8,10 +8,15 @@ import 'components/detailBase.dart';
 import 'components/volunteersSheet.dart';
 
 class MajorScreen extends StatelessWidget {
-
-  const MajorScreen({required this.major, super.key, this.schoolVolunteers});
+  const MajorScreen({
+    required this.major,
+    super.key,
+    this.schoolVolunteers,
+    this.universityWebsite,
+  });
   final Major major;
   final List<User>? schoolVolunteers;
+  final String? universityWebsite;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +42,11 @@ class MajorScreen extends StatelessWidget {
           iconColor: Colors.blue,
           label: 'Major\nPlan',
           onPressed: () {
-            _launchURL(major.roadmap);
+            final url =
+                (major.roadmap.isEmpty) ? universityWebsite : major.roadmap;
+            if (url != null && url.isNotEmpty) {
+              _launchURL(url);
+            }
           },
         ),
         CustomButtons(
@@ -45,7 +54,7 @@ class MajorScreen extends StatelessWidget {
           iconColor: Colors.red,
           label: 'Future\nJobs',
           onPressed: () {
-            _showModalBottomSheet(context, 'Future\nJobs', major.jobs);
+            _showModalBottomSheet(context, 'Future Jobs', major.jobs);
           },
         ),
       ],
@@ -60,7 +69,10 @@ class MajorScreen extends StatelessWidget {
   }
 
   void _showVolunteers(
-      BuildContext context, String title, List<User> volunteers,) {
+    BuildContext context,
+    String title,
+    List<User> volunteers,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
@@ -73,7 +85,10 @@ class MajorScreen extends StatelessWidget {
   }
 
   void _showModalBottomSheet(
-      BuildContext context, String title, List<String> items,) {
+    BuildContext context,
+    String title,
+    List<String> items,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: Colors.transparent,

@@ -219,7 +219,9 @@ class EditProfileState extends ConsumerState<EditProfile> {
           color: Colors.white,
           iconSize: 22,
         ),
-        border: null,
+        border: Border.all(
+          color: Theme.of(context).colorScheme.primary,
+        ),
       ),
       body: RoundedBackground(
         child: SingleChildScrollView(

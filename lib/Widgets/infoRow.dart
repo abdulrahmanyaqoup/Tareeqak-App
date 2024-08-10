@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 
 class InfoRow extends StatelessWidget {
   const InfoRow({
-    required this.icon, required this.label, required this.value, super.key,
+    required this.icon,
+    required this.value,
+    this.label,
+    super.key,
   });
 
   final IconData icon;
-  final String label;
+  final String? label;
   final String value;
 
   @override
@@ -30,14 +33,17 @@ class InfoRow extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 7,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
+              if (label == null)
+                const SizedBox()
+              else
+                Text(
+                  label!,
+                  style: TextStyle(
+                    fontSize: 7,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
                 ),
-              ),
               Text(
                 value.isEmpty ? '-' : value,
                 style: TextStyle(

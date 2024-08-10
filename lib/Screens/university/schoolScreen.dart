@@ -8,11 +8,15 @@ import 'components/detailBase.dart';
 import 'components/volunteersSheet.dart';
 
 class SchoolScreen extends StatelessWidget {
-
-  const SchoolScreen(
-      {required this.school, super.key, this.universityVolunteers,});
+  const SchoolScreen({
+    required this.school,
+    super.key,
+    this.universityVolunteers,
+    this.universityWebsite,
+  });
   final School school;
   final List<User>? universityVolunteers;
+  final String? universityWebsite;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +43,12 @@ class SchoolScreen extends StatelessWidget {
           label: 'University Majors',
           onPressed: () {
             _showGridModalBottomSheet(
-                context, 'University Majors', school.majors, schoolVolunteers,);
+              context,
+              'University Majors',
+              school.majors,
+              schoolVolunteers,
+              universityWebsite!,
+            );
           },
         ),
       ],
@@ -47,7 +56,10 @@ class SchoolScreen extends StatelessWidget {
   }
 
   void _showVolunteers(
-      BuildContext context, String title, List<User> volunteers,) {
+    BuildContext context,
+    String title,
+    List<User> volunteers,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
@@ -59,8 +71,13 @@ class SchoolScreen extends StatelessWidget {
     );
   }
 
-  void _showGridModalBottomSheet(BuildContext context, String title,
-      List<dynamic> items, List<User> volunteers,) {
+  void _showGridModalBottomSheet(
+    BuildContext context,
+    String title,
+    List<dynamic> items,
+    List<User> volunteers,
+    String universityWebsite,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
@@ -68,6 +85,7 @@ class SchoolScreen extends StatelessWidget {
           title: title,
           items: items,
           schoolVolunteers: volunteers,
+          universityWebsite: universityWebsite,
         );
       },
     );

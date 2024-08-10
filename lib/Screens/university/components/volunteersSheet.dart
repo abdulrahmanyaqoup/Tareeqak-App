@@ -37,7 +37,7 @@ class VolunteersSheet extends StatelessWidget {
           const SizedBox(height: 16),
           if (volunteers!.isEmpty || volunteers == null)
             Text(
-              'No volunteers available',
+              'No advisors found',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.error,
                 fontSize: 16,

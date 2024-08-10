@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../Models/University/major.dart';
 import '../../../Models/University/school.dart';
 import '../../../Models/User/user.dart';
+import '../../../Widgets/search.dart';
 import '../majorScreen.dart';
 import '../schoolScreen.dart';
 
@@ -15,6 +16,7 @@ class GridModalBottomSheet extends StatefulWidget {
     this.noRoute,
     this.universityVolunteers,
     this.schoolVolunteers,
+    this.universityWebsite,
   });
 
   final String title;
@@ -22,6 +24,7 @@ class GridModalBottomSheet extends StatefulWidget {
   final bool? noRoute;
   final List<User>? universityVolunteers;
   final List<User>? schoolVolunteers;
+  final String? universityWebsite;
 
   @override
   State<GridModalBottomSheet> createState() => GridModalBottomSheetState();
@@ -54,11 +57,11 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+      decoration: const BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          topRight: Radius.circular(20),
         ),
       ),
       child: Column(
@@ -73,19 +76,9 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
             ),
           ),
           const SizedBox(height: 16),
-          TextField(
-            onChanged: updateSearchQuery,
-            decoration: InputDecoration(
-              hintText: 'Search...',
-              prefixIcon: const Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide.none,
-              ),
-              filled: true,
-              fillColor: Colors.grey.shade200,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-            ),
+          Search(
+            hintText: 'Search...',
+            onSearchChanged: updateSearchQuery,
           ),
           const SizedBox(height: 16),
           Expanded(
@@ -106,6 +99,7 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                                 universityVolunteers:
                                     widget.universityVolunteers ?? [],
                                 school: item,
+                                universityWebsite: widget.universityWebsite,
                               ),
                             ),
                           );
@@ -116,6 +110,7 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                               builder: (context) => MajorScreen(
                                 schoolVolunteers: widget.schoolVolunteers ?? [],
                                 major: item,
+                                universityWebsite: widget.universityWebsite,
                               ),
                             ),
                           );
@@ -127,15 +122,9 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                       height: 80,
                       padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: Colors.grey[100],
                         borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.2),
-                            blurRadius: 1,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                        
                       ),
                       child: Row(
                         children: [

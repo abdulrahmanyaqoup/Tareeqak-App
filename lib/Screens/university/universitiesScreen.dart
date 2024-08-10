@@ -5,8 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../Provider/universityProvider.dart';
 import '../../Utils/getUniversities.dart';
+import '../../Widgets/search.dart';
 import '../../Widgets/snackBar.dart';
-import 'components/search.dart';
 import 'components/universitiesGrid.dart';
 import 'components/universityShimmer.dart';
 
@@ -81,10 +81,31 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
           SliverToBoxAdapter(
-            child: Search(
-              onSearchChanged: (query) => ref
-                  .read(universityProvider.notifier)
-                  .filterUniversities(query),
+            child: ColoredBox(
+              color: Theme.of(context).colorScheme.primary,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                    bottom: 10,
+                    top: 20,
+                    left: 15,
+                    right: 15,
+                  ),
+                  child: Search(
+                    onSearchChanged: (query) => ref
+                        .read(universityProvider.notifier)
+                        .filterUniversities(query),
+                    hintText: 'Search for a university',
+                  ),
+                ),
+              ),
             ),
           ),
           universities.when(

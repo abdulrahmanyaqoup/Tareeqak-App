@@ -11,9 +11,9 @@ import 'components/detailBase.dart';
 import 'components/volunteersSheet.dart';
 
 class UniversityScreen extends ConsumerWidget {
-
   const UniversityScreen({
-    required this.university, super.key,
+    required this.university,
+    super.key,
   });
   final University university;
 
@@ -27,7 +27,7 @@ class UniversityScreen extends ConsumerWidget {
     return DetailBase(
       title: university.name,
       description: university.description,
-      city: 'Amman',
+      city: university.city,
       universityType: 'Public',
       facts: university.facts,
       buttons: [
@@ -37,7 +37,10 @@ class UniversityScreen extends ConsumerWidget {
           label: 'University Advisors',
           onPressed: () {
             _showVolunteers(
-                context, 'University Advisors', universityVolunteers,);
+              context,
+              'University Advisors',
+              universityVolunteers,
+            );
           },
         ),
         CustomButtons(
@@ -46,7 +49,8 @@ class UniversityScreen extends ConsumerWidget {
           label: 'University Location',
           onPressed: () {
             _launchURL(
-                'https://www.google.com/maps/place/University+of+Jordan/@32.0161048,35.8695456,15z/data=!4m6!3m5!1s0x151c9f765ba05b27:0x5a5ba049c504b635!8m2!3d32.0161048!4d35.8695456!16zL20vMDdxc2Q1?entry=ttu',);
+              university.location,
+            );
           },
         ),
         CustomButtons(
@@ -54,8 +58,13 @@ class UniversityScreen extends ConsumerWidget {
           iconColor: Colors.orange,
           label: 'University Schools',
           onPressed: () {
-            _showGridModalBottomSheet(context, 'University Schools',
-                university.schools, universityVolunteers,);
+            _showGridModalBottomSheet(
+              context,
+              'University Schools',
+              university.schools,
+              universityVolunteers,
+              university.website,
+            );
           },
         ),
       ],
@@ -70,7 +79,10 @@ class UniversityScreen extends ConsumerWidget {
   }
 
   void _showVolunteers(
-      BuildContext context, String title, List<User> volunteers,) {
+    BuildContext context,
+    String title,
+    List<User> volunteers,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
@@ -82,8 +94,13 @@ class UniversityScreen extends ConsumerWidget {
     );
   }
 
-  void _showGridModalBottomSheet(BuildContext context, String title,
-      List<dynamic> items, List<User> volunteers,) {
+  void _showGridModalBottomSheet(
+    BuildContext context,
+    String title,
+    List<dynamic> items,
+    List<User> volunteers,
+    String? universityWebsite,
+  ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
@@ -91,6 +108,7 @@ class UniversityScreen extends ConsumerWidget {
           title: title,
           items: items,
           universityVolunteers: volunteers,
+          universityWebsite: universityWebsite,
         );
       },
     );
