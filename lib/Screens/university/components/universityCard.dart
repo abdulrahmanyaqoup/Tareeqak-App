@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-
 import '../../../Models/University/university.dart';
 import '../universityScreen.dart';
 
@@ -47,10 +45,10 @@ class UniversityCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SvgPicture.asset(
-            'assets/images/universities/ju.svg',
-            width: 80,
+          Image.asset(
+            'assets/images/universities/ju.png',
             height: 80,
+            width: 80,
           ),
           Text(
             university.name,
