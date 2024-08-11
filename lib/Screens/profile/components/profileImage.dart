@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../env/env.dart';
-import '../../../model/User/user.dart';
+import '../../../model/models.dart';
 
 class ProfileImage extends StatelessWidget {
   const ProfileImage({

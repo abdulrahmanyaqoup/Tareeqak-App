@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 
 void showSnackBar(BuildContext context, String text, ContentType contentType) {
   final snackBar = SnackBar(
+    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
     content: AwesomeSnackbarContent(
-      title: text,
-      titleFontSize: 16,
-      messageFontSize: 0,
-      message: '',
+      title: contentType.message,
+      message: text,
       contentType: contentType,
     ),
     duration: const Duration(seconds: 3),

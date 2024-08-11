@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../model/University/university.dart';
+import '../../../model/models.dart';
 import '../universityScreen.dart';
 
 class UniversityCard extends StatelessWidget {

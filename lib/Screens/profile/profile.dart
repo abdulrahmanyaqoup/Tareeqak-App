@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../Provider/userProvider.dart';
-import '../../Widgets/cardShimmer.dart';
-import '../../Widgets/snackBar.dart';
+import '../../provider/userProvider.dart';
+import '../../widgets/cardShimmer.dart';
+import '../../widgets/snackBar.dart';
 import '../advisors/components/advisorCard.dart';
 import 'components/profileBody.dart';
 import 'editProfile.dart';

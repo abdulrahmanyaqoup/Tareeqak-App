@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../model/University/university.dart';
-import '../../model/User/user.dart';
+import '../../model/models.dart';
 import '../../provider/userProvider.dart';
 import 'components/advisorsSheet.dart';
 import 'components/bottomSheet.dart';

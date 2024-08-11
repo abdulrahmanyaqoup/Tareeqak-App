@@ -7,10 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../model/University/major.dart';
-import '../../model/University/school.dart';
-import '../../model/User/user.dart';
-import '../../model/User/userProps.dart';
+import '../../model/models.dart';
 import '../../provider/universityProvider.dart';
 import '../../provider/userProvider.dart';
 import '../../widgets/customButton.dart';

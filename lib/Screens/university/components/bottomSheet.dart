@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../model/University/major.dart';
-import '../../../model/University/school.dart';
-import '../../../model/User/user.dart';
+import '../../../model/models.dart';
 import '../../../widgets/search.dart';
 import '../majorScreen.dart';
 import '../schoolScreen.dart';

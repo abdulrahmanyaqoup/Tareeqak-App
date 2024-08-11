@@ -7,7 +7,7 @@ import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../api/otpApi.dart';
-import '../../model/User/user.dart';
+import '../../model/models.dart';
 import '../../provider/userProvider.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/snackBar.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/University/school.dart';
-import '../../model/User/user.dart';
+import '../../model/models.dart';
 import 'components/advisorsSheet.dart';
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';

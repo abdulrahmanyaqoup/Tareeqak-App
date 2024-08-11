@@ -2,8 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../model/University/major.dart';
-import '../../../model/University/school.dart';
+import '../../../model/models.dart';
 import '../../../provider/universityProvider.dart';
 import '../../../widgets/customButton.dart';
 import '../../university/components/bottomSheet.dart';
@@ -156,7 +155,7 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
                 })
             : null,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: Colors.grey.shade100,

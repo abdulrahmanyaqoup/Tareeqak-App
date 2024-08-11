@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../model/University/university.dart';
+import '../../../model/models.dart';
 import 'universityCard.dart';
 
 class UniversitiesGrid extends StatelessWidget {
@@ -11,7 +11,12 @@ class UniversitiesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverPadding(
-      padding: const EdgeInsets.all(15),
+      padding: const EdgeInsets.only(
+        top: 15,
+        left: 15,
+        right: 15,
+        bottom: 20,
+      ),
       sliver: SliverGrid.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
