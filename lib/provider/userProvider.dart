@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../Models/User/user.dart';
 import '../api/userApi.dart';
+import '../model/User/user.dart';
 
 class UserState {
   UserState({

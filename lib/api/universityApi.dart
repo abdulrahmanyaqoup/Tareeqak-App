@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 
-import '../Models/University/university.dart';
+import '../model/University/university.dart';
 import 'dioClient.dart';
 import 'dioExceptionHandler.dart';
 
