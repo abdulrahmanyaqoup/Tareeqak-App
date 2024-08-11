@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../Models/University/university.dart' as model;
+import '../../../model/University/university.dart';
 import '../universityScreen.dart';
 
 class UniversityCard extends StatelessWidget {
@@ -10,7 +10,7 @@ class UniversityCard extends StatelessWidget {
     super.key,
   });
 
-  final model.University university;
+  final University university;
 
   @override
   Widget build(BuildContext context) {

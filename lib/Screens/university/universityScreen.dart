@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../Models/University/university.dart';
-import '../../Models/User/user.dart';
-import '../../Provider/userProvider.dart';
+import '../../model/University/university.dart';
+import '../../model/User/user.dart';
+import '../../provider/userProvider.dart';
 import 'components/advisorsSheet.dart';
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';

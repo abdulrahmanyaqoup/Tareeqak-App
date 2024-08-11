@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../Models/University/university.dart';
+import '../../../model/University/university.dart';
 import 'universityCard.dart';
 
 class UniversitiesGrid extends StatelessWidget {

@@ -6,11 +6,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../Models/User/user.dart';
-import '../../Provider/userProvider.dart';
-import '../../Widgets/customButton.dart';
-import '../../Widgets/snackBar.dart';
 import '../../api/otpApi.dart';
+import '../../model/User/user.dart';
+import '../../provider/userProvider.dart';
+import '../../widgets/customButton.dart';
+import '../../widgets/snackBar.dart';
 import 'profile.dart';
 
 class Otp extends ConsumerStatefulWidget {

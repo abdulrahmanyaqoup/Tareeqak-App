@@ -2,10 +2,10 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../../Models/University/major.dart';
-import '../../../Models/University/school.dart';
-import '../../../Provider/universityProvider.dart';
-import '../../../Widgets/customButton.dart';
+import '../../../model/University/major.dart';
+import '../../../model/University/school.dart';
+import '../../../provider/universityProvider.dart';
+import '../../../widgets/customButton.dart';
 import '../../university/components/bottomSheet.dart';
 
 class FilterAdvisors extends ConsumerStatefulWidget {

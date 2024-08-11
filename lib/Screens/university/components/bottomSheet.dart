@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../Models/University/major.dart';
-import '../../../Models/University/school.dart';
-import '../../../Models/User/user.dart';
-import '../../../Widgets/search.dart';
+import '../../../model/University/major.dart';
+import '../../../model/University/school.dart';
+import '../../../model/User/user.dart';
+import '../../../widgets/search.dart';
 import '../majorScreen.dart';
 import '../schoolScreen.dart';
 

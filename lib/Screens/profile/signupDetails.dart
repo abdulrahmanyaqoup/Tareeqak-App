@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../Models/University/major.dart';
-import '../../Models/University/school.dart';
-import '../../Models/User/user.dart';
-import '../../Models/User/userProps.dart';
-import '../../Provider/universityProvider.dart';
-import '../../Provider/userProvider.dart';
+import '../../model/University/major.dart';
+import '../../model/University/school.dart';
+import '../../model/User/user.dart';
+import '../../model/User/userProps.dart';
+import '../../provider/universityProvider.dart';
+import '../../provider/userProvider.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/dropdown.dart';
 import '../../widgets/snackBar.dart';
