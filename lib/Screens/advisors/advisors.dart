@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../Provider/userProvider.dart';
-import '../../Widgets/cardShimmer.dart';
-import '../../Widgets/snackBar.dart';
-import 'components/filterVolunteers.dart';
-import 'components/volunteerCard.dart';
+import '../../widgets/cardShimmer.dart';
+import '../../widgets/snackBar.dart';
+import 'components/advisorCard.dart';
+import 'components/filterAdvisors.dart';
 
-class VolunteersScreen extends ConsumerStatefulWidget {
-  const VolunteersScreen({super.key});
+class Advisors extends ConsumerStatefulWidget {
+  const Advisors({super.key});
 
   @override
-  ConsumerState<VolunteersScreen> createState() => VolunteersScreenState();
+  ConsumerState<Advisors> createState() => _AdvisorsState();
 }
 
-class VolunteersScreenState extends ConsumerState<VolunteersScreen>
-    with AutomaticKeepAliveClientMixin<VolunteersScreen> {
+class _AdvisorsState extends ConsumerState<Advisors>
+    with AutomaticKeepAliveClientMixin<Advisors> {
   @override
   bool get wantKeepAlive => true;
 
@@ -72,7 +72,7 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                     topRight: Radius.circular(20),
                   ),
                 ),
-                child: FilterVolunteers(
+                child: FilterAdvisors(
                   onClearFilters: () {
                     setState(() {
                       ref.read(userProvider);
@@ -123,7 +123,9 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                 return SliverList.builder(
                   itemBuilder: (context, index) {
                     final user = userState.filteredUsers[index];
-                    return VolunteerCard(user: user);
+                    return AdvisorCard(
+                      user: user,
+                    );
                   },
                   itemCount: userState.filteredUsers.length,
                 );

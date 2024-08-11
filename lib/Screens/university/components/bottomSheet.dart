@@ -14,16 +14,16 @@ class GridModalBottomSheet extends StatefulWidget {
     required this.items,
     super.key,
     this.noRoute,
-    this.universityVolunteers,
-    this.schoolVolunteers,
+    this.universityAdvisors,
+    this.schoolAdvisors,
     this.universityWebsite,
   });
 
   final String title;
   final List<dynamic> items;
   final bool? noRoute;
-  final List<User>? universityVolunteers;
-  final List<User>? schoolVolunteers;
+  final List<User>? universityAdvisors;
+  final List<User>? schoolAdvisors;
   final String? universityWebsite;
 
   @override
@@ -96,8 +96,8 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                             context,
                             CupertinoPageRoute<void>(
                               builder: (context) => SchoolScreen(
-                                universityVolunteers:
-                                    widget.universityVolunteers ?? [],
+                                universityAdvisors:
+                                    widget.universityAdvisors ?? [],
                                 school: item,
                                 universityWebsite: widget.universityWebsite,
                               ),
@@ -108,7 +108,7 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
                             context,
                             CupertinoPageRoute<void>(
                               builder: (context) => MajorScreen(
-                                schoolVolunteers: widget.schoolVolunteers ?? [],
+                                schoolAdvisors: widget.schoolAdvisors ?? [],
                                 major: item,
                                 universityWebsite: widget.universityWebsite,
                               ),

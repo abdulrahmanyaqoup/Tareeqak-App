@@ -2,25 +2,26 @@ import 'package:flutter/material.dart';
 
 import '../../Models/University/school.dart';
 import '../../Models/User/user.dart';
+import 'components/advisorsSheet.dart';
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
-import 'components/volunteersSheet.dart';
 
 class SchoolScreen extends StatelessWidget {
   const SchoolScreen({
     required this.school,
     super.key,
-    this.universityVolunteers,
+    this.universityAdvisors,
     this.universityWebsite,
   });
+
   final School school;
-  final List<User>? universityVolunteers;
+  final List<User>? universityAdvisors;
   final String? universityWebsite;
 
   @override
   Widget build(BuildContext context) {
-    final schoolVolunteers = universityVolunteers!
+    final schoolAdvisors = universityAdvisors!
         .where((user) => user.userProps.school == school.name)
         .toList();
 
@@ -34,7 +35,7 @@ class SchoolScreen extends StatelessWidget {
           iconColor: Colors.green,
           label: 'School Advisor',
           onPressed: () {
-            _showVolunteers(context, 'School Advisor', schoolVolunteers);
+            _showAdvisors(context, 'School Advisor', schoolAdvisors);
           },
         ),
         CustomButtons(
@@ -46,7 +47,7 @@ class SchoolScreen extends StatelessWidget {
               context,
               'University Majors',
               school.majors,
-              schoolVolunteers,
+              schoolAdvisors,
               universityWebsite!,
             );
           },
@@ -55,17 +56,17 @@ class SchoolScreen extends StatelessWidget {
     );
   }
 
-  void _showVolunteers(
+  void _showAdvisors(
     BuildContext context,
     String title,
-    List<User> volunteers,
+    List<User> advisors,
   ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
-        return VolunteersSheet(
+        return AdvisorsSheet(
           title: title,
-          volunteers: volunteers,
+          advisors: advisors,
         );
       },
     );
@@ -75,7 +76,7 @@ class SchoolScreen extends StatelessWidget {
     BuildContext context,
     String title,
     List<dynamic> items,
-    List<User> volunteers,
+    List<User> advisors,
     String universityWebsite,
   ) {
     showModalBottomSheet<void>(
@@ -84,7 +85,7 @@ class SchoolScreen extends StatelessWidget {
         return GridModalBottomSheet(
           title: title,
           items: items,
-          schoolVolunteers: volunteers,
+          schoolAdvisors: advisors,
           universityWebsite: universityWebsite,
         );
       },

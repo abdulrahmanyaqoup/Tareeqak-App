@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../../../Models/University/university.dart';
 import 'universityCard.dart';
 

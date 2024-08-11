@@ -13,13 +13,13 @@ import '../../Models/User/user.dart';
 import '../../Models/User/userProps.dart';
 import '../../Provider/universityProvider.dart';
 import '../../Provider/userProvider.dart';
-import '../../Widgets/customButton.dart';
-import '../../Widgets/dropdown.dart';
-import '../../Widgets/snackBar.dart';
-import '../../Widgets/textfield.dart';
+import '../../widgets/customButton.dart';
+import '../../widgets/dropdown.dart';
+import '../../widgets/snackBar.dart';
+import '../../widgets/textfield.dart';
 import 'components/profileImage.dart';
 import 'components/roundedBackground.dart';
-import 'profileScreen.dart';
+import 'profile.dart';
 
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({required this.user, super.key});
@@ -27,10 +27,10 @@ class EditProfile extends ConsumerStatefulWidget {
   final User user;
 
   @override
-  ConsumerState<EditProfile> createState() => EditProfileState();
+  ConsumerState<EditProfile> createState() => _EditProfileState();
 }
 
-class EditProfileState extends ConsumerState<EditProfile>
+class _EditProfileState extends ConsumerState<EditProfile>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
@@ -123,7 +123,7 @@ class EditProfileState extends ConsumerState<EditProfile>
         .signOut()
         .then(
           (response) => Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute<void>(builder: (_) => const ProfileScreen()),
+            CupertinoPageRoute<void>(builder: (_) => const Profile()),
             (Route<dynamic> route) => false,
           ),
         )
@@ -142,7 +142,7 @@ class EditProfileState extends ConsumerState<EditProfile>
         .then(
           (response) => {
             Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute<void>(builder: (_) => const ProfileScreen()),
+              CupertinoPageRoute<void>(builder: (_) => const Profile()),
               (Route<dynamic> route) => false,
             ),
             showSnackBar(context, response, ContentType.success),
@@ -320,6 +320,15 @@ class EditProfileState extends ConsumerState<EditProfile>
                         hintText: 'Contact',
                         obscureText: false,
                         prefixIcon: const Icon(CupertinoIcons.phone),
+                        keyboardType: TextInputType.phone,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Contact can't be empty!";
+                          } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                            return 'Enter a valid contact number!';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 20),
                       Row(

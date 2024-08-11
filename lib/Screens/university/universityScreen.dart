@@ -5,22 +5,23 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../Models/University/university.dart';
 import '../../Models/User/user.dart';
 import '../../Provider/userProvider.dart';
+import 'components/advisorsSheet.dart';
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
-import 'components/volunteersSheet.dart';
 
 class UniversityScreen extends ConsumerWidget {
   const UniversityScreen({
     required this.university,
     super.key,
   });
+
   final University university;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final allVolunteers = ref.watch(userProvider);
-    final universityVolunteers = allVolunteers.value!.userList
+    final allAdvisors = ref.watch(userProvider);
+    final universityAdvisors = allAdvisors.value!.userList
         .where((user) => user.userProps.university == university.name)
         .toList();
 
@@ -36,10 +37,10 @@ class UniversityScreen extends ConsumerWidget {
           iconColor: Colors.green,
           label: 'University Advisors',
           onPressed: () {
-            _showVolunteers(
+            _showAdvisors(
               context,
               'University Advisors',
-              universityVolunteers,
+              universityAdvisors,
             );
           },
         ),
@@ -62,7 +63,7 @@ class UniversityScreen extends ConsumerWidget {
               context,
               'University Schools',
               university.schools,
-              universityVolunteers,
+              universityAdvisors,
               university.website,
             );
           },
@@ -78,17 +79,17 @@ class UniversityScreen extends ConsumerWidget {
     }
   }
 
-  void _showVolunteers(
+  void _showAdvisors(
     BuildContext context,
     String title,
-    List<User> volunteers,
+    List<User> advisors,
   ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
-        return VolunteersSheet(
+        return AdvisorsSheet(
           title: title,
-          volunteers: volunteers,
+          advisors: advisors,
         );
       },
     );
@@ -98,7 +99,7 @@ class UniversityScreen extends ConsumerWidget {
     BuildContext context,
     String title,
     List<dynamic> items,
-    List<User> volunteers,
+    List<User> advisors,
     String? universityWebsite,
   ) {
     showModalBottomSheet<void>(
@@ -107,7 +108,7 @@ class UniversityScreen extends ConsumerWidget {
         return GridModalBottomSheet(
           title: title,
           items: items,
-          universityVolunteers: volunteers,
+          universityAdvisors: advisors,
           universityWebsite: universityWebsite,
         );
       },

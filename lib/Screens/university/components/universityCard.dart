@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../../Models/University/university.dart';
+
+import '../../../Models/University/university.dart' as model;
 import '../universityScreen.dart';
 
 class UniversityCard extends StatelessWidget {
@@ -9,7 +10,7 @@ class UniversityCard extends StatelessWidget {
     super.key,
   });
 
-  final University university;
+  final model.University university;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class UniversityCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

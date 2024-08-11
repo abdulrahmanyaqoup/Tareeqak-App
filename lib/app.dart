@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
 import 'Screens/chatbot/chatbot.dart';
-import 'Screens/profile/profileScreen.dart';
 import 'Screens/university/universitiesScreen.dart';
-import 'Screens/volunteers/volunteersScreen.dart';
 import 'Utils/getUniversities.dart';
+import 'screens/advisors/advisors.dart';
+import 'screens/profile/profile.dart';
 
 class BottomNavigation extends ConsumerStatefulWidget {
   const BottomNavigation({super.key});
@@ -74,9 +74,9 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         physics: const NeverScrollableScrollPhysics(),
         children: [
           _buildNavigator(0, const ChatBot()),
-          _buildNavigator(1, const VolunteersScreen()),
+          _buildNavigator(1, const Advisors()),
           _buildNavigator(2, const UniversitiesScreen()),
-          _buildNavigator(3, const ProfileScreen()),
+          _buildNavigator(3, const Profile()),
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(

@@ -12,10 +12,10 @@ import '../../Models/User/user.dart';
 import '../../Models/User/userProps.dart';
 import '../../Provider/universityProvider.dart';
 import '../../Provider/userProvider.dart';
-import '../../Widgets/customButton.dart';
-import '../../Widgets/dropdown.dart';
-import '../../Widgets/snackBar.dart';
-import '../../Widgets/textfield.dart';
+import '../../widgets/customButton.dart';
+import '../../widgets/dropdown.dart';
+import '../../widgets/snackBar.dart';
+import '../../widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
 import 'otp.dart';
@@ -222,7 +222,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         controller: contactController,
                         hintText: 'Enter your contact',
                         prefixIcon: const Icon(CupertinoIcons.phone),
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Contact can't be empty!";

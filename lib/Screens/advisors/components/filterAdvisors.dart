@@ -8,8 +8,8 @@ import '../../../Provider/universityProvider.dart';
 import '../../../Widgets/customButton.dart';
 import '../../university/components/bottomSheet.dart';
 
-class FilterVolunteers extends ConsumerStatefulWidget {
-  const FilterVolunteers({
+class FilterAdvisors extends ConsumerStatefulWidget {
+  const FilterAdvisors({
     required this.onFilterChanged,
     required this.onClearFilters,
     super.key,
@@ -20,10 +20,10 @@ class FilterVolunteers extends ConsumerStatefulWidget {
   final VoidCallback onClearFilters;
 
   @override
-  ConsumerState<FilterVolunteers> createState() => FilterVolunteersState();
+  ConsumerState<FilterAdvisors> createState() => _FilterAdvisorsState();
 }
 
-class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
+class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
   String? selectedUniversity;
   String? selectedSchool;
   String? selectedMajor;
@@ -156,7 +156,7 @@ class FilterVolunteersState extends ConsumerState<FilterVolunteers> {
                 })
             : null,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 11),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(8),
             color: Colors.grey.shade100,

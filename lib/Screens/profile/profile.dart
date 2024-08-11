@@ -6,20 +6,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../Provider/userProvider.dart';
 import '../../Widgets/cardShimmer.dart';
 import '../../Widgets/snackBar.dart';
-import '../volunteers/components/volunteerCard.dart';
+import '../advisors/components/advisorCard.dart';
 import 'components/profileBody.dart';
 import 'editProfile.dart';
 import 'signup.dart';
 
-class ProfileScreen extends ConsumerStatefulWidget {
-  const ProfileScreen({super.key});
+class Profile extends ConsumerStatefulWidget {
+  const Profile({super.key});
 
   @override
-  ConsumerState<ProfileScreen> createState() => ProfileScreenState();
+  ConsumerState<Profile> createState() => _ProfileState();
 }
 
-class ProfileScreenState extends ConsumerState<ProfileScreen>
-    with AutomaticKeepAliveClientMixin<ProfileScreen> {
+class _ProfileState extends ConsumerState<Profile>
+    with AutomaticKeepAliveClientMixin<Profile> {
   @override
   bool get wantKeepAlive => true;
 
@@ -75,7 +75,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
           final buttonText = user.name.isNotEmpty ? 'Edit Profile' : 'Sign Up';
           final greetings = user.name.isNotEmpty
               ? 'Welcome back, ${user.name}'
-              : 'Sign up to be an advisor!';
+              : 'Become an advisor!';
           final onPressed = user.name.isNotEmpty
               ? () => Navigator.push(
                     context,
@@ -86,7 +86,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
               : () => Navigator.push(
                     context,
                     CupertinoPageRoute<void>(
-                      builder: (_) => const SignupScreen(),
+                      builder: (_) => const Signup(),
                     ),
                   );
 
@@ -102,7 +102,7 @@ class ProfileScreenState extends ConsumerState<ProfileScreen>
                 top: height * 0.04,
                 left: 16,
                 right: 16,
-                child: VolunteerCard(
+                child: AdvisorCard(
                   user: userState.user,
                   isProfile: true,
                 ),

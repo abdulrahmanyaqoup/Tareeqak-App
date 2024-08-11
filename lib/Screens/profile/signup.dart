@@ -6,18 +6,18 @@ import '../../Widgets/customButton.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'profileScreen.dart';
+import 'profile.dart';
 import 'signin.dart';
 import 'signupDetails.dart';
 
-class SignupScreen extends ConsumerStatefulWidget {
-  const SignupScreen({super.key});
+class Signup extends ConsumerStatefulWidget {
+  const Signup({super.key});
 
   @override
-  ConsumerState<SignupScreen> createState() => SignupScreenState();
+  ConsumerState<Signup> createState() => _SignupState();
 }
 
-class SignupScreenState extends ConsumerState<SignupScreen> {
+class _SignupState extends ConsumerState<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -46,7 +46,7 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute<void>(
-        builder: (context) => const ProfileScreen(),
+        builder: (context) => const Profile(),
       ),
       (route) => false,
     );

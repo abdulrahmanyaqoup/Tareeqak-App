@@ -3,25 +3,25 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../Models/University/major.dart';
 import '../../Models/User/user.dart';
+import 'components/advisorsSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
-import 'components/volunteersSheet.dart';
 
 class MajorScreen extends StatelessWidget {
   const MajorScreen({
     required this.major,
     super.key,
-    this.schoolVolunteers,
+    this.schoolAdvisors,
     this.universityWebsite,
   });
 
   final Major major;
-  final List<User>? schoolVolunteers;
+  final List<User>? schoolAdvisors;
   final String? universityWebsite;
 
   @override
   Widget build(BuildContext context) {
-    final majorVolunteers = schoolVolunteers!
+    final majorAdvisors = schoolAdvisors!
         .where((user) => user.userProps.major == major.name)
         .toList();
 
@@ -35,7 +35,7 @@ class MajorScreen extends StatelessWidget {
           iconColor: Colors.green,
           label: 'Major Advisors',
           onPressed: () {
-            _showVolunteers(context, 'Major Advisors', majorVolunteers);
+            _showAdvisors(context, 'Major Advisors', majorAdvisors);
           },
         ),
         CustomButtons(
@@ -69,17 +69,17 @@ class MajorScreen extends StatelessWidget {
     }
   }
 
-  void _showVolunteers(
+  void _showAdvisors(
     BuildContext context,
     String title,
-    List<User> volunteers,
+    List<User> advisors,
   ) {
     showModalBottomSheet<void>(
       context: context,
       builder: (context) {
-        return VolunteersSheet(
+        return AdvisorsSheet(
           title: title,
-          volunteers: volunteers,
+          advisors: advisors,
         );
       },
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../Provider/universityProvider.dart';
-import '../../Widgets/search.dart';
+import '../../widgets/search.dart';
 import 'components/universitiesGrid.dart';
 import 'components/universityShimmer.dart';
 
@@ -11,10 +11,10 @@ class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
 
   @override
-  ConsumerState<UniversitiesScreen> createState() => UniversitiesScreenState();
+  ConsumerState<UniversitiesScreen> createState() => _UniversitiesScreenState();
 }
 
-class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
+class _UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;

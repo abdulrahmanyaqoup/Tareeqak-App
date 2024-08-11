@@ -9,17 +9,17 @@ import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'profileScreen.dart';
+import 'profile.dart';
 import 'signup.dart';
 
 class Signin extends ConsumerStatefulWidget {
   const Signin({super.key});
 
   @override
-  ConsumerState<Signin> createState() => SigninState();
+  ConsumerState<Signin> createState() => _SigninState();
 }
 
-class SigninState extends ConsumerState<Signin> {
+class _SigninState extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -38,7 +38,7 @@ class SigninState extends ConsumerState<Signin> {
         Navigator.pushAndRemoveUntil(
           context,
           CupertinoPageRoute<void>(
-            builder: (_) => const ProfileScreen(),
+            builder: (_) => const Profile(),
           ),
           (Route<dynamic> route) => false,
         );
@@ -145,7 +145,7 @@ class SigninState extends ConsumerState<Signin> {
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
-                            builder: (_) => const SignupScreen(),
+                            builder: (_) => const Signup(),
                           ),
                         ),
                         child: const Text("Don't have an account? Sign up"),

@@ -11,7 +11,7 @@ import '../../Provider/userProvider.dart';
 import '../../Widgets/customButton.dart';
 import '../../Widgets/snackBar.dart';
 import '../../api/otpApi.dart';
-import 'profileScreen.dart';
+import 'profile.dart';
 
 class Otp extends ConsumerStatefulWidget {
   const Otp({required this.email, super.key});
@@ -73,7 +73,7 @@ class _Otp extends ConsumerState<Otp> {
         .then(
           (response) => Navigator.of(context).pushAndRemoveUntil(
             CupertinoPageRoute<void>(
-              builder: (_) => const ProfileScreen(),
+              builder: (_) => const Profile(),
             ),
             (Route<dynamic> route) => false,
           ),
