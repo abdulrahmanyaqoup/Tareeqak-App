@@ -46,8 +46,8 @@ class ChatBotState extends State<ChatBot>
 
   Future<void> _sendMessage() async {
     if (_isTyping) {
-      _stopTyping = true;
       setState(() {
+        _stopTyping = true;
         _isTyping = false;
       });
       return;
@@ -78,10 +78,14 @@ class ChatBotState extends State<ChatBot>
 
     for (var i = 0; i < response.length; i++) {
       if (_stopTyping && _messages[_messages.length - 1].isEmpty) {
-        _messages[_messages.length - 1] = 'Typing stopped here';
-        break;
+        setState(() {
+          _messages
+            ..removeLast()
+            ..removeLast();
+        });
+        return;
       } else if (_stopTyping) {
-        break;
+        return;
       }
 
       await Future<void>.delayed(const Duration(milliseconds: 2));
@@ -136,7 +140,6 @@ class ChatBotState extends State<ChatBot>
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Text(
-                    // ignore: lines_longer_than_80_chars
                     'Hello! I’m Aspire AI, your personal university guide. '
                     'How can I assist you on your academic journey?',
                     textAlign: TextAlign.center,

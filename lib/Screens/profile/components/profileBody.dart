@@ -32,6 +32,7 @@ class ProfileBody extends StatelessWidget {
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           children: [
             SizedBox(height: height * 0.15),

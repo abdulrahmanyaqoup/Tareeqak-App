@@ -118,7 +118,7 @@ class _MessageListState extends State<MessageList> {
                     decoration: BoxDecoration(
                       color: isUser
                           ? Theme.of(context).colorScheme.primary
-                          : Colors.grey.shade200,
+                          : Colors.grey.shade100,
                       borderRadius: isUser
                           ? const BorderRadius.only(
                               topRight: Radius.circular(16),

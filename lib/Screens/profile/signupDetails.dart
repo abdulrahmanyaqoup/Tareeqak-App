@@ -136,6 +136,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
       ),
       body: RoundedBackground(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Form(
             key: _formKey,
             child: Column(
@@ -223,7 +224,8 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Contact can't be empty!";
-                          } else if (!RegExp(r'^\d{10}$').hasMatch(value)) {
+                          } else if (RegExp(r'^07[789]\d{7}$')
+                              .hasMatch(value)) {
                             return 'Enter a valid contact number!';
                           }
                           return null;

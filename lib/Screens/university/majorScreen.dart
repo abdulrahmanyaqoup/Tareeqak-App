@@ -115,6 +115,7 @@ class MajorScreen extends StatelessWidget {
             const SizedBox(height: 16),
             Expanded(
               child: ListView.separated(
+                physics: const BouncingScrollPhysics(),
                 itemCount: items.length,
                 separatorBuilder: (context, index) => const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 15),

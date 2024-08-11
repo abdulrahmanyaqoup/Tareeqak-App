@@ -74,6 +74,7 @@ class _SigninState extends ConsumerState<Signin> {
       ),
       body: RoundedBackground(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Form(
             key: _formKey,
             child: Column(

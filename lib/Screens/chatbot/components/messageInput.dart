@@ -16,8 +16,8 @@ class MessageInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 1,
-      shadowColor: Colors.grey.shade100,
+      elevation: 5,
+      shadowColor: Colors.black.withOpacity(0.5),
       borderRadius: BorderRadius.circular(10),
       child: TextField(
         onTapOutside: (pointerEvent) {
@@ -31,7 +31,7 @@ class MessageInput extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           filled: true,
-          fillColor: Colors.grey.shade200,
+          fillColor: Colors.grey.shade100,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           suffixIcon: CupertinoButton(
             pressedOpacity: 0.8,

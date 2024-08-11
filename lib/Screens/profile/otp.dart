@@ -111,6 +111,7 @@ class _Otp extends ConsumerState<Otp> {
         ),
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(40),
           child: Column(

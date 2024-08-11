@@ -74,6 +74,7 @@ class _SignupState extends ConsumerState<Signup> {
       ),
       body: RoundedBackground(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Form(
             key: _formKey,
             child: Column(

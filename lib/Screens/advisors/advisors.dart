@@ -120,14 +120,17 @@ class _AdvisorsState extends ConsumerState<Advisors>
                   ),
                 );
               } else {
-                return SliverList.builder(
-                  itemBuilder: (context, index) {
-                    final user = userState.filteredUsers[index];
-                    return AdvisorCard(
-                      user: user,
-                    );
-                  },
-                  itemCount: userState.filteredUsers.length,
+                return SliverPadding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  sliver: SliverList.builder(
+                    itemBuilder: (context, index) {
+                      final user = userState.filteredUsers[index];
+                      return AdvisorCard(
+                        user: user,
+                      );
+                    },
+                    itemCount: userState.filteredUsers.length,
+                  ),
                 );
               }
             },

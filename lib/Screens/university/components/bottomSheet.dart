@@ -81,6 +81,7 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
           const SizedBox(height: 16),
           Expanded(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Column(
                 children: List.generate(filteredItems.length, (index) {
                   final item = filteredItems[index];

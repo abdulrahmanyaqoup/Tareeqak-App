@@ -11,8 +11,8 @@ class UniversityShimmer extends StatelessWidget {
       sliver: SliverGrid.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          mainAxisSpacing: 10,
-          crossAxisSpacing: 10,
+          mainAxisSpacing: 15,
+          crossAxisSpacing: 15,
           mainAxisExtent: 200,
         ),
         itemBuilder: (context, index) {
@@ -22,7 +22,7 @@ class UniversityShimmer extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(.3),
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

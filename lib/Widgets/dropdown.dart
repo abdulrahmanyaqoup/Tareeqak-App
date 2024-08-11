@@ -48,16 +48,21 @@ class _DropdownState extends State<Dropdown> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomDropdown(
+                closedHeaderPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                overlayHeight: 250,
                 enabled: widget.enabled ?? true,
+                itemsListPadding: const EdgeInsets.only(bottom: 10),
                 disabledDecoration: CustomDropdownDisabledDecoration(
                   fillColor: Colors.grey.shade300,
                   headerStyle: const TextStyle(
+                    overflow: TextOverflow.fade,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
-                    color: Colors.grey,
                   ),
                   prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
                   hintStyle: const TextStyle(
+                    overflow: TextOverflow.fade,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF757575),
@@ -79,42 +84,45 @@ class _DropdownState extends State<Dropdown> {
                       }
                     : null,
                 decoration: CustomDropdownDecoration(
+                  closedBorderRadius: const BorderRadius.all(
+                    Radius.circular(8),
+                  ),
                   listItemDecoration: ListItemDecoration(
-                    splashColor: Colors.grey.shade200,
+                    splashColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    highlightColor:
+                        Theme.of(context).colorScheme.primary.withOpacity(0.1),
                   ),
                   listItemStyle: TextStyle(
+                    overflow: TextOverflow.fade,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: Colors.grey.shade700,
                   ),
                   closedFillColor: Colors.grey.shade500.withOpacity(0.1),
                   prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
-                  expandedFillColor: Colors.grey.shade50,
+                  expandedFillColor: Colors.grey.shade100,
+                  expandedSuffixIcon: Icon(
+                    Icons.keyboard_arrow_up,
+                    color: Colors.grey[700],
+                  ),
                   expandedShadow: [
-                    const BoxShadow(
-                      color: Colors.grey,
-                      blurRadius: 0.5,
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
                     ),
                   ],
-                  searchFieldDecoration: SearchFieldDecoration(
-                    focusedBorder: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      borderSide: BorderSide.none,
-                    ),
-                    border: const OutlineInputBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      borderSide: BorderSide.none,
-                    ),
-                    fillColor: Colors.grey.shade500.withOpacity(0.1),
-                  ),
                   expandedBorderRadius: const BorderRadius.all(
                     Radius.circular(8),
                   ),
+                  headerStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    overflow: TextOverflow.fade,
+                  ),
                   hintStyle: const TextStyle(
+                    overflow: TextOverflow.fade,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     color: Color(0xFF757575),

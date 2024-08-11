@@ -50,6 +50,7 @@ class DetailBase extends StatelessWidget {
                 ),
               ),
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Padding(
                   padding: const EdgeInsets.all(16),
                   child: Column(
