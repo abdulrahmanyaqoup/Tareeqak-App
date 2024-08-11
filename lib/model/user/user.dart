@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
-
-import 'userProps.dart';
+part of '../models.dart';
 
 @immutable
 class User {

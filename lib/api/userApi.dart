@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
-import '../model/User/user.dart';
+import '../model/models.dart';
 import 'dioClient.dart';
 import 'dioExceptionHandler.dart';
 

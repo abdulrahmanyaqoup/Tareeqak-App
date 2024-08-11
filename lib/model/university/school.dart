@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
-
-import 'major.dart';
+part of '../models.dart';
 
 @immutable
 class School {

@@ -1,9 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/universityApi.dart';
-import '../model/University/major.dart';
-import '../model/University/school.dart';
-import '../model/University/university.dart';
+import '../model/models.dart';
 
 class UniversityState {
   UniversityState({

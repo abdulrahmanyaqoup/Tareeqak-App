@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../api/userApi.dart';
-import '../model/User/user.dart';
+import '../model/models.dart';
 
 class UserState {
   UserState({

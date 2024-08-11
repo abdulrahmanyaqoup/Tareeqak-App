@@ -46,6 +46,7 @@ class InfoRow extends StatelessWidget {
                 ),
               Text(
                 value.isEmpty ? '-' : value,
+                softWrap: false,
                 style: TextStyle(
                   fontSize: 14,
                   overflow: TextOverflow.fade,
