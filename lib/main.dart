@@ -21,6 +21,7 @@ final ThemeData customTheme = ThemeData(
     seedColor: const Color(0xFF1A405B),
     primary: const Color(0xFF1A405B),
     secondary: const Color(0xFF001E31),
+    surface: Colors.white,
   ),
   scaffoldBackgroundColor: Colors.white,
   fontFamily: 'Helvetica Neue',
@@ -39,14 +40,14 @@ final ThemeData customTheme = ThemeData(
         vertical: 10,
       ),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(6),
       ),
     ),
   ),
   textButtonTheme: TextButtonThemeData(
     style: TextButton.styleFrom(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(6),
       ),
     ),
   ),

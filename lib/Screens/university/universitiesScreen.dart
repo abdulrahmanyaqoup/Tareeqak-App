@@ -1,12 +1,9 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../Provider/universityProvider.dart';
-import '../../Utils/getUniversities.dart';
 import '../../Widgets/search.dart';
-import '../../Widgets/snackBar.dart';
 import 'components/universitiesGrid.dart';
 import 'components/universityShimmer.dart';
 
@@ -28,7 +25,6 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
   @override
   void initState() {
     super.initState();
-    Future.microtask(_getUniversities);
     _scrollController = ScrollController()
       ..addListener(() {
         setState(() {
@@ -38,15 +34,6 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
           if (_opacity > 1) _opacity = 1;
         });
       });
-  }
-
-  Future<void> _getUniversities() async {
-    await getUniversities(ref).catchError(
-      (Object error) => {
-        showSnackBar(context, error.toString(), ContentType.failure),
-        throw Error(),
-      },
-    );
   }
 
   @override
@@ -63,6 +50,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
     return Scaffold(
       body: CustomScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        physics: const BouncingScrollPhysics(),
         slivers: [
           CupertinoSliverNavigationBar(
             middle: const Text(
@@ -93,7 +81,7 @@ class UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
                 ),
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    bottom: 10,
+                    bottom: 5,
                     top: 20,
                     left: 15,
                     right: 15,

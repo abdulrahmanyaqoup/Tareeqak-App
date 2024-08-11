@@ -41,8 +41,9 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
     super.build(context);
     final users = ref.watch(userProvider);
 
-    return Scaffold(
-      body: CustomScrollView(
+    return CupertinoPageScaffold(
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(),
         slivers: [
           CupertinoSliverNavigationBar(
             middle: const Text(
@@ -56,9 +57,9 @@ class VolunteersScreenState extends ConsumerState<VolunteersScreen>
                 color: Colors.white,
               ),
             ),
-            brightness: Brightness.dark,
             stretch: true,
             backgroundColor: Theme.of(context).colorScheme.primary,
+            border: null,
           ),
           SliverToBoxAdapter(
             child: ColoredBox(

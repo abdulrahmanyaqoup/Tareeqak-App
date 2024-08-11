@@ -45,6 +45,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   String _selectedMajor = '';
   bool? enabledSchool = false;
   bool? enabledMajor = false;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -54,6 +55,9 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
 
   Future<void> _signupUser() async {
     if (!_formKey.currentState!.validate()) return;
+    setState(() {
+      isLoading = true;
+    });
 
     final user = User(
       name: widget.name,
@@ -66,27 +70,26 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         image: _image?.file.path ?? '',
       ),
     );
-    await ref
-        .read(userProvider.notifier)
-        .signUp(user, widget.password)
-        .then(
-          (response) => {
-            if (_image != null) _image = null,
-            Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute<void>(
-                builder: (_) => Otp(email: widget.email),
-              ),
-              (Route<dynamic> route) => route.isFirst,
-            ),
-            showSnackBar(context, response, ContentType.success),
-          },
-        )
-        .catchError(
-          (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
-            throw Error(),
-          },
+    await ref.read(userProvider.notifier).signUp(user, widget.password).then(
+      (response) {
+        if (_image != null) _image = null;
+        Navigator.of(context).pushAndRemoveUntil(
+          CupertinoPageRoute<void>(
+            builder: (_) => Otp(email: widget.email),
+          ),
+          (Route<dynamic> route) => route.isFirst,
         );
+        showSnackBar(context, response, ContentType.success);
+      },
+    ).catchError(
+      (Object error) {
+        showSnackBar(context, error.toString(), ContentType.failure);
+        setState(() {
+          isLoading = false;
+        });
+        throw Error();
+      },
+    );
   }
 
   Future<void> _pickImage() async {
@@ -232,6 +235,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
+                        isLoading: isLoading,
                         onPressed: _signupUser,
                         text: 'Sign up',
                       ),

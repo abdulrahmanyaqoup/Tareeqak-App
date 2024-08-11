@@ -30,7 +30,8 @@ class EditProfile extends ConsumerStatefulWidget {
   ConsumerState<EditProfile> createState() => EditProfileState();
 }
 
-class EditProfileState extends ConsumerState<EditProfile> {
+class EditProfileState extends ConsumerState<EditProfile>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController contactController;
@@ -38,6 +39,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
   String _selectedUniversity = '';
   String _selectedSchool = '';
   String _selectedMajor = '';
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -73,7 +75,9 @@ class EditProfileState extends ConsumerState<EditProfile> {
 
   Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
-
+    setState(() {
+      isLoading = true;
+    });
     final updatedUserProps = UserProps(
       university: _selectedUniversity,
       school: _selectedSchool,
@@ -97,14 +101,20 @@ class EditProfileState extends ConsumerState<EditProfile> {
               'Profile updated successfully',
               ContentType.success,
             ),
+            setState(() {
+              isLoading = false;
+            }),
           },
         )
         .catchError(
-          (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
-            throw Error(),
-          },
-        );
+      (Object error) {
+        showSnackBar(context, error.toString(), ContentType.failure);
+        setState(() {
+          isLoading = false;
+        });
+        throw Error();
+      },
+    );
   }
 
   Future<void> _signOut() async {
@@ -317,6 +327,7 @@ class EditProfileState extends ConsumerState<EditProfile> {
                         children: [
                           Expanded(
                             child: CustomButton(
+                              isLoading: isLoading,
                               onPressed: updateUser,
                               text: 'Update',
                               textColor: Colors.white,
@@ -328,8 +339,8 @@ class EditProfileState extends ConsumerState<EditProfile> {
                               onPressed: () =>
                                   _showDeleteConfirmationDialog(context),
                               text: 'Delete',
-                              color: Colors.grey[200],
-                              textColor: const Color.fromARGB(255, 240, 81, 70),
+                              color: Colors.grey.shade200,
+                              textColor: Colors.red.shade600,
                             ),
                           ),
                         ],

@@ -10,6 +10,7 @@ class CustomButton extends StatelessWidget {
     this.width,
     this.fontSize,
     this.padding,
+    this.isLoading = false,
   });
 
   final VoidCallback onPressed;
@@ -19,13 +20,14 @@ class CustomButton extends StatelessWidget {
   final double? width;
   final double? fontSize;
   final EdgeInsetsGeometry? padding;
+  final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: width ?? double.infinity,
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: !isLoading ? onPressed : null,
         style: ElevatedButton.styleFrom(
           shadowColor: Colors.transparent,
           padding: padding,
@@ -36,14 +38,20 @@ class CustomButton extends StatelessWidget {
           // Custom
           // highlight color
         ),
-        child: Text(
-          text,
-          style: TextStyle(
-            fontFamily: 'Helvetica Neue Roman',
-            color: textColor ?? Colors.white,
-            fontSize: fontSize ?? 16,
-          ),
-        ),
+        child: isLoading
+            ? const SizedBox(
+                width: 22,
+                height: 22,
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  strokeWidth: 2,
+                ),
+              )
+            : Text(
+                text,
+                style:
+                    TextStyle(fontSize: 16, color: textColor ?? Colors.white),
+              ),
       ),
     );
   }

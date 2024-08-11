@@ -188,11 +188,6 @@ class SignupScreenState extends ConsumerState<SignupScreen> {
                             builder: (context) => const Signin(),
                           ),
                         ),
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
                         child: const Text('Do you have an account? Sign in'),
                       ),
                     ],

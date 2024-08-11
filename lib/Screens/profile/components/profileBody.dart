@@ -98,7 +98,7 @@ class ProfileDataBody extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         CustomButton(
-          width: MediaQuery.of(context).size.width * 0.55,
+          width: 180,
           onPressed: onPressed!,
           text: buttonText!,
         ),

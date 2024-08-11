@@ -9,15 +9,16 @@ class CardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 2,
-      margin: const EdgeInsets.all(15),
+      elevation: 0,
+      color: Colors.grey[200],
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
       child: Padding(
         padding: const EdgeInsets.only(left: 14, right: 14, bottom: 25),
         child: Shimmer.fromColors(
-          baseColor: Colors.grey[400]!,
+          baseColor: Colors.grey[500]!,
           highlightColor: Colors.grey[100]!,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -28,7 +28,15 @@ class _MessageListState extends State<MessageList> {
       highlightColor: Colors.grey[100]!,
       child: Row(
         children: [
-          const CircleAvatar(radius: 16),
+          CircleAvatar(
+            radius: 16,
+            backgroundColor: Colors.transparent,
+            child: Lottie.asset(
+              'assets/animations/starsFilled.json',
+              fit: BoxFit.contain,
+              controller: widget.animationController,
+            ),
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Align(
@@ -38,7 +46,11 @@ class _MessageListState extends State<MessageList> {
                     const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
+                    bottomLeft: Radius.circular(16),
+                  ),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.05),

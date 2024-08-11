@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class CustomTextField extends StatelessWidget {
+class CustomTextField extends StatefulWidget {
   const CustomTextField({
     required this.controller,
     required this.hintText,
@@ -21,41 +21,52 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
 
   @override
+  _CustomTextFieldState createState() => _CustomTextFieldState();
+}
+
+class _CustomTextFieldState extends State<CustomTextField> {
+  bool _hasError = false;
+
+  @override
   Widget build(BuildContext context) {
     return TextFormField(
       onTapOutside: (pointerEvent) {
         FocusScope.of(context).unfocus();
       },
-      keyboardType: keyboardType,
-      controller: controller,
-      obscureText: obscureText,
+      keyboardType: widget.keyboardType,
+      controller: widget.controller,
+      obscureText: widget.obscureText,
       decoration: InputDecoration(
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
+        prefixIcon: widget.prefixIcon,
+        suffixIcon: widget.suffixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),
+          borderSide: _hasError
+              ? BorderSide(color: Colors.grey.shade500.withOpacity(0.1))
+              : BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: BorderSide(color: Colors.grey.shade500.withOpacity(0.1)),
+          borderSide: BorderSide.none,
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         filled: true,
         fillColor: Colors.grey.shade500.withOpacity(0.1),
-        hintText: hintText,
+        hintText: widget.hintText,
         hintStyle: const TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w400,
           color: Color(0xFF757575),
         ),
       ),
-      validator: validator,
+      validator: (value) {
+        final validationResult = widget.validator?.call(value);
+        setState(() {
+          _hasError = validationResult != null;
+        });
+        return validationResult;
+      },
     );
   }
 }

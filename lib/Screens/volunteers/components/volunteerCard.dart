@@ -59,7 +59,7 @@ class VolunteerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: isProfile ? 1 : 0,
-      margin: const EdgeInsets.all(15),
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       color: !isProfile ? Colors.grey.shade100 : Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -78,7 +78,7 @@ class VolunteerCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.primary,
+                      color: Colors.grey.shade600,
                     ),
                   ),
                   child: CircleAvatar(
@@ -106,15 +106,19 @@ class VolunteerCard extends StatelessWidget {
                     children: [
                       Text(
                         user.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.primary,
                           fontSize: 16,
                         ),
                       ),
                       Text(
                         user.userProps.university,
-                        style: const TextStyle(
-                          color: Colors.grey,
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withOpacity(0.7),
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),

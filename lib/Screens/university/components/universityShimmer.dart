@@ -17,19 +17,12 @@ class UniversityShimmer extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return Shimmer.fromColors(
-            baseColor: Colors.grey[400]!,
+            baseColor: Colors.grey[500]!,
             highlightColor: Colors.grey[100]!,
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(.8),
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    offset: const Offset(0, 2),
-                    color: Theme.of(context).primaryColor.withOpacity(.2),
-                    blurRadius: 3,
-                  ),
-                ],
+                color: Colors.white.withOpacity(.3),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,

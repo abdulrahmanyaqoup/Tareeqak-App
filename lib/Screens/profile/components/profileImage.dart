@@ -35,12 +35,16 @@ class ProfileImage extends StatelessWidget {
             radius: 60,
             backgroundColor: Colors.white12,
             backgroundImage: image ??
-                CachedNetworkImageProvider(
-                  '${Env.URI}${user.userProps.image}',
-                  headers: {'x-api-key': Env.API_KEY},
-                  maxWidth: 130,
-                  maxHeight: 130,
-                ),
+                (user.userProps.image.isNotEmpty
+                    ? CachedNetworkImageProvider(
+                        '${Env.URI}${user.userProps.image}',
+                        headers: {'x-api-key': Env.API_KEY},
+                        maxWidth: 130,
+                        maxHeight: 130,
+                        cacheManager:
+                            CachedNetworkImageProvider.defaultCacheManager,
+                      )
+                    : null),
             child: image == null && user.userProps.image.isEmpty
                 ? const Icon(
                     Icons.person,
@@ -63,7 +67,7 @@ class ProfileImage extends StatelessWidget {
             child: Icon(
               CupertinoIcons.camera_circle_fill,
               size: 40,
-              color: Colors.grey.shade300,
+              color: Colors.grey.shade200,
             ),
           ),
         ),

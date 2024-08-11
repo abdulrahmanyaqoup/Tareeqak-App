@@ -91,6 +91,13 @@ class MajorScreen extends StatelessWidget {
     List<String> items,
   ) {
     showModalBottomSheet<void>(
+      backgroundColor: Colors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
+        ),
+      ),
       context: context,
       builder: (BuildContext bc) {
         return Column(

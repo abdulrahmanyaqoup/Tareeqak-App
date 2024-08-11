@@ -8,6 +8,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../Models/User/user.dart';
 import '../../Provider/userProvider.dart';
+import '../../Widgets/customButton.dart';
 import '../../Widgets/snackBar.dart';
 import '../../api/otpApi.dart';
 import 'profileScreen.dart';
@@ -45,18 +46,24 @@ class _Otp extends ConsumerState<Otp> {
     var token = '';
     var user = const User();
 
-    try {
-      final response =
-          await OtpApi().verifyOTP(widget.email, otpController.text);
+    await OtpApi()
+        .verifyOTP(widget.email, otpController.text)
+        .then((response) async {
       token = response['token'] as String;
       user = User.fromMap(response);
       await _signInVerified(user, token);
-    } catch (error) {
       setState(() {
-        errorMessage = error.toString();
         isLoading = false;
       });
-    }
+    }).catchError(
+      (Object error) {
+        setState(() {
+          errorMessage = error.toString();
+          isLoading = false;
+        });
+        throw Error();
+      },
+    );
   }
 
   Future<void> _signInVerified(User user, String token) async {
@@ -171,36 +178,11 @@ class _Otp extends ConsumerState<Otp> {
                   style: const TextStyle(color: Colors.red),
                 ),
               const SizedBox(height: 20),
-              ElevatedButton(
+              CustomButton(
                 onPressed: _verifyOtp,
-                style: ElevatedButton.styleFrom(
-                  minimumSize: const Size(150, 40),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30,
-                    vertical: 10,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-                child: isLoading
-                    ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Text(
-                        'Verify OTP',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                        ),
-                      ),
+                text: 'Verify OTP',
+                width: 150,
+                isLoading: isLoading,
               ),
               const SizedBox(height: 20),
             ],

@@ -4,11 +4,12 @@ import '../../../Models/User/user.dart';
 import '../../volunteers/components/volunteerCard.dart';
 
 class VolunteersSheet extends StatelessWidget {
-
   const VolunteersSheet({
-    required this.title, super.key,
+    required this.title,
+    super.key,
     this.volunteers,
   });
+
   final String title;
   final List<User>? volunteers;
 
@@ -19,8 +20,8 @@ class VolunteersSheet extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surface,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(30),
-          topRight: Radius.circular(30),
+          topLeft: Radius.circular(15),
+          topRight: Radius.circular(15),
         ),
       ),
       child: Column(

@@ -25,7 +25,7 @@ class InfoRow extends StatelessWidget {
           child: Icon(
             icon,
             color: Theme.of(context).colorScheme.primary,
-            size: 20,
+            size: 25,
           ),
         ),
         const SizedBox(width: 10),
@@ -39,18 +39,19 @@ class InfoRow extends StatelessWidget {
                 Text(
                   label!,
                   style: TextStyle(
-                    fontSize: 7,
+                    fontSize: 12,
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                 ),
               Text(
                 value.isEmpty ? '-' : value,
                 style: TextStyle(
-                  fontSize: 15,
+                  fontSize: 14,
                   overflow: TextOverflow.fade,
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  fontWeight: FontWeight.w600,
+                  color:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.7),
                 ),
               ),
             ],

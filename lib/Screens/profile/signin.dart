@@ -24,26 +24,34 @@ class SigninState extends ConsumerState<Signin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
+  bool isLoading = false;
 
   Future<void> _signIn(String email, String password) async {
-    await ref
-        .read(userProvider.notifier)
-        .signIn(email, password)
-        .then(
-          (response) => Navigator.pushAndRemoveUntil(
-            context,
-            CupertinoPageRoute<void>(
-              builder: (_) => const ProfileScreen(),
-            ),
-            (Route<dynamic> route) => false,
+    setState(() {
+      isLoading = true;
+    });
+    await ref.read(userProvider.notifier).signIn(email, password).then(
+      (response) {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.pushAndRemoveUntil(
+          context,
+          CupertinoPageRoute<void>(
+            builder: (_) => const ProfileScreen(),
           ),
-        )
-        .catchError(
-          (Object error, stackTrace) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
-            throw Error(),
-          },
+          (Route<dynamic> route) => false,
         );
+      },
+    ).catchError(
+      (Object error, stackTrace) {
+        showSnackBar(context, error.toString(), ContentType.failure);
+        setState(() {
+          isLoading = false;
+        });
+        throw Error();
+      },
+    );
   }
 
   @override
@@ -122,6 +130,7 @@ class SigninState extends ConsumerState<Signin> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
+                        isLoading: isLoading,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _signIn(
@@ -137,11 +146,6 @@ class SigninState extends ConsumerState<Signin> {
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
                             builder: (_) => const SignupScreen(),
-                          ),
-                        ),
-                        style: TextButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
                         child: const Text("Don't have an account? Sign up"),

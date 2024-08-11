@@ -9,6 +9,7 @@ class Search extends StatelessWidget {
 
   final ValueChanged<String> onSearchChanged;
   final String hintText;
+
   @override
   Widget build(BuildContext context) {
     return TextField(
@@ -25,7 +26,7 @@ class Search extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: Colors.grey.shade200,
+        fillColor: Colors.grey.shade500.withOpacity(0.1),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       ),
     );
