@@ -17,8 +17,8 @@ class UniversityShimmer extends StatelessWidget {
         ),
         itemBuilder: (context, index) {
           return Shimmer.fromColors(
-            baseColor: Colors.grey[500]!,
-            highlightColor: Colors.grey[100]!,
+            baseColor: Colors.grey[200]!,
+            highlightColor: Theme.of(context).colorScheme.primary,
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white.withOpacity(.3),
@@ -35,20 +35,25 @@ class UniversityShimmer extends StatelessWidget {
                     child: const Icon(
                       Icons.school,
                       color: Colors.white,
-                      size: 30,
+                      size: 70,
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Container(
-                    height: 20,
-                    width: 100,
-                    color: Colors.grey[100],
+                  const SizedBox(height: 30),
+                  const Text(
+                    'University Of Jordan',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  const SizedBox(height: 4),
-                  Container(
-                    height: 20,
-                    width: 60,
-                    color: Colors.grey[100],
+                  const SizedBox(height: 10),
+                  const Text(
+                    'Amman',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
                   ),
                 ],
               ),

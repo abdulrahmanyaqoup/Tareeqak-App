@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../Widgets/customButton.dart';
-import 'buttonShimmer.dart';
 
 class ProfileBody extends StatelessWidget {
   const ProfileBody({
@@ -62,14 +62,25 @@ class ProfileLoadingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      children: [
-        ButtonShimmer(height: 40, width: 250),
-        ButtonShimmer(
-          height: 40,
-          width: 250,
-        ),
-      ],
+    return Shimmer.fromColors(
+      baseColor: Colors.grey[200]!,
+      highlightColor: const Color(0xFFBCC6CC),
+      child: Column(
+        children: [
+          const Text(
+            'Become an advisor!',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          CustomButton(
+            width: 180,
+            onPressed: () {},
+            text: 'Sign Up',
+          ),
+        ],
+      ),
     );
   }
 }

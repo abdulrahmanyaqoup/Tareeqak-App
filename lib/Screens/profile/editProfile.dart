@@ -33,6 +33,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _contactController;
+  FileImage? _persistentImage;
   FileImage? _image;
   String _selectedUniversity = '';
   String _selectedSchool = '';
@@ -64,10 +65,10 @@ class _EditProfileState extends ConsumerState<EditProfile>
       imageQuality: 80,
     );
 
+    if (pickedFile == null) return;
     setState(() {
-      if (pickedFile != null) {
-        _image = FileImage(File(pickedFile.path));
-      }
+      _image = FileImage(File(pickedFile.path));
+      _persistentImage = _image;
     });
   }
 
@@ -99,6 +100,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
               ContentType.success,
             ),
             setState(() {
+              if (_image != null) _image = null;
               _isLoading = false;
             }),
           },
@@ -107,7 +109,6 @@ class _EditProfileState extends ConsumerState<EditProfile>
       (Object error) {
         showSnackBar(context, error.toString(), ContentType.failure);
         setState(() {
-          if (_image != null) _image = null;
           _isLoading = false;
         });
         throw Error();
@@ -211,9 +212,10 @@ class _EditProfileState extends ConsumerState<EditProfile>
               children: [
                 const SizedBox(height: 25),
                 ProfileImage(
+                  key: ValueKey(widget.user.userProps.image),
                   userImage: widget.user.userProps.image,
                   onImagePick: _pickImage,
-                  pickedImage: _image,
+                  pickedImage: _persistentImage,
                 ),
                 const SizedBox(height: 40),
                 Container(

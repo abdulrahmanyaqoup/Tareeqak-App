@@ -63,7 +63,7 @@ class _ProfileState extends ConsumerState<Profile>
               top: height * 0.04,
               left: 16,
               right: 16,
-              child: const CardShimmer(showButtons: false),
+              child: const CardShimmer(showButtons: false, isProfile: true),
             ),
           ],
         ),

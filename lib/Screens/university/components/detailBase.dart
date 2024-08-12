@@ -1,8 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../Widgets/infoRow.dart';
+import '../../../env/env.dart';
 
 class DetailBase extends StatelessWidget {
   DetailBase({
@@ -11,11 +13,13 @@ class DetailBase extends StatelessWidget {
     required this.facts,
     required this.buttons,
     super.key,
+    this.logo,
     this.city,
     this.universityType,
   });
 
   final String title;
+  final String? logo;
   final String description;
   final String? city;
   final String? universityType;
@@ -96,10 +100,13 @@ class DetailBase extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 16),
-                          if (city != null)
-                            Image.asset(
-                              'assets/images/universities/ju.png',
-                              width: 100,
+                          if (logo != null && logo!.isNotEmpty)
+                            Image(
+                              image: CachedNetworkImageProvider(
+                                '${Env.URI}$logo',
+                                headers: {'x-api-key': Env.API_KEY},
+                              ),
+                              width: 110,
                             )
                           else
                             const SizedBox(),

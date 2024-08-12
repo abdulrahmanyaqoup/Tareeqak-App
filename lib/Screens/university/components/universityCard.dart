@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../env/env.dart';
 import '../../../model/models.dart';
 import '../universityScreen.dart';
 
@@ -40,10 +42,13 @@ class UniversityCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Image.asset(
-            'assets/images/universities/ju.png',
-            height: 80,
-            width: 80,
+          Image(
+            image: CachedNetworkImageProvider(
+              '${Env.URI}${university.logo}',
+              headers: {'x-api-key': Env.API_KEY},
+            ),
+            height: 100,
+            width: 100,
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5),

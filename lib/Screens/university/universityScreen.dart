@@ -26,9 +26,10 @@ class UniversityScreen extends ConsumerWidget {
 
     return DetailBase(
       title: university.name,
+      logo: university.logo,
       description: university.description,
       city: university.city,
-      universityType: 'Public',
+      universityType: university.type,
       facts: university.facts,
       buttons: [
         CustomButtons(

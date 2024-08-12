@@ -1,7 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+import '../../Widgets/snackBar.dart';
 import '../../api/openaiApi.dart';
 import 'components/messageInput.dart';
 import 'components/messageList.dart';
@@ -66,9 +68,17 @@ class ChatBotState extends State<ChatBot>
     });
 
     await Future<void>.delayed(const Duration(milliseconds: 10));
-    final response = await _api.sendMessage(message);
-
-    await _simulateTyping(response);
+    await _api
+        .sendMessage(message)
+        .then(
+          (response) async => _simulateTyping(response),
+        )
+        .catchError(
+      (Object error) {
+        showSnackBar(context, error.toString(), ContentType.failure);
+        throw Error();
+      },
+    );
   }
 
   Future<void> _simulateTyping(String response) async {
