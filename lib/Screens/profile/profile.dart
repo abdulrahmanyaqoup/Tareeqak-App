@@ -32,7 +32,8 @@ class _ProfileState extends ConsumerState<Profile>
   Future<void> _checkLoginStatus() async {
     await ref.read(userProvider.notifier).checkLoginStatus().catchError(
           (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
             throw Error(),
           },
         );

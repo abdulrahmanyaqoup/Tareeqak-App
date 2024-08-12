@@ -48,14 +48,15 @@ class _Otp extends ConsumerState<Otp> {
 
     await OtpApi()
         .verifyOTP(widget.email, _otpController.text)
-        .then((response) async {
-      token = response['token'] as String;
-      user = User.fromMap(response);
-      await _signInVerified(user, token);
-      setState(() {
-        _isLoading = false;
-      });
-    }).catchError(
+        .then(
+          (response) async => {
+            token = response['token'] as String,
+            user = User.fromMap(response),
+            await _signInVerified(user, token),
+            setState(() => _isLoading = false),
+          },
+        )
+        .catchError(
       (Object error) {
         setState(() {
           _errorMessage = error.toString();
@@ -71,19 +72,24 @@ class _Otp extends ConsumerState<Otp> {
         .read(userProvider.notifier)
         .signInVerifiedUser(user, token)
         .then(
-          (response) => Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute<void>(
-              builder: (_) => const Profile(),
-            ),
-            (Route<dynamic> route) => false,
-          ),
+          (response) => {
+            if (mounted)
+              Navigator.of(context).pushAndRemoveUntil(
+                CupertinoPageRoute<void>(
+                  builder: (_) => const Profile(),
+                ),
+                (Route<dynamic> route) => false,
+              ),
+          },
         )
         .catchError(
-          (Object error, stackTrace) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
-            throw Error(),
-          },
-        );
+      (Object error, stackTrace) {
+        if (mounted) {
+          showSnackBar(context, error.toString(), ContentType.failure);
+        }
+        throw Error();
+      },
+    );
   }
 
   Future<void> _deleteUnverifiedUser() async {

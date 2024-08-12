@@ -94,11 +94,12 @@ class _EditProfileState extends ConsumerState<EditProfile>
         .updateUser(updatedUser)
         .then(
           (response) => {
-            showSnackBar(
-              context,
-              'Profile updated successfully',
-              ContentType.success,
-            ),
+            if (mounted)
+              showSnackBar(
+                context,
+                'Profile updated successfully',
+                ContentType.success,
+              ),
             setState(() {
               if (_image != null) _image = null;
               _isLoading = false;
@@ -106,14 +107,15 @@ class _EditProfileState extends ConsumerState<EditProfile>
           },
         )
         .catchError(
-      (Object error) {
-        showSnackBar(context, error.toString(), ContentType.failure);
-        setState(() {
-          _isLoading = false;
-        });
-        throw Error();
-      },
-    );
+          (Object error) => {
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
+            setState(() {
+              _isLoading = false;
+            }),
+            throw Error(),
+          },
+        );
   }
 
   Future<void> _signOut() async {
@@ -121,17 +123,22 @@ class _EditProfileState extends ConsumerState<EditProfile>
         .read(userProvider.notifier)
         .signOut()
         .then(
-          (response) => Navigator.of(context).pushAndRemoveUntil(
-            CupertinoPageRoute<void>(builder: (_) => const Profile()),
-            (Route<dynamic> route) => false,
-          ),
+          (response) => {
+            if (mounted)
+              Navigator.of(context).pushAndRemoveUntil(
+                CupertinoPageRoute<void>(builder: (_) => const Profile()),
+                (Route<dynamic> route) => false,
+              ),
+          },
         )
         .catchError(
-          (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
-            throw Error(),
-          },
-        );
+      (Object error) {
+        if (mounted) {
+          showSnackBar(context, error.toString(), ContentType.failure);
+        }
+        throw Error();
+      },
+    );
   }
 
   Future<void> _deleteUser() async {
@@ -140,16 +147,18 @@ class _EditProfileState extends ConsumerState<EditProfile>
         .deleteUser()
         .then(
           (response) => {
-            Navigator.of(context).pushAndRemoveUntil(
-              CupertinoPageRoute<void>(builder: (_) => const Profile()),
-              (Route<dynamic> route) => false,
-            ),
-            showSnackBar(context, response, ContentType.success),
+            if (mounted)
+              Navigator.of(context).pushAndRemoveUntil(
+                CupertinoPageRoute<void>(builder: (_) => const Profile()),
+                (Route<dynamic> route) => false,
+              ),
+            if (mounted) showSnackBar(context, response, ContentType.success),
           },
         )
         .catchError(
           (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
             throw Error(),
           },
         );

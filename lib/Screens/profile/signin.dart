@@ -30,28 +30,30 @@ class _SigninState extends ConsumerState<Signin> {
     setState(() {
       _isLoading = true;
     });
-    await ref.read(userProvider.notifier).signIn(email, password).then(
-      (response) {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.pushAndRemoveUntil(
-          context,
-          CupertinoPageRoute<void>(
-            builder: (_) => const Profile(),
-          ),
-          (Route<dynamic> route) => false,
+    await ref
+        .read(userProvider.notifier)
+        .signIn(email, password)
+        .then(
+          (response) => {
+            setState(() => _isLoading = false),
+            if (mounted)
+              Navigator.pushAndRemoveUntil(
+                context,
+                CupertinoPageRoute<void>(
+                  builder: (_) => const Profile(),
+                ),
+                (Route<dynamic> route) => false,
+              ),
+          },
+        )
+        .catchError(
+          (Object error, stackTrace) => {
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
+            setState(() => _isLoading = false),
+            throw Error(),
+          },
         );
-      },
-    ).catchError(
-      (Object error, stackTrace) {
-        showSnackBar(context, error.toString(), ContentType.failure);
-        setState(() {
-          _isLoading = false;
-        });
-        throw Error();
-      },
-    );
   }
 
   @override

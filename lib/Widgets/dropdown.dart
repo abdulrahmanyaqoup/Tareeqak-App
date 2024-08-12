@@ -54,6 +54,9 @@ class _DropdownState extends State<Dropdown> {
                 enabled: widget.enabled ?? true,
                 itemsListPadding: const EdgeInsets.only(bottom: 10),
                 disabledDecoration: CustomDropdownDisabledDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(8),
+                  ),
                   fillColor: Colors.grey.shade300,
                   headerStyle: const TextStyle(
                     overflow: TextOverflow.fade,

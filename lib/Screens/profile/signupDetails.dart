@@ -67,29 +67,32 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         image: _image?.file.path ?? '',
       ),
     );
-    await ref.read(userProvider.notifier).signUp(user, widget.password).then(
-      (response) {
-        Navigator.of(context).pushAndRemoveUntil(
-          CupertinoPageRoute<void>(
-            builder: (_) => Otp(email: widget.email),
-          ),
-          (Route<dynamic> route) => route.isFirst,
+    await ref
+        .read(userProvider.notifier)
+        .signUp(user, widget.password)
+        .then(
+          (response) => {
+            if (mounted)
+              {
+                Navigator.of(context).pushAndRemoveUntil(
+                  CupertinoPageRoute<void>(
+                    builder: (_) => Otp(email: widget.email),
+                  ),
+                  (Route<dynamic> route) => route.isFirst,
+                ),
+                showSnackBar(context, response, ContentType.success),
+              },
+            setState(() => _isLoading = false),
+          },
+        )
+        .catchError(
+          (Object error) => {
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
+            setState(() => _isLoading = false),
+            throw Error(),
+          },
         );
-        showSnackBar(context, response, ContentType.success);
-        setState(() {
-          if (_image != null) _image = null;
-          _isLoading = false;
-        });
-      },
-    ).catchError(
-      (Object error) {
-        showSnackBar(context, error.toString(), ContentType.failure);
-        setState(() {
-          _isLoading = false;
-        });
-        throw Error();
-      },
-    );
   }
 
   Future<void> _pickImage() async {

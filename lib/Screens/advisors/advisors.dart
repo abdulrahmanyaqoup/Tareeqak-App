@@ -30,7 +30,8 @@ class _AdvisorsState extends ConsumerState<Advisors>
   Future<void> _getAllUsers() async {
     await ref.read(userProvider.notifier).getAllUsers().catchError(
           (Object error) => {
-            showSnackBar(context, error.toString(), ContentType.failure),
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
             throw Error(),
           },
         );

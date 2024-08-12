@@ -74,11 +74,12 @@ class ChatBotState extends State<ChatBot>
           (response) async => _simulateTyping(response),
         )
         .catchError(
-      (Object error) {
-        showSnackBar(context, error.toString(), ContentType.failure);
-        throw Error();
-      },
-    );
+          (Object error) => {
+            if (mounted)
+              showSnackBar(context, error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   Future<void> _simulateTyping(String response) async {

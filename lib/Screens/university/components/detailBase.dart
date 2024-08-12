@@ -104,7 +104,7 @@ class DetailBase extends StatelessWidget {
                             Image(
                               image: CachedNetworkImageProvider(
                                 '${Env.URI}$logo',
-                                headers: {'x-api-key': Env.API_KEY},
+                                headers: {'apikey': Env.API_KEY},
                               ),
                               width: 110,
                             )
