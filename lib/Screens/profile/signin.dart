@@ -24,16 +24,16 @@ class _SigninState extends ConsumerState<Signin> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  bool isLoading = false;
+  bool _isLoading = false;
 
   Future<void> _signIn(String email, String password) async {
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
     await ref.read(userProvider.notifier).signIn(email, password).then(
       (response) {
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
         Navigator.pushAndRemoveUntil(
           context,
@@ -47,7 +47,7 @@ class _SigninState extends ConsumerState<Signin> {
       (Object error, stackTrace) {
         showSnackBar(context, error.toString(), ContentType.failure);
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
         throw Error();
       },
@@ -131,7 +131,7 @@ class _SigninState extends ConsumerState<Signin> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        isLoading: isLoading,
+                        isLoading: _isLoading,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             _signIn(

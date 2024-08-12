@@ -19,11 +19,11 @@ class Signup extends ConsumerStatefulWidget {
 
 class _SignupState extends ConsumerState<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController =
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final TextEditingController nameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
@@ -33,9 +33,9 @@ class _SignupState extends ConsumerState<Signup> {
         context,
         CupertinoPageRoute<void>(
           builder: (context) => SignupDetails(
-            email: emailController.text,
-            password: passwordController.text,
-            name: nameController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+            name: _nameController.text,
           ),
         ),
       );
@@ -54,10 +54,10 @@ class _SignupState extends ConsumerState<Signup> {
 
   @override
   void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 
@@ -90,7 +90,7 @@ class _SignupState extends ConsumerState<Signup> {
                   child: Column(
                     children: [
                       CustomTextField(
-                        controller: nameController,
+                        controller: _nameController,
                         hintText: 'Enter your name*',
                         prefixIcon: const Icon(CupertinoIcons.person),
                         validator: (value) {
@@ -103,7 +103,7 @@ class _SignupState extends ConsumerState<Signup> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
-                        controller: emailController,
+                        controller: _emailController,
                         hintText: 'Enter your email*',
                         prefixIcon: const Icon(CupertinoIcons.mail),
                         validator: (value) {
@@ -119,7 +119,7 @@ class _SignupState extends ConsumerState<Signup> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
-                        controller: passwordController,
+                        controller: _passwordController,
                         hintText: 'Enter your password*',
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
@@ -146,13 +146,13 @@ class _SignupState extends ConsumerState<Signup> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
-                        controller: confirmPasswordController,
+                        controller: _confirmPasswordController,
                         hintText: 'Confirm your password*',
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Confirm Password can't be empty!";
-                          } else if (value != passwordController.text) {
+                          } else if (value != _passwordController.text) {
                             return 'Passwords do not match!';
                           }
                           return null;

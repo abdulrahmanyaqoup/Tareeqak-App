@@ -35,25 +35,25 @@ class SignupDetails extends ConsumerStatefulWidget {
 
 class _SignupDetails extends ConsumerState<SignupDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController contactController = TextEditingController();
+  final TextEditingController _contactController = TextEditingController();
   FileImage? _image;
   String _selectedUniversity = '';
   String _selectedSchool = '';
   String _selectedMajor = '';
-  bool? enabledSchool = false;
-  bool? enabledMajor = false;
-  bool isLoading = false;
+  bool? _enabledSchool = false;
+  bool? _enabledMajor = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
-    contactController.dispose();
+    _contactController.dispose();
     super.dispose();
   }
 
   Future<void> _signupUser() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
 
     final user = User(
@@ -63,13 +63,12 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         university: _selectedUniversity,
         school: _selectedSchool,
         major: _selectedMajor,
-        contact: contactController.text,
+        contact: _contactController.text,
         image: _image?.file.path ?? '',
       ),
     );
     await ref.read(userProvider.notifier).signUp(user, widget.password).then(
       (response) {
-        if (_image != null) _image = null;
         Navigator.of(context).pushAndRemoveUntil(
           CupertinoPageRoute<void>(
             builder: (_) => Otp(email: widget.email),
@@ -77,12 +76,16 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
           (Route<dynamic> route) => route.isFirst,
         );
         showSnackBar(context, response, ContentType.success);
+        setState(() {
+          if (_image != null) _image = null;
+          _isLoading = false;
+        });
       },
     ).catchError(
       (Object error) {
         showSnackBar(context, error.toString(), ContentType.failure);
         setState(() {
-          isLoading = false;
+          _isLoading = false;
         });
         throw Error();
       },
@@ -180,7 +183,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                             _selectedSchool = '';
                             _selectedMajor = '';
                             if (_selectedUniversity.isNotEmpty) {
-                              enabledSchool = true;
+                              _enabledSchool = true;
                             }
                           });
                         },
@@ -196,11 +199,11 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                             _selectedSchool = value ?? '';
                             _selectedMajor = '';
                             if (_selectedSchool.isNotEmpty) {
-                              enabledMajor = true;
+                              _enabledMajor = true;
                             }
                           });
                         },
-                        enabled: enabledSchool,
+                        enabled: _enabledSchool,
                       ),
                       const SizedBox(height: 20),
                       Dropdown(
@@ -213,20 +216,20 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                             _selectedMajor = value ?? '';
                           });
                         },
-                        enabled: enabledMajor,
+                        enabled: _enabledMajor,
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
-                        controller: contactController,
-                        hintText: 'Enter your contact',
+                        controller: _contactController,
+                        hintText: 'Enter your phone number',
                         prefixIcon: const Icon(CupertinoIcons.phone),
                         keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Contact can't be empty!";
-                          } else if (RegExp(r'^07[789]\d{7}$')
+                            return "Phone number can't be empty!";
+                          } else if (!RegExp(r'^07[789]\d{7}$')
                               .hasMatch(value)) {
-                            return 'Enter a valid contact number!';
+                            return 'Enter a valid phone number! 079*******';
                           }
                           return null;
                         },
@@ -234,7 +237,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                       ),
                       const SizedBox(height: 20),
                       CustomButton(
-                        isLoading: isLoading,
+                        isLoading: _isLoading,
                         onPressed: _signupUser,
                         text: 'Sign up',
                       ),

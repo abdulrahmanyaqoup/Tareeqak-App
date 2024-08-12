@@ -23,9 +23,9 @@ class FilterAdvisors extends ConsumerStatefulWidget {
 }
 
 class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
-  String? selectedUniversity;
-  String? selectedSchool;
-  String? selectedMajor;
+  String? _selectedUniversity;
+  String? _selectedSchool;
+  String? _selectedMajor;
 
   @override
   Widget build(BuildContext context) {
@@ -35,13 +35,13 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
     var schools = <School>[];
     var majors = <Major>[];
 
-    if (selectedUniversity != null) {
+    if (_selectedUniversity != null) {
       final university =
-          universities.firstWhereOrNull((u) => u.name == selectedUniversity);
+          universities.firstWhereOrNull((u) => u.name == _selectedUniversity);
       if (university != null) {
         schools = university.schools.uniqueByName().toList();
-        final school = selectedSchool != null
-            ? schools.firstWhereOrNull((s) => s.name == selectedSchool)
+        final school = _selectedSchool != null
+            ? schools.firstWhereOrNull((s) => s.name == _selectedSchool)
             : null;
         majors = school != null
             ? school.majors.uniqueByName().toList()
@@ -56,15 +56,15 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
-          if (selectedUniversity != null ||
-              selectedSchool != null ||
-              selectedMajor != null)
+          if (_selectedUniversity != null ||
+              _selectedSchool != null ||
+              _selectedMajor != null)
             CustomButton(
               onPressed: () {
                 setState(() {
-                  selectedUniversity = null;
-                  selectedSchool = null;
-                  selectedMajor = null;
+                  _selectedUniversity = null;
+                  _selectedSchool = null;
+                  _selectedMajor = null;
                   widget.onClearFilters();
                 });
               },
@@ -76,15 +76,15 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
               _buildDropdown<void>(
                 context,
                 'University',
-                selectedUniversity,
+                _selectedUniversity,
                 universities,
                 onSelected: (value) {
                   setState(() {
-                    selectedUniversity = value;
+                    _selectedUniversity = value;
                     widget.onFilterChanged(
-                      selectedUniversity,
-                      selectedSchool,
-                      selectedMajor,
+                      _selectedUniversity,
+                      _selectedSchool,
+                      _selectedMajor,
                     );
                   });
                 },
@@ -93,15 +93,15 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
               _buildDropdown<void>(
                 context,
                 'School',
-                selectedSchool,
+                _selectedSchool,
                 schools,
                 onSelected: (value) {
                   setState(() {
-                    selectedSchool = value;
+                    _selectedSchool = value;
                     widget.onFilterChanged(
-                      selectedUniversity,
-                      selectedSchool,
-                      selectedMajor,
+                      _selectedUniversity,
+                      _selectedSchool,
+                      _selectedMajor,
                     );
                   });
                 },
@@ -110,15 +110,15 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
               _buildDropdown<void>(
                 context,
                 'Major',
-                selectedMajor,
+                _selectedMajor,
                 majors,
                 onSelected: (value) {
                   setState(() {
-                    selectedMajor = value;
+                    _selectedMajor = value;
                     widget.onFilterChanged(
-                      selectedUniversity,
-                      selectedSchool,
-                      selectedMajor,
+                      _selectedUniversity,
+                      _selectedSchool,
+                      _selectedMajor,
                     );
                   });
                 },

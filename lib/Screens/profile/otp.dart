@@ -23,13 +23,13 @@ class Otp extends ConsumerStatefulWidget {
 }
 
 class _Otp extends ConsumerState<Otp> {
-  TextEditingController otpController = TextEditingController();
-  bool isLoading = false;
-  String? errorMessage;
+  final TextEditingController _otpController = TextEditingController();
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
-    otpController.dispose();
+    _otpController.dispose();
     super.dispose();
   }
 
@@ -40,26 +40,26 @@ class _Otp extends ConsumerState<Otp> {
 
   Future<void> _verifyOtp() async {
     setState(() {
-      isLoading = true;
-      errorMessage = null;
+      _isLoading = true;
+      _errorMessage = null;
     });
     var token = '';
     var user = const User();
 
     await OtpApi()
-        .verifyOTP(widget.email, otpController.text)
+        .verifyOTP(widget.email, _otpController.text)
         .then((response) async {
       token = response['token'] as String;
       user = User.fromMap(response);
       await _signInVerified(user, token);
       setState(() {
-        isLoading = false;
+        _isLoading = false;
       });
     }).catchError(
       (Object error) {
         setState(() {
-          errorMessage = error.toString();
-          isLoading = false;
+          _errorMessage = error.toString();
+          _isLoading = false;
         });
         throw Error();
       },
@@ -146,7 +146,7 @@ class _Otp extends ConsumerState<Otp> {
               ),
               const SizedBox(height: 40),
               PinCodeTextField(
-                controller: otpController,
+                controller: _otpController,
                 appContext: context,
                 length: 6,
                 keyboardType: TextInputType.number,
@@ -173,9 +173,9 @@ class _Otp extends ConsumerState<Otp> {
                 enableActiveFill: true,
               ),
               const SizedBox(height: 20),
-              if (errorMessage != null)
+              if (_errorMessage != null)
                 Text(
-                  errorMessage!,
+                  _errorMessage!,
                   style: const TextStyle(color: Colors.red),
                 ),
               const SizedBox(height: 20),
@@ -183,7 +183,7 @@ class _Otp extends ConsumerState<Otp> {
                 onPressed: _verifyOtp,
                 text: 'Verify OTP',
                 width: 150,
-                isLoading: isLoading,
+                isLoading: _isLoading,
               ),
               const SizedBox(height: 20),
             ],

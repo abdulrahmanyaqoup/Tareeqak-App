@@ -3,20 +3,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../env/env.dart';
-import '../../../model/models.dart';
 
-class ProfileImage extends StatelessWidget {
+class ProfileImage extends StatefulWidget {
   const ProfileImage({
-    required this.user,
-    required this.image,
+    required this.userImage,
+    required this.pickedImage,
     required this.onImagePick,
     super.key,
   });
 
-  final User user;
-  final FileImage? image;
+  final String userImage;
+  final FileImage? pickedImage;
   final Future<void> Function() onImagePick;
 
+  @override
+  State<ProfileImage> createState() => _ProfileImageState();
+}
+
+class _ProfileImageState extends State<ProfileImage> {
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -34,18 +38,16 @@ class ProfileImage extends StatelessWidget {
           child: CircleAvatar(
             radius: 60,
             backgroundColor: Colors.white12,
-            backgroundImage: image ??
-                (user.userProps.image.isNotEmpty
+            backgroundImage: widget.pickedImage ??
+                (widget.userImage.isNotEmpty
                     ? CachedNetworkImageProvider(
-                        '${Env.URI}${user.userProps.image}',
+                        '${Env.URI}${widget.userImage}',
                         headers: {'x-api-key': Env.API_KEY},
                         maxWidth: 130,
                         maxHeight: 130,
-                        cacheManager:
-                            CachedNetworkImageProvider.defaultCacheManager,
                       )
                     : null),
-            child: image == null && user.userProps.image.isEmpty
+            child: widget.pickedImage == null && widget.userImage.isEmpty
                 ? const Icon(
                     Icons.person,
                     size: 60,
@@ -59,7 +61,7 @@ class ProfileImage extends StatelessWidget {
           right: -4,
           child: FloatingActionButton(
             backgroundColor: Theme.of(context).colorScheme.primary,
-            onPressed: onImagePick,
+            onPressed: widget.onImagePick,
             elevation: 0,
             highlightElevation: 0,
             mini: true,

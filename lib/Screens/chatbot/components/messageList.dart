@@ -136,6 +136,7 @@ class _MessageListState extends State<MessageList> {
                           ? TextDirection.rtl
                           : TextDirection.ltr,
                       child: MarkdownBody(
+                        selectable: true,
                         data: message,
                         styleSheet: MarkdownStyleSheet(
                           p: TextStyle(

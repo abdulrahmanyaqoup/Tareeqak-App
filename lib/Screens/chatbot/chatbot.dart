@@ -10,7 +10,7 @@ class ChatBot extends StatefulWidget {
   const ChatBot({super.key});
 
   @override
-  ChatBotState createState() => ChatBotState();
+  State<ChatBot> createState() => ChatBotState();
 }
 
 class ChatBotState extends State<ChatBot>

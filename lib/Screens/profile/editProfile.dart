@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../model/models.dart';
 import '../../provider/universityProvider.dart';
 import '../../provider/userProvider.dart';
+import '../../widgets/confirmationDialog.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/dropdown.dart';
 import '../../widgets/snackBar.dart';
@@ -30,20 +31,20 @@ class EditProfile extends ConsumerStatefulWidget {
 class _EditProfileState extends ConsumerState<EditProfile>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late TextEditingController nameController;
-  late TextEditingController contactController;
+  late TextEditingController _nameController;
+  late TextEditingController _contactController;
   FileImage? _image;
   String _selectedUniversity = '';
   String _selectedSchool = '';
   String _selectedMajor = '';
-  bool isLoading = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     final user = widget.user;
-    nameController = TextEditingController(text: user.name);
-    contactController = TextEditingController(text: user.userProps.contact);
+    _nameController = TextEditingController(text: user.name);
+    _contactController = TextEditingController(text: user.userProps.contact);
     _selectedUniversity = user.userProps.university;
     _selectedSchool = user.userProps.school;
     _selectedMajor = user.userProps.major;
@@ -51,8 +52,8 @@ class _EditProfileState extends ConsumerState<EditProfile>
 
   @override
   void dispose() {
-    nameController.dispose();
-    contactController.dispose();
+    _nameController.dispose();
+    _contactController.dispose();
     super.dispose();
   }
 
@@ -73,18 +74,18 @@ class _EditProfileState extends ConsumerState<EditProfile>
   Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() {
-      isLoading = true;
+      _isLoading = true;
     });
     final updatedUserProps = UserProps(
       university: _selectedUniversity,
       school: _selectedSchool,
       major: _selectedMajor,
-      contact: contactController.text,
+      contact: _contactController.text,
       image: _image?.file.path ?? '',
     );
     final updatedUser = User(
       email: widget.user.email,
-      name: nameController.text,
+      name: _nameController.text,
       userProps: updatedUserProps,
     );
     await ref
@@ -92,14 +93,13 @@ class _EditProfileState extends ConsumerState<EditProfile>
         .updateUser(updatedUser)
         .then(
           (response) => {
-            if (_image != null) _image = null,
             showSnackBar(
               context,
               'Profile updated successfully',
               ContentType.success,
             ),
             setState(() {
-              isLoading = false;
+              _isLoading = false;
             }),
           },
         )
@@ -107,7 +107,8 @@ class _EditProfileState extends ConsumerState<EditProfile>
       (Object error) {
         showSnackBar(context, error.toString(), ContentType.failure);
         setState(() {
-          isLoading = false;
+          if (_image != null) _image = null;
+          _isLoading = false;
         });
         throw Error();
       },
@@ -151,36 +152,6 @@ class _EditProfileState extends ConsumerState<EditProfile>
             throw Error(),
           },
         );
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Confirm Deletion'),
-          content: const Text(
-            'Are you sure you want to delete your account? '
-            'This action is irreversible.',
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteUser();
-              },
-              child: const Text('Delete'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -240,9 +211,9 @@ class _EditProfileState extends ConsumerState<EditProfile>
               children: [
                 const SizedBox(height: 25),
                 ProfileImage(
-                  user: widget.user,
-                  image: _image,
+                  userImage: widget.user.userProps.image,
                   onImagePick: _pickImage,
+                  pickedImage: _image,
                 ),
                 const SizedBox(height: 40),
                 Container(
@@ -264,10 +235,16 @@ class _EditProfileState extends ConsumerState<EditProfile>
                   child: Column(
                     children: [
                       CustomTextField(
-                        controller: nameController,
-                        hintText: 'Name',
+                        controller: _nameController,
+                        hintText: 'Enter your name',
                         obscureText: false,
                         prefixIcon: const Icon(CupertinoIcons.person),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Name can't be empty!";
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 20),
                       Dropdown(
@@ -314,17 +291,17 @@ class _EditProfileState extends ConsumerState<EditProfile>
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
-                        controller: contactController,
-                        hintText: 'Contact',
+                        controller: _contactController,
+                        hintText: 'Enter your phone number',
                         obscureText: false,
                         prefixIcon: const Icon(CupertinoIcons.phone),
                         keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return "Contact can't be empty!";
+                            return "Phone number can't be empty!";
                           } else if (!RegExp(r'^07[789]\d{7}$')
                               .hasMatch(value)) {
-                            return 'Enter a valid contact number!';
+                            return 'Enter a valid phone number! 079*******';
                           }
                           return null;
                         },
@@ -335,7 +312,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
                         children: [
                           Expanded(
                             child: CustomButton(
-                              isLoading: isLoading,
+                              isLoading: _isLoading,
                               onPressed: updateUser,
                               text: 'Update',
                               textColor: Colors.white,
@@ -344,11 +321,13 @@ class _EditProfileState extends ConsumerState<EditProfile>
                           const SizedBox(width: 10),
                           Expanded(
                             child: CustomButton(
-                              onPressed: () =>
-                                  _showDeleteConfirmationDialog(context),
+                              onPressed: () => showDeleteConfirmationDialog(
+                                context: context,
+                                onDelete: _deleteUser,
+                              ),
                               text: 'Delete',
-                              color: Colors.grey.shade200,
-                              textColor: Colors.red.shade600,
+                              color: Colors.red,
+                              textColor: Colors.white,
                             ),
                           ),
                         ],

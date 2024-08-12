@@ -23,6 +23,7 @@ class MessageInput extends StatelessWidget {
         onTapOutside: (pointerEvent) {
           FocusScope.of(context).unfocus();
         },
+        maxLines: null,
         controller: controller,
         decoration: InputDecoration(
           hintText: 'Ask me about universities',
@@ -32,7 +33,8 @@ class MessageInput extends StatelessWidget {
           ),
           filled: true,
           fillColor: Colors.grey.shade100,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           suffixIcon: CupertinoButton(
             pressedOpacity: 0.8,
             padding: EdgeInsets.zero,

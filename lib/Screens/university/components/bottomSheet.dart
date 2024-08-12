@@ -29,23 +29,23 @@ class GridModalBottomSheet extends StatefulWidget {
 }
 
 class GridModalBottomSheetState extends State<GridModalBottomSheet> {
-  String searchQuery = '';
-  List<dynamic> filteredItems = [];
+  String _searchQuery = '';
+  List<dynamic> _filteredItems = [];
 
   @override
   void initState() {
     super.initState();
-    filteredItems = widget.items;
+    _filteredItems = widget.items;
   }
 
   void updateSearchQuery(String query) {
     setState(() {
-      searchQuery = query;
-      filteredItems = widget.items
+      _searchQuery = query;
+      _filteredItems = widget.items
           .where(
             (item) => ((item as dynamic).name as String)
                 .toLowerCase()
-                .contains(searchQuery.toLowerCase()),
+                .contains(_searchQuery.toLowerCase()),
           )
           .toList();
     });
@@ -83,8 +83,8 @@ class GridModalBottomSheetState extends State<GridModalBottomSheet> {
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
               child: Column(
-                children: List.generate(filteredItems.length, (index) {
-                  final item = filteredItems[index];
+                children: List.generate(_filteredItems.length, (index) {
+                  final item = _filteredItems[index];
                   return InkWell(
                     onTap: () {
                       if (widget.noRoute != null && widget.noRoute!) {

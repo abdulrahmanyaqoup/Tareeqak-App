@@ -10,6 +10,8 @@ class University {
     required this.website,
     required this.facts,
     required this.schools,
+    required this.image,
+    required this.type,
   });
 
   factory University.fromMap(Map<String, dynamic> map) {
@@ -25,6 +27,8 @@ class University {
       website: map['website'] as String? ?? '',
       facts: List<String>.from(map['facts'] as List<dynamic>? ?? const []),
       schools: schools,
+      image: map['image'] as String? ?? '',
+      type: map['type'] as String? ?? '',
     );
   }
 
@@ -35,6 +39,8 @@ class University {
   final String website;
   final List<String> facts;
   final List<School> schools;
+  final String image;
+  final String type;
 
   University copyWith({
     String? name,
@@ -44,6 +50,8 @@ class University {
     String? website,
     List<String>? facts,
     List<School>? schools,
+    String? image,
+    String? type,
   }) {
     return University(
       name: name ?? this.name,
@@ -53,6 +61,8 @@ class University {
       website: website ?? this.website,
       facts: facts ?? this.facts,
       schools: schools ?? this.schools,
+      image: image ?? this.image,
+      type: type ?? this.type,
     );
   }
 }
