@@ -42,7 +42,7 @@ class _ProfileImageState extends State<ProfileImage> {
                 (widget.userImage.isNotEmpty
                     ? CachedNetworkImageProvider(
                         '${Env.URI}${widget.userImage}',
-                        headers: {'x-api-key': Env.API_KEY},
+                        headers: {'apikey': Env.API_KEY},
                         maxWidth: 130,
                         maxHeight: 130,
                       )
