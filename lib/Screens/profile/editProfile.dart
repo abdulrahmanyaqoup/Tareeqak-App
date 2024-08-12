@@ -74,9 +74,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
 
   Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
     final updatedUserProps = UserProps(
       university: _selectedUniversity,
       school: _selectedSchool,
@@ -110,9 +108,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
           (Object error) => {
             if (mounted)
               showSnackBar(context, error.toString(), ContentType.failure),
-            setState(() {
-              _isLoading = false;
-            }),
+            setState(() => _isLoading = false),
             throw Error(),
           },
         );
@@ -294,9 +290,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
                         prefixIcon: CupertinoIcons.pen,
                         items: majors.map((major) => major.name).toList(),
                         onChanged: (String? value) {
-                          setState(() {
-                            _selectedMajor = value ?? '';
-                          });
+                          setState(() => _selectedMajor = value ?? '');
                         },
                         enabled: _selectedSchool.isNotEmpty,
                       ),

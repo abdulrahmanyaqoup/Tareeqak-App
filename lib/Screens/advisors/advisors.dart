@@ -75,15 +75,14 @@ class _AdvisorsState extends ConsumerState<Advisors>
                 ),
                 child: FilterAdvisors(
                   onClearFilters: () {
-                    setState(() {
-                      ref.read(userProvider);
-                      users.valueOrNull!.filteredUsers =
-                          users.valueOrNull!.userList;
-                    });
+                    setState(
+                      () => users.valueOrNull!.filteredUsers =
+                          users.valueOrNull!.userList,
+                    );
                   },
                   onFilterChanged: (university, school, major) {
                     ref.read(userProvider.notifier).filterUsers(
-                          ref.read(userProvider).valueOrNull!.userList,
+                          users.valueOrNull!.userList,
                           university,
                           school,
                           major,

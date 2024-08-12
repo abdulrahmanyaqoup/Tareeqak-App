@@ -27,9 +27,7 @@ class _SigninState extends ConsumerState<Signin> {
   bool _isLoading = false;
 
   Future<void> _signIn(String email, String password) async {
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
     await ref
         .read(userProvider.notifier)
         .signIn(email, password)
@@ -125,9 +123,9 @@ class _SigninState extends ConsumerState<Signin> {
                                 : Icons.visibility_off,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
+                            setState(
+                              () => _isPasswordVisible = !_isPasswordVisible,
+                            );
                           },
                         ),
                       ),

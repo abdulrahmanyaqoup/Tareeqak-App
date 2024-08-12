@@ -52,9 +52,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
 
   Future<void> _signupUser() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() {
-      _isLoading = true;
-    });
+    setState(() => _isLoading = true);
 
     final user = User(
       name: widget.name,
@@ -215,9 +213,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         prefixIcon: CupertinoIcons.pen,
                         items: majors.map((major) => major.name).toList(),
                         onChanged: (String? value) {
-                          setState(() {
-                            _selectedMajor = value ?? '';
-                          });
+                          setState(() => _selectedMajor = value ?? '');
                         },
                         enabled: _enabledMajor,
                       ),

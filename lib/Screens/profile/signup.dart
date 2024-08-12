@@ -137,11 +137,9 @@ class _SignupState extends ConsumerState<Signup> {
                                 ? Icons.visibility
                                 : Icons.visibility_off,
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
+                          onPressed: () => setState(
+                            () => _isPasswordVisible = !_isPasswordVisible,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -165,10 +163,10 @@ class _SignupState extends ConsumerState<Signup> {
                                 : Icons.visibility_off,
                           ),
                           onPressed: () {
-                            setState(() {
-                              _isConfirmPasswordVisible =
-                                  !_isConfirmPasswordVisible;
-                            });
+                            setState(
+                              () => _isConfirmPasswordVisible =
+                                  !_isConfirmPasswordVisible,
+                            );
                           },
                         ),
                       ),

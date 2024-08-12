@@ -83,26 +83,22 @@ class ChatBotState extends State<ChatBot>
   }
 
   Future<void> _simulateTyping(String response) async {
-    setState(() {
-      _messages[_messages.length - 1] = ''; // Clear placeholder
-    });
+    setState(() => _messages[_messages.length - 1] = '');
 
     for (var i = 0; i < response.length; i++) {
       if (_stopTyping && _messages[_messages.length - 1].isEmpty) {
-        setState(() {
-          _messages
+        setState(
+          () => _messages
             ..removeLast()
-            ..removeLast();
-        });
+            ..removeLast(),
+        );
         return;
       } else if (_stopTyping) {
         return;
       }
 
       await Future<void>.delayed(const Duration(milliseconds: 2));
-      setState(() {
-        _messages[_messages.length - 1] += response[i];
-      });
+      setState(() => _messages[_messages.length - 1] += response[i]);
     }
 
     setState(() {
