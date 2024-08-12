@@ -11,7 +11,7 @@ Dio createDio() {
     ..options = BaseOptions(
       baseUrl: Env.URI,
       headers: {
-        'x-api-key': Env.API_KEY,
+        'apikey': Env.API_KEY,
         HttpHeaders.contentTypeHeader: 'application/json; charset=UTF-8',
         HttpHeaders.acceptHeader: 'application/json',
       },

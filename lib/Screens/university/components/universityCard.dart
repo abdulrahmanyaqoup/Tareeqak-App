@@ -45,7 +45,7 @@ class UniversityCard extends StatelessWidget {
           Image(
             image: CachedNetworkImageProvider(
               '${Env.URI}${university.logo}',
-              headers: {'x-api-key': Env.API_KEY},
+              headers: {'apikey': Env.API_KEY},
             ),
             height: 100,
             width: 100,

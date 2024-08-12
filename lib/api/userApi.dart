@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:http_parser/http_parser.dart';
 
@@ -67,7 +69,7 @@ class UserApi {
     try {
       final options = Options(
         headers: {
-          'x-auth-token': token,
+          HttpHeaders.authorizationHeader: token,
         },
       );
       final response =
@@ -121,7 +123,7 @@ class UserApi {
       }
       final options = Options(
         headers: {
-          'x-auth-token': token,
+          HttpHeaders.authorizationHeader: token,
           'Content-Type': 'multipart/form-data',
         },
       );
@@ -142,7 +144,7 @@ class UserApi {
     try {
       final options = Options(
         headers: {
-          'x-auth-token': token,
+          HttpHeaders.authorizationHeader: token,
         },
       );
       final response = await dio.delete<dynamic>(
