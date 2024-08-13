@@ -41,8 +41,6 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   }
 
   Future<void> checkLoginStatus() async {
-    if (state.valueOrNull!.isLoggedIn) return;
-
     state = const AsyncLoading();
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token');
