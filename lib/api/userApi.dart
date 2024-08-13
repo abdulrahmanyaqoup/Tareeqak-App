@@ -69,7 +69,8 @@ class UserApi {
     try {
       final options = Options(
         headers: {
-          HttpHeaders.authorizationHeader: token,
+          HttpHeaders.authorizationHeader:
+              token.isNotEmpty ? 'Bearer $token' : null,
         },
       );
       final response =
@@ -123,7 +124,7 @@ class UserApi {
       }
       final options = Options(
         headers: {
-          HttpHeaders.authorizationHeader: token,
+          HttpHeaders.authorizationHeader: 'Bearer $token',
           'Content-Type': 'multipart/form-data',
         },
       );
@@ -144,7 +145,7 @@ class UserApi {
     try {
       final options = Options(
         headers: {
-          HttpHeaders.authorizationHeader: token,
+          HttpHeaders.authorizationHeader: 'Bearer $token',
         },
       );
       final response = await dio.delete<dynamic>(

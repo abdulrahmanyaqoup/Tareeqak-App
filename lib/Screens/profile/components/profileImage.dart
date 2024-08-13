@@ -21,6 +21,8 @@ class ProfileImage extends StatefulWidget {
 }
 
 class _ProfileImageState extends State<ProfileImage> {
+  bool error = false;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -43,8 +45,7 @@ class _ProfileImageState extends State<ProfileImage> {
                     ? CachedNetworkImageProvider(
                         '${Env.URI}${widget.userImage}',
                         headers: {'apikey': Env.API_KEY},
-                        maxWidth: 130,
-                        maxHeight: 130,
+                        errorListener: (e) => setState(() => error = true),
                       )
                     : null),
             child: widget.pickedImage == null && widget.userImage.isEmpty
