@@ -131,7 +131,7 @@ class _Otp extends ConsumerState<Otp> {
                   color: Theme.of(context).colorScheme.surface,
                 ),
                 child: Lottie.asset(
-                  'assets/animations/logo.json',
+                  'assets/animations/book.json',
                   fit: BoxFit.contain,
                 ),
               ),

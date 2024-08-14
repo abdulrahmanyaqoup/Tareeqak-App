@@ -38,7 +38,7 @@ class ProfileBody extends StatelessWidget {
             SizedBox(height: height * 0.15),
             Lottie.asset(
               height: 200,
-              'assets/animations/logo.json',
+              'assets/animations/book.json',
               fit: BoxFit.cover,
             ),
             const SizedBox(height: 10),
