@@ -9,6 +9,7 @@ import '../../widgets/snackBar.dart';
 import '../advisors/components/advisorCard.dart';
 import 'components/profileBody.dart';
 import 'editProfile.dart';
+import 'manualScreen.dart';
 import 'signup.dart';
 
 class Profile extends ConsumerStatefulWidget {
@@ -50,6 +51,15 @@ class _ProfileState extends ConsumerState<Profile>
         backgroundColor: Theme.of(context).colorScheme.primary,
         border: null,
         padding: EdgeInsetsDirectional.zero,
+        leading: IconButton(
+          icon: const Icon(CupertinoIcons.question_circle, color: Colors.white),
+          onPressed: () => Navigator.push(
+            context,
+            CupertinoPageRoute<void>(
+              builder: (_) => ManualScreen(isProfile: true,),
+            ),
+          ),
+        ),
       ),
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: getUser.when(
