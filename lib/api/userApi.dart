@@ -43,7 +43,7 @@ class UserApi {
       );
       return response.data as String;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 
@@ -61,7 +61,7 @@ class UserApi {
       );
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 
@@ -78,7 +78,7 @@ class UserApi {
 
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 
@@ -92,7 +92,7 @@ class UserApi {
           .map((user) => User.fromMap(user as Map<String, dynamic>))
           .toList();
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 
@@ -135,7 +135,7 @@ class UserApi {
       );
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 
@@ -155,7 +155,7 @@ class UserApi {
       );
       return response.data as String;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 }

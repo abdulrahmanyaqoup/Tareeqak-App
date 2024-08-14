@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../main.dart';
 import '../../model/models.dart';
 import '../../provider/universityProvider.dart';
 import '../../provider/userProvider.dart';
@@ -33,6 +34,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _contactController;
+  final _context = Tareeqak.navKey.currentContext;
   FileImage? _persistentImage;
   FileImage? _image;
   String _selectedUniversity = '';
@@ -92,9 +94,9 @@ class _EditProfileState extends ConsumerState<EditProfile>
         .updateUser(updatedUser)
         .then(
           (response) => {
-            if (mounted)
+            if (_context != null)
               showSnackBar(
-                context,
+                _context,
                 'Profile updated successfully',
                 ContentType.success,
               ),
@@ -106,8 +108,8 @@ class _EditProfileState extends ConsumerState<EditProfile>
         )
         .catchError(
           (Object error) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            if (_context != null)
+              showSnackBar(_context, error.toString(), ContentType.failure),
             setState(() => _isLoading = false),
             throw Error(),
           },
@@ -129,8 +131,8 @@ class _EditProfileState extends ConsumerState<EditProfile>
         )
         .catchError(
       (Object error) {
-        if (mounted) {
-          showSnackBar(context, error.toString(), ContentType.failure);
+        if (_context != null) {
+          showSnackBar(_context, error.toString(), ContentType.failure);
         }
         throw Error();
       },
@@ -148,13 +150,14 @@ class _EditProfileState extends ConsumerState<EditProfile>
                 CupertinoPageRoute<void>(builder: (_) => const Profile()),
                 (Route<dynamic> route) => false,
               ),
-            if (mounted) showSnackBar(context, response, ContentType.success),
+            if (_context != null)
+              showSnackBar(_context, response, ContentType.success),
           },
         )
         .catchError(
           (Object error) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            if (_context != null)
+              showSnackBar(_context, error.toString(), ContentType.failure),
             throw Error(),
           },
         );

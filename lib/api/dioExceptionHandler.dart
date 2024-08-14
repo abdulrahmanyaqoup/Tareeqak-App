@@ -7,44 +7,45 @@ class DioExceptionHandler extends Interceptor {
     handler.next(
       DioException(
         requestOptions: err.requestOptions,
-        message: errorMessage,
+        error: errorMessage,
+        response: err.response,
+        type: err.type,
+        message: err.message,
       ),
     );
   }
 
   String _handleDioException(DioException e) {
-    final String errorMessage;
     switch (e.type) {
       case DioExceptionType.cancel:
-        errorMessage = 'Request was cancelled';
+        return 'Request was cancelled';
       case DioExceptionType.connectionTimeout:
-        errorMessage = 'Connection timeout';
+        return 'Connection timeout';
       case DioExceptionType.receiveTimeout:
-        errorMessage = 'Receive timeout';
+        return 'Receive timeout';
       case DioExceptionType.sendTimeout:
-        errorMessage = 'Send timeout';
+        return 'Send timeout';
       case DioExceptionType.badResponse:
         if (e.response?.statusCode == 502 || e.response?.statusCode == 503) {
-          errorMessage = 'Internal server error';
+          return 'Internal server error';
         } else {
-          errorMessage = e.response!.data as String;
+          return e.response!.data as String;
         }
       case DioExceptionType.badCertificate:
-        errorMessage = 'Internal Server Error';
+        return 'Internal Server Error';
       case DioExceptionType.connectionError:
-        errorMessage = 'Connection Error';
+        return 'Connection Error';
       case DioExceptionType.unknown:
-        errorMessage = 'Something went wrong';
+        return 'Something went wrong';
     }
-    return errorMessage;
   }
 }
 
 class CustomException implements Exception {
   CustomException(this.message);
 
-  final String message;
+  final dynamic message;
 
   @override
-  String toString() => message;
+  String toString() => message as String;
 }

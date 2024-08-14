@@ -15,7 +15,7 @@ class OtpApi {
       );
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 
@@ -28,7 +28,7 @@ class OtpApi {
         },
       );
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 }

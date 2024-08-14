@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import 'Screens/profile/manualScreen.dart';
 import 'app.dart';
 import 'appThemes.dart';
@@ -26,11 +27,13 @@ Future<void> main() async {
 class Tareeqak extends StatefulWidget {
   const Tareeqak({super.key});
 
+  static GlobalKey<NavigatorState> navKey = GlobalKey();
+
   @override
-  State<Tareeqak> createState() => _TareeqakState();
+  State<Tareeqak> createState() => _Tareeqak();
 }
 
-class _TareeqakState extends State<Tareeqak> {
+class _Tareeqak extends State<Tareeqak> {
   late Future<bool> isFirstTimeFuture;
 
   @override
@@ -56,6 +59,7 @@ class _TareeqakState extends State<Tareeqak> {
       debugShowCheckedModeBanner: false,
       title: 'Tareeqak',
       theme: appTheme,
+      navigatorKey: Tareeqak.navKey,
       home: FutureBuilder<bool>(
         future: isFirstTimeFuture,
         builder: (context, snapshot) {

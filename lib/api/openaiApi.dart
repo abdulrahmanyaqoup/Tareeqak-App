@@ -14,7 +14,7 @@ class OpenaiApi {
       );
       return response.data as String;
     } on DioException catch (e) {
-      throw CustomException(e.message!);
+      throw CustomException(e.error);
     }
   }
 }

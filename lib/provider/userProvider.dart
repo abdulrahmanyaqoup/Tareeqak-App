@@ -77,6 +77,8 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     await storage.write(key: 'token', value: token);
     state = await AsyncValue.guard(() async {
       return state.valueOrNull!.copyWith(
+        userList: [...state.valueOrNull!.userList, user],
+        filteredUsers: [...state.valueOrNull!.filteredUsers, user],
         user: user,
         isLoggedIn: true,
       );
