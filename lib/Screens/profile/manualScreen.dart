@@ -7,6 +7,7 @@ import 'profile.dart';
 
 class ManualScreen extends StatelessWidget {
   const ManualScreen({required this.isProfile, super.key});
+
   final bool isProfile;
 
   @override
@@ -15,8 +16,8 @@ class ManualScreen extends StatelessWidget {
       pages: [
         PageViewModel(
           title: 'Welcome to Tareeqak',
-          body:
-              'Tareeqak helps high school graduates make informed decisions about their future academic paths.',
+          body: 'Tareeqak helps high school graduates make informed decisions '
+              'about their future academic paths.',
           image: Center(
             child: Image.asset('assets/images/tareeqak_logo.png', height: 300),
           ),
@@ -25,16 +26,20 @@ class ManualScreen extends StatelessWidget {
         PageViewModel(
           title: 'Explore Opportunities',
           body:
-              'Uncover diverse universities and specialized majors that align with your ambitions.',
+              'Uncover diverse universities and specialized majors that align '
+              'with your ambitions.',
           image: Center(
-            child: Image.asset('assets/images/manual/universities.png', height: 300),
+            child: Image.asset(
+              'assets/images/manual/universities.png',
+              height: 300,
+            ),
           ),
           decoration: getPageDecoration(),
         ),
         PageViewModel(
           title: 'Get Personalized Assistance',
-          body:
-              'Our Aspire AI and real advisors are here to help you with any questions you might have.',
+          body: 'Our Aspire AI and real advisors are here to help you with any '
+              'questions you might have.',
           image: Center(
             child: Image.asset('assets/images/manual/AI.png', height: 300),
           ),
@@ -44,14 +49,15 @@ class ManualScreen extends StatelessWidget {
           title: 'Connect with Peer Advisors',
           body: 'Connect with university students for firsthand advice.',
           image: Center(
-            child: Image.asset('assets/images/manual/advisors.png', height: 200),
+            child:
+                Image.asset('assets/images/manual/advisors.png', height: 200),
           ),
           decoration: getPageDecoration(),
         ),
         PageViewModel(
           title: 'Your Data is Secure',
-          body:
-              'We prioritize your privacy. Your personal information is safe and secure with us.',
+          body: 'We prioritize your privacy. Your personal information is safe '
+              'and secure with us.',
           image: Center(
             child: Icon(
               Icons.security,
@@ -73,9 +79,13 @@ class ManualScreen extends StatelessWidget {
   }
 
   void goToProfile(BuildContext context) {
-    !isProfile ? Navigator.of(context).pushReplacement(
-      CupertinoPageRoute<Profile>(builder: (_) => const BottomNavigation()),
-    ) : Navigator.of(context).pop();
+    !isProfile
+        ? Navigator.of(context).pushReplacement(
+            CupertinoPageRoute<Profile>(
+              builder: (_) => const BottomNavigation(),
+            ),
+          )
+        : Navigator.of(context).pop();
   }
 
   DotsDecorator getDotsDecorator() => DotsDecorator(

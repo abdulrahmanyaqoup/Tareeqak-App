@@ -56,7 +56,9 @@ class _ProfileState extends ConsumerState<Profile>
           onPressed: () => Navigator.push(
             context,
             CupertinoPageRoute<void>(
-              builder: (_) => ManualScreen(isProfile: true,),
+              builder: (_) => const ManualScreen(
+                isProfile: true,
+              ),
             ),
           ),
         ),
