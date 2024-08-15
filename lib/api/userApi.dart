@@ -64,6 +64,19 @@ class UserApi {
       throw CustomException(e.error);
     }
   }
+  /* Future<String> forgotPassword(String email) async {
+    try {
+      final response = await dio.post<dynamic>(
+        'api/otp/forgot',
+        data: {
+          'email': email,
+        },
+      );
+      return response as String;
+    } on DioException catch (e) {
+      throw CustomException(e.error);
+    }
+  } */
 
   Future<Map<String, dynamic>> getUser(String token) async {
     try {

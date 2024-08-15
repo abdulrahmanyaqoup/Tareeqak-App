@@ -9,6 +9,7 @@ import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
+import 'forgotPassword.dart';
 import 'profile.dart';
 import 'signup.dart';
 
@@ -62,6 +63,7 @@ class _Signin extends ConsumerState<Signin> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
@@ -128,7 +130,25 @@ class _Signin extends ConsumerState<Signin> {
                           },
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      Padding(
+                        padding: EdgeInsets.only(left: width * 0.45),
+                        child: TextButton(
+                          onPressed: () =>
+                              Navigator.of(context).pushReplacement(
+                            CupertinoPageRoute<void>(
+                              builder: (_) => const ForgotPassword(),
+                            ),
+                          ),
+                          child: const Text(
+                            textAlign: TextAlign.right,
+                            'Forgot password?',
+                            style: TextStyle(
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 5),
                       CustomButton(
                         isLoading: _isLoading,
                         onPressed: () {
