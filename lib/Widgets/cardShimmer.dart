@@ -19,7 +19,8 @@ class CardShimmer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: isProfile ? 1 : 0,
+      elevation: isProfile ? 3 : 0,
+      shadowColor: Colors.white,
       color: isProfile ? Colors.white : Colors.grey.shade100,
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       shape: RoundedRectangleBorder(

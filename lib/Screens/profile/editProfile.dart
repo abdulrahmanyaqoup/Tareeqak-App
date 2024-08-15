@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
-import '../../main.dart';
 import '../../model/models.dart';
 import '../../provider/universityProvider.dart';
 import '../../provider/userProvider.dart';
@@ -26,15 +25,14 @@ class EditProfile extends ConsumerStatefulWidget {
   final User user;
 
   @override
-  ConsumerState<EditProfile> createState() => _EditProfileState();
+  ConsumerState<EditProfile> createState() => _EditProfile();
 }
 
-class _EditProfileState extends ConsumerState<EditProfile>
+class _EditProfile extends ConsumerState<EditProfile>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _contactController;
-  final _context = Tareeqak.navKey.currentContext;
   FileImage? _persistentImage;
   FileImage? _image;
   String _selectedUniversity = '';
@@ -94,12 +92,10 @@ class _EditProfileState extends ConsumerState<EditProfile>
         .updateUser(updatedUser)
         .then(
           (response) => {
-            if (_context != null)
-              showSnackBar(
-                _context,
-                'Profile updated successfully',
-                ContentType.success,
-              ),
+            showSnackBar(
+              'Profile updated successfully',
+              ContentType.success,
+            ),
             setState(() {
               if (_image != null) _image = null;
               _isLoading = false;
@@ -108,8 +104,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
         )
         .catchError(
           (Object error) => {
-            if (_context != null)
-              showSnackBar(_context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             setState(() => _isLoading = false),
             throw Error(),
           },
@@ -131,9 +126,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
         )
         .catchError(
       (Object error) {
-        if (_context != null) {
-          showSnackBar(_context, error.toString(), ContentType.failure);
-        }
+        showSnackBar(error.toString(), ContentType.failure);
         throw Error();
       },
     );
@@ -150,14 +143,12 @@ class _EditProfileState extends ConsumerState<EditProfile>
                 CupertinoPageRoute<void>(builder: (_) => const Profile()),
                 (Route<dynamic> route) => false,
               ),
-            if (_context != null)
-              showSnackBar(_context, response, ContentType.success),
+            showSnackBar(response, ContentType.success),
           },
         )
         .catchError(
           (Object error) => {
-            if (_context != null)
-              showSnackBar(_context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             throw Error(),
           },
         );
@@ -170,11 +161,11 @@ class _EditProfileState extends ConsumerState<EditProfile>
     var majors = <Major>[];
 
     if (_selectedUniversity.isNotEmpty &&
-        universityState.valueOrNull!.universities.isNotEmpty) {
+        universityState.requireValue.universities.isNotEmpty) {
       final selectedUniversity =
-          universityState.valueOrNull!.universities.firstWhere(
+          universityState.requireValue.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
-        orElse: () => universityState.valueOrNull!.universities.first,
+        orElse: () => universityState.requireValue.universities.first,
       );
       schools = selectedUniversity.schools;
       if (_selectedSchool.isNotEmpty && selectedUniversity.schools.isNotEmpty) {
@@ -261,7 +252,7 @@ class _EditProfileState extends ConsumerState<EditProfile>
                         value: _selectedUniversity,
                         hintText: 'Select your university',
                         prefixIcon: Icons.business,
-                        items: universityState.valueOrNull!.universities
+                        items: universityState.requireValue.universities
                             .map((university) => university.name)
                             .toList(),
                         onChanged: (String? value) {

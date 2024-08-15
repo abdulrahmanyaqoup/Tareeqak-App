@@ -71,22 +71,19 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         .then(
           (response) => {
             if (mounted)
-              {
-                Navigator.of(context).pushAndRemoveUntil(
-                  CupertinoPageRoute<void>(
-                    builder: (_) => Otp(email: widget.email),
-                  ),
-                  (Route<dynamic> route) => route.isFirst,
+              Navigator.of(context).pushAndRemoveUntil(
+                CupertinoPageRoute<void>(
+                  builder: (_) => Otp(email: widget.email),
                 ),
-                showSnackBar(context, response, ContentType.success),
-              },
+                (Route<dynamic> route) => route.isFirst,
+              ),
+            showSnackBar(response, ContentType.success),
             setState(() => _isLoading = false),
           },
         )
         .catchError(
           (Object error) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             setState(() => _isLoading = false),
             throw Error(),
           },
@@ -113,11 +110,11 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
     var schools = <School>[];
     var majors = <Major>[];
     if (_selectedUniversity.isNotEmpty &&
-        universityState.valueOrNull!.universities.isNotEmpty) {
+        universityState.requireValue.universities.isNotEmpty) {
       final selectedUniversity =
-          universityState.valueOrNull!.universities.firstWhere(
+          universityState.requireValue.universities.firstWhere(
         (university) => university.name == _selectedUniversity,
-        orElse: () => universityState.valueOrNull!.universities.first,
+        orElse: () => universityState.requireValue.universities.first,
       );
       schools = selectedUniversity.schools;
       if (_selectedSchool.isNotEmpty && selectedUniversity.schools.isNotEmpty) {
@@ -175,7 +172,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         value: _selectedUniversity,
                         hintText: 'Select your university',
                         prefixIcon: Icons.business,
-                        items: universityState.valueOrNull!.universities
+                        items: universityState.requireValue.universities
                             .map((university) => university.name)
                             .toList(),
                         onChanged: (String? value) {

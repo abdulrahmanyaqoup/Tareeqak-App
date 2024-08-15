@@ -9,24 +9,28 @@ class UniversityState {
     this.filteredUniversities = const [],
     this.schools = const [],
     this.majors = const [],
+    this.isSearching = false,
   });
 
   final List<University> universities;
   final List<University> filteredUniversities;
   final List<School> schools;
   final List<Major> majors;
+  final bool isSearching;
 
   UniversityState copyWith({
     List<University>? universities,
     List<University>? filteredUniversities,
     List<School>? schools,
     List<Major>? majors,
+    bool isSearching = false,
   }) {
     return UniversityState(
       universities: universities ?? this.universities,
       filteredUniversities: filteredUniversities ?? this.filteredUniversities,
       schools: schools ?? this.schools,
       majors: majors ?? this.majors,
+      isSearching: isSearching,
     );
   }
 }
@@ -46,9 +50,8 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
     final allMajors = allSchools.expand((school) => school.majors).toList();
 
     state = await AsyncValue.guard(() async {
-      return state.valueOrNull!.copyWith(
+      return state.requireValue.copyWith(
         universities: universities,
-        filteredUniversities: universities,
         schools: allSchools,
         majors: allMajors,
       );
@@ -58,18 +61,19 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
   Future<void> filterUniversities(String query) async {
     state = await AsyncValue.guard(() async {
       if (query.isEmpty) {
-        return state.valueOrNull!.copyWith(
-          filteredUniversities: state.valueOrNull!.universities,
+        return state.requireValue.copyWith(
+          filteredUniversities: <University>[],
         );
       } else {
-        final filteredUniversities = state.valueOrNull!.universities
+        final filteredUniversities = state.requireValue.universities
             .where(
               (university) =>
                   university.name.toLowerCase().contains(query.toLowerCase()),
             )
             .toList();
-        return state.valueOrNull!.copyWith(
+        return state.requireValue.copyWith(
           filteredUniversities: filteredUniversities,
+          isSearching: true,
         );
       }
     });

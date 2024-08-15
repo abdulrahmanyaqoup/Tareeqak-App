@@ -12,10 +12,10 @@ class ChatBot extends StatefulWidget {
   const ChatBot({super.key});
 
   @override
-  State<ChatBot> createState() => ChatBotState();
+  State<ChatBot> createState() => _ChatBot();
 }
 
-class ChatBotState extends State<ChatBot>
+class _ChatBot extends State<ChatBot>
     with AutomaticKeepAliveClientMixin<ChatBot>, TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
@@ -75,8 +75,7 @@ class ChatBotState extends State<ChatBot>
         )
         .catchError(
           (Object error) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             throw Error(),
           },
         );

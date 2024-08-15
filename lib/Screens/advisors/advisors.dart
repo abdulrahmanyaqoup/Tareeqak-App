@@ -13,10 +13,10 @@ class Advisors extends ConsumerStatefulWidget {
   const Advisors({super.key});
 
   @override
-  ConsumerState<Advisors> createState() => _AdvisorsState();
+  ConsumerState<Advisors> createState() => _Advisors();
 }
 
-class _AdvisorsState extends ConsumerState<Advisors>
+class _Advisors extends ConsumerState<Advisors>
     with AutomaticKeepAliveClientMixin<Advisors> {
   @override
   bool get wantKeepAlive => true;
@@ -30,8 +30,7 @@ class _AdvisorsState extends ConsumerState<Advisors>
   Future<void> _getAllUsers() async {
     await ref.read(userProvider.notifier).getAllUsers().catchError(
           (Object error) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             throw Error(),
           },
         );
@@ -42,8 +41,8 @@ class _AdvisorsState extends ConsumerState<Advisors>
     super.build(context);
     final users = ref.watch(userProvider);
 
-    return CupertinoPageScaffold(
-      child: CustomScrollView(
+    return Scaffold(
+      body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
           CupertinoSliverNavigationBar(
@@ -76,13 +75,15 @@ class _AdvisorsState extends ConsumerState<Advisors>
                 child: FilterAdvisors(
                   onClearFilters: () {
                     setState(
-                      () => users.valueOrNull!.filteredUsers =
-                          users.valueOrNull!.userList,
+                      () {
+                        users.requireValue.filteredUsers = [];
+                        users.requireValue.isSearching = false;
+                      },
                     );
                   },
                   onFilterChanged: (university, school, major) {
                     ref.read(userProvider.notifier).filterUsers(
-                          users.valueOrNull!.userList,
+                          users.requireValue.userList,
                           university,
                           school,
                           major,
@@ -104,7 +105,10 @@ class _AdvisorsState extends ConsumerState<Advisors>
               child: Center(child: Text('Error: $error')),
             ),
             data: (userState) {
-              if (userState.filteredUsers.isEmpty) {
+              if ((users.requireValue.isSearching
+                      ? userState.filteredUsers
+                      : userState.userList)
+                  .isEmpty) {
                 return SliverToBoxAdapter(
                   child: Center(
                     heightFactor: 12,
@@ -124,12 +128,16 @@ class _AdvisorsState extends ConsumerState<Advisors>
                   padding: const EdgeInsets.only(bottom: 10),
                   sliver: SliverList.builder(
                     itemBuilder: (context, index) {
-                      final user = userState.filteredUsers[index];
+                      final user = userState.filteredUsers.isEmpty
+                          ? userState.userList[index]
+                          : userState.filteredUsers[index];
                       return AdvisorCard(
                         user: user,
                       );
                     },
-                    itemCount: userState.filteredUsers.length,
+                    itemCount: userState.filteredUsers.isEmpty
+                        ? userState.userList.length
+                        : userState.filteredUsers.length,
                   ),
                 );
               }

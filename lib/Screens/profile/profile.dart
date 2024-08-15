@@ -16,10 +16,10 @@ class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
 
   @override
-  ConsumerState<Profile> createState() => _ProfileState();
+  ConsumerState<Profile> createState() => _Profile();
 }
 
-class _ProfileState extends ConsumerState<Profile>
+class _Profile extends ConsumerState<Profile>
     with AutomaticKeepAliveClientMixin<Profile> {
   @override
   bool get wantKeepAlive => true;
@@ -33,8 +33,7 @@ class _ProfileState extends ConsumerState<Profile>
   Future<void> _checkLoginStatus() async {
     await ref.read(userProvider.notifier).checkLoginStatus().catchError(
           (Object error) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             throw Error(),
           },
         );

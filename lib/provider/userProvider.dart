@@ -12,24 +12,28 @@ class UserState {
     this.userList = const [],
     this.filteredUsers = const [],
     this.isLoggedIn = false,
+    this.isSearching = false,
   });
 
   final User user;
   final List<User> userList;
-  List<User> filteredUsers;
   final bool isLoggedIn;
+  List<User> filteredUsers;
+  bool isSearching;
 
   UserState copyWith({
     User? user,
     List<User>? userList,
     List<User>? filteredUsers,
     bool? isLoggedIn,
+    bool? isSearching,
   }) {
     return UserState(
       user: user ?? this.user,
       userList: userList ?? this.userList,
       filteredUsers: filteredUsers ?? this.filteredUsers,
       isLoggedIn: isLoggedIn ?? this.isLoggedIn,
+      isSearching: isSearching ?? this.isSearching,
     );
   }
 }
@@ -46,14 +50,14 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     final token = await storage.read(key: 'token');
 
     if (token == null) {
-      state = await AsyncValue.guard(() async => state.valueOrNull!);
+      state = await AsyncValue.guard(() async => state.requireValue);
       return;
     }
 
     final userData = await UserApi().getUser(token);
     final user = User.fromMap(userData);
     state = await AsyncValue.guard(() async {
-      return state.valueOrNull!.copyWith(
+      return state.requireValue.copyWith(
         user: user,
         isLoggedIn: true,
       );
@@ -68,18 +72,22 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       user: user,
       password: password,
     );
-    state = await AsyncValue.guard(() async => state.valueOrNull!);
+    state = await AsyncValue.guard(() async => state.requireValue);
     return response;
   }
 
-  Future<void> signInVerifiedUser(User user, String token) async {
+  Future<void> signInVerifiedUser(Map<String, dynamic> response) async {
+    final token = response['token'] as String;
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
+    final user = User.fromMap(response['user'] as Map<String, dynamic>);
+    final currentState = state.requireValue;
+    final refreshUserList = <User>[...currentState.userList, user];
     state = await AsyncValue.guard(() async {
-      return state.valueOrNull!.copyWith(
-        userList: [...state.valueOrNull!.userList, user],
-        filteredUsers: [...state.valueOrNull!.filteredUsers, user],
+      return state.requireValue.copyWith(
         user: user,
+        userList: refreshUserList,
+        filteredUsers: <User>[],
         isLoggedIn: true,
       );
     });
@@ -91,9 +99,10 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     final token = response['token'] as String;
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
+    final user = User.fromMap(response['user'] as Map<String, dynamic>);
     state = await AsyncValue.guard(() async {
-      return state.valueOrNull!.copyWith(
-        user: User.fromMap(response),
+      return state.requireValue.copyWith(
+        user: user,
         isLoggedIn: true,
       );
     });
@@ -104,7 +113,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     await storage.delete(key: 'token');
 
     state = await AsyncValue.guard(() async {
-      return state.valueOrNull!.copyWith(
+      return state.requireValue.copyWith(
         user: const User(),
         isLoggedIn: false,
       );
@@ -115,9 +124,8 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     state = const AsyncLoading();
     final users = await UserApi().getAllUsers();
     state = await AsyncValue.guard(() async {
-      return state.valueOrNull!.copyWith(
+      return state.requireValue.copyWith(
         userList: users,
-        filteredUsers: users,
       );
     });
   }
@@ -130,7 +138,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
         await UserApi().updateUser(user: updatedUser, token: token ?? '');
     final user = User.fromMap(response);
 
-    final currentState = state.valueOrNull!;
+    final currentState = state.requireValue;
     final updatedUserList = currentState.userList
         .map((user1) => user1.email == user.email ? user : user1)
         .toList();
@@ -138,7 +146,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       return currentState.copyWith(
         user: user,
         userList: updatedUserList,
-        filteredUsers: updatedUserList,
+        filteredUsers: <User>[],
       );
     });
   }
@@ -149,14 +157,14 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
 
     final response = await UserApi().deleteUser(token: token);
     await storage.delete(key: 'token');
-    final currentState = state.valueOrNull!;
+    final currentState = state.requireValue;
     final refreshUserList = currentState.userList
         .where((user) => user.email != currentState.user.email)
         .toList();
     state = await AsyncValue.guard(() async {
       return currentState.copyWith(
         userList: refreshUserList,
-        filteredUsers: refreshUserList,
+        filteredUsers: <User>[],
         user: const User(),
         isLoggedIn: false,
       );
@@ -178,10 +186,12 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
         final matchMajor = major == null || user.userProps.major == major;
         return matchUniversity && matchSchool && matchMajor;
       }).toList();
-      return state.valueOrNull!.copyWith(filteredUsers: filterUsers);
+      return state.requireValue
+          .copyWith(filteredUsers: filterUsers, isSearching: true);
     });
   }
 }
 
-final userProvider =
-    AutoDisposeAsyncNotifierProvider<UserProvider, UserState>(UserProvider.new);
+final userProvider = AsyncNotifierProvider.autoDispose<UserProvider, UserState>(
+  UserProvider.new,
+);

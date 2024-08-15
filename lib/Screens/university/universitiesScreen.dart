@@ -11,10 +11,10 @@ class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
 
   @override
-  ConsumerState<UniversitiesScreen> createState() => _UniversitiesScreenState();
+  ConsumerState<UniversitiesScreen> createState() => _UniversitiesScreen();
 }
 
-class _UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
+class _UniversitiesScreen extends ConsumerState<UniversitiesScreen>
     with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
@@ -100,7 +100,9 @@ class _UniversitiesScreenState extends ConsumerState<UniversitiesScreen>
             loading: () => const UniversityShimmer(),
             error: (error, stackTrace) => const SizedBox.shrink(),
             data: (universities) => UniversitiesGrid(
-              universities: universities.filteredUniversities,
+              universities: universities.isSearching
+                  ? universities.filteredUniversities
+                  : universities.universities,
             ),
           ),
         ],

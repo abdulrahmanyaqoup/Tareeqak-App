@@ -25,10 +25,10 @@ class GridModalBottomSheet extends StatefulWidget {
   final String? universityWebsite;
 
   @override
-  State<GridModalBottomSheet> createState() => GridModalBottomSheetState();
+  State<GridModalBottomSheet> createState() => _GridModalBottomSheet();
 }
 
-class GridModalBottomSheetState extends State<GridModalBottomSheet> {
+class _GridModalBottomSheet extends State<GridModalBottomSheet> {
   String _searchQuery = '';
   List<dynamic> _filteredItems = [];
 

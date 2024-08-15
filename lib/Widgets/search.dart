@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Search extends StatefulWidget {
@@ -34,11 +35,10 @@ class _SearchState extends State<Search> {
       textInputAction: TextInputAction.search,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        prefixIcon: const Icon(Icons.search),
         suffixIcon: _controller.text.isNotEmpty
             ? IconButton(
                 icon: const Icon(
-                  Icons.clear_rounded,
+                  CupertinoIcons.clear_thick_circled,
                 ),
                 onPressed: () {
                   _controller.clear();
@@ -47,7 +47,7 @@ class _SearchState extends State<Search> {
                   );
                 },
               )
-            : null,
+            : const Icon(Icons.search),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide.none,

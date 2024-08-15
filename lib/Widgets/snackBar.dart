@@ -1,7 +1,10 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 
-void showSnackBar(BuildContext context, String text, ContentType contentType) {
+import '../main.dart';
+
+void showSnackBar(String text, ContentType contentType) {
+  final context = Tareeqak.navKey.currentContext;
   final snackBar = SnackBar(
     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
     content: AwesomeSnackbarContent(
@@ -14,7 +17,9 @@ void showSnackBar(BuildContext context, String text, ContentType contentType) {
     backgroundColor: Colors.transparent,
     elevation: 0,
   );
-  ScaffoldMessenger.of(context)
-    ..hideCurrentSnackBar()
-    ..showSnackBar(snackBar);
+  if (context != null) {
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(snackBar);
+  }
 }

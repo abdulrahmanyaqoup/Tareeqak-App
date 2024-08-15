@@ -99,12 +99,12 @@ class _DropdownState extends State<Dropdown> {
                   listItemStyle: TextStyle(
                     overflow: TextOverflow.fade,
                     fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey.shade700,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey.shade800,
                   ),
                   closedFillColor: Colors.grey.shade500.withOpacity(0.1),
                   prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
-                  expandedFillColor: Colors.grey.shade100,
+                  expandedFillColor: Colors.grey.shade50,
                   expandedSuffixIcon: Icon(
                     Icons.keyboard_arrow_up,
                     color: Colors.grey[700],

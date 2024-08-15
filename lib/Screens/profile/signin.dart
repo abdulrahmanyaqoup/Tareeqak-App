@@ -16,10 +16,10 @@ class Signin extends ConsumerStatefulWidget {
   const Signin({super.key});
 
   @override
-  ConsumerState<Signin> createState() => _SigninState();
+  ConsumerState<Signin> createState() => _Signin();
 }
 
-class _SigninState extends ConsumerState<Signin> {
+class _Signin extends ConsumerState<Signin> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -46,8 +46,7 @@ class _SigninState extends ConsumerState<Signin> {
         )
         .catchError(
           (Object error, stackTrace) => {
-            if (mounted)
-              showSnackBar(context, error.toString(), ContentType.failure),
+            showSnackBar(error.toString(), ContentType.failure),
             setState(() => _isLoading = false),
             throw Error(),
           },

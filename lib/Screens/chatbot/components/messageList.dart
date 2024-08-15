@@ -18,10 +18,10 @@ class MessageList extends StatefulWidget {
   final ScrollController scrollController;
 
   @override
-  State<MessageList> createState() => _MessageListState();
+  State<MessageList> createState() => _MessageList();
 }
 
-class _MessageListState extends State<MessageList> {
+class _MessageList extends State<MessageList> {
   Widget _buildTypingIndicator() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,

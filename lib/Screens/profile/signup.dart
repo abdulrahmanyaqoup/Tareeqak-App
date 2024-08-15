@@ -14,10 +14,10 @@ class Signup extends ConsumerStatefulWidget {
   const Signup({super.key});
 
   @override
-  ConsumerState<Signup> createState() => _SignupState();
+  ConsumerState<Signup> createState() => _Signup();
 }
 
-class _SignupState extends ConsumerState<Signup> {
+class _Signup extends ConsumerState<Signup> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();

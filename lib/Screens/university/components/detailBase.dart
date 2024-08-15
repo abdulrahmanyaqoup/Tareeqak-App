@@ -148,8 +148,8 @@ class DetailBase extends StatelessWidget {
                                       child: Text(
                                         facts[index],
                                         textAlign: TextAlign.center,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
+                                        style: TextStyle(
+                                          color: Colors.grey.shade200,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
