@@ -49,9 +49,13 @@ class _Profile extends ConsumerState<Profile>
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         border: null,
-        padding: EdgeInsetsDirectional.zero,
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.question_circle, color: Colors.white),
+          icon: const Icon(
+            CupertinoIcons.question_circle,
+            color: Colors.white,
+            size: 27,
+          ),
           onPressed: () => Navigator.push(
             context,
             CupertinoPageRoute<void>(
