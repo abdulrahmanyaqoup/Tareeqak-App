@@ -15,7 +15,7 @@ import '../../widgets/snackBar.dart';
 import '../../widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'otp.dart';
+import 'verify.dart';
 
 class SignupDetails extends ConsumerStatefulWidget {
   const SignupDetails({
@@ -73,7 +73,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
             if (mounted)
               Navigator.of(context).pushAndRemoveUntil(
                 CupertinoPageRoute<void>(
-                  builder: (_) => Otp(email: widget.email, isSignup: true),
+                  builder: (_) => Verify(email: widget.email, isSignup: true),
                 ),
                 (Route<dynamic> route) => route.isFirst,
               ),
@@ -124,7 +124,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         border: null,

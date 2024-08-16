@@ -6,18 +6,18 @@ import '../../Widgets/customButton.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
+import 'login.dart';
 import 'profile.dart';
-import 'signin.dart';
 import 'signupDetails.dart';
 
-class Signup extends ConsumerStatefulWidget {
-  const Signup({super.key});
+class Register extends ConsumerStatefulWidget {
+  const Register({super.key});
 
   @override
-  ConsumerState<Signup> createState() => _Signup();
+  ConsumerState<Register> createState() => _Register();
 }
 
-class _Signup extends ConsumerState<Signup> {
+class _Register extends ConsumerState<Register> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -67,7 +67,7 @@ class _Signup extends ConsumerState<Signup> {
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         border: null,
@@ -184,7 +184,7 @@ class _Signup extends ConsumerState<Signup> {
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
-                            builder: (context) => const Signin(),
+                            builder: (context) => const Login(),
                           ),
                         ),
                         child: const Text('Do you have an account? Sign in'),

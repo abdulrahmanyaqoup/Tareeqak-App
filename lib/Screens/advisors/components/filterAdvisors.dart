@@ -173,7 +173,7 @@ class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
-              const Icon(Icons.arrow_drop_down, color: Colors.black54),
+              const Icon(Icons.arrow_drop_down_rounded, color: Colors.black54),
             ],
           ),
         ),

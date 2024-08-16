@@ -44,7 +44,7 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
   Future<void> getUniversities() async {
     state = const AsyncLoading();
 
-    final universities = await UniversityApi().getUniversities();
+    final universities = await const UniversityApi().getUniversities();
     final allSchools =
         universities.expand((university) => university.schools).toList();
     final allMajors = allSchools.expand((school) => school.majors).toList();

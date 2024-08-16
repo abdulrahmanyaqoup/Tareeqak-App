@@ -5,6 +5,8 @@ import 'dioClient.dart';
 import 'dioExceptionHandler.dart';
 
 class UniversityApi {
+  const UniversityApi();
+
   Future<List<University>> getUniversities() async {
     try {
       final response = await dio.get<dynamic>('api/universities');

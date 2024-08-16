@@ -106,7 +106,7 @@ class _DropdownState extends State<Dropdown> {
                   prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
                   expandedFillColor: Colors.grey.shade50,
                   expandedSuffixIcon: Icon(
-                    Icons.keyboard_arrow_up,
+                    Icons.keyboard_arrow_up_rounded,
                     color: Colors.grey[700],
                   ),
                   expandedShadow: [

@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-import '../api/userApi.dart';
+import '../api/userApi/userApi.dart';
 import '../model/models.dart';
 
 class UserState {
@@ -54,7 +54,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
       return;
     }
 
-    final userData = await UserApi().getUser(token);
+    final userData = await const UserApi().getUser(token);
     final user = User.fromMap(userData);
     state = await AsyncValue.guard(() async {
       return state.requireValue.copyWith(
@@ -68,7 +68,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     User user,
     String password,
   ) async {
-    final response = await UserApi().signUp(
+    final response = await const UserApi().register(
       user: user,
       password: password,
     );
@@ -95,7 +95,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
 
   Future<void> signIn(String email, String password) async {
     final response =
-        await UserApi().signInUser(email: email, password: password);
+        await const UserApi().login(email: email, password: password);
     final token = response['token'] as String;
     const storage = FlutterSecureStorage();
     await storage.write(key: 'token', value: token);
@@ -122,7 +122,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
 
   Future<void> getAllUsers() async {
     state = const AsyncLoading();
-    final users = await UserApi().getAllUsers();
+    final users = await const UserApi().getUsers();
     state = await AsyncValue.guard(() async {
       return state.requireValue.copyWith(
         userList: users,
@@ -135,7 +135,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     final token = await storage.read(key: 'token');
 
     final response =
-        await UserApi().updateUser(user: updatedUser, token: token ?? '');
+        await const UserApi().updateUser(user: updatedUser, token: token ?? '');
     final user = User.fromMap(response);
 
     final currentState = state.requireValue;
@@ -155,7 +155,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     const storage = FlutterSecureStorage();
     final token = await storage.read(key: 'token') ?? '';
 
-    final response = await UserApi().deleteUser(token: token);
+    final response = await const UserApi().deleteUser(token: token);
     await storage.delete(key: 'token');
     final currentState = state.requireValue;
     final refreshUserList = currentState.userList

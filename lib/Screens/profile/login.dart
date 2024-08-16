@@ -9,18 +9,18 @@ import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'forgotPassword.dart';
 import 'profile.dart';
-import 'signup.dart';
+import 'register.dart';
+import 'resetPassword.dart';
 
-class Signin extends ConsumerStatefulWidget {
-  const Signin({super.key});
+class Login extends ConsumerStatefulWidget {
+  const Login({super.key});
 
   @override
-  ConsumerState<Signin> createState() => _Signin();
+  ConsumerState<Login> createState() => _Login();
 }
 
-class _Signin extends ConsumerState<Signin> {
+class _Login extends ConsumerState<Login> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -68,7 +68,7 @@ class _Signin extends ConsumerState<Signin> {
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         border: null,
@@ -136,7 +136,7 @@ class _Signin extends ConsumerState<Signin> {
                           onPressed: () =>
                               Navigator.of(context).pushReplacement(
                             CupertinoPageRoute<void>(
-                              builder: (_) => const ForgotPassword(),
+                              builder: (_) => const ResetPassword(),
                             ),
                           ),
                           child: const Text(
@@ -165,7 +165,7 @@ class _Signin extends ConsumerState<Signin> {
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
-                            builder: (_) => const Signup(),
+                            builder: (_) => const Register(),
                           ),
                         ),
                         child: const Text("Don't have an account? Sign up"),

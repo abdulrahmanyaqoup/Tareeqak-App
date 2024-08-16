@@ -10,7 +10,7 @@ import '../advisors/components/advisorCard.dart';
 import 'components/profileBody.dart';
 import 'editProfile.dart';
 import 'manualScreen.dart';
-import 'signup.dart';
+import 'register.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -49,12 +49,12 @@ class _Profile extends ConsumerState<Profile>
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         border: null,
-        padding: const EdgeInsetsDirectional.symmetric(horizontal: 16),
-        leading: IconButton(
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 20),
+        trailing: IconButton(
           icon: const Icon(
             CupertinoIcons.question_circle,
             color: Colors.white,
-            size: 27,
+            size: 25,
           ),
           onPressed: () => Navigator.push(
             context,
@@ -102,7 +102,7 @@ class _Profile extends ConsumerState<Profile>
               : () => Navigator.push(
                     context,
                     CupertinoPageRoute<void>(
-                      builder: (_) => const Signup(),
+                      builder: (_) => const Register(),
                     ),
                   );
 

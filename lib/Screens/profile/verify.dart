@@ -5,23 +5,22 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-import '../../api/otpApi.dart';
+import '../../api/userApi/userApi.dart';
 import '../../provider/userProvider.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/snackBar.dart';
 import 'profile.dart';
-import 'signin.dart';
 
-class Otp extends ConsumerStatefulWidget {
-  const Otp({required this.email, required this.isSignup, super.key});
+class Verify extends ConsumerStatefulWidget {
+  const Verify({required this.email, required this.isSignup, super.key});
 
   final String email;
   final bool isSignup;
   @override
-  ConsumerState<Otp> createState() => _Otp();
+  ConsumerState<Verify> createState() => _Verify();
 }
 
-class _Otp extends ConsumerState<Otp> {
+class _Verify extends ConsumerState<Verify> {
   String currentText = '';
   bool _isLoading = false;
   String? _errorMessage;
@@ -36,8 +35,8 @@ class _Otp extends ConsumerState<Otp> {
       _isLoading = true;
       _errorMessage = null;
     });
-    await OtpApi()
-        .verifyOTP(widget.email, currentText)
+    await const UserApi()
+        .verify(widget.email, currentText)
         .then(
           (response) async => {
             await _signInVerified(response),
@@ -78,13 +77,14 @@ class _Otp extends ConsumerState<Otp> {
   }
 
   Future<void> _deleteUnverifiedUser() async {
-    await OtpApi().deleteUnverified(widget.email).catchError(
+    await const UserApi().deleteUnverified(widget.email).catchError(
       (Object error) {
         showSnackBar(error.toString(), ContentType.failure);
         throw Error();
       },
     );
   }
+
   /* Future<void> _sendNewPassword() async {
     await UserApi().sendNewPassword(widget.email,currentText).then(
       (response) => {

@@ -32,7 +32,8 @@ class DetailBase extends StatelessWidget {
     return Scaffold(
       appBar: CupertinoNavigationBar(
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left),
+          icon: const Icon(Icons.arrow_back_rounded),
+          highlightColor: Colors.transparent,
           onPressed: () => Navigator.pop(context),
           color: Colors.white,
         ),

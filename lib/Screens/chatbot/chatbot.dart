@@ -23,7 +23,7 @@ class _ChatBot extends State<ChatBot>
   final TextEditingController _controller = TextEditingController();
   late final ScrollController _scrollController;
   final List<String> _messages = [];
-  final OpenaiApi _api = OpenaiApi();
+  final OpenaiApi _api = const OpenaiApi();
   bool _isTyping = false;
   bool _stopTyping = false;
   late final AnimationController _animationController;

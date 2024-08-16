@@ -7,14 +7,14 @@ import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
 
-class ForgotPassword extends ConsumerStatefulWidget {
-  const ForgotPassword({super.key});
+class ResetPassword extends ConsumerStatefulWidget {
+  const ResetPassword({super.key});
 
   @override
-  ConsumerState<ForgotPassword> createState() => _ForgotPassword();
+  ConsumerState<ResetPassword> createState() => _ResetPassword();
 }
 
-class _ForgotPassword extends ConsumerState<ForgotPassword> {
+class _ResetPassword extends ConsumerState<ResetPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final bool _isLoading = false;

@@ -4,6 +4,8 @@ import 'dioClient.dart';
 import 'dioExceptionHandler.dart';
 
 class OpenaiApi {
+  const OpenaiApi();
+
   Future<String> sendMessage(String message) async {
     try {
       final response = await dio.post<dynamic>(
