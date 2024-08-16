@@ -102,7 +102,7 @@ class UserApi {
         },
       );
       final response =
-          await dio.get<dynamic>('api/users/current', options: options);
+          await dio.get<dynamic>('api/users/getUser', options: options);
 
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {

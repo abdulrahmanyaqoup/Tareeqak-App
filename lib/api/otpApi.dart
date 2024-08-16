@@ -7,7 +7,7 @@ class OtpApi {
   Future<Map<String, dynamic>> verifyOTP(String email, String otp) async {
     try {
       final response = await dio.post<dynamic>(
-        'api/otp/verify',
+        'api/users/verifyUser',
         data: {
           'email': email,
           'otp': otp,
@@ -22,7 +22,7 @@ class OtpApi {
   Future<void> deleteUnverified(String email) async {
     try {
       await dio.delete<dynamic>(
-        'api/otp/delete',
+        'api/users/deleteUnverified',
         data: {
           'email': email,
         },
