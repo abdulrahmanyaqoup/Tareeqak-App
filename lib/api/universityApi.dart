@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import '../model/models.dart';
 import 'dioClient.dart';
 import 'dioExceptionHandler.dart';
 
+@immutable
 class UniversityApi {
-  const UniversityApi();
+  UniversityApi() : dio = DioClient.instance.dio;
+  final Dio dio;
 
   Future<List<University>> getUniversities() async {
     try {

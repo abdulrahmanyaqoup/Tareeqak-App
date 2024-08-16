@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../app.dart';
-import 'profile.dart';
+import 'profileScreen.dart';
 
 class ManualScreen extends StatelessWidget {
   const ManualScreen({required this.isProfile, super.key});
@@ -81,8 +81,8 @@ class ManualScreen extends StatelessWidget {
   void goToProfile(BuildContext context) {
     !isProfile
         ? Navigator.of(context).pushReplacement(
-            CupertinoPageRoute<Profile>(
-              builder: (_) => const BottomNavigation(),
+            CupertinoPageRoute<ProfileScreen>(
+              builder: (_) => const App(),
             ),
           )
         : Navigator.of(context).pop();

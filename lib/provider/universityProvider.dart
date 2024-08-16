@@ -1,10 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../api/universityApi.dart';
 import '../model/models.dart';
 
+@immutable
 class UniversityState {
-  UniversityState({
+  const UniversityState({
     this.universities = const [],
     this.filteredUniversities = const [],
     this.schools = const [],
@@ -35,16 +37,21 @@ class UniversityState {
   }
 }
 
-class UniversityNotifier extends AsyncNotifier<UniversityState> {
+@immutable
+class UniversityProvider extends AsyncNotifier<UniversityState> {
+  UniversityProvider({required this.universityApi});
+
+  final UniversityApi universityApi;
+
   @override
   UniversityState build() {
-    return UniversityState();
+    return const UniversityState();
   }
 
   Future<void> getUniversities() async {
     state = const AsyncLoading();
 
-    final universities = await const UniversityApi().getUniversities();
+    final universities = await universityApi.getUniversities();
     final allSchools =
         universities.expand((university) => university.schools).toList();
     final allMajors = allSchools.expand((school) => school.majors).toList();
@@ -81,6 +88,8 @@ class UniversityNotifier extends AsyncNotifier<UniversityState> {
 }
 
 final universityProvider =
-    AsyncNotifierProvider<UniversityNotifier, UniversityState>(
-  UniversityNotifier.new,
+    AsyncNotifierProvider<UniversityProvider, UniversityState>(
+  () => UniversityProvider(
+    universityApi: UniversityApi(),
+  ),
 );

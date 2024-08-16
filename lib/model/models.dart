@@ -1,1 +1,1 @@
-library models;import 'package:flutter/cupertino.dart';part 'university/major.dart';part 'university/school.dart';part 'university/university.dart';part 'user/user.dart';part 'user/userProps.dart';
+library models;import 'package:flutter/foundation.dart';part 'university/major.dart';part 'university/school.dart';part 'university/university.dart';part 'user/user.dart';part 'user/userProps.dart';

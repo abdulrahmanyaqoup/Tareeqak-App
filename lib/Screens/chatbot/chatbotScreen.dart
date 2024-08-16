@@ -8,22 +8,25 @@ import '../../api/openaiApi.dart';
 import 'components/messageInput.dart';
 import 'components/messageList.dart';
 
-class ChatBot extends StatefulWidget {
-  const ChatBot({super.key});
+@immutable
+class ChatBotScreen extends StatefulWidget {
+  const ChatBotScreen({super.key});
 
   @override
-  State<ChatBot> createState() => _ChatBot();
+  State<ChatBotScreen> createState() => _ChatBotScreen();
 }
 
-class _ChatBot extends State<ChatBot>
-    with AutomaticKeepAliveClientMixin<ChatBot>, TickerProviderStateMixin {
+class _ChatBotScreen extends State<ChatBotScreen>
+    with
+        AutomaticKeepAliveClientMixin<ChatBotScreen>,
+        TickerProviderStateMixin {
   @override
   bool get wantKeepAlive => true;
 
   final TextEditingController _controller = TextEditingController();
   late final ScrollController _scrollController;
   final List<String> _messages = [];
-  final OpenaiApi _api = const OpenaiApi();
+  final OpenaiApi _api = OpenaiApi();
   bool _isTyping = false;
   bool _stopTyping = false;
   late final AnimationController _animationController;

@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 import 'dioClient.dart';
 import 'dioExceptionHandler.dart';
 
+@immutable
 class OpenaiApi {
-  const OpenaiApi();
+  OpenaiApi() : dio = DioClient.instance.dio;
+  final Dio dio;
 
   Future<String> sendMessage(String message) async {
     try {

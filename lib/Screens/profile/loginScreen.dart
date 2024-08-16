@@ -3,24 +3,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../Provider/userProvider.dart';
 import '../../Widgets/customButton.dart';
 import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
+import '../../provider/userProvider.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'profile.dart';
-import 'register.dart';
-import 'resetPassword.dart';
+import 'profileScreen.dart';
+import 'registerScreen.dart';
+import 'resetPassScreen.dart';
 
-class Login extends ConsumerStatefulWidget {
-  const Login({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  ConsumerState<Login> createState() => _Login();
+  ConsumerState<LoginScreen> createState() => _LoginScreen();
 }
 
-class _Login extends ConsumerState<Login> {
+class _LoginScreen extends ConsumerState<LoginScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -39,7 +39,7 @@ class _Login extends ConsumerState<Login> {
               Navigator.pushAndRemoveUntil(
                 context,
                 CupertinoPageRoute<void>(
-                  builder: (_) => const Profile(),
+                  builder: (_) => const ProfileScreen(),
                 ),
                 (Route<dynamic> route) => false,
               ),
@@ -63,12 +63,11 @@ class _Login extends ConsumerState<Login> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_forward_rounded, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         border: null,
@@ -130,20 +129,19 @@ class _Login extends ConsumerState<Login> {
                           },
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.only(left: width * 0.45),
+                      Align(
+                        alignment: Alignment.centerRight,
                         child: TextButton(
-                          onPressed: () =>
-                              Navigator.of(context).pushReplacement(
+                          onPressed: () => Navigator.of(context).push(
                             CupertinoPageRoute<void>(
-                              builder: (_) => const ResetPassword(),
+                              builder: (_) => const ResetPassScreen(),
                             ),
                           ),
                           child: const Text(
                             textAlign: TextAlign.right,
-                            'Forgot password?',
+                            'Reset password',
                             style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -165,7 +163,7 @@ class _Login extends ConsumerState<Login> {
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
-                            builder: (_) => const Register(),
+                            builder: (_) => const RegisterScreen(),
                           ),
                         ),
                         child: const Text("Don't have an account? Sign up"),

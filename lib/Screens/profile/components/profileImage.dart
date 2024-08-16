@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 
 import '../../../env/env.dart';
 
+@immutable
 class ProfileImage extends StatefulWidget {
   const ProfileImage({
     required this.userImage,

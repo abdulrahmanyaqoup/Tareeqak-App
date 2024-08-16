@@ -7,6 +7,7 @@ import '../../widgets/search.dart';
 import 'components/universitiesGrid.dart';
 import 'components/universityShimmer.dart';
 
+@immutable
 class UniversitiesScreen extends ConsumerStatefulWidget {
   const UniversitiesScreen({super.key});
 

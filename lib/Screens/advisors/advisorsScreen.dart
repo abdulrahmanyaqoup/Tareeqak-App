@@ -1,40 +1,24 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../provider/userProvider.dart';
 import '../../widgets/cardShimmer.dart';
-import '../../widgets/snackBar.dart';
 import 'components/advisorCard.dart';
 import 'components/filterAdvisors.dart';
 
-class Advisors extends ConsumerStatefulWidget {
-  const Advisors({super.key});
+@immutable
+class AdvisorsScreen extends ConsumerStatefulWidget {
+  const AdvisorsScreen({super.key});
 
   @override
-  ConsumerState<Advisors> createState() => _Advisors();
+  ConsumerState<AdvisorsScreen> createState() => _AdvisorsScreen();
 }
 
-class _Advisors extends ConsumerState<Advisors>
-    with AutomaticKeepAliveClientMixin<Advisors> {
+class _AdvisorsScreen extends ConsumerState<AdvisorsScreen>
+    with AutomaticKeepAliveClientMixin<AdvisorsScreen> {
   @override
   bool get wantKeepAlive => true;
-
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(_getAllUsers);
-  }
-
-  Future<void> _getAllUsers() async {
-    await ref.read(userProvider.notifier).getAllUsers().catchError(
-          (Object error) => {
-            showSnackBar(error.toString(), ContentType.failure),
-            throw Error(),
-          },
-        );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,10 +59,7 @@ class _Advisors extends ConsumerState<Advisors>
                 child: FilterAdvisors(
                   onClearFilters: () {
                     setState(
-                      () {
-                        users.requireValue.filteredUsers = [];
-                        users.requireValue.isSearching = false;
-                      },
+                      () => ref.read(userProvider.notifier).clearFilters(),
                     );
                   },
                   onFilterChanged: (university, school, major) {

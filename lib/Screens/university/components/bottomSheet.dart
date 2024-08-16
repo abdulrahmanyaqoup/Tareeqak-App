@@ -7,6 +7,7 @@ import '../../../widgets/search.dart';
 import '../majorScreen.dart';
 import '../schoolScreen.dart';
 
+@immutable
 class GridModalBottomSheet extends StatefulWidget {
   const GridModalBottomSheet({
     required this.title,
@@ -128,21 +129,24 @@ class _GridModalBottomSheet extends State<GridModalBottomSheet> {
                       ),
                       child: Row(
                         children: [
-                          if (item is University) Image(
-                                  image: CachedNetworkImageProvider(
-                                    '${Env.URI}${item.logo}',
-                                    headers: {'apikey': Env.API_KEY},
-                                    errorListener: (error) {},
-                                  ),
-                                  height: 50,
-                                  width: 50,
-                                ) else Icon(
-                            (item is Major)
-                                ? CupertinoIcons.pen
-                                : CupertinoIcons.book,
-                            color: Theme.of(context).primaryColor,
-                            size: 30,
-                          ),
+                          if (item is University)
+                            Image(
+                              image: CachedNetworkImageProvider(
+                                '${Env.URI}${item.logo}',
+                                headers: {'apikey': Env.API_KEY},
+                                errorListener: (error) {},
+                              ),
+                              height: 50,
+                              width: 50,
+                            )
+                          else
+                            Icon(
+                              (item is Major)
+                                  ? CupertinoIcons.pen
+                                  : Icons.school,
+                              color: Theme.of(context).primaryColor,
+                              size: 30,
+                            ),
                           const SizedBox(width: 16),
                           Expanded(
                             child: Text(

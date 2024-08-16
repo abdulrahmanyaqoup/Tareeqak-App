@@ -6,18 +6,19 @@ import '../../Widgets/customButton.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'login.dart';
-import 'profile.dart';
-import 'signupDetails.dart';
+import 'loginScreen.dart';
+import 'profileScreen.dart';
+import 'regDetailsScreen.dart';
 
-class Register extends ConsumerStatefulWidget {
-  const Register({super.key});
+@immutable
+class RegisterScreen extends ConsumerStatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  ConsumerState<Register> createState() => _Register();
+  ConsumerState<RegisterScreen> createState() => _RegisterScreen();
 }
 
-class _Register extends ConsumerState<Register> {
+class _RegisterScreen extends ConsumerState<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -32,7 +33,7 @@ class _Register extends ConsumerState<Register> {
       Navigator.push(
         context,
         CupertinoPageRoute<void>(
-          builder: (context) => SignupDetails(
+          builder: (context) => RegDetailsScreen(
             email: _emailController.text,
             password: _passwordController.text,
             name: _nameController.text,
@@ -46,7 +47,7 @@ class _Register extends ConsumerState<Register> {
     Navigator.pushAndRemoveUntil(
       context,
       CupertinoPageRoute<void>(
-        builder: (context) => const Profile(),
+        builder: (context) => const ProfileScreen(),
       ),
       (route) => false,
     );
@@ -184,7 +185,7 @@ class _Register extends ConsumerState<Register> {
                       TextButton(
                         onPressed: () => Navigator.of(context).pushReplacement(
                           CupertinoPageRoute<void>(
-                            builder: (context) => const Login(),
+                            builder: (context) => const LoginScreen(),
                           ),
                         ),
                         child: const Text('Do you have an account? Sign in'),

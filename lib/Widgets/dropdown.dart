@@ -1,6 +1,7 @@
 import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:flutter/material.dart';
 
+@immutable
 class Dropdown extends StatefulWidget {
   const Dropdown({
     required this.hintText,

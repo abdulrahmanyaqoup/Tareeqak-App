@@ -8,19 +8,20 @@ import '../../widgets/cardShimmer.dart';
 import '../../widgets/snackBar.dart';
 import '../advisors/components/advisorCard.dart';
 import 'components/profileBody.dart';
-import 'editProfile.dart';
+import 'editProfileScreen.dart';
 import 'manualScreen.dart';
-import 'register.dart';
+import 'registerScreen.dart';
 
-class Profile extends ConsumerStatefulWidget {
-  const Profile({super.key});
+@immutable
+class ProfileScreen extends ConsumerStatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  ConsumerState<Profile> createState() => _Profile();
+  ConsumerState<ProfileScreen> createState() => _ProfileScreen();
 }
 
-class _Profile extends ConsumerState<Profile>
-    with AutomaticKeepAliveClientMixin<Profile> {
+class _ProfileScreen extends ConsumerState<ProfileScreen>
+    with AutomaticKeepAliveClientMixin<ProfileScreen> {
   @override
   bool get wantKeepAlive => true;
 
@@ -96,13 +97,13 @@ class _Profile extends ConsumerState<Profile>
               ? () => Navigator.push(
                     context,
                     CupertinoPageRoute<void>(
-                      builder: (_) => EditProfile(user: user),
+                      builder: (_) => EditProfileScreen(user: user),
                     ),
                   )
               : () => Navigator.push(
                     context,
                     CupertinoPageRoute<void>(
-                      builder: (_) => const Register(),
+                      builder: (_) => const RegisterScreen(),
                     ),
                   );
 

@@ -1,6 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
+@immutable
 class DioExceptionHandler extends Interceptor {
+  const DioExceptionHandler();
+
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     final errorMessage = _handleDioException(err);
@@ -41,8 +45,9 @@ class DioExceptionHandler extends Interceptor {
   }
 }
 
+@immutable
 class CustomException implements Exception {
-  CustomException(this.message);
+  const CustomException(this.message);
 
   final dynamic message;
 

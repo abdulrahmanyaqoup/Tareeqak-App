@@ -18,7 +18,7 @@ import '../../widgets/snackBar.dart';
 import '../../widgets/textfield.dart';
 import 'components/profileImage.dart';
 import 'components/roundedBackground.dart';
-import 'profile.dart';
+import 'profileScreen.dart';
 
 class CropAspectRatioPresetCustom implements CropAspectRatioPresetData {
   @override
@@ -28,16 +28,16 @@ class CropAspectRatioPresetCustom implements CropAspectRatioPresetData {
   String get name => '1x1 (customized)';
 }
 
-class EditProfile extends ConsumerStatefulWidget {
-  const EditProfile({required this.user, super.key});
+class EditProfileScreen extends ConsumerStatefulWidget {
+  const EditProfileScreen({required this.user, super.key});
 
   final User user;
 
   @override
-  ConsumerState<EditProfile> createState() => _EditProfile();
+  ConsumerState<EditProfileScreen> createState() => _EditProfileScreen();
 }
 
-class _EditProfile extends ConsumerState<EditProfile>
+class _EditProfileScreen extends ConsumerState<EditProfileScreen>
     with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
@@ -114,7 +114,7 @@ class _EditProfile extends ConsumerState<EditProfile>
           (response) => {
             if (mounted)
               Navigator.of(context).pushAndRemoveUntil(
-                CupertinoPageRoute<void>(builder: (_) => const Profile()),
+                CupertinoPageRoute<void>(builder: (_) => const ProfileScreen()),
                 (Route<dynamic> route) => false,
               ),
           },
@@ -135,7 +135,7 @@ class _EditProfile extends ConsumerState<EditProfile>
           (response) => {
             if (mounted)
               Navigator.of(context).pushAndRemoveUntil(
-                CupertinoPageRoute<void>(builder: (_) => const Profile()),
+                CupertinoPageRoute<void>(builder: (_) => const ProfileScreen()),
                 (Route<dynamic> route) => false,
               ),
             showSnackBar(response, ContentType.success),
@@ -183,7 +183,7 @@ class _EditProfile extends ConsumerState<EditProfile>
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             Navigator.of(context).pop();

@@ -7,20 +7,23 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 
 import '../../api/userApi/userApi.dart';
 import '../../provider/userProvider.dart';
+import '../../screens/profile/loginScreen.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/snackBar.dart';
-import 'profile.dart';
+import 'profileScreen.dart';
 
-class Verify extends ConsumerStatefulWidget {
-  const Verify({required this.email, required this.isSignup, super.key});
+@immutable
+class VerifyScreen extends ConsumerStatefulWidget {
+  const VerifyScreen({required this.email, required this.isSignup, super.key});
 
   final String email;
   final bool isSignup;
   @override
-  ConsumerState<Verify> createState() => _Verify();
+  ConsumerState<VerifyScreen> createState() => _VerifyScreen();
 }
 
-class _Verify extends ConsumerState<Verify> {
+class _VerifyScreen extends ConsumerState<VerifyScreen> {
+  final UserApi _userApi = UserApi();
   String currentText = '';
   bool _isLoading = false;
   String? _errorMessage;
@@ -35,7 +38,7 @@ class _Verify extends ConsumerState<Verify> {
       _isLoading = true;
       _errorMessage = null;
     });
-    await const UserApi()
+    await _userApi
         .verify(widget.email, currentText)
         .then(
           (response) async => {
@@ -63,7 +66,7 @@ class _Verify extends ConsumerState<Verify> {
             if (mounted)
               Navigator.of(context).pushReplacement(
                 CupertinoPageRoute<void>(
-                  builder: (_) => const Profile(),
+                  builder: (_) => const ProfileScreen(),
                 ),
               ),
           },
@@ -76,8 +79,24 @@ class _Verify extends ConsumerState<Verify> {
     );
   }
 
-  Future<void> _deleteUnverifiedUser() async {
-    await const UserApi().deleteUnverified(widget.email).catchError(
+  Future<void> _resetPasswordVerify() async {
+    await _userApi
+        .resetPasswordVerify(widget.email, currentText)
+        .then(
+          (response) => {
+            if (mounted)
+              Navigator.of(context).pushReplacement(
+                CupertinoPageRoute<void>(
+                  builder: (_) => const LoginScreen(),
+                ),
+              ),
+            showSnackBar(
+              'New password sent to your email.',
+              ContentType.success,
+            ),
+          },
+        )
+        .catchError(
       (Object error) {
         showSnackBar(error.toString(), ContentType.failure);
         throw Error();
@@ -85,24 +104,15 @@ class _Verify extends ConsumerState<Verify> {
     );
   }
 
-  /* Future<void> _sendNewPassword() async {
-    await UserApi().sendNewPassword(widget.email,currentText).then(
-      (response) => {
-        if (mounted)
-          showSnackBar('New password sent to your email.', ContentType.success),
-          Navigator.of(context).pushReplacement(
-            CupertinoPageRoute<void>(
-              builder: (_) => const Signin(),
-            ),
-          ),
-      },
-    ).catchError(
-      (Object error, stackTrace) {
+  Future<void> _deleteUnverifiedUser() async {
+    await _userApi.deleteUnverified(widget.email).catchError(
+      (Object error) {
         showSnackBar(error.toString(), ContentType.failure);
         throw Error();
       },
     );
-  } */
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -113,7 +123,7 @@ class _Verify extends ConsumerState<Verify> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => {
-            _deleteUnverifiedUser(),
+            if (widget.isSignup) _deleteUnverifiedUser(),
             Navigator.of(context).pop(),
           },
         ),
@@ -198,7 +208,8 @@ class _Verify extends ConsumerState<Verify> {
                   ),
                 const SizedBox(height: 20),
                 CustomButton(
-                  onPressed: _verifyOtp,
+                  onPressed:
+                      widget.isSignup ? _verifyOtp : _resetPasswordVerify,
                   text: 'Verify OTP',
                   width: 150,
                   isLoading: _isLoading,

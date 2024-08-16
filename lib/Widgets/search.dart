@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+@immutable
 class Search extends StatefulWidget {
   const Search({
     required this.onSearchChanged,

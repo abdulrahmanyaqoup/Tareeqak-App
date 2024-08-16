@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+@immutable
 class CustomTextField extends StatefulWidget {
   const CustomTextField({
     required this.controller,

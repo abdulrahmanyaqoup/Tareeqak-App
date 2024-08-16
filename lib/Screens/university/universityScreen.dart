@@ -9,6 +9,7 @@ import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
 
+@immutable
 class UniversityScreen extends ConsumerWidget {
   const UniversityScreen({
     required this.university,

@@ -1,23 +1,26 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
 
-import 'Screens/chatbot/chatbot.dart';
-import 'Screens/university/universitiesScreen.dart';
-import 'Utils/getUniversities.dart';
-import 'screens/advisors/advisors.dart';
-import 'screens/profile/profile.dart';
+import 'Widgets/snackBar.dart';
+import 'provider/universityProvider.dart';
+import 'provider/userProvider.dart';
+import 'screens/advisors/advisorsScreen.dart';
+import 'screens/chatbot/chatbotScreen.dart';
+import 'screens/profile/profileScreen.dart';
+import 'screens/university/universitiesScreen.dart';
 
-class BottomNavigation extends ConsumerStatefulWidget {
-  const BottomNavigation({super.key});
+@immutable
+class App extends ConsumerStatefulWidget {
+  const App({super.key});
 
   @override
-  ConsumerState<BottomNavigation> createState() => _BottomNavigationState();
+  ConsumerState<App> createState() => _App();
 }
 
-class _BottomNavigationState extends ConsumerState<BottomNavigation>
-    with TickerProviderStateMixin {
+class _App extends ConsumerState<App> with TickerProviderStateMixin {
   late final AnimationController _controller;
   static const _introAnimationEnd = 60 / 240;
   late TabController _tabController;
@@ -25,13 +28,32 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
   @override
   void initState() {
     super.initState();
-    Future.microtask(() => getUniversities(ref));
+    Future.microtask(_getUniversities);
+    Future.microtask(_getUsers);
     _tabController = TabController(
       vsync: this,
       initialIndex: 3,
       length: _navigatorKeys.length,
     );
     _controller = AnimationController(vsync: this);
+  }
+
+  Future<void> _getUniversities() async {
+    await ref.read(universityProvider.notifier).getUniversities().catchError(
+          (Object error) => {
+            showSnackBar(error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
+  }
+
+  Future<void> _getUsers() async {
+    await ref.read(userProvider.notifier).getAllUsers().catchError(
+          (Object error) => {
+            showSnackBar(error.toString(), ContentType.failure),
+            throw Error(),
+          },
+        );
   }
 
   final List<GlobalKey<NavigatorState>> _navigatorKeys = [
@@ -73,10 +95,10 @@ class _BottomNavigationState extends ConsumerState<BottomNavigation>
         controller: _tabController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          _buildNavigator(0, const ChatBot()),
-          _buildNavigator(1, const Advisors()),
+          _buildNavigator(0, const ChatBotScreen()),
+          _buildNavigator(1, const AdvisorsScreen()),
           _buildNavigator(2, const UniversitiesScreen()),
-          _buildNavigator(3, const Profile()),
+          _buildNavigator(3, const ProfileScreen()),
         ],
       ),
       bottomNavigationBar: CupertinoTabBar(

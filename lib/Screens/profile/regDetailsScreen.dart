@@ -15,10 +15,11 @@ import '../../widgets/snackBar.dart';
 import '../../widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'verify.dart';
+import 'verifyScreen.dart';
 
-class SignupDetails extends ConsumerStatefulWidget {
-  const SignupDetails({
+@immutable
+class RegDetailsScreen extends ConsumerStatefulWidget {
+  const RegDetailsScreen({
     required this.email,
     required this.password,
     required this.name,
@@ -30,10 +31,10 @@ class SignupDetails extends ConsumerStatefulWidget {
   final String name;
 
   @override
-  ConsumerState<SignupDetails> createState() => _SignupDetails();
+  ConsumerState<RegDetailsScreen> createState() => _RegDetailsScreen();
 }
 
-class _SignupDetails extends ConsumerState<SignupDetails> {
+class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _contactController = TextEditingController();
   File? _image;
@@ -73,7 +74,8 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
             if (mounted)
               Navigator.of(context).pushAndRemoveUntil(
                 CupertinoPageRoute<void>(
-                  builder: (_) => Verify(email: widget.email, isSignup: true),
+                  builder: (_) =>
+                      VerifyScreen(email: widget.email, isSignup: true),
                 ),
                 (Route<dynamic> route) => route.isFirst,
               ),

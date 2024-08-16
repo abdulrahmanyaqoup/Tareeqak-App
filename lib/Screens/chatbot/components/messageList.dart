@@ -5,6 +5,7 @@ import 'package:shimmer/shimmer.dart';
 
 import '../../../Utils/getLanguageCode.dart';
 
+@immutable
 class MessageList extends StatefulWidget {
   const MessageList({
     required this.messages,

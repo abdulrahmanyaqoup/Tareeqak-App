@@ -1,46 +1,55 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../Widgets/customButton.dart';
+import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
+import '../../api/userApi/userApi.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
+import 'verifyScreen.dart';
 
-class ResetPassword extends ConsumerStatefulWidget {
-  const ResetPassword({super.key});
+@immutable
+class ResetPassScreen extends ConsumerStatefulWidget {
+  const ResetPassScreen({super.key});
 
   @override
-  ConsumerState<ResetPassword> createState() => _ResetPassword();
+  ConsumerState<ResetPassScreen> createState() => _ResetPassScreen();
 }
 
-class _ResetPassword extends ConsumerState<ResetPassword> {
+class _ResetPassScreen extends ConsumerState<ResetPassScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  final bool _isLoading = false;
+  final UserApi _api = UserApi();
+  bool _isLoading = false;
 
-  /* Future<void> _forgotPassword(String email) async {
-  setState(() => _isLoading = true);
+  Future<void> _resetPassword(String email) async {
+    setState(() => _isLoading = true);
 
-  try {
-    final response = await UserApi().forgotPassword(email: email);
-    setState(() => _isLoading = false);
-    if (mounted) {
-      showSnackBar('Password reset OTP sent to your email.', ContentType.success);
-      Navigator.pushAndRemoveUntil(
+    await _api.resetPassword(email).then((response) async {
+      setState(() => _isLoading = false);
+      showSnackBar(response, ContentType.success);
+      if (!mounted) return;
+      await Navigator.pushAndRemoveUntil(
         context,
         CupertinoPageRoute<void>(
-          builder: (_) => const OTP(email: _emailController.text, isSignup: false),
+          builder: (_) => VerifyScreen(
+            email: _emailController.text,
+            isSignup: false,
+          ),
         ),
-        (Route<dynamic> route) => false,
+        (Route<dynamic> route) => route.isFirst,
       );
-    }
-  } catch (error) {
-    showSnackBar(error.toString(), ContentType.failure);
-    setState(() => _isLoading = false);
-    throw Error(); 
+    }).catchError(
+      (Object error) {
+        setState(() => _isLoading = false);
+        showSnackBar(error.toString(), ContentType.failure);
+        throw Error();
+      },
+    );
   }
-}*/
 
   @override
   void dispose() {
@@ -54,7 +63,7 @@ class _ResetPassword extends ConsumerState<ResetPassword> {
       appBar: CupertinoNavigationBar(
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: IconButton(
-          icon: const Icon(CupertinoIcons.arrow_left, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
           onPressed: () => Navigator.of(context).pop(),
         ),
         border: null,
@@ -69,7 +78,7 @@ class _ResetPassword extends ConsumerState<ResetPassword> {
               children: [
                 const SizedBox(height: 60),
                 const Text(
-                  'Forgot Password',
+                  'Reset Password',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
                 const SizedBox(height: 20),
@@ -102,9 +111,9 @@ class _ResetPassword extends ConsumerState<ResetPassword> {
                         isLoading: _isLoading,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            /* _forgotPassword(
+                            _resetPassword(
                               _emailController.text,
-                            ); */
+                            );
                           }
                         },
                         text: 'Submit',

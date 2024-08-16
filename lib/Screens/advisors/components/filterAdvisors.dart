@@ -7,6 +7,7 @@ import '../../../provider/universityProvider.dart';
 import '../../../widgets/customButton.dart';
 import '../../university/components/bottomSheet.dart';
 
+@immutable
 class FilterAdvisors extends ConsumerStatefulWidget {
   const FilterAdvisors({
     required this.onFilterChanged,
@@ -19,10 +20,10 @@ class FilterAdvisors extends ConsumerStatefulWidget {
   final VoidCallback onClearFilters;
 
   @override
-  ConsumerState<FilterAdvisors> createState() => _FilterAdvisorsState();
+  ConsumerState<FilterAdvisors> createState() => _FilterAdvisors();
 }
 
-class _FilterAdvisorsState extends ConsumerState<FilterAdvisors> {
+class _FilterAdvisors extends ConsumerState<FilterAdvisors> {
   String? _selectedUniversity;
   String? _selectedSchool;
   String? _selectedMajor;

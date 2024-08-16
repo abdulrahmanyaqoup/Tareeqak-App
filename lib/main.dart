@@ -73,7 +73,7 @@ class _Tareeqak extends State<Tareeqak> {
             final showManualScreen = snapshot.data ?? true;
             return showManualScreen
                 ? const ManualScreen(isProfile: false)
-                : const BottomNavigation();
+                : const App();
           }
         },
       ),
