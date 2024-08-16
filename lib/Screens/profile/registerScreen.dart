@@ -7,7 +7,6 @@ import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
 import 'loginScreen.dart';
-import 'profileScreen.dart';
 import 'regDetailsScreen.dart';
 
 @immutable
@@ -29,27 +28,17 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
   bool _isConfirmPasswordVisible = false;
 
   void goToOptionalSignup() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.push(
-        context,
-        CupertinoPageRoute<void>(
-          builder: (context) => RegDetailsScreen(
-            email: _emailController.text,
-            password: _passwordController.text,
-            name: _nameController.text,
-          ),
-        ),
-      );
-    }
-  }
+    if (!_formKey.currentState!.validate()) return;
 
-  void profileScreen() {
-    Navigator.pushAndRemoveUntil(
+    Navigator.push(
       context,
       CupertinoPageRoute<void>(
-        builder: (context) => const ProfileScreen(),
+        builder: (context) => RegDetailsScreen(
+          email: _emailController.text,
+          password: _passwordController.text,
+          name: _nameController.text,
+        ),
       ),
-      (route) => false,
     );
   }
 

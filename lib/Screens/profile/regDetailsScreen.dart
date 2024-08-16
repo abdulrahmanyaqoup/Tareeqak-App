@@ -153,7 +153,8 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
                         child: CircleAvatar(
                           radius: 50,
                           backgroundColor: Colors.grey[200],
-                          backgroundImage: FileImage(_image!),
+                          backgroundImage:
+                              _image != null ? FileImage(_image!) : null,
                           child: _image == null
                               ? const Icon(
                                   Icons.add_a_photo,
