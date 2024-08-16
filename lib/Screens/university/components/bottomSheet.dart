@@ -1,6 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import '../../../env/env.dart';
 import '../../../model/models.dart';
 import '../../../widgets/search.dart';
 import '../majorScreen.dart';
@@ -127,8 +128,18 @@ class _GridModalBottomSheet extends State<GridModalBottomSheet> {
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            Icons.school,
+                          if (item is University) Image(
+                                  image: CachedNetworkImageProvider(
+                                    '${Env.URI}${item.logo}',
+                                    headers: {'apikey': Env.API_KEY},
+                                    errorListener: (error) {},
+                                  ),
+                                  height: 50,
+                                  width: 50,
+                                ) else Icon(
+                            (item is Major)
+                                ? CupertinoIcons.pen
+                                : CupertinoIcons.book,
                             color: Theme.of(context).primaryColor,
                             size: 30,
                           ),
