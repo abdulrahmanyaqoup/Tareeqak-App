@@ -143,7 +143,7 @@ class _GridModalBottomSheet extends State<GridModalBottomSheet> {
                             Icon(
                               (item is Major)
                                   ? CupertinoIcons.pen
-                                  : Icons.school,
+                                  : CupertinoIcons.book,
                               color: Theme.of(context).primaryColor,
                               size: 30,
                             ),

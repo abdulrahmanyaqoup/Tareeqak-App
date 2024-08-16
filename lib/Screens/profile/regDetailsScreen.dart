@@ -187,7 +187,7 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
                       Dropdown(
                         value: _selectedSchool,
                         hintText: 'Select your school',
-                        prefixIcon: Icons.school,
+                        prefixIcon: CupertinoIcons.book,
                         items: schools.map((school) => school.name).toList(),
                         onChanged: (String? value) {
                           setState(() {

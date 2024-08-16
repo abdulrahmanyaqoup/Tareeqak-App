@@ -88,7 +88,7 @@ class CardShimmer extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const InfoRow(
-                icon: Icons.school,
+                icon: CupertinoIcons.book,
                 label: 'School',
                 value: 'School of Engineering',
               ),
