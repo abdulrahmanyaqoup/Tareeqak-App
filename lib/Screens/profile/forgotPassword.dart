@@ -19,22 +19,18 @@ class _ForgotPassword extends ConsumerState<ForgotPassword> {
   final TextEditingController _emailController = TextEditingController();
   final bool _isLoading = false;
 
-  /* Future<void> _ForgotPassword(String email) async {
+  /* Future<void> _forgotPassword(String email) async {
   setState(() => _isLoading = true);
 
   try {
-    // Directly call the API
-    final response = await UserApi().signInUser(email: email);
-
-    // Assuming the API call was successful, proceed with the rest
+    final response = await UserApi().forgotPassword(email: email);
     setState(() => _isLoading = false);
-
     if (mounted) {
-      showSnackBar('Password reset link sent to your email', ContentType.success);
+      showSnackBar('Password reset OTP sent to your email.', ContentType.success);
       Navigator.pushAndRemoveUntil(
         context,
         CupertinoPageRoute<void>(
-          builder: (_) => const Signin(),
+          builder: (_) => const OTP(email: _emailController.text, isSignup: false),
         ),
         (Route<dynamic> route) => false,
       );
@@ -106,7 +102,7 @@ class _ForgotPassword extends ConsumerState<ForgotPassword> {
                         isLoading: _isLoading,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            /* _ForgotPassword(
+                            /* _forgotPassword(
                               _emailController.text,
                             ); */
                           }

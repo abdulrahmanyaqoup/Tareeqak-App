@@ -64,12 +64,27 @@ class UserApi {
       throw CustomException(e.error);
     }
   }
-  /* Future<String> forgotPassword(String email) async {
+  /* Future<String> forgotPasword(String email) async {
     try {
       final response = await dio.post<dynamic>(
-        'api/otp/forgot',
+        'api/forgotPassword',
         data: {
           'email': email,
+        },
+      );
+      return response as String;
+    } on DioException catch (e) {
+      throw CustomException(e.error);
+    }
+  } */
+
+  /* Future<String> sendNewPassowrd(String email,String otp) async {
+    try {
+      final response = await dio.post<dynamic>(
+        'api/sendNewPassword',
+        data: {
+          'email': email,
+          'otp': otp,
         },
       );
       return response as String;

@@ -73,7 +73,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
             if (mounted)
               Navigator.of(context).pushAndRemoveUntil(
                 CupertinoPageRoute<void>(
-                  builder: (_) => Otp(email: widget.email),
+                  builder: (_) => Otp(email: widget.email, isSignup: true),
                 ),
                 (Route<dynamic> route) => route.isFirst,
               ),

@@ -10,12 +10,13 @@ import '../../provider/userProvider.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/snackBar.dart';
 import 'profile.dart';
+import 'signin.dart';
 
 class Otp extends ConsumerStatefulWidget {
-  const Otp({required this.email, super.key});
+  const Otp({required this.email, required this.isSignup, super.key});
 
   final String email;
-
+  final bool isSignup;
   @override
   ConsumerState<Otp> createState() => _Otp();
 }
@@ -84,7 +85,24 @@ class _Otp extends ConsumerState<Otp> {
       },
     );
   }
-
+  /* Future<void> _sendNewPassword() async {
+    await UserApi().sendNewPassword(widget.email,currentText).then(
+      (response) => {
+        if (mounted)
+          showSnackBar('New password sent to your email.', ContentType.success),
+          Navigator.of(context).pushReplacement(
+            CupertinoPageRoute<void>(
+              builder: (_) => const Signin(),
+            ),
+          ),
+      },
+    ).catchError(
+      (Object error, stackTrace) {
+        showSnackBar(error.toString(), ContentType.failure);
+        throw Error();
+      },
+    );
+  } */
   @override
   Widget build(BuildContext context) {
     return Scaffold(
