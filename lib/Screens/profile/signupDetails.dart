@@ -4,11 +4,11 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 
 import '../../model/models.dart';
 import '../../provider/universityProvider.dart';
 import '../../provider/userProvider.dart';
+import '../../utils/imagePicker.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/dropdown.dart';
 import '../../widgets/snackBar.dart';
@@ -36,7 +36,7 @@ class SignupDetails extends ConsumerStatefulWidget {
 class _SignupDetails extends ConsumerState<SignupDetails> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _contactController = TextEditingController();
-  FileImage? _image;
+  File? _image;
   String _selectedUniversity = '';
   String _selectedSchool = '';
   String _selectedMajor = '';
@@ -62,7 +62,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
         school: _selectedSchool,
         major: _selectedMajor,
         contact: _contactController.text,
-        image: _image?.file.path ?? '',
+        image: _image?.path ?? '',
       ),
     );
     await ref
@@ -91,16 +91,10 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
   }
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-    );
-
+    final image = await imagePicker();
+    if (image == null) return;
     setState(() {
-      if (pickedFile != null) {
-        _image = FileImage(File(pickedFile.path));
-      }
+      _image = File(image.path);
     });
   }
 
@@ -157,7 +151,7 @@ class _SignupDetails extends ConsumerState<SignupDetails> {
                         child: CircleAvatar(
                           radius: 50,
                           backgroundColor: Colors.grey[200],
-                          backgroundImage: _image,
+                          backgroundImage: FileImage(_image!),
                           child: _image == null
                               ? const Icon(
                                   Icons.add_a_photo,

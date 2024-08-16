@@ -5,11 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 import '../../model/models.dart';
 import '../../provider/universityProvider.dart';
 import '../../provider/userProvider.dart';
+import '../../utils/imagePicker.dart';
 import '../../widgets/confirmationDialog.dart';
 import '../../widgets/customButton.dart';
 import '../../widgets/dropdown.dart';
@@ -18,6 +19,14 @@ import '../../widgets/textfield.dart';
 import 'components/profileImage.dart';
 import 'components/roundedBackground.dart';
 import 'profile.dart';
+
+class CropAspectRatioPresetCustom implements CropAspectRatioPresetData {
+  @override
+  (int, int)? get data => (1, 1);
+
+  @override
+  String get name => '1x1 (customized)';
+}
 
 class EditProfile extends ConsumerStatefulWidget {
   const EditProfile({required this.user, super.key});
@@ -33,8 +42,8 @@ class _EditProfile extends ConsumerState<EditProfile>
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late TextEditingController _nameController;
   late TextEditingController _contactController;
-  FileImage? _persistentImage;
-  FileImage? _image;
+  File? _persistentImage;
+  File? _image;
   String _selectedUniversity = '';
   String _selectedSchool = '';
   String _selectedMajor = '';
@@ -58,20 +67,6 @@ class _EditProfile extends ConsumerState<EditProfile>
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-    );
-
-    if (pickedFile == null) return;
-    setState(() {
-      _image = FileImage(File(pickedFile.path));
-      _persistentImage = _image;
-    });
-  }
-
   Future<void> updateUser() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
@@ -80,7 +75,7 @@ class _EditProfile extends ConsumerState<EditProfile>
       school: _selectedSchool,
       major: _selectedMajor,
       contact: _contactController.text,
-      image: _image?.file.path ?? '',
+      image: _image?.path ?? '',
     );
     final updatedUser = User(
       email: widget.user.email,
@@ -146,12 +141,19 @@ class _EditProfile extends ConsumerState<EditProfile>
             showSnackBar(response, ContentType.success),
           },
         )
-        .catchError(
-          (Object error) => {
-            showSnackBar(error.toString(), ContentType.failure),
-            throw Error(),
-          },
-        );
+        .catchError((Object error) {
+      showSnackBar(error.toString(), ContentType.failure);
+      throw Error();
+    });
+  }
+
+  Future<void> _pickImage() async {
+    final image = await imagePicker();
+    if (image == null) return;
+    setState(() {
+      _image = File(image.path);
+      _persistentImage = _image;
+    });
   }
 
   @override

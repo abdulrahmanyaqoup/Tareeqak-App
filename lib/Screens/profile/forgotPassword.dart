@@ -1,15 +1,11 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../Provider/userProvider.dart';
 import '../../Widgets/customButton.dart';
-import '../../Widgets/snackBar.dart';
 import '../../Widgets/textfield.dart';
 import 'components/formContainer.dart';
 import 'components/roundedBackground.dart';
-import 'signin.dart';
 
 class ForgotPassword extends ConsumerStatefulWidget {
   const ForgotPassword({super.key});
@@ -21,7 +17,7 @@ class ForgotPassword extends ConsumerStatefulWidget {
 class _ForgotPassword extends ConsumerState<ForgotPassword> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   /* Future<void> _ForgotPassword(String email) async {
   setState(() => _isLoading = true);
