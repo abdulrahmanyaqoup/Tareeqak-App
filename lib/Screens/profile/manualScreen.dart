@@ -19,7 +19,7 @@ class ManualScreen extends StatelessWidget {
           body: 'Tareeqak helps high school graduates make informed decisions '
               'about their future academic paths.',
           image: Center(
-            child: Image.asset('assets/images/tareeqak_logo.png', height: 300),
+            child: Image.asset('assets/Logo-white.png', height: 200),
           ),
           decoration: getPageDecoration(),
         ),
@@ -58,11 +58,11 @@ class ManualScreen extends StatelessWidget {
           title: 'Your Data is Secure',
           body: 'We prioritize your privacy. Your personal information is safe '
               'and secure with us.',
-          image: Center(
+          image: const Center(
             child: Icon(
               Icons.security,
               size: 200,
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.white,
             ),
           ),
           decoration: getPageDecoration(),
@@ -71,10 +71,17 @@ class ManualScreen extends StatelessWidget {
       onDone: () => goToProfile(context),
       onSkip: () => goToProfile(context),
       showSkipButton: true,
+      baseBtnStyle: TextButton.styleFrom(
+        foregroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
       skip: const Text('Skip'),
       next: const Icon(Icons.arrow_forward),
       done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
       dotsDecorator: getDotsDecorator(),
+      globalBackgroundColor: const Color(0xFF1A405B),
     );
   }
 
@@ -91,14 +98,18 @@ class ManualScreen extends StatelessWidget {
   DotsDecorator getDotsDecorator() => DotsDecorator(
         size: const Size.square(10),
         activeSize: const Size(22, 10),
+        activeColor: Colors.white,
         activeShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
       );
 
   PageDecoration getPageDecoration() => const PageDecoration(
-        titleTextStyle: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-        bodyTextStyle: TextStyle(fontSize: 15),
-        pageColor: Colors.white,
+        titleTextStyle: TextStyle(
+          fontSize: 28,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+        bodyTextStyle: TextStyle(fontSize: 15, color: Colors.white),
         imagePadding: EdgeInsets.only(top: 50),
       );
 }
