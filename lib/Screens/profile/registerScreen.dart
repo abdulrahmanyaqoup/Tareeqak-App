@@ -80,6 +80,8 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                   child: Column(
                     children: [
                       CustomTextField(
+                        autoFillHints: const [AutofillHints.name],
+                        keyboardType: TextInputType.name,
                         controller: _nameController,
                         hintText: 'Enter your name*',
                         prefixIcon: const Icon(CupertinoIcons.person),
@@ -93,6 +95,11 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
+                        autoFillHints: const [
+                          AutofillHints.email,
+                          AutofillHints.newUsername,
+                        ],
+                        keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         hintText: 'Enter your email*',
                         prefixIcon: const Icon(CupertinoIcons.mail),
@@ -109,6 +116,8 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
+                        autoFillHints: const [AutofillHints.newPassword],
+                        keyboardType: TextInputType.visiblePassword,
                         controller: _passwordController,
                         hintText: 'Enter your password*',
                         prefixIcon: const Icon(CupertinoIcons.lock),
@@ -134,6 +143,8 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
+                        autoFillHints: const [AutofillHints.newPassword],
+                        keyboardType: TextInputType.visiblePassword,
                         controller: _confirmPasswordController,
                         hintText: 'Confirm your password*',
                         prefixIcon: const Icon(CupertinoIcons.lock),

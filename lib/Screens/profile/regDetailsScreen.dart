@@ -213,6 +213,10 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
+                        autoFillHints: const [
+                          AutofillHints.telephoneNumber,
+                          AutofillHints.telephoneNumberNational,
+                        ],
                         controller: _contactController,
                         hintText: 'Enter your phone number',
                         prefixIcon: const Icon(CupertinoIcons.phone),

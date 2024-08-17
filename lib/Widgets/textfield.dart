@@ -6,6 +6,7 @@ class CustomTextField extends StatefulWidget {
     required this.controller,
     required this.hintText,
     required this.obscureText,
+    required this.autoFillHints,
     super.key,
     this.keyboardType,
     this.validator,
@@ -16,6 +17,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
+  final List<String> autoFillHints;
   final String? Function(String?)? validator;
   final Icon? prefixIcon;
   final Widget? suffixIcon;
@@ -34,6 +36,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       onTapOutside: (pointerEvent) {
         FocusScope.of(context).unfocus();
       },
+      autofillHints: widget.autoFillHints,
       keyboardType: widget.keyboardType,
       controller: widget.controller,
       obscureText: widget.obscureText,

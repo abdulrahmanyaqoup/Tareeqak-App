@@ -238,6 +238,8 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
                   child: Column(
                     children: [
                       CustomTextField(
+                        autoFillHints: const [AutofillHints.name],
+                        keyboardType: TextInputType.name,
                         controller: _nameController,
                         hintText: 'Enter your name',
                         obscureText: false,
@@ -292,11 +294,12 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
+                        autoFillHints: const [AutofillHints.telephoneNumber],
+                        keyboardType: TextInputType.phone,
                         controller: _contactController,
                         hintText: 'Enter your phone number',
                         obscureText: false,
                         prefixIcon: const Icon(CupertinoIcons.phone),
-                        keyboardType: TextInputType.phone,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Phone number can't be empty!";

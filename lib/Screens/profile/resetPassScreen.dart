@@ -92,6 +92,11 @@ class _ResetPassScreen extends ConsumerState<ResetPassScreen> {
                   child: Column(
                     children: [
                       CustomTextField(
+                        autoFillHints: const [
+                          AutofillHints.email,
+                          AutofillHints.username,
+                        ],
+                        keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         hintText: 'Enter your email*',
                         prefixIcon: const Icon(CupertinoIcons.mail),

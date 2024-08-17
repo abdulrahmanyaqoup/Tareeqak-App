@@ -90,6 +90,11 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                   child: Column(
                     children: [
                       CustomTextField(
+                        autoFillHints: const [
+                          AutofillHints.email,
+                          AutofillHints.username,
+                        ],
+                        keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         hintText: 'Enter your email*',
                         prefixIcon: const Icon(CupertinoIcons.mail),
@@ -106,6 +111,8 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: 20),
                       CustomTextField(
+                        autoFillHints: const [AutofillHints.password],
+                        keyboardType: TextInputType.visiblePassword,
                         controller: _passwordController,
                         hintText: 'Enter your password*',
                         prefixIcon: const Icon(CupertinoIcons.lock),
