@@ -9,11 +9,8 @@ import 'app.dart';
 import 'appThemes.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  FlutterNativeSplash.preserve(
-    widgetsBinding: WidgetsFlutterBinding.ensureInitialized(),
-  );
+  final binding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: binding);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -69,7 +66,10 @@ class _Tareeqak extends State<Tareeqak> {
             FlutterNativeSplash.remove();
             return const Center(child: Text('Error loading app'));
           } else {
-            FlutterNativeSplash.remove();
+            Future.delayed(
+              const Duration(seconds: 1),
+              FlutterNativeSplash.remove,
+            );
             final showManualScreen = snapshot.data ?? true;
             return showManualScreen
                 ? const ManualScreen(isProfile: false)
