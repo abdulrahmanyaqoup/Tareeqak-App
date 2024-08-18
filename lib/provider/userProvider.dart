@@ -172,10 +172,14 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     return response;
   }
 
-  Future<void> clearFilters() => AsyncValue.guard(() async {
-        return state.requireValue
-            .copyWith(filteredUsers: <User>[], isSearching: false);
-      });
+  Future<void> clearFilters() async {
+    state = await AsyncValue.guard(() async {
+      return state.requireValue.copyWith(
+        filteredUsers: <User>[],
+        isSearching: false,
+      );
+    });
+  }
 
   Future<void> filterUsers(
     List<User> allUsers,

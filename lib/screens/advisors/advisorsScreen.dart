@@ -58,9 +58,7 @@ class _AdvisorsScreen extends ConsumerState<AdvisorsScreen>
                 ),
                 child: FilterAdvisors(
                   onClearFilters: () {
-                    setState(
-                      () => ref.read(userProvider.notifier).clearFilters(),
-                    );
+                    ref.read(userProvider.notifier).clearFilters();
                   },
                   onFilterChanged: (university, school, major) {
                     ref.read(userProvider.notifier).filterUsers(
