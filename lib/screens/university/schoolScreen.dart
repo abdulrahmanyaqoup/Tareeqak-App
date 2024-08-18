@@ -32,19 +32,19 @@ class SchoolScreen extends StatelessWidget {
         CustomButtons(
           icon: Icons.people,
           iconColor: Colors.green,
-          label: 'School Advisor',
+          label: 'School Advisors',
           onPressed: () {
-            _showAdvisors(context, 'School Advisor', schoolAdvisors);
+            _showAdvisors(context, 'School Advisors', schoolAdvisors);
           },
         ),
         CustomButtons(
           icon: Icons.school,
           iconColor: Colors.orange,
-          label: 'University Majors',
+          label: 'School Majors',
           onPressed: () {
             _showGridModalBottomSheet(
               context,
-              'University Majors',
+              'School Majors',
               school.majors,
               schoolAdvisors,
               universityWebsite!,
