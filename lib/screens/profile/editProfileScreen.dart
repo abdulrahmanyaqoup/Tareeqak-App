@@ -74,7 +74,10 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
       university: _selectedUniversity,
       school: _selectedSchool,
       major: _selectedMajor,
-      contact: _contactController.text,
+      contact: _contactController.text.replaceAll(
+        RegExp(r'\s+'),
+        '',
+      ),
       image: _image?.path ?? '',
     );
     final updatedUser = User(
@@ -303,8 +306,12 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Phone number can't be empty!";
-                          } else if (!RegExp(r'^07[789]\d{7}$')
-                              .hasMatch(value)) {
+                          } else if (!RegExp(r'^07[789]\d{7}$').hasMatch(
+                            value.replaceAll(
+                              RegExp(r'\s+'),
+                              '',
+                            ),
+                          )) {
                             return 'Enter a valid phone number! 079*******';
                           }
                           return null;

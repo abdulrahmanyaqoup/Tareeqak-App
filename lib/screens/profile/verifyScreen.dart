@@ -18,6 +18,7 @@ class VerifyScreen extends ConsumerStatefulWidget {
 
   final String email;
   final bool isSignup;
+
   @override
   ConsumerState<VerifyScreen> createState() => _VerifyScreen();
 }
@@ -80,6 +81,11 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
   }
 
   Future<void> _resetPasswordVerify() async {
+    setState(() {
+      _isLoading = true;
+      _errorMessage = null;
+    });
+
     await _userApi
         .resetPasswordVerify(widget.email, currentText)
         .then(
@@ -99,6 +105,10 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
         .catchError(
       (Object error) {
         showSnackBar(error.toString(), ContentType.failure);
+        setState(() {
+          _isLoading = true;
+          _errorMessage = null;
+        });
         throw Error();
       },
     );

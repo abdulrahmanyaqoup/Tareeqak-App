@@ -70,7 +70,6 @@ class _ChatBotScreen extends State<ChatBotScreen>
       _messages.add('');
     });
 
-    await Future<void>.delayed(const Duration(milliseconds: 10));
     await _api
         .sendMessage(message)
         .then(
@@ -79,6 +78,11 @@ class _ChatBotScreen extends State<ChatBotScreen>
         .catchError(
           (Object error) => {
             showSnackBar(error.toString(), ContentType.failure),
+            setState(
+              () => _messages
+                ..removeLast()
+                ..removeLast(),
+            ),
             throw Error(),
           },
         );

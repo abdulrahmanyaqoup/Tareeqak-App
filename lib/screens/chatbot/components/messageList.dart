@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../Utils/getLanguageCode.dart';
 
@@ -23,6 +24,11 @@ class MessageList extends StatefulWidget {
 }
 
 class _MessageList extends State<MessageList> {
+  Future<void> _launchURL(String website) async {
+    final url = Uri.parse(website);
+    await launchUrl(url);
+  }
+
   Widget _buildTypingIndicator() {
     return Shimmer.fromColors(
       baseColor: Colors.grey[300]!,
@@ -137,6 +143,7 @@ class _MessageList extends State<MessageList> {
                           ? TextDirection.rtl
                           : TextDirection.ltr,
                       child: MarkdownBody(
+                        onTapLink: (text, href, title) => _launchURL(href!),
                         selectable: true,
                         data: message,
                         styleSheet: MarkdownStyleSheet(

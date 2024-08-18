@@ -62,7 +62,10 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
         university: _selectedUniversity,
         school: _selectedSchool,
         major: _selectedMajor,
-        contact: _contactController.text,
+        contact: _contactController.text.replaceAll(
+          RegExp(r'\s+'),
+          '',
+        ),
         image: _image?.path ?? '',
       ),
     );
@@ -224,8 +227,12 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Phone number can't be empty!";
-                          } else if (!RegExp(r'^07[789]\d{7}$')
-                              .hasMatch(value)) {
+                          } else if (!RegExp(r'^07[789]\d{7}$').hasMatch(
+                            value.replaceAll(
+                              RegExp(r'\s+'),
+                              '',
+                            ),
+                          )) {
                             return 'Enter a valid phone number! 079*******';
                           }
                           return null;

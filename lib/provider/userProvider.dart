@@ -43,6 +43,7 @@ class UserState {
 @immutable
 class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
   UserProvider({required this.storage, required this.userApi});
+
   final FlutterSecureStorage storage;
   final UserApi userApi;
 
@@ -172,14 +173,12 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     return response;
   }
 
-  Future<void> clearFilters() async {
-    state = await AsyncValue.guard(() async {
-      return state.requireValue.copyWith(
-        filteredUsers: <User>[],
-        isSearching: false,
+  Future<void> clearFilters() async => state = await AsyncValue.guard(
+        () async => state.requireValue.copyWith(
+          filteredUsers: <User>[],
+          isSearching: false,
+        ),
       );
-    });
-  }
 
   Future<void> filterUsers(
     List<User> allUsers,
