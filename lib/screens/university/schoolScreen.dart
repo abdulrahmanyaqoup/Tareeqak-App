@@ -6,6 +6,7 @@ import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
 
+
 class SchoolScreen extends StatelessWidget {
   const SchoolScreen({
     required this.school,
@@ -37,6 +38,7 @@ class SchoolScreen extends StatelessWidget {
             _showAdvisors(context, 'School Advisors', schoolAdvisors);
           },
         ),
+        const SizedBox(width: 20),
         CustomButtons(
           icon: Icons.school,
           iconColor: Colors.orange,

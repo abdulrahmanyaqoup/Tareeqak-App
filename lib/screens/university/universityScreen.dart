@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -34,9 +35,29 @@ class UniversityScreen extends ConsumerWidget {
       facts: university.facts,
       buttons: [
         CustomButtons(
+          icon: CupertinoIcons.globe,
+          iconColor: Colors.purple,
+          label: 'Website',
+           onPressed: () {
+            _launchURL(
+              university.website,
+            );
+          },
+        ),
+        CustomButtons(
+          icon: Icons.location_on,
+          iconColor: Colors.red,
+          label: 'Location',
+          onPressed: () {
+            _launchURL(
+              university.location,
+            );
+          },
+        ),
+        CustomButtons(
           icon: Icons.people,
           iconColor: Colors.green,
-          label: 'University Advisors',
+          label: 'Advisors',
           onPressed: () {
             _showAdvisors(
               context,
@@ -46,19 +67,9 @@ class UniversityScreen extends ConsumerWidget {
           },
         ),
         CustomButtons(
-          icon: Icons.location_on,
-          iconColor: Colors.red,
-          label: 'University Location',
-          onPressed: () {
-            _launchURL(
-              university.location,
-            );
-          },
-        ),
-        CustomButtons(
           icon: Icons.school,
           iconColor: Colors.orange,
-          label: 'University Schools',
+          label: 'Schools',
           onPressed: () {
             _showGridModalBottomSheet(
               context,

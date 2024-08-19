@@ -37,7 +37,7 @@ class CustomButtons extends StatelessWidget {
           child: IconButton(
             enableFeedback: true,
             highlightColor: Colors.transparent,
-            icon: Icon(icon, color: iconColor, size: 50),
+            icon: Icon(icon, color: iconColor, size: 40),
             onPressed: onPressed,
           ),
         ),
