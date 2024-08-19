@@ -29,6 +29,24 @@ class _AdvisorsScreen extends ConsumerState<AdvisorsScreen>
       body: CustomScrollView(
         physics: const BouncingScrollPhysics(),
         slivers: [
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await ref.read(userProvider.notifier).getAllUsers();
+            },
+            builder: (
+              context,
+              refreshState,
+              pulledExtent,
+              refreshTriggerPullDistance,
+              refreshIndicatorExtent,
+            ) {
+              return Container(
+                color: Theme.of(context).colorScheme.primary,
+                alignment: Alignment.center,
+                child: const CupertinoActivityIndicator(),
+              );
+            },
+          ),
           CupertinoSliverNavigationBar(
             middle: const Text(
               'Advisors',
