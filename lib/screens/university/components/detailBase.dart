@@ -94,7 +94,7 @@ class DetailBase extends StatelessWidget {
                                   Container()
                                 else
                                   InfoRow(
-                                    icon: Icons.school,
+                                    icon: Icons.account_balance_rounded,
                                     value: universityType!,
                                   ),
                               ],
@@ -173,9 +173,11 @@ class DetailBase extends StatelessWidget {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 30),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: universityType == null
+                            ? MainAxisAlignment.center
+                            : MainAxisAlignment.spaceBetween,
                         children: buttons,
                       ),
                     ],

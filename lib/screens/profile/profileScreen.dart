@@ -89,7 +89,7 @@ class _ProfileScreen extends ConsumerState<ProfileScreen>
         },
         data: (userState) {
           final user = userState.user;
-          final buttonText = user.name.isNotEmpty ? 'Edit Profile' : 'Sign Up';
+          final buttonText = user.name.isNotEmpty ? 'Edit Profile' : 'Register';
           final greetings = user.name.isNotEmpty
               ? 'Welcome back, ${user.name}'
               : 'Become an advisor!';

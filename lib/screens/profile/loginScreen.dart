@@ -27,11 +27,11 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
   bool _isPasswordVisible = false;
   bool _isLoading = false;
 
-  Future<void> _signIn(String email, String password) async {
+  Future<void> _login(String email, String password) async {
     setState(() => _isLoading = true);
     await ref
         .read(userProvider.notifier)
-        .signIn(email, password)
+        .login(email, password)
         .then(
           (response) => {
             setState(() => _isLoading = false),
@@ -82,7 +82,7 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
               children: [
                 const SizedBox(height: 80),
                 const Text(
-                  'Signin',
+                  'Login',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
                 const SizedBox(height: 20),
@@ -96,12 +96,14 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                         ],
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
-                        hintText: 'Enter your email*',
+                        hintText: "Enter your university's email",
                         prefixIcon: const Icon(CupertinoIcons.mail),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Email can't be empty!";
-                          } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                          } else if (!RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu)\'
+                                  r'.jo$')
                               .hasMatch(value)) {
                             return 'Enter a valid email address!';
                           }
@@ -114,7 +116,7 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                         autoFillHints: const [AutofillHints.password],
                         keyboardType: TextInputType.visiblePassword,
                         controller: _passwordController,
-                        hintText: 'Enter your password*',
+                        hintText: 'Enter your password',
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -145,10 +147,9 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                             ),
                           ),
                           child: const Text(
-                            textAlign: TextAlign.right,
                             'Reset password',
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 12,
                             ),
                           ),
                         ),
@@ -158,7 +159,7 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                         isLoading: _isLoading,
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            _signIn(
+                            _login(
                               _emailController.text,
                               _passwordController.text,
                             );
@@ -173,7 +174,7 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                             builder: (_) => const RegisterScreen(),
                           ),
                         ),
-                        child: const Text("Don't have an account? Sign up"),
+                        child: const Text("Don't have an account? Register"),
                       ),
                     ],
                   ),

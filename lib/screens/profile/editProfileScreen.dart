@@ -109,10 +109,10 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
         );
   }
 
-  Future<void> _signOut() async {
+  Future<void> _register() async {
     await ref
         .read(userProvider.notifier)
-        .signOut()
+        .logout()
         .then(
           (response) => {
             if (mounted)
@@ -197,7 +197,7 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
           style: TextStyle(color: Colors.white, fontSize: 23),
         ),
         trailing: IconButton(
-          onPressed: _signOut,
+          onPressed: _register,
           icon: const FaIcon(FontAwesomeIcons.arrowRightFromBracket),
           color: Colors.white,
           iconSize: 22,
@@ -258,7 +258,7 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
                       Dropdown(
                         value: _selectedUniversity,
                         hintText: 'Select your university',
-                        prefixIcon: Icons.business,
+                        prefixIcon: Icons.account_balance_outlined,
                         items: universityState.requireValue.universities
                             .map((university) => university.name)
                             .toList(),
@@ -288,7 +288,7 @@ class _EditProfileScreen extends ConsumerState<EditProfileScreen>
                       Dropdown(
                         value: _selectedMajor,
                         hintText: 'Select your major',
-                        prefixIcon: CupertinoIcons.pen,
+                        prefixIcon: CupertinoIcons.pencil,
                         items: majors.map((major) => major.name).toList(),
                         onChanged: (String? value) {
                           setState(() => _selectedMajor = value ?? '');

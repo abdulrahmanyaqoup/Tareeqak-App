@@ -51,7 +51,7 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
     super.dispose();
   }
 
-  Future<void> _signupUser() async {
+  Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
 
@@ -71,14 +71,14 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
     );
     await ref
         .read(userProvider.notifier)
-        .signUp(user, widget.password)
+        .register(user, widget.password)
         .then(
           (response) => {
             if (mounted)
               Navigator.of(context).pushAndRemoveUntil(
                 CupertinoPageRoute<void>(
                   builder: (_) =>
-                      VerifyScreen(email: widget.email, isSignup: true),
+                      VerifyScreen(email: widget.email, isRegister: true),
                 ),
                 (Route<dynamic> route) => route.isFirst,
               ),
@@ -144,7 +144,7 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
               children: [
                 const SizedBox(height: 40),
                 const Text(
-                  'Signup',
+                  'Register Details',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
                 const SizedBox(height: 20),
@@ -171,7 +171,7 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
                       Dropdown(
                         value: _selectedUniversity,
                         hintText: 'Select your university',
-                        prefixIcon: Icons.business,
+                        prefixIcon: Icons.account_balance_outlined,
                         items: universityState.requireValue.universities
                             .map((university) => university.name)
                             .toList(),
@@ -242,8 +242,8 @@ class _RegDetailsScreen extends ConsumerState<RegDetailsScreen> {
                       const SizedBox(height: 20),
                       CustomButton(
                         isLoading: _isLoading,
-                        onPressed: _signupUser,
-                        text: 'Sign up',
+                        onPressed: _register,
+                        text: 'Register',
                       ),
                     ],
                   ),

@@ -24,22 +24,16 @@ class UniversityShimmer extends StatelessWidget {
                 color: Colors.white.withOpacity(.3),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: Column(
+              child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.school,
-                      color: Colors.white,
-                      size: 70,
-                    ),
+                  Icon(
+                    Icons.account_balance_outlined,
+                    color: Colors.white,
+                    size: 100,
                   ),
-                  const SizedBox(height: 30),
-                  const Text(
+                  SizedBox(height: 20),
+                  Text(
                     'University Of Jordan',
                     style: TextStyle(
                       color: Colors.black,
@@ -47,8 +41,8 @@ class UniversityShimmer extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 10),
-                  const Text(
+                  SizedBox(height: 10),
+                  Text(
                     'Amman',
                     style: TextStyle(
                       color: Colors.black,

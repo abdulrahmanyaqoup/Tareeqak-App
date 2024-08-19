@@ -43,7 +43,9 @@ class _AdvisorsScreen extends ConsumerState<AdvisorsScreen>
               return Container(
                 color: Theme.of(context).colorScheme.primary,
                 alignment: Alignment.center,
-                child: const CupertinoActivityIndicator(),
+                child: const CupertinoActivityIndicator(
+                  color: Colors.grey,
+                ),
               );
             },
           ),

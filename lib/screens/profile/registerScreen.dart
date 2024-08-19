@@ -27,7 +27,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
-  void goToOptionalSignup() {
+  void _goToRegisterDetails() {
     if (!_formKey.currentState!.validate()) return;
 
     Navigator.push(
@@ -72,7 +72,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
               children: [
                 const SizedBox(height: 60),
                 const Text(
-                  'Signup',
+                  'Register',
                   style: TextStyle(fontSize: 30, color: Colors.white),
                 ),
                 const SizedBox(height: 20),
@@ -83,7 +83,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                         autoFillHints: const [AutofillHints.name],
                         keyboardType: TextInputType.name,
                         controller: _nameController,
-                        hintText: 'Enter your name*',
+                        hintText: 'Enter your name',
                         prefixIcon: const Icon(CupertinoIcons.person),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -101,14 +101,16 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                         ],
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
-                        hintText: 'Enter your email*',
+                        hintText: "Enter your university's email",
                         prefixIcon: const Icon(CupertinoIcons.mail),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Email can't be empty!";
-                          } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                          } else if (!RegExp(
+                                  r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu)\'
+                                  r'.jo$')
                               .hasMatch(value)) {
-                            return 'Enter a valid email address!';
+                            return 'Enter a valid university email address!';
                           }
                           return null;
                         },
@@ -119,7 +121,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                         autoFillHints: const [AutofillHints.newPassword],
                         keyboardType: TextInputType.visiblePassword,
                         controller: _passwordController,
-                        hintText: 'Enter your password*',
+                        hintText: 'Enter your password',
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -146,7 +148,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                         autoFillHints: const [AutofillHints.newPassword],
                         keyboardType: TextInputType.visiblePassword,
                         controller: _confirmPasswordController,
-                        hintText: 'Confirm your password*',
+                        hintText: 'Confirm your password',
                         prefixIcon: const Icon(CupertinoIcons.lock),
                         validator: (value) {
                           if (value!.isEmpty) {
@@ -174,7 +176,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                       const SizedBox(height: 20),
                       CustomButton(
                         textColor: Colors.white,
-                        onPressed: goToOptionalSignup,
+                        onPressed: _goToRegisterDetails,
                         padding: const EdgeInsets.symmetric(
                           horizontal: 45,
                           vertical: 10,
@@ -188,7 +190,7 @@ class _RegisterScreen extends ConsumerState<RegisterScreen> {
                             builder: (context) => const LoginScreen(),
                           ),
                         ),
-                        child: const Text('Do you have an account? Sign in'),
+                        child: const Text('Do you have an account? Login'),
                       ),
                     ],
                   ),

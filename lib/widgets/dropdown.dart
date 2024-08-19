@@ -58,13 +58,14 @@ class _DropdownState extends State<Dropdown> {
                   borderRadius: const BorderRadius.all(
                     Radius.circular(8),
                   ),
-                  fillColor: Colors.grey.shade300,
+                  fillColor: Colors.grey.shade500.withOpacity(0.1),
                   headerStyle: const TextStyle(
                     overflow: TextOverflow.fade,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                   ),
-                  prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
+                  prefixIcon:
+                      Icon(widget.prefixIcon, color: Colors.grey.shade800),
                   hintStyle: const TextStyle(
                     overflow: TextOverflow.fade,
                     fontSize: 16,
@@ -104,7 +105,8 @@ class _DropdownState extends State<Dropdown> {
                     color: Colors.grey.shade800,
                   ),
                   closedFillColor: Colors.grey.shade500.withOpacity(0.1),
-                  prefixIcon: Icon(widget.prefixIcon, color: Colors.grey[700]),
+                  prefixIcon:
+                      Icon(widget.prefixIcon, color: Colors.grey.shade800),
                   expandedFillColor: Colors.grey.shade50,
                   expandedSuffixIcon: Icon(
                     Icons.keyboard_arrow_up_rounded,

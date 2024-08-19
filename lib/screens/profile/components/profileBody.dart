@@ -77,7 +77,7 @@ class ProfileLoadingBody extends StatelessWidget {
           CustomButton(
             width: 180,
             onPressed: () {},
-            text: 'Sign Up',
+            text: 'Register',
           ),
         ],
       ),

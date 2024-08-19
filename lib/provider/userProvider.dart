@@ -71,7 +71,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     });
   }
 
-  Future<String> signUp(
+  Future<String> register(
     User user,
     String password,
   ) async {
@@ -83,7 +83,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     return response;
   }
 
-  Future<void> signInVerifiedUser(Map<String, dynamic> response) async {
+  Future<void> loginVerified(Map<String, dynamic> response) async {
     final token = response['token'] as String;
     await storage.write(key: 'token', value: token);
     final user = User.fromMap(response['user'] as Map<String, dynamic>);
@@ -99,7 +99,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     });
   }
 
-  Future<void> signIn(String email, String password) async {
+  Future<void> login(String email, String password) async {
     final response = await userApi.login(email: email, password: password);
     final token = response['token'] as String;
     await storage.write(key: 'token', value: token);
@@ -112,7 +112,7 @@ class UserProvider extends AutoDisposeAsyncNotifier<UserState> {
     });
   }
 
-  Future<void> signOut() async {
+  Future<void> logout() async {
     await storage.delete(key: 'token');
 
     state = await AsyncValue.guard(() async {

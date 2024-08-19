@@ -14,10 +14,14 @@ import 'profileScreen.dart';
 
 @immutable
 class VerifyScreen extends ConsumerStatefulWidget {
-  const VerifyScreen({required this.email, required this.isSignup, super.key});
+  const VerifyScreen({
+    required this.email,
+    required this.isRegister,
+    super.key,
+  });
 
   final String email;
-  final bool isSignup;
+  final bool isRegister;
 
   @override
   ConsumerState<VerifyScreen> createState() => _VerifyScreen();
@@ -43,7 +47,7 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
         .verify(widget.email, currentText)
         .then(
           (response) async => {
-            await _signInVerified(response),
+            await _loginVerified(response),
             setState(() => _isLoading = false),
           },
         )
@@ -58,10 +62,10 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
     );
   }
 
-  Future<void> _signInVerified(Map<String, dynamic> response) async {
+  Future<void> _loginVerified(Map<String, dynamic> response) async {
     await ref
         .read(userProvider.notifier)
-        .signInVerifiedUser(response)
+        .loginVerified(response)
         .then(
           (response) => {
             if (mounted)
@@ -97,17 +101,16 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
                 ),
               ),
             showSnackBar(
-              'New password sent to your email.',
+              response,
               ContentType.success,
             ),
           },
         )
         .catchError(
       (Object error) {
-        showSnackBar(error.toString(), ContentType.failure);
         setState(() {
-          _isLoading = true;
-          _errorMessage = null;
+          _isLoading = false;
+          _errorMessage = error.toString();
         });
         throw Error();
       },
@@ -133,7 +136,7 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => {
-            if (widget.isSignup) _deleteUnverifiedUser(),
+            if (widget.isRegister) _deleteUnverifiedUser(),
             Navigator.of(context).pop(),
           },
         ),
@@ -219,7 +222,7 @@ class _VerifyScreen extends ConsumerState<VerifyScreen> {
                 const SizedBox(height: 20),
                 CustomButton(
                   onPressed:
-                      widget.isSignup ? _verifyOtp : _resetPasswordVerify,
+                      widget.isRegister ? _verifyOtp : _resetPasswordVerify,
                   text: 'Verify OTP',
                   width: 150,
                   isLoading: _isLoading,
