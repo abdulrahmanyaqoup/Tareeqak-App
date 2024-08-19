@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/models.dart';
@@ -5,7 +6,6 @@ import 'components/advisorsSheet.dart';
 import 'components/bottomSheet.dart';
 import 'components/customButtons.dart';
 import 'components/detailBase.dart';
-
 
 class SchoolScreen extends StatelessWidget {
   const SchoolScreen({
@@ -40,7 +40,7 @@ class SchoolScreen extends StatelessWidget {
         ),
         const SizedBox(width: 20),
         CustomButtons(
-          icon: Icons.school,
+          icon: CupertinoIcons.pencil,
           iconColor: Colors.orange,
           label: 'School Majors',
           onPressed: () {

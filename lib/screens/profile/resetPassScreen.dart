@@ -98,7 +98,7 @@ class _ResetPassScreen extends ConsumerState<ResetPassScreen> {
                         ],
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
-                        hintText: "Enter your university's email",
+                        hintText: 'Enter your university email',
                         prefixIcon: const Icon(CupertinoIcons.mail),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -107,7 +107,7 @@ class _ResetPassScreen extends ConsumerState<ResetPassScreen> {
                                   r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(edu)\'
                                   r'.jo$')
                               .hasMatch(value)) {
-                            return 'Enter a valid email address!';
+                            return 'Enter a valid university email address!';
                           }
                           return null;
                         },

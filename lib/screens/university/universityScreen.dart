@@ -38,7 +38,7 @@ class UniversityScreen extends ConsumerWidget {
           icon: CupertinoIcons.globe,
           iconColor: Colors.purple,
           label: 'Website',
-           onPressed: () {
+          onPressed: () {
             _launchURL(
               university.website,
             );
@@ -67,7 +67,7 @@ class UniversityScreen extends ConsumerWidget {
           },
         ),
         CustomButtons(
-          icon: Icons.school,
+          icon: CupertinoIcons.book_fill,
           iconColor: Colors.orange,
           label: 'Schools',
           onPressed: () {
